@@ -2,9 +2,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "anoobvinu07.github.io",
+    "title": "Anoob Prakash",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2\n\n# test website"
+    "text": "Highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings."
   },
   {
     "objectID": "about.html",
@@ -12,5 +12,19 @@
     "title": "About",
     "section": "",
     "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "index.html#education",
+    "href": "index.html#education",
+    "title": "Anoob Prakash",
+    "section": "Education",
+    "text": "Education\n\nPh.D. in Plant Biology, 2018-25\nUniversity of Vermont, USA\nM.Sc. in Tree Physiology and Breeding, 2011-13\nKerala Agricultural University, India\nB.Sc. in Forestry, 2007-13\nKerala Agricultural University, India"
+  },
+  {
+    "objectID": "index.html#interests",
+    "href": "index.html#interests",
+    "title": "Anoob Prakash",
+    "section": "Interests",
+    "text": "Interests\n\nBasketball\nData Analysis\nData Visualisation\nGaming"
   }
 ]
