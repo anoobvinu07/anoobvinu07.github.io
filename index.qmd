@@ -1,13 +1,58 @@
 ---
-title: "anoobvinu07.github.io"
+pagetitle: "Anoob Prakash"
+format: 
+  html:
+    page-layout: full
+    toc: false
+# image: "img/Logo_website_update2.png"
+#title: "Home"
+about:
+  template: marquee
+  id: about-block
+  
+  
+  links:
+    - icon: twitter-x
+      text: Twitter
+      href: https://twitter.com/KellerLabUVM
+    - icon: github
+      text: Github
+      href: https://github.com/anoobvinu07
+    - icon: google
+      text: Google Scholar
+      href: https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ
+    - icon: envelope
+      text: Email
+      href: "mailto:anoobvinu@gmail.com"  
 ---
 
-This is a Quarto website.
+::: {#edu-exp}
+:::
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+Highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings.  
 
-```{r}
-1 + 1
+:::: {.grid}
 
-# test website
-```
+::: {.g-col-12 .g-col-md-8 style="text-align: left;"}
+## Education
+
+- **_Ph.D._ in Plant Biology**, **2018-25**  
+  *University of Vermont, USA*
+
+- **_M.Sc._ in Tree Physiology and Breeding**, **2011-13**  
+  *Kerala Agricultural University, India*
+
+- **_B.Sc._ in Forestry**, **2007-13**  
+  *Kerala Agricultural University, India*
+:::
+
+::: {.g-col-12 .g-col-md-4 style="text-align: left;"}
+## Interests
+
+- Basketball
+- Data Analysis
+- Data Visualisation
+- Gaming
+:::
+
+::::
