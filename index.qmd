@@ -29,30 +29,28 @@ about:
 ::: {#edu-exp}
 :::
 
-Highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings.  
+Highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings.
 
-:::: {.grid}
-
+::::: grid
 ::: {.g-col-12 .g-col-md-8 style="text-align: left;"}
 ## Education
 
-- **_Ph.D._ in Plant Biology**, **2018-25**  
-  *University of Vermont, USA*
+-   ***Ph.D.*** **Plant Biology**\
+    *University of Vermont, USA*
 
-- **_M.Sc._ in Tree Physiology and Breeding**, **2011-13**  
-  *Kerala Agricultural University, India*
+-   ***M.Sc.*** **Tree Physiology and Breeding**\
+    *Kerala Agricultural University, India*
 
-- **_B.Sc._ in Forestry**, **2007-13**  
-  *Kerala Agricultural University, India*
+-   ***B.Sc.*** **(*Hons.*) Forestry**\
+    *Kerala Agricultural University, India*
 :::
 
 ::: {.g-col-12 .g-col-md-4 style="text-align: left;"}
 ## Interests
 
-- Basketball
-- Data Analysis
-- Data Visualisation
-- Gaming
+-   Basketball
+-   Data Analysis
+-   Data Visualization
+-   Gaming
 :::
-
-::::
+:::::
