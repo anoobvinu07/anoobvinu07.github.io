@@ -5,13 +5,13 @@ project:
 website:
   title: "Anoob Prakash"
   description: "The lab website of Stephen R. Keller"
-  image: img/LogoBlack_square.png
-  favicon: img/LogoBlack_square.png
+  image: img/AP_logo.png
+  favicon: img/AP_logo.png
   
   # start of the navigation bar at the top of the website
   navbar:
     pinned: true
-    logo: /img/small_logo3.png
+    logo: /img/AP_logo.png
     
     # your sub-pages
     left:
