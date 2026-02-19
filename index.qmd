@@ -12,9 +12,9 @@ about:
   
   
   links:
-    - icon: twitter-x
-      text: Twitter
-      href: https://x.com/anoobvinu
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/anoob-prakash/
     - icon: github
       text: Github
       href: https://github.com/anoobvinu07

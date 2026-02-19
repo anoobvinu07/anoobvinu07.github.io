@@ -1,0 +1,349 @@
+---
+title: "Scientific output from the lab"
+subtitle: "~ the results of our curiosity" 
+---  
+
+
+*** 
+
+# Pre-prints or manuscripts in review:  
+:::: {.column-default}
+
+::::{layout="[ 1, 99 ]"}  
+
+::: {#first-column}
+
+:::  
+
+::: {#second-column}  
+
+- Verrico, B.M., T. Capblancq, M.C. Fitzpatrick, and S.R. Keller. Reciprocal evaluation of genomic offset predictions of climate maladaptation with independent empirical datasets. (In review)
+
+- Rellstab, C. and S.R. Keller. Can we use genomic data to predict maladaptation to environmental change? (In review).
+
+- Groover, A., L. Bogar, C. Brodersen, R. David-Schwartz, J. Gersony, N. Holbrook, A. Polle, J. Pittermann, B. Medlyn, N. McDowell, S.R. Keller, T. Tschaplinski, R. Spicer, K. Sokolowska, A. Sala, and Y. Preisler. Tree drought physiology: Critical research questions and strategies for mitigating climate change effects on forests. (In revision).
+
+- Portlas, Z.M., J. Molofsky, L. Milbrath, and S.R. Keller. Preadaptation and post-introduction evolution in the invasive Centaurea jacea (Asteraceae) hybrid complex in response to drought stress. (In revision)
+
+- Verrico, B.M. and S.R. Keller. Fine-scale adaptation in the presence of extensive gene flow in the coniferous tree red spruce (Picea rubens Sarg.). (In revision)
+
+- Capblancq, T., S. Lachmuth, M.C. Fitzpatrick, and S.R. Keller. From the last glacial maximum to the end of the 21th century: the journey of a montane tree species. (In revision)
+
+- Chhatre, V.E., K.C. Fetter, A.V. Gougherty, M.C. Fitzpatrick, R.Y. Soolanayakanahally, R.S. Zalensy, and S.R. Keller. Climatic niche predicts the landscape structure of locally adaptive standing genetic variation. bioRxiv preprint: <https://doi.org/10.1101/817411>
+
+:::  
+::::
+::::
+
+
+***  
+
+# Published
+## 2024  
+
+
+::::{layout="[ 1, 99 ]"}  
+
+::: {#first-column}
+
+:::  
+
+::: {#second-column}  
+
+- Butnor, J.R., Wilson, C.P., Bakir, M., D’Amato, A.W., Flower, C.E., Hansen, C.F., Keller, S.R., Knight, K.S. and Murakami, P.F., 2024. Cold Tolerance Assay Reveals Evidence of Climate Adaptation Among American Elm (Ulmus americana L.) Genotypes. Forests, 15(11), p.1843. <https://doi.org/10.3390/f15111843>
+
+- Prakash, A., Capblancq, T., Shallows, K., Saville, D., Landau, D., Landress, C., Jacobs, T., and S.R. Keller. Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration. Applications in Plant Sciences 12(3), e11600. <https://doi.org/10.1002/aps3.11600>
+
+- Bolte, C.E., Phannareth, T., Zavala Páez, M., Sutara, B., Can, M., Fitzpatrick, M.C., Holliday, J., Keller, S.R. and Hamilton, J.A., 2023. Genomic insights into hybrid zone formation: the role of climate, landscape, and demography in the emergence of a novel hybrid lineage between Populus trichocarpa and P. balsamifera. Molecular Ecology e17430. <https://doi.org/10.1111/mec.17430>
+
+- Lachmuth, S., T. Capblancq, A. Prakash, S.R. Keller, and M.C. Fitzpatrick. 2024. Novel genomic offset metrics account for local adaptation in climate suitability forecasts and inform assisted migration. Ecological Monographs, 94 (1), e1593. <https://doi.org.10.1002/ecm.1593>
+
+
+:::  
+
+::::
+
+
+## 2023  
+
+
+::::{layout="[ 1, 99 ]"}  
+
+::: {#first-column}
+
+:::  
+
+::: {#second-column}  
+
+- Fetter, K. and S.R. Keller, 2023. Admixture mapping and selection scans identify genomic regions associated with stomatal patterning and disease resistance in hybrid poplars. Ecology & Evolution. <https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.10579>
+
+
+- Lachmuth, S., T. Capblancq, A. Prakash, S.R. Keller, and M.C. Fitzpatrick. 2023. Novel genomic offset metrics account for local adaptation in climate suitability forecasts and inform assisted migration. Ecological Monographs. <https://doi.org.10.1002/ecm.1593>
+
+- Molofsky, J., D. Thom, S.R. Keller, and L.R. Milbrath. 2023.. Closely related invasive species may be controlled by the same demographic life stages. Neobiota 82:189-207, <https://doi.org/10.3897/neobiota.82.95127>
+
+- Capblancq,T., S. Lachmuth, M.C. Fitzpatrick and S.R. Keller. 2023. From common gardens to candidate genes: exploring local adaptation to climate in red spruce. New Phytologist <https://doi.org/10.1111/nph.18465>
+
+
+:::  
+
+::::
+
+
+
+## 2022  
+
+::::{layout="[ 1, 99 ]"}  
+
+::: {#first-column}
+
+:::  
+
+::: {#second-column}  
+
+- Molofsky, J., D.S. Park, D.M. Richardson, S.R. Keller, B. Beckage, J.R. Mandel, J.S. Boatwright and C. Hui. 2022. Optimal differentiation to the edge of trait space (EoTS). Evolutionary Ecology.
+
+- Prakash, A., S. DeYoung, S. Lachmuth, J.L. Adams, K. Johnsen, J.R. Butnor, D.M. Nelson, M.C. Fitzpatrick and S.R. Keller. 2022. Genotypic variation and plasticity in climate-adaptive traits after range expansion and fragmentation of red spruce (Picea rubens Sarg.) Philosophical Transactions of the Royal Society B, 377(1848).
+
+- A.J. Láruson, M.C. Fitzpatrick, S.R. Keller, B.C. Haller, K.E. Lotterhos. 2022. Seeing the forest for the trees: Assessing genetic offset predictions from gradient forest. Evolutionary Applications 15(3):403-416.
+
+- Gougherty, A.V., S.R. Keller, and M.C. Fitzpatrick. 2022. Do genetically informed distribution models improve range predictions in past climates? A case study with balsam poplar. Frontiers of Biogeography 14(3).
+
+
+:::  
+
+::::
+
+
+## 2021  
+
+::::{layout="[ 1, 99 ]"}  
+
+::: {#first-column}
+
+:::  
+
+::: {#second-column}  
+
+- An, X., K. Gao, Z. Chen, J. Li, X. Yang, J. Zhou, T. Guo, T. Zhao, S. Huang, D. Miao, W.U. Khan, P. Rao, M. Ye, B. Lei, W. Liao, J. Wang, L. Ji, Y. Li, B. Guo, N.S. Mustafa, S. Li, Q. Yun, S.R. Keller, J. Mao, R. Zhang, S.H. Strauss. 2021. High quality haplotype-resolved genome assemblies of Populus tomentosa Carr., a stabilized interspecific hybrid species widespread in Asia. Molecular Ecology Resources 22(2):786-802.
+
+- Capblancq, T., H. Munson, J.R. Butnor, and S.R. Keller. 2021. Genomic drivers of early-life fitness in Picea rubens. Conservation Genetics 22, 963–976
+
+- Fetter, K.C., D.M. Nelson, and S.R. Keller. 2021. Growth‐defense trade‐offs masked in unadmixed populations are revealed by hybridization. Evolution 75, 1450–1465 <https://doi.org/10.1111/evo.14227>
+
+- Fitzpatrick, M.C., V.E. Chhatre, R. Soolanayakanahally, and S.R. Keller. 2021. Experimental support for genomic prediction of climate maladaptation using the machine learning approach Gradient Forests. Molecular Ecology Resources 21(8):2749-2765.
+
+- Gougherty, A.V., S.R. Keller, M.C. Fitzpatrick. 2021. Maladaptation, migration, and extirpation fuel climate change risk in a forest tree species. Nature Climate Change 11:166-171.
+
+
+:::  
+
+::::
+
+
+## 2020  
+
+::::{layout="[ 1, 99 ]"}  
+
+::: {#first-column}
+
+:::  
+
+::: {#second-column}  
+
+- Thibault, E., R. Soolanayakanahally, and S.R. Keller. 2020. Latitudinal clines in bud flush phenology reflect genetic variation in chilling requirements in balsam poplar, Populus balsamifera L. (Salicaceae). The American Journal of Botany 107:1597-1605.
+
+- Hildbrand, R.H., S.R. Keller, S.M. Laperriere, A.E. Santoro, J. Cessna, and R. Trott. 2020. Microbial communities can predict the ecological condition of headwater streams.  PLoS One.
+
+- Capblancq, T.,  M.C. Fitzpatrick, R.A. Bay, M. Exposito-Alonso, and S.R. Keller.  2020. Genomic prediction of (mal)adaptation across current and future climatic landscapes. Annual Review of Ecology, Evolution, and Systematics, Vol. 51.
+
+- Capblancq, T., J. Butnor, S. DeYoung, E. Thibault, H. Munson, D.M. Nelson, M.C. Fitzpatrick, and S.R. Keller. 2020. Whole exome sequencing reveals a long-term decline in effective population size of red spruce (Picea rubens). Evolutionary Applications.
+
+- Laperriere, S.M., R.H. Hildbrand, S.R. Keller, R. Trott, and A.E. Santoro. 2020. Microbial indicators of watershed land use and headwater stream condition.  Applied and Environmental Microbiology, 86:e00018-20.
+
+- Sun, Y., J. Ding, E. Siemann, and S.R. Keller. 2020. Biological control of invasive weeds under climate change:  progress, challenges, and management implications. Current Opinion in Insect Science, 38:72-78.  
+
+- Gougherty, A., V.E. Chhatre, S.R. Keller, and M.C. Fitzpatrick. 2020. Contemporary range position predicts the range-wide pattern of genetic diversity in balsam poplar (Populus balsamifera L.). Journal of Biogeography.
+
+- Verrico, B.M., J. Weiland, T.D. Perkins, B. Beckage, and S.R. Keller. 2020. Long-term monitoring reveals forest community change driven by atmospheric sulfate pollution and contemporary climate change. Diversity and Distributions, 26:270-283.
+
+
+
+:::  
+
+::::
+
+## 2019  
+
+::::{layout="[ 1, 99 ]"}  
+
+::: {#first-column}
+
+:::  
+
+::: {#second-column}  
+
+- Lachmuth, S., J. Molofsky, L. Milbrath, J. Suda, and S.R. Keller. 2019. Associations between genomic ancestry, genome size and capitula morphology in the invasive meadow knapweed hybrid complex (Centaurea × moncktonii C.E. Britton) in eastern North America. AoB Plants, 11:plz055.
+ 
+- Butnor, J.R., B.M. Verrico, K.J. Johnsen, C.A. Mayer, V. Vankus, and S.R. Keller. 2019. Phenotypic variation in climate-associated traits of red spruce (Picea rubens Sarg.) along elevation gradients in the southern Appalachian Mountains. Castanea 84:128-143.
+
+- Fetter, K.C., S. Eberhardt, R.S. Barclay, S. Wing, and S.R. Keller. 2019. StomataCounter: a neural network automatic stomata identification and counting. New Phytologist 223:1671-1681. 
+ 
+- Fetter, K. C. and A. Weakley. 2019. Reduced gene flow from mainland populations of Liriodendron tulipifera into the Florida peninsula promotes diversification. International Journal of Plant Sciences 180:253-269.
+
+- Schrieber, K., S. Wolf, C. Wypior, D. Hohlig, S.R. Keller, I. Hensen, and S. Lachmuth. 2019. Enemy release mitigates inbreeding depression in native and invasive Silene latifolia populations: experimental insight into the role of inbreeding × environment interactions in invasion success. Ecology and Evolution 9:3564-3576.
+ 
+- Hoogland, J.L., R. Trott, and S.R. Keller. 2019. Polyandry and polygyny in a social rodent: an integrative perspective based on social organization, copulations, and genetics. Frontiers in Ecology and Evolution. 7. <https://doi.org/10.3389/fevo.2019.00003>
+
+
+:::  
+
+::::
+
+
+## 2018  
+
+::::{layout="[ 1, 99 ]"}  
+
+::: {#first-column}
+
+:::  
+
+::: {#second-column}  
+
+- Gougherty, A.V., S.R. Keller, A. Kruger, C.D. Stylinski, A.J. Elmore, and M.C. Fitzpatrick. 2018. Estimating tree phenology from high frequency tree movement data. Agricultural and Forest Meteorology, 263:217-224.
+ 
+- Chhatre, V.E., L.M. Evans, S.P. DiFazio, and S.R. Keller. 2018. Adaptive introgression and maintenance of a trispecies hybrid complex in range-edge populations of Populus. Molecular Ecology 27:4820-4838.
+ 
+- Fitzpatrick, M.C., S.R. Keller, and K.E. Lotterhos. 2018. Comment on “Genomic signals of selection predict climate-driven population declines in a migratory bird.” Science 361, eaat7279.
+
+- Butnor, J.R., B.M. Verrico, V. Vankus, and S.R. Keller. 2018. Ethanol exposure can inhibit red spruce (Picea rubens Sarg.) germination. Seed Science and Technology, 46:259-265.
+
+
+:::  
+
+::::
+
+
+## 2017  
+
+::::{layout="[ 1, 99 ]"}  
+
+::: {#first-column}
+
+:::  
+
+::: {#second-column}  
+
+- S.R. Keller, V.E. Chhatre, and M.C. Fitzpatrick. 2017. Influence of range position on locally adaptive gene-environment associations in Populus flowering time genes. Journal of Heredity, 109:47-58.
+ 
+- Palacio-Lopez, K., S.R. Keller, J.M. Molofsky. 2017. Genomic admixture between locally adapted populations of Arabidopsis thaliana (Mouse ear cress): Evidence of optimal genetic outcrossing distance. Journal of Heredity, 109:38-46.
+ 
+- Fetter, K.C., P. Gugger, and S.R. Keller. 2017. Landscape genomics in angiosperm trees: model systems at the foundations and forefront of the field. Comparative and Evolutionary Genomics of Angiosperm Trees. Andrew Groover and Quentin Cronk, eds. Springer, ISBN 978-3-319-49329-9.
+ 
+- S.R. Keller, R. Hilderbrand, M.K. Shank, and M. Potapova. 2017. Environmental DNA genetic monitoring of the nuisance freshwater diatom, Didymospheniageminata, in eastern North American streams. Diversity and Distributions, 23:381-393.
+            — see also the﻿ article in The Scientist featuring our eDNA work on Didymo﻿
+ 
+- Colautti, R.I., J.M. Alexander, K.M. Dglugosch,  S.R. Keller, and S.E. Sultan. 2017. Invasions and extinctions: through the looking glass of evolutionary ecology. Philosophical Transactions of the Royal Society B, 372(1712):20160031.
+​ 
+
+:::  
+
+::::
+
+
+## 2016  
+
+::::{layout="[ 1, 99 ]"}  
+
+::: {#first-column}
+
+:::  
+
+::: {#second-column}  
+
+- Sebasky, M., S.R. Keller, and D.R. Taylor. 2016. Investigating past range dynamics for a weed of cultivation, Silene vulgaris. Ecology and Evolution, 6:4800-4811.
+ 
+- Pylant, C.L., D.M. Nelson, M.C. Fitzpatrick, J.E. Gates, and S.R. Keller. 2016. Geographic origins and population genetics of bats killed at wind-energy facilities. Ecological Applications, 26:1381.
+ 
+- Kazyak, D.C., R.H. Hilderbrand, T.L. King, S.R. Keller, and V.E. Chhatre. 2016. Hiding in plain sight: a case for cryptic metapopulations in brook trout. PLoS ONE 11(1): e0146295.
+
+
+:::  
+
+::::
+
+## 2015  
+
+::::{layout="[ 1, 99 ]"}  
+
+::: {#first-column}
+
+:::  
+
+::: {#second-column}  
+- Jaramillo-Correa, J.P., J. Prunier, A. Vazquez-Lobo, S.R. Keller, A. Moreno-Letelier. 2015. Molecular signatures of adaptation and selection in forest trees. Advances in Botanical Research, Vol. 74, 265-306.
+ 
+- Fitzpatrick, M.C. and S.R. Keller. 2015. Ecological genomics meets community-level modeling of biodiversity: Mapping the genomic landscape of current and future environmental adaptation. Ecology Letters 18:1-16.
+ 
+- Kazyak, D.C., R.H. Hilderbrand, S.R. Keller, M.C. Colaw, A.E. Holloway, R.P. Morgan III, and T.L. King. 2015. Spatial structure of morphological and neutral genetic variation in Brook Trout (Salvelinus fontinalis). Trans. Amer. Fisheries Soc. 144:480-490.
+
+
+
+:::  
+
+::::
+
+## 2014 and prior
+
+
+- Pylant, C.L., D.M. Nelson, and S.R. Keller. 2014. Stable hydrogen isotopes record the summering grounds of eastern red bats (Lasiurus borealis). PeerJ 2:e629.
+ 
+- Molofsky, J., S.R. Keller, S. Lavergne, M. Kaproth, and M. Eppinga. 2014. Human-aided admixture may fuel ecosystem transformation during biological invasions: theoretical and experimental evidence. Ecology and Evolution 4: 899-910.
+ 
+- Keller, S.R., P. D. Fields, A. E. Berardi, and D. R. Taylor. 2014. Recent admixture generates heterozygosity-fitness correlations during the range expansion of an invading species. Journal of Evolutionary Biology 27:616-627.
+
+- Keller, S.R., R. Trott, C. Pylant, and D. Nelson. 2013. Genome-wide microsatellite marker development from next-generation sequencing of two non-model bat species impacted by wind turbine mortality: Lasiurus borealis and L. cinereus (Vespertilionidae). Molecular Ecology Resources. 14:435-436.
+ 
+- Olson, M.S., N. Levsen, R. Soolanayakanahally, R. Guy, W. Schroeder, S.R. Keller, and P. Tiffin. 2013. The adaptive potential of the dominant boreal forest tree Populus balsamifera L. to phenology requirements in a warmer global climate. Mol. Ecol. 22:1214-1230.
+
+- Keller, S.R., K. J. Gilbert, P. D. Fields, and D. R. Taylor. 2012. Bayesian inference of a complex invasion history revealed by nuclear and chloroplast genetic diversity in the colonizing plant, Silene latifolia. Mol. Ecol. 21:4721-4734.
+ 
+- Keller, S.R., N. Levsen, M.S. Olson,and P. Tiffin. 2012. Local adaptation in the flowering time genetic network of balsam poplar, Populus balsamifera L. Mol. Biol. Evol. 29:3143-3152.
+
+- Sloan, D.B., S.R. Keller, A.E. Berardi, B.J. Sanderson, J.F. Karpovich, and D.R. Taylor. 2011. De novo transcriptome assembly and polymorphism detection in the flowering plant Silene vulgaris (Caryophyllaceae). Mol. Ecol. Res. 12:333-343.
+ 
+- Keller, S.R., N. Levsen, P. K. Ingvarsson, M. S. Olson, and P. Tiffin. 2011. Local selection across a latitudinal gradient shapes nucleotide diversity in balsam poplar, Populus balsamifera L. Genetics.
+ 
+- Keller, S.R., R. Soolanayakanahally, R. Guy, S. Silim, M. Olson, and P. Tiffin. 2011. Climate-driven local adaptation in ecophysiology and phenology in balsam poplar, Populus balsamifera L. (Salicaceae). American Journal of Botany 98:99-108.
+ 
+- Jenkins, C.E. and S.R. Keller. 2011. A phylogenetic comparative study of preadaptation for invasiveness in the flowering plant genus Silene (Caryophyllaceae). Biological Invasions 13:1471-1486.
+
+- Keller, S.R. and D.R. Taylor. 2010. Genomic admixture increases fitness during a biological invasion. Journal of Evolutionary Biology 23:1720-1731.
+ 
+- Keller, S.R., M.S. Olson, S. Silim, W. Schroeder, and P. Tiffin. 2010. Genomic diversity, population structure and migration following rapid range expansion in the Balsam Poplar, Populus balsamifera. Molecular Ecology, 19:1212-1226.
+           — see also the ‘Perspectives’ piece in this issue of Mol. Ecol. by Martin Lascoux and Remy Petit
+ 
+- Fields, P.D., S.R. Keller, P.K. Ingvarsson, A. Pederson, and D.R. Taylor. 2010. Isolation and characterization of polymorphic microsatellite loci in the white campion, Silene latifolia (Caryophyllaceae). Molecular Ecology Resources, 10:232-238.
+ 
+- Keller, S.R., D.R. Sowell, M. Neiman, L.M. Wolfe, and D.R. Taylor. 2009. Adaptation and colonization history affect the evolution of clines in two introduced species. New Phytologist, 183:678-690.
+ 
+- Keller, S.R. and D.R. Taylor. 2008. History, chance, and adaptation during biological invasion: separating stochastic phenotypic evolution from response to selection. Ecology Letters, 11: 852-866.
+ 
+- Sloan, D.B., C.M. Barr, M.S. Olson, S.R. Keller, and D.R. Taylor. 2008. Evolutionary rate variation at multiple levels of biological organization in plant mitochondrial DNA. Molecular Biology and Evolution, 25:243-246.
+ 
+- Etterson, J.R., S.R. Keller, and L.F. Galloway. 2007. Epistatic and cytonuclear interactions govern outbreeding depression in the autotetraploid Campanulastrum americanum. Evolution, 61:2671-2683.
+ 
+- Barr, C.M., S.R. Keller, P.K. Ingvarsson, D.B. Sloan, and D.R. Taylor. 2007. Variation in mutation rate and polymorphism among mitochondrial genes of Silene vulgaris. Molecular Biology and Evolution, 24:1783-1791.
+ 
+- Taylor, D.R. and S.R. Keller. 2007. Historical range expansion determines the phylogenetic diversity introduced during contemporary species invasion. Evolution, 61:334-345.
+ 
+- Keller, S.R. and K.E. Schwaegerle. 2006. Maternal sex and mate relatedness affect offspring quality in the gynodioecious Silene acaulis. Journal of Evolutionary Biology, 19:1128-1138.
+
+
+
+<center>
+
+<img src="../img/UVM_logo_green.png" style="height: 25%; width: 25%; object-fit: contain" onclick="window.open(&apos;https://www.uvm.edu&apos;, &apos;blank&apos;);"/>
+
+<center>

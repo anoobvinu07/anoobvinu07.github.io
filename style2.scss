@@ -1,0 +1,270 @@
+/*-- scss:defaults --*/
+
+// Import fonts (define mainfont in _quarto.yml)
+/*@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Nunito:wght@300&family=Roboto+Mono:wght@300&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&family=Nunito:wght@300;800&family=Roboto+Mono:wght@400;700&display=swap');
+
+// Colors
+$light-sage-green: #D1D9CE;
+$dark-sage-green: #98A08D;
+$cream: #f8f8ff ; //main bg color used here - make changes here    //#FDFBF7; //originial
+$cream1: #FDFBF7;
+$white: #f8f8ff;
+$dark-gray: #5A5856;
+$gray: #64605f;
+$light-gray: #949799;
+$purple: #9158A2; //#AE8BD1;
+$black: #000000;
+$burnt-orange: #ad7237;
+
+// Base document colors
+$navbar-bg: $cream1;
+$navbar-fg: $black; 
+$navbar-hl: $purple; 
+$body-bg: $cream;
+$body-color: $gray;
+$footer-bg: $cream; 
+$link-color: $purple;
+
+// Inline code
+$code-bg: $cream;
+$code-color: $burnt-orange; //$purple; 
+
+// Code blocks
+$code-block-bg: $cream;
+
+/*-- scss:rules --*/
+
+/* ELEMENT SELECTORS */
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: 1px;
+  font-weight: 500;
+  color: $gray;
+}
+
+h3 {
+  font-size: 35px;
+}
+
+body {
+  line-height: 1.5; // min 1.5 suggested for assistive tech
+  font-size: 19.5px;
+}
+
+/* ID selectors */
+
+// responsive-ish iframes (width adjusts to viewport size; couldn't figure out how to expand viewport height, so set to this size for now)
+#map-size {
+  width: 100%;
+  height: 350px;
+}
+
+.figure-caption {
+  color: $gray;
+  font-style: italic;
+}
+
+/* CLASS SELECTORS (self-defined) */
+
+// subtitles used with trestles template (currently using jolla)
+/*.custom-subtitle {
+  font-size: 22px;
+  margin-bottom: 0.15em;
+}
+
+.custom-subtitle2 {
+  font-size: 20px;
+  font-style: italic;
+}*/
+
+// larger text
+.large-text {
+  font-size: 25px;
+}
+
+// slightly smaller than default text
+.small-text {
+  font-size: 17px;
+}
+
+// smallest text
+.extra-small-text{
+  font-size: 14px;  
+}
+
+// extra space above line of text (but not as much as <br>)
+.topbr {
+    display: block;
+    margin-top: 1em;
+}
+
+// center align text
+.center-text {
+  text-align: center;
+  left: 50%;
+}
+
+// dark gray text
+.dark-gray-text{
+  color: $dark-gray;
+}
+
+// gray-italic text (mostly used for captions)
+.gray-italic {
+  color: $gray;
+  font-style: italic;
+  font-size: 17px;
+}
+
+// gray background
+.quote-text-bg {
+  background-color: rgba(152, 160, 141, 0.3); //rgba(166, 164, 161, 0.4);
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-right: 5px;
+  padding-left: 8px;
+  border-radius: 15px;
+}
+
+// btn styling
+.btn {
+  color: $dark-gray;
+  background-color: $cream; //$light-sage-green;
+  border-color: $dark-gray;
+}
+
+// button hover styling
+.btn:hover {
+  color: $cream;
+  background-color: $purple;
+  border-color: $dark-gray;
+}
+
+// image styling
+.img-styling {
+  border-radius: 2%;
+  border: 2px solid $gray;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+ //width: 80%;
+}
+
+// center image only
+.center-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* CLASS SELECTORS (copied from inspecting site -- Quarto defined?) */
+
+// resize logo (top left corner) see https://github.com/robertmitchellv/robertmitchellv.github.io/blob/main/custom-dark.scss
+.navbar-brand img { 
+  max-height: 60px;
+  width: auto;
+}
+
+// headshot shape
+.rounded { 
+    border-radius: 50px 20px 50px 20px !important;
+}
+
+// button text size (landing page)
+.about-link-text { 
+  font-size: 18px;
+}
+
+// button icon size (landing page)
+.bi { 
+  font-size: 18px;
+}
+
+// listing card styling
+.card {
+  background-color: $cream;
+  //border-radius: 5.25em;
+}
+
+// listing description text styling
+.description {
+  font-size: 25px;
+}
+
+
+
+// about page link button colors 
+div.quarto-about-jolla .about-link {
+  color: $dark-sage-green;
+}
+
+
+
+// photo gallery layout 
+// photo grid
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18px, 5fr));
+  gap: 1em;
+  margin: 2em 0;
+  justify-content: center; /* centers the grid horizontally */
+}
+
+.photo-grid img {
+  width: 20%;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+.photo-grid img:hover {
+  transform: scale(3.04);
+}
+
+
+
+// profile photo layout 
+.profile-photo {
+  display: block;
+  margin: 2em auto;        /* centers the image horizontally */
+  width: 180px;            /* sets a fixed width for the profile photo */
+  max-width: 100%;         /* makes the photo responsive */
+  border-radius: 40% / 25%;      /* makes the photo circular */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* adds subtle shadow */
+  transition: transform 0.2s;
+}
+.profile-photo:hover {
+  transform: scale(1.50);  /* slight zoom on hover */
+}
+
+// panorama photo layout
+.panorama-photo {
+  display: block;
+  margin: 2em auto;        /* centers the image horizontally */
+  width: 100%;            /* sets a fixed width for the profile photo */
+  max-width: 100%;         /* makes the photo responsive */
+  border-radius: 8px;      /* makes the photo circular */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* adds subtle shadow */
+  transition: transform 0.2s;
+}
+.panorama-photo:hover {
+  transform: scale(1.20);  /* zoom on hover */
+}
+
+
+// margin photo layout
+
+// profile photo layout 
+.margin-photo {
+  display: block;
+  margin: 2em auto;        /* centers the image horizontally */
+  width: 100%;            /* sets a fixed width for the profile photo */
+  max-width: 100%;         /* makes the photo responsive */
+  border-radius: 8px;      
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* adds subtle shadow */
+  transition: transform 0.2s;
+}
+.margin-photo:hover {
+  transform: scale(1.50);  /* zoom on hover */
+}
+

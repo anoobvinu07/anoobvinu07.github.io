@@ -4,19 +4,61 @@ project:
 
 website:
   title: "Anoob Prakash"
+  description: "The lab website of Stephen R. Keller"
+  image: img/LogoBlack_square.png
+  favicon: img/LogoBlack_square.png
+  
+  # start of the navigation bar at the top of the website
   navbar:
+    pinned: true
+    logo: /img/small_logo3.png
+    
+    # your sub-pages
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      - text: "Research"
+        href: research/research.qmd
+      - text: "Publications"
+        href: publications/publications.qmd
+      - text: "Photos"
+        href: photos/photos.qmd
+      
+    
+    # your social media handles
+    right:
+      - icon: linkedin
+        href: https://www.linkedin.com/in/anoob-prakash/
+      - icon: google
+        href: https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ
+      - icon: github
+        href: https://github.com/anoobvinu07
+      - icon: envelope
+        aria-label: email
+        href: "mailto:anoobvinu@gmail.com"
+        
+  # person-workspace
+  
 
+# Don't touch unless you know what you are doing :) ------------
+  search: 
+    location: navbar
+    type: textbox
+  page-footer: 
+    center: |
+      <span class="faux-block">
+      © Copyright <span id="year"></span> | Anoob Prakash
+      </span>
+      <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+      </script>
+ 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
-    css: styles.css
+    fontsize: 1.1em
+    theme: 
+      # - litera
+      - style2.scss
     toc: true
-
-editor: visual
-
+    toc-depth: 4
+    toc-title: ""
+    footnotes-hover: true
+    highlight-style: tango
