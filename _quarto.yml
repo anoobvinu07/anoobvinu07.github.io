@@ -16,7 +16,7 @@ website:
     # your sub-pages
     left:
       - text: "About"
-        href: about/about.qmd
+        href: about.qmd
       - text: "Research"
         href: research/research.qmd
       - text: "Publications"
@@ -57,8 +57,9 @@ format:
   html:
     fontsize: 1.1em
     theme: 
-      dark:  style2-dark.scss
       light: style2.scss
+      dark:  style2-dark.scss
+
       
       # - style2-dark.scss
     toc: true

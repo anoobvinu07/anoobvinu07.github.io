@@ -1,0 +1,77 @@
+---
+title: "A little bit about me"
+
+format: 
+  html:
+    page-layout: full
+
+about:
+  template: trestles
+  image: "img/prakash_2024.jpg"  
+  image-width: 20em
+  image-shape: round
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:anoobvinu@gmail.com
+    - icon: github
+      text: GitHub
+      href: https://github.com/anoobvinu07
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/anoob-prakash/
+    - text: Research Gate
+      href: https://www.researchgate.net/profile/Anoob-Prakash
+    - text: Google Scholar
+      href: https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ
+    - text: ORCID
+      href: https://orcid.org/0000-0002-7207-934X
+    - icon: instagram
+      text: Instagram
+      href: https://www.instagram.com/anoobprakash/
+---
+
+::: {#hero-heading}
+
+
+
+## Experience
+
+- ***Post Doc.*** **Forestry and Natural Resources**  
+  *Purdue University, USA*
+  
+- ***Graduate Intern***   
+  *The Nature Conservancy, USA*
+
+- ***Graduate Researcher*** **Plant Biology**  
+  *University of Vermont, USA*
+
+- ***Graduate Teaching Assistant*** **Plant Biology**  
+  *University of Vermont, USA*
+  
+
+Highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change, and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings.  
+
+Research on genotypic and phenotypic variation in red spruce led to a collaboration with the Nature Conservancy for seed source selection.
+
+## Education
+
+- ***Ph.D.*** **Plant Biology**  
+  *University of Vermont, USA*
+
+- ***M.Sc.*** **Tree Physiology and Breeding**  
+  *Kerala Agricultural University, India*
+
+- ***B.Sc. (Hons.)*** **Forestry**  
+  *Kerala Agricultural University, India*  
+  
+Anoob Prakash holds a PhD in Plant Biology. He is a researcher interested in topics such as climate change adaptation, transparency and open data, environmental data science, and population genomics. He is currently conducting postdoctoral research at the Purdue University.
+
+
+## Interests
+
+- Basketball  
+- Data analysis  
+- Data visualization  
+- Gaming
+:::
