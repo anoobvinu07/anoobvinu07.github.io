@@ -20,7 +20,7 @@ website:
       - text: "Research"
         href: research/research.qmd
       - text: "CV"
-        href: publications/publications.qmd
+        href: cv/cv.qmd
       - text: "Blog"
         href: photos/photos.qmd
       

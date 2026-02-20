@@ -312,3 +312,123 @@ div.quarto-about-jolla .about-link {
   border-radius: 999px;
   opacity: 0.9;
 }
+
+.cv-hero {
+  text-align: center;
+  padding: 2.5rem 1rem 2rem 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 16px;
+  background: radial-gradient(circle at top left, rgba(111,179,184,0.15), transparent 55%),
+              radial-gradient(circle at bottom right, rgba(145,88,162,0.12), transparent 55%);
+}
+
+.cv-name {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.cv-title {
+  margin-top: 0.3rem;
+  font-size: 1.05rem;
+  color: #666666;
+}
+
+.cv-meta {
+  margin-top: 0.8rem;
+  font-size: 0.95rem;
+  color: #777777;
+}
+
+.cv-meta a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(0,0,0,0.2);
+}
+
+.cv-meta a:hover {
+  color: #9158A2;
+  border-bottom-color: #9158A2;
+}
+
+.cv-actions {
+  margin-top: 1.2rem;
+}
+
+.cv-actions .btn {
+  border-radius: 999px;
+  padding: 0.45rem 1.4rem;
+  font-size: 0.95rem;
+}
+
+/* Section “cards” */
+.cv-section {
+  background-color: rgba(248, 248, 255, 0.9);
+  border-radius: 12px;
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 1.1rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+.cv-section > h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+/* Tighter list spacing for CV feel */
+.cv-section ul {
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+}
+
+/* Responsive width */
+main.content {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.pub-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.pub-list li {
+  margin-bottom: 0.6rem;
+}
+
+.pub-btn {
+  display: inline-block;
+  width: 100%;
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: rgba(248,248,255,0.9);
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.pub-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  border-color: #6fb3b8;
+}
+
+.pub-title {
+  font-weight: 600;
+  display: block;
+}
+
+.pub-meta {
+  font-size: 0.9rem;
+  color: #666666;
+  display: block;
+  margin-top: 0.1rem;
+}
+

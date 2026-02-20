@@ -1,0 +1,346 @@
+---
+title: "Curriculum Vitae"
+pagetitle: "Anoob Prakash – Curriculum Vitae"
+format:
+  html:
+    toc: true
+    number-sections: false
+    page-layout: full
+    css: styles-cv.css   # <– new custom CSS for modern look
+---  
+
+
+_Last updated on July 2025_
+
+::: {.cv-hero}
+<div class="cv-name">Anoob Prakash</div>
+<div class="cv-title">Ecological & Evolutionary Genomics · Climate Adaptation · Bioinformatics</div>
+<div class="cv-meta">
+  <span><a href="mailto:anoobvinu@gmail.com">E-mail</a></span> ·
+  <span><a href="https://www.linkedin.com/in/anoob-prakash/" target="_blank">LinkedIn</a></span> ·
+  <span><a href="https://github.com/anoobvinu07" target="_blank">GitHub</a></span> ·
+  <span><a href="https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ" target="_blank">Google Scholar</a></span>
+</div>
+
+<div class="cv-actions">
+  [Download CV (PDF)](current/Prakash_CV.pdf){.btn .btn-outline-primary}
+  [Download Resume (PDF)](current/Prakash_Resume.pdf){.btn .btn-outline-primary}
+</div>
+:::
+
+::: {.cv-section}
+## Professional Profile
+
+Highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change, and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings.
+:::
+
+::: {.cv-section}
+## Education
+
+**Ph.D., Plant Biology** – University of Vermont, USA (2018–2025)  
+Advisor: Dr. Stephen R. Keller
+
+**M.Sc., Tree Physiology and Breeding** – Kerala Agricultural University, India (2011–2014)  
+Advisor: Dr. A. V. Santhoshkumar
+
+**B.Sc., Forestry** – Kerala Agricultural University, India (2007–2011)  
+Advisor: Dr. T. K. Kunhamu
+:::
+
+
+::: {.cv-section}
+## Skills
+
+#### Technical Skills
+
+- Programming and scripting: R (proficient), Unix/Linux (proficient), Python (basic).
+- Data tools: ArcGIS (advanced), QGIS (basic), tidyverse (proficient).
+- Data analysis and bioinformatics: Management and analysis of large-scale genomic, phenotypic, and climate datasets; application of bioinformatic pipelines and climate forecasting methods; graphical data visualization.
+
+#### Communication and Design
+
+- Design and visualization: Affinity Designer (proficient), Adobe Illustrator (proficient), Adobe After Effects (advanced).
+- Presentation and documentation: Microsoft Office, Quarto (proficient), R Markdown (proficient).
+
+#### Research and Field Skills
+
+- Statistical data analysis.
+- Wet lab techniques.
+- Field data collection methodologies.
+
+#### Collaboration and Networking
+
+- Built strong collaborative relationships with researchers at the University of Maryland.
+- Engaged with scientists, ecologists, and practitioners at The Nature Conservancy (Maryland, West Virginia, Virginia) and the Central Appalachian Spruce Restoration Initiative (CASRI).
+
+#### Leadership and Service
+
+- Graduate Student Senator, Department of Plant Biology, University of Vermont (2018–2020).
+- Captain, college basketball team – led team to inter-collegiate championship (2012).
+- Assistant Hostel Secretary, College of Forestry, Kerala Agricultural University (2009).
+:::
+
+::: {.cv-section} 
+## Research and Professional Experience  
+
+#### Postdoctoral Research Associate – Purdue University, USA (2026-Present)  
+
+- Application of machine-learning approach to investigate climate pre- or mal-adaptation for these species with high restoration potential (SHRP).  
+- Working to identify seed sources for regeneration planting in the zones of mal-adaptation.  
+
+#### Graduate Research Assistant – University of Vermont, USA (2018–2025)
+
+Investigated genotypic and phenotypic variation and climate change adaptation in red spruce (*Picea rubens*).
+
+**Project 1: Genotypic variation and plasticity in climate-adaptive traits**
+
+- Quantified biomass and trait variance to identify patterns of genotypic and phenotypic responses to climate gradients using quantitative genetics and Bayesian approaches.
+- Collaborated with interdisciplinary teams to collect and manage large, multi-year datasets from multiple field sources.
+
+**Project 2: Introgression and local adaptation**
+
+- Utilized molecular approaches to investigate the role of introgression underlying local adaptation.
+- Identified patterns of local and climate adaptation to inform conservation strategies for fragmented red spruce populations.
+
+**Project 3: Molecular basis of local adaptation and climate-response forecasting**
+
+- Used genome-wide association studies (GWAS) to detect loci underlying polygenic traits.
+- Applied advanced bioinformatic approaches to assess the genetic architecture of locally adaptive traits.
+
+#### Graduate Teaching Assistant – University of Vermont, USA (2018–2025)
+
+Conducted grading, lab instruction, report writing guidance, peer-review facilitation, and lab setup for wet and dry labs.
+
+**Principles of Biology I and II (2018–2021)**
+
+- Trained students in the process of scientific inquiry and genetics concepts.
+- Taught wet lab protocols, microscopy, and molecular modelling approaches.
+
+**Exploring Biology (2022–2023)**
+
+- Taught bench work for protein purification, enzyme purification, SDS–PAGE, and gel analysis.
+
+**Ecology and Evolution (2022–2025)**
+
+- Trained more than 100 students in data collection protocols and data analysis in R.
+- Mentored students in designing and carrying out independent research projects.
+
+#### Graduate Research Intern – The Nature Conservancy, USA (2021 & 2022)
+
+Applied genomics-assisted seed source selection to identify viable seed sources for restoration of red spruce in the fragmented southern range edge, resulting in more than 58,000 seedlings planted across three U.S. states.
+
+- Collected data from experimental plots after restoration planting to monitor and assess genomic-assisted seed sourcing strategies in Virginia, West Virginia, and Maryland.
+- Communicated results in a peer-reviewed scientific journal and at national and international conferences.
+
+#### Teaching Assistant – Kerala Agricultural University, India (2014–2016)
+
+- Taught undergraduate and graduate courses including biochemistry, biotechnology, tree improvement, tree physiology, world forest systems, and ecophysiology.
+- Managed laboratory space and inventory; assisted students with bench work and scientific writing for coursework and research.
+
+#### Graduate Research Assistant – Kerala Agricultural University, India (2011–2014)
+
+Investigated the impact of particulate pollution on growth, physiology, and anatomical properties of *Tectona grandis* and other moist deciduous tree species near industrial sites.
+
+- Assessed chlorophyll content, ascorbic acid levels, relative water content, and leaf pH to evaluate air pollution tolerance across seasons.
+- Analyzed dust accumulation, leaf surface area, leaf area index, and leaf area duration to quantify pollution effects on tree health and productivity.
+- Compared wood anatomical properties of pollution-exposed and control populations, identifying significant differences in wood quality and structure.
+
+#### Independent Undergraduate Researcher – Kerala, India (2010–2011)
+
+- Characterized structural and functional attributes of home gardens and developed recommendations for integrated farming systems for medium and large-scale farmers.
+- Assisted the Assistant Conservator of Forests in drafting a working plan for Konni Forest Division, ensuring continuity of forest management policies over a 10-year period.
+- Conducted site quality mapping, growing stock assessment, and regeneration surveys as part of forest management planning.
+:::  
+
+::: {.cv-section}
+## Fellowships
+
+- GradCAMP Climate Scholar, USDA and West Virginia State University (2023–2024).
+- National Science Foundation Research Traineeship (NRT), Quantitative and Evolutionary STEM Training (QuEST), University of Vermont (2018–2023).
+
+:::
+
+::: {.cv-section}
+## Publications  
+
+#### Peer-Reviewed Publications
+
+<ul class="pub-list">
+
+<li>
+<a class="pub-btn" href="https://doi.org/10.1002/aps3.11600" target="_blank" rel="noopener">
+  <span class="pub-title">Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration</span>
+  <span class="pub-meta">Prakash, A., Capblancq, T., Shallows, K., Saville, D., Landau, D., Landress, C., Jacobs, T., & Keller, S. (2024). Applications in Plant Sciences, 12(3), e11600.</span>
+</a>
+</li>
+
+<li>
+<a class="pub-btn" href="https://doi.org/10.1002/ecm.1593" target="_blank" rel="noopener">
+  <span class="pub-title">Novel genomic offset metrics integrate local adaptation into habitat suitability forecasts and inform assisted migration</span>
+  <span class="pub-meta">Lachmuth, S., Capblancq, T., Prakash, A., Keller, S. R., & Fitzpatrick, M. C. (2023). Ecological Monographs.</span>
+</a>
+</li>
+
+<li>
+<a class="pub-btn" href="https://doi.org/10.1098/rstb.2021.0008" target="_blank" rel="noopener">
+  <span class="pub-title">Genotypic variation and plasticity in climate-adaptive traits after range expansion and fragmentation of red spruce</span>
+  <span class="pub-meta">Prakash, A., DeYoung, S., Lachmuth, S., Adams, J. L., Johnsen, K., Butnor, J. R., Nelson, D. M., Fitzpatrick, M. C., & Keller, S. R. (2022). Philosophical Transactions of the Royal Society B, 377(1848), 20210008.</span>
+</a>
+</li>
+
+
+<li>
+<a class="pub-btn" href="https://doi.org/10.1093/aob/mcab046" target="_blank" rel="noopener">
+  <span class="pub-title">Variation in climatic tolerance, but not stomatal traits, partially explains Pooideae grass species distributions</span>
+  <span class="pub-meta">Das, A., Prakash, A., Dedon, N., Doty, A., Siddiqui, M., & Preston, J. C. (2021). <em>Annals of Botany</em>, 128(1), 83–95.</span>
+</a>
+</li>
+
+<li>
+<a class="pub-btn" href="pubs/reshma_etal_2020_Fodder yield and nutritive value of mulberry (Morus indica L.) under varying plant density.pdf" target="_blank" rel="noopener">
+  <span class="pub-title">Fodder yield and nutritive value of mulberry (<em>Morus indica</em>) under varying plant density and pruning frequency in coconut garden</span>
+  <span class="pub-meta">Raj, R. M., Raj, A. K., Kunhamu, T. K., & Prakash, A. (2019). <em>Range Management and Agroforestry</em>, 40(2), 255–261.</span>
+</a>
+</li>
+
+<li>
+<a class="pub-btn" href="pubs/prakash_etal_2017_Impact  of  particulate  pollution  on   photosynthesis,  transpiration  and  plant   water  potential  of  teak   (Tectona  grandis  L.).pdf" target="_blank" rel="noopener">
+  <span class="pub-title">Impact of particulate pollution on photosynthesis, transpiration and plant water potential of teak (<em>Tectona grandis</em>)</span>
+  <span class="pub-meta">Prakash, A., Santhoshkumar, A. V., & Roby, P. C. (2017). <em>Current Science</em>, 113(7), 1272–1276.</span>
+</a>
+</li>
+
+<li>
+<a class="pub-btn" href="pubs/reshma_etal_2016_Fodder yield and nutritive value of subabul (Leucaena leucocephala Lam.) under diverse management regimes in coconut garden.pdf" target="_blank" rel="noopener">
+  <span class="pub-title">Fodder yield and nutritive value of subabul (<em>Leucaena leucocephala</em>) under diverse management regimes in coconut garden</span>
+  <span class="pub-meta">Raj, R. M., Raj, A. K., & Prakash, A. (2016). <em>Indian Journal of Agroforestry</em>, 18(2), 79–85.</span>
+</a>
+</li>
+
+<li>
+<a class="pub-btn" href="pubs/prakash_etal_2016_Appropriateness of moist deciduous species against particulate pollution abatement and monitoring.pdf" target="_blank" rel="noopener">
+  <span class="pub-title">Appropriateness of moist deciduous species against particulate pollution abatement and monitoring</span>
+  <span class="pub-meta">Prakash, A., Santhoshkumar, A. V., & Roby, P. C. (2016). <em>International Journal of Science, Environment and Technology</em>, 5, 537–546.</span>
+</a>
+</li>
+
+</ul> 
+
+
+:::
+
+
+::: {.cv-section}
+#### Peer-Review Activities
+
+- Journal of Heredity (2025)
+- Molecular Biology and Evolution (2025)
+- New Phytologist (2024)
+- G3: Genes, Genomes, Genetics (2023)
+- Ecological Monographs (2022)
+- Frontiers in Plant Science (2022)
+:::
+
+::: {.cv-section}
+## Conference Presentations
+
+#### Conference Talks
+
+- “Unraveling the genetic architecture of local adaptation in species with a history of introgression.”  
+  3rd Joint Congress on Evolutionary Biology, Montreal, Canada (2024).
+- “Unraveling the effects of introgression on local adaptation in red spruce (*Picea rubens*): Genetic rescue and shaping of adaptive traits.”  
+  XXVI World Congress of IUFRO, Stockholm, Sweden (2024).
+- “Understanding the role of introgression on local adaptation in red spruce (*Picea rubens*).”  
+  UVM Student Research Conference, Burlington, Vermont, USA (2024).
+- “Exploring the drivers of selection in a range-fragmented forest tree: A case study in red spruce (*Picea rubens*).”  
+  Evolution 2023, Albuquerque, New Mexico, USA (2023).
+- “Detecting signals of polygenic adaptation in the face of demographic history and population structure in red spruce (*Picea rubens*).”  
+  Botany 2022, Anchorage, Alaska, USA (2022).
+- “The evolution of species’ ranges in the face of changing environments.”  
+  Forest Genetics Student and Postdoc Symposium, virtual (2021).
+
+#### Outreach
+
+- “Using genomics to assist red spruce conservation and restoration under a changing climate.”  
+  CASRI Annual Meeting, Davis, West Virginia, USA (2023, virtual).
+- “Science Sparks: Plant Biology.”  
+  Science Olympiad outreach talk for grades 7–10, University of Vermont (2023).
+- “Demographic history of red spruce and genotypic variation in climate-adaptive traits after range expansion and fragmentation.”  
+  NSF-funded Red Spruce Climate Change Workshop, Burlington, Vermont, USA (2021).
+
+#### Poster Presentations
+
+- “Seeds of Hope: Sprucing up forest restoration with genomics.”  
+  3rd Joint Congress on Evolutionary Biology, Montreal, Canada (2024).  
+  Invited poster at UVM CALS and Food Systems Research Center Board of Trustees event (2024).
+- “Investigating population differentiation in red spruce (*Picea rubens*) due to climate change.”  
+  UVM Student Research Conference, Burlington, Vermont, USA (2019).  
+  Evolution, Providence, Rhode Island, USA (2019).
+- “Anatomical changes in the wood properties of *Tectona grandis* due to particulate pollution.”  
+  National Biodiversity Congress, Thiruvananthapuram, Kerala, India (2015).
+- “Vegetational composition and regeneration status of mangroves in Chetuwai backwaters, Kerala.”  
+  Indian Biodiversity Congress, Chennai, Tamil Nadu, India (2014).
+::: 
+
+::: {.cv-section}
+## Training and Workshops  
+
+- Computational Biology Upskilling Workshop – Dean Lee and Tommy Tang, The Festival of Genomics & Biodata (June 2025).
+- Enhancing Variant Analysis and Interpretation – Heidi Rehm and Suganthi Balasubramanian, The Festival of Genomics & Biodata (June 2025).
+- Mastering Spatial Data Analysis: From Basics to Cutting-Edge Innovations – Abdul Hassan Samee and Ilya Korsunsky, The Festival of Genomics & Biodata (June 2025).
+- Computational analysis of single-cell RNA-seq data – The Festival of Genomics & Biodata (June 2025).
+- Data and Open Science Summit – UVM and NASA (January 2025).
+- Next Generation Sequencing Webinar – HelixOmics Analytics (May 2024).
+- Schrödinger Educators Week – Schrödinger (May 2024).
+- De novo genome assembly and annotation workshop – Botany 2022 (July 2022).
+- Echoes in Space – Introduction to RADAR Remote Sensing, EO College and ESA (November 2017).
+- UAV Remote Sensing and Applications, Indian Institute of Remote Sensing and ISRO (July 2017).
+- Conservation Genetics, Salim Ali Centre for Ornithology and Natural History (2017).
+- Statistics and R (PH525.1X), HarvardX/edX (2017).
+- Introduction to Python for Data Science (DAT208X), Microsoft/edX (2017).
+- Multiple remote sensing and GIS trainings through IIRS, ISRO, and Kerala Agricultural University (2014–2016).
+:::  
+
+::: {.cv-section}
+## Grants and Awards
+
+- CALS Graduate Student Enhancement Fund with 100% departmental match (2024, 2019).
+- Graduate College Conference Grant Program with 100% departmental match (2024).
+- UVM Graduate Student Senate Mini Grants with 100% departmental match (2022).
+::: 
+
+::: {.cv-section}
+## Teaching Experience (Course List)
+
+**University of Vermont, USA (2018–2025)**
+
+- Exploring Biology (2022, 2023).
+- Ecology and Evolution (2022–2025, spring and fall).
+- Principles of Biology I (2018, 2019, 2021).
+- Principles of Biology II (2019, 2020).
+
+**Kerala Agricultural University, India (2014–2016)**
+
+- Forest Ecophysiology (2013–2015).
+- Plant Biochemistry (2013–2014).
+- Ethnobotany (2015).
+- Plant Biotechnology (2015).
+- World Forestry System (2015).
+- Principles of Tree Improvement (2015).
+- Elementary Tree Physiology (2014–2015).
+- Medicinal and Aromatic Plants (2015).
+- Weapon Training and First Aid Training (2014–2015).
+:::
+
+::: {.cv-section}
+## Professional Memberships
+
+- Botanical Society of America (BSA).
+- Society for the Study of Evolution (SSE).
+- American Society of Naturalists (ASN).
+:::  
+
+
+## References
+
+Available upon request.
