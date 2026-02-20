@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -32,17 +32,18 @@ ul.task-list li input[type="checkbox"] {
 <link href="./img/AP_logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e41caad1b6b9b62eb3087831f3b4c651.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-e41caad1b6b9b62eb3087831f3b4c651.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e41caad1b6b9b62eb3087831f3b4c651.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-577d015458cd48ce3af8dbd7c2ddc366.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-e1be5f40dc20c76b3d284492309f8129.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-577d015458cd48ce3af8dbd7c2ddc366.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-af554f16b462ed3886043f17c44dac67.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-fb160f5fc9595f6832a4aac633fe4eeb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-af554f16b462ed3886043f17c44dac67.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -227,6 +228,7 @@ ul.task-list li input[type="checkbox"] {
       toggleColorMode(toAlternate);
       setStyleSentinel(toAlternate);
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
     };
     // Switch to dark mode if need be
     if (hasAlternateSentinel()) {
@@ -242,7 +244,8 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./img/AP_logo.png" alt="" class="navbar-logo">
+    <img src="./img/AP_logo.png" alt="" class="navbar-logo light-content">
+    <img src="./img/AP_logo.png" alt="" class="navbar-logo dark-content">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -261,11 +264,11 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./publications/publications.html"> 
-<span class="menu-text">Publications</span></a>
+<span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./photos/photos.html"> 
-<span class="menu-text">Photos</span></a>
+<span class="menu-text">Blog</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -310,30 +313,16 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="bio">
 <p><span style="font-size: 2.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;">Hi there! I’m Anoob Prakash</span></p>
-<p><span style="font-size: 1.6rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;">Welcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how tree species respond to changing climate. Learn more <a href="about/about.qmd">about me</a> on this site, you’ll find my research, projects (data visualization and analysis) and interests.</span></p>
+<p><span style="font-size: 1.6rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;">Welcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how species respond to a changing climate. Learn more <a href="./about.html">about me</a>. On this site, you’ll find my research, projects in data visualization and analysis, and other interests.</span></p>
+</div>
+<div class="section-separator">
+</div>
+<div class="footer-logos">
+<p><a href="https://www.linkedin.com/in/anoob-prakash/" target="_blank"> <img src="img/linkedin-brands-solid-full.svg" alt="LinkedIn"> </a> <a href="https://github.com/anoobvinu07" target="_blank"> <img src="img/github-brands-solid-full.svg" alt="GitHub"> </a> <a href="https://scholar.google.com/citations?hl=en&amp;user=jIOSRMkAAAAJ" target="_blank"> <img src="img/google-scholar-brands-solid-full.svg" alt="Google Scholar"> </a> <a href="https://orcid.org/0000-0002-7207-934X" target="_blank"> <img src="img/orcid-brands-solid-full.svg" alt="ORCID"> </a> <a href="mailto:anoobvinu@gmail.com" target="_blank"> <img src="img/envelope-solid-full.svg" alt="ORCID"> </a> <a href="https://www.instagram.com/anoobprakash/" target="_blank"> <img src="img/square-instagram-brands-solid-full.svg" alt="ORCID"> </a></p>
 </div>
 
 
-</main> 
-  <hr class="about-sep">
-   <div class="about-links">
-  <a href="https://www.linkedin.com/in/anoob-prakash/" class="about-link" rel="" target="">
-    <i class="bi bi-linkedin"></i>
-     <span class="about-link-text"></span>
-  </a>
-  <a href="https://github.com/anoobvinu07" class="about-link" rel="" target="">
-    <i class="bi bi-github"></i>
-     <span class="about-link-text"></span>
-  </a>
-  <a href="https://scholar.google.com/citations?hl=en&amp;user=jIOSRMkAAAAJ" class="about-link" rel="" target="">
-    <i class="bi bi-google"></i>
-     <span class="about-link-text"></span>
-  </a>
-  <a href="mailto:anoobvinu@gmail.com" class="about-link" rel="" target="">
-    <i class="bi bi-envelope"></i>
-     <span class="about-link-text"></span>
-  </a>
-</div>
+</main>  
 </div>
  <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -393,13 +382,14 @@ ul.task-list li input[type="checkbox"] {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

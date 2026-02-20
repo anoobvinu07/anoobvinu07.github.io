@@ -1,6 +1,6 @@
 ---
 title: "Adaptation and response to environmental change"
-subtitle: "~ the questions that drive us" 
+subtitle: "~ the questions that drive me" 
 format: 
   html:
     page-layout: full
@@ -40,7 +40,7 @@ One current area of interest in the Keller lab is the susceptibility of hybrid p
 ## Genomic Forecasting
 
 **Status:** Ongoing\
-**Publications:** [Fitzpatrick and Keller (2015)](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.12376) \| [Fitzpatrick et al. (2021)](https://onlinelibrary.wiley.com/doi/pdf/10.1111/1755-0998.13374) \| [Lachmuth et al. (2023) in Ecological Monographs](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593) \| [Lachmuth et al. (2023) in Frontiers](https://www.frontiersin.org/journals/ecology-and-evolution/articles/10.3389/fevo.2023.1155783/full)
+**Publications:** [Lachmuth et al. (2024) in Ecological Monographs](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593)  
 
 ::::: column-screen
 :::: column-margin
@@ -54,22 +54,13 @@ Forecasting the responses of populations to climate change is a complex but impo
 In addition to building and refining the computational pipeline of genomic offset for forecasting climate change responses, our lab has been working on empirical testing of offset predictions, using a space-for-time approach that evaluates the effect of transferring genotypes from their source climate into one or more common garden sites, and predicting growth and fitness-traits from genomic offsets calculated between the source and garden site climates. Using poplar trees as a study system, we provided the first such common garden test of offset predictions, showing a strong negative response of growth with increasing genomic offset ([Fitzpatrick et al. 2021](https://onlinelibrary.wiley.com/doi/pdf/10.1111/1755-0998.13374)). We have recently shown a similar result in red spruce (Picea rubens) across 3 seedling common gardens ([Lachmuth et al., 2023](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593)), as well as in a 60 year old red spruce provenance trial in northern New Hampshire (Verrico et al., in prep.).
 :::::
 
-## Invasions
-
-**Status:** Completed
-
-The movement of species into new habitats allows populations that were previously geographically isolated to reproduce with each other and create novel genotypes through hybridization. Through environmental selection, novel genotypes can result in phenotypes that increase hybrid fitness and promote biological invasions. Furthermore, hybridization between genetically distinct species can result in changes to the genome size or species ploidy, which can alter the reproduction rate and promote invasion success. The rapid evolution of hybrid species in the introduced range can lead to a drastic shift in the stable state dynamics of the ecosystem, transforming the community assembly.
-
-Past research has largely focused on the effects of hybridization in Centaura × moncktonii (*C. jacea × C. nigra*), a plant invasive to North America known as Japanese knapweed. Using a combination of field collections at hybrid zones in eastern North America and the Pacific northwest.
-
-An assessment of the genome size, degree of introgression, and species traits reveals that hybrid individuals have smaller genomes and capitula traits that promote reproductive success, indicating that admixture of *C. jacea* and *C. nigra* can generate invasive genotypes that are environmentally selected for.
 
 # Research systems
 
 ## Red spruce
 
 **Status:** Ongoing\
-**Publications:** [Capblancq et al. (2020)](https://onlinelibrary.wiley.com/doi/full/10.1111/eva.12985) \| [Capblancq et al. (2021)](https://link.springer.com/article/10.1007/s10592-021-01378-7) \| [Prakash et al. (2022)](https://royalsocietypublishing.org/doi/full/10.1098/rstb.2021.0008) \| [Lachmuth et al. (2023) in Ecological Monographs](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593) \| [Prakash et al. (2024)](https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11600)
+**Publications:** [Prakash et al. (2022)](https://royalsocietypublishing.org/doi/full/10.1098/rstb.2021.0008) \| [Prakash et al. (2024)](https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11600)
 
 ::::: column-screen
 :::: column-margin
@@ -115,25 +106,6 @@ Kathryn Shallows from TNC approached the Keller lab in 2019 regarding red spruce
 ![Genomic assisted red spruce restoration at Maryland, West-Viginia and Virginia, USA.](genomics_to_the_field_snippet.png){.lightbox group="red-spruce"}
 :::
 
-::::: column-screen
-:::: column-margin
-::: margin-photo
-![](spruce/img1.jpeg){.lightbox group="spruce"}
-:::
-::::
-
-**Spruce orchard project**
-
-In a project funded by the USDA-FS Forest Health Protection program, we are applying the genomic offset model, a method for forecasting genomic maladaptation to climate change, to establish a red spruce seed orchard in the Green Mountain National Forest. Forest managers have traditionally applied a “local is best” framework when choosing where to source seeds for restoration plantings. However, the genotypes currently found in a particular region may not be the ones best adapted to survive the future climate conditions that the region is likely to experience by the end of the century. We have sourced red spruce cuttings from trees that capture a diversity of genotypes predicted by our genomic offset models to be well-adapted to future climates in New England. Once the grafted seedlings become reproductive in 5-7 years, they will produce significant quantities of future climate-adapted seed to support reforestation and assisted migration plantings, a key need expressed by conservation partners in a workshop on red spruce hosted by our lab group in 2021.
-
-**Assisted migration project**
-
-We are working with our partners at The Nature Conservancy, the U.S. Fish and Wildlife Service, and the Vermont Agency of Natural Resources to collect seedling performance data from a network of recently established assisted migration field trials.
-:::::
 
 
-<center>
 
-<img src="../img/UVM_logo_green.png" style="height: 25%; width: 25%; object-fit: contain" onclick="window.open(&apos;https://www.uvm.edu&apos;, &apos;blank&apos;);"/>
-
-<center>

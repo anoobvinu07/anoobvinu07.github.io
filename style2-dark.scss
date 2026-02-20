@@ -272,3 +272,43 @@ div.quarto-about-jolla .about-link {
   transform: scale(1.50);  /* zoom on hover */
 }
 
+
+.footer-logos {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;   /* bigger gap between logos */
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.footer-logos a {
+  display: inline-block;
+}
+
+.footer-logos img {
+  width: 38px;              /* smaller size */
+  height: 38px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: grayscale(50%) brightness(0.9);  /* muted default */
+}
+
+/* hover: zoom + colorize */
+.footer-logos a:hover img {
+  transform: scale(1.25);
+  filter: grayscale(0%) brightness(1.1) saturate(1.4);
+}
+
+.section-separator {
+  width: 60%;
+  max-width: 500px;
+  height: 1px;
+  margin: 2rem auto 1.5rem auto; /* space around the line */
+  background: linear-gradient(
+    to right,
+    transparent,
+    #b0b0b0,
+    transparent
+  );
+  border-radius: 999px;
+  opacity: 0.9;
+}

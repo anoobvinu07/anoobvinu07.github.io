@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -32,17 +32,18 @@ ul.task-list li input[type="checkbox"] {
 <link href="./img/AP_logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e41caad1b6b9b62eb3087831f3b4c651.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-e41caad1b6b9b62eb3087831f3b4c651.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e41caad1b6b9b62eb3087831f3b4c651.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-577d015458cd48ce3af8dbd7c2ddc366.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-e1be5f40dc20c76b3d284492309f8129.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-577d015458cd48ce3af8dbd7c2ddc366.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-af554f16b462ed3886043f17c44dac67.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-fb160f5fc9595f6832a4aac633fe4eeb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-af554f16b462ed3886043f17c44dac67.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -227,6 +228,7 @@ ul.task-list li input[type="checkbox"] {
       toggleColorMode(toAlternate);
       setStyleSentinel(toAlternate);
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
     };
     // Switch to dark mode if need be
     if (hasAlternateSentinel()) {
@@ -242,7 +244,8 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./img/AP_logo.png" alt="" class="navbar-logo">
+    <img src="./img/AP_logo.png" alt="" class="navbar-logo light-content">
+    <img src="./img/AP_logo.png" alt="" class="navbar-logo dark-content">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -261,11 +264,11 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./publications/publications.html"> 
-<span class="menu-text">Publications</span></a>
+<span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./photos/photos.html"> 
-<span class="menu-text">Photos</span></a>
+<span class="menu-text">Blog</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -348,29 +351,39 @@ ul.task-list li input[type="checkbox"] {
 <section id="experience" class="level2">
 <h2 data-anchor-id="experience">Experience</h2>
 <ul>
-<li><p><strong><em>Post Doc.</em></strong> <strong>Forestry and Natural Resources</strong><br>
+<li><p><strong><em>Postdoctoral Research Associate</em></strong>, <strong>Forestry and Natural Resources</strong><br>
 <em>Purdue University, USA</em></p></li>
-<li><p><strong><em>Graduate Intern</em></strong><br>
+<li><p><strong><em>Graduate Researcher</em></strong>, <strong>Plant Biology</strong><br>
+<em>University of Vermont, USA</em></p></li>
+<li><p><strong><em>Graduate Research Intern</em></strong><br>
 <em>The Nature Conservancy, USA</em></p></li>
-<li><p><strong><em>Graduate Researcher</em></strong> <strong>Plant Biology</strong><br>
+<li><p><strong><em>Graduate Teaching Assistant</em></strong>, <strong>Plant Biology</strong><br>
 <em>University of Vermont, USA</em></p></li>
-<li><p><strong><em>Graduate Teaching Assistant</em></strong> <strong>Plant Biology</strong><br>
-<em>University of Vermont, USA</em></p></li>
+<li><p><strong><em>Graduate Teaching Assistant</em></strong>, <strong>Tree Physiology and Breeding</strong><br>
+<em>Kerala Agricultural University, India</em></p></li>
 </ul>
-<p>Highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change, and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings.</p>
-<p>Research on genotypic and phenotypic variation in red spruce led to a collaboration with the Nature Conservancy for seed source selection.</p>
+<p>AP is a highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change, and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings.</p>
+<p>He worked on understanding species response to climate change. He utilized genomics, climate data and trait data to predict species response to climate change using machine learning approaches. His work on genotypic and phenotypic variation in red spruce at <a href="https://www.uvm.edu/">University of Vermont</a> under <a href="https://www.uvm.edu/cals/plantbiology/profile/stephen-r-keller">Dr.&nbsp;Stephen R. Keller</a> led to collaborations with <a href="https://www.nature.org/en-us/">The Nature Conservancy (TNC)</a> and <a href="https://restoreredspruce.org/">Central Appalachian Spruce Restoration initiative (CASRI)</a>. This collaboration resulted in the successful selection of seed sources based on their genomics and planting of approximately 58 thousand seedlings in West Virginia, Virginia and Maryland.</p>
+<p>Currently,he is working as a Post doc at Purdue University with Dr.&nbsp;Matthew Ginzel and Dr.&nbsp;Vikram Chhatre investigating the climate change adaptation in black walnut, white oak and short-leaf pine. He is using machine-learning approach to investigate climate pre- or mal-adaptation for these species with high restoration potential (SHRP). He is working to identify seed sources for regeneration planting in the zones of mal-adaptation. The current research aims to deliver actionable insights to make informed decisions regarding seed sourcing for future healthy forests and assist in coordination of restoration efforts with forest practitioners.</p>
+<div class="section-separator">
+</div>
 </section>
 <section id="education" class="level2">
 <h2 data-anchor-id="education">Education</h2>
 <ul>
-<li><p><strong><em>Ph.D.</em></strong> <strong>Plant Biology</strong><br>
+<li><p><strong><em>Ph.D.</em></strong>, <strong>Plant Biology</strong><br>
 <em>University of Vermont, USA</em></p></li>
 <li><p><strong><em>M.Sc.</em></strong> <strong>Tree Physiology and Breeding</strong><br>
 <em>Kerala Agricultural University, India</em></p></li>
 <li><p><strong><em>B.Sc. (Hons.)</em></strong> <strong>Forestry</strong><br>
 <em>Kerala Agricultural University, India</em></p></li>
 </ul>
-<p>Anoob Prakash holds a PhD in Plant Biology. He is a researcher interested in topics such as climate change adaptation, transparency and open data, environmental data science, and population genomics. He is currently conducting postdoctoral research at the Purdue University.</p>
+<p>Anoob Prakash holds a PhD in Plant Biology. He is a researcher interested in topics such as climate change adaptation, transparency and open data, environmental data science, and population genomics. During his Ph.D., he investigated climate change adaptation in red spruce (<strong>Picea rubens</strong> Sarg.). He investigated adaptive introgression of red spruce with its sister species black spruce (<strong>Picea mariana</strong>) and the role of introgression in red spruce. He managed three common gardens for phenotypic and phenological measurements and carried out genomic analysis to understand trait plasticity, local adaptation and adaptive loci with genome wide association studies (GWAS).</p>
+<p>During his Masters, he investigated the effect of particulate pollution on moist deciduous trees. He carried this research near Walayar Cement Factory to investigate the impact of particulate dust on nearby trees as well as to identify the resilient trees for future to mitigate the impact of particulate pollutions impact on plant and human health.</p>
+<p>He was a National Science Foundation Research Trainee in the <a href="https://www.uvm.edu/cas/bilds">Biological Data Science (BilDS)</a> program (formerly known as the Quantitative Evolutionary STEM Training (QuEST) program). As part of this traineeship he collaborated and networked with researchers from different science streams at UVM and learned to apply quantitative skills to solve environmental and global health problems. He also carried out an internship at TNC as part of this traineeship to apply himself in making informed decisions for a large scale reforestation program, which was closely aligned with with research interest.</p>
+<p>He was also a <a href="https://www.climatehubs.usda.gov/hubs/northeast/project/gradcamp">USDA GradCAMP Climate scholar</a> where he participated in a year-long, cohort-based professional development experience focused on climate adaptation, mitigation, and climate justice. He also engaged in interdisciplinary research, networking, and science communication with peers and climate professionals and developed factsheets discussing forests of the future. Finally, served as a graduate student senator for UVM for 2 years representing Plant Biology regarding issues of stipend for grad students, student mental health, and revision of constitution and bylaws.</p>
+<div class="section-separator">
+</div>
 </section>
 <section id="interests" class="level2">
 <h2 data-anchor-id="interests">Interests</h2>
@@ -382,6 +395,8 @@ ul.task-list li input[type="checkbox"] {
 <li>Data visualization<br>
 </li>
 <li>Gaming</li>
+<li>Illustration<br>
+</li>
 </ul>
 </section>
 </div>
@@ -447,13 +462,14 @@ ul.task-list li input[type="checkbox"] {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

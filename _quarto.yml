@@ -19,9 +19,9 @@ website:
         href: about.qmd
       - text: "Research"
         href: research/research.qmd
-      - text: "Publications"
+      - text: "CV"
         href: publications/publications.qmd
-      - text: "Photos"
+      - text: "Blog"
         href: photos/photos.qmd
       
     

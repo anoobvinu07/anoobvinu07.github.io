@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -32,18 +32,19 @@ ul.task-list li input[type="checkbox"] {
 <link href="../img/AP_logo.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e41caad1b6b9b62eb3087831f3b4c651.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-e41caad1b6b9b62eb3087831f3b4c651.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e41caad1b6b9b62eb3087831f3b4c651.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-1429f825f2b5161864ed63466bc07163.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-505c1f8c4dd2ce2fb790f1447c56f485.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-1429f825f2b5161864ed63466bc07163.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-1c8ecb814c58ffd315eeec5bcf9fa253.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ada8dbc8feb10fb7294755b0f7433b73.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-1c8ecb814c58ffd315eeec5bcf9fa253.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -231,6 +232,7 @@ ul.task-list li input[type="checkbox"] {
       toggleColorMode(toAlternate);
       setStyleSentinel(toAlternate);
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
     };
     // Switch to dark mode if need be
     if (hasAlternateSentinel()) {
@@ -246,7 +248,8 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../img/AP_logo.png" alt="" class="navbar-logo">
+    <img src="../img/AP_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../img/AP_logo.png" alt="" class="navbar-logo dark-content">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -265,11 +268,11 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../publications/publications.html"> 
-<span class="menu-text">Publications</span></a>
+<span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../photos/photos.html"> 
-<span class="menu-text">Photos</span></a>
+<span class="menu-text">Blog</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -314,7 +317,6 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#hybridization-and-adaptive-introgression" id="toc-hybridization-and-adaptive-introgression" class="nav-link" data-scroll-target="#hybridization-and-adaptive-introgression">Hybridization and Adaptive Introgression</a></li>
   <li><a href="#genomic-forecasting" id="toc-genomic-forecasting" class="nav-link" data-scroll-target="#genomic-forecasting">Genomic Forecasting</a></li>
-  <li><a href="#invasions" id="toc-invasions" class="nav-link" data-scroll-target="#invasions">Invasions</a></li>
   </ul></li>
   <li><a href="#research-systems" id="toc-research-systems" class="nav-link" data-scroll-target="#research-systems">Research systems</a>
   <ul>
@@ -330,7 +332,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Adaptation and response to environmental change</h1>
-<p class="subtitle lead">~ the questions that drive us</p>
+<p class="subtitle lead">~ the questions that drive me</p>
 </div>
 
 
@@ -370,7 +372,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="genomic-forecasting" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="genomic-forecasting">Genomic Forecasting</h2>
 <p><strong>Status:</strong> Ongoing<br>
-<strong>Publications:</strong> <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/ele.12376">Fitzpatrick and Keller (2015)</a> | <a href="https://onlinelibrary.wiley.com/doi/pdf/10.1111/1755-0998.13374">Fitzpatrick et al.&nbsp;(2021)</a> | <a href="https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593">Lachmuth et al.&nbsp;(2023) in Ecological Monographs</a> | <a href="https://www.frontiersin.org/journals/ecology-and-evolution/articles/10.3389/fevo.2023.1155783/full">Lachmuth et al.&nbsp;(2023) in Frontiers</a></p>
+<strong>Publications:</strong> <a href="https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593">Lachmuth et al.&nbsp;(2024) in Ecological Monographs</a></p>
 <div class="column-screen page-columns page-full">
 
 <div class="no-row-height column-margin column-container"><div class="">
@@ -381,20 +383,13 @@ ul.task-list li input[type="checkbox"] {
 <p>In addition to building and refining the computational pipeline of genomic offset for forecasting climate change responses, our lab has been working on empirical testing of offset predictions, using a space-for-time approach that evaluates the effect of transferring genotypes from their source climate into one or more common garden sites, and predicting growth and fitness-traits from genomic offsets calculated between the source and garden site climates. Using poplar trees as a study system, we provided the first such common garden test of offset predictions, showing a strong negative response of growth with increasing genomic offset (<a href="https://onlinelibrary.wiley.com/doi/pdf/10.1111/1755-0998.13374">Fitzpatrick et al.&nbsp;2021</a>). We have recently shown a similar result in red spruce (Picea rubens) across 3 seedling common gardens (<a href="https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593">Lachmuth et al., 2023</a>), as well as in a 60 year old red spruce provenance trial in northern New Hampshire (Verrico et al., in prep.).</p>
 </div>
 </section>
-<section id="invasions" class="level2">
-<h2 class="anchored" data-anchor-id="invasions">Invasions</h2>
-<p><strong>Status:</strong> Completed</p>
-<p>The movement of species into new habitats allows populations that were previously geographically isolated to reproduce with each other and create novel genotypes through hybridization. Through environmental selection, novel genotypes can result in phenotypes that increase hybrid fitness and promote biological invasions. Furthermore, hybridization between genetically distinct species can result in changes to the genome size or species ploidy, which can alter the reproduction rate and promote invasion success. The rapid evolution of hybrid species in the introduced range can lead to a drastic shift in the stable state dynamics of the ecosystem, transforming the community assembly.</p>
-<p>Past research has largely focused on the effects of hybridization in Centaura × moncktonii (<em>C. jacea × C. nigra</em>), a plant invasive to North America known as Japanese knapweed. Using a combination of field collections at hybrid zones in eastern North America and the Pacific northwest.</p>
-<p>An assessment of the genome size, degree of introgression, and species traits reveals that hybrid individuals have smaller genomes and capitula traits that promote reproductive success, indicating that admixture of <em>C. jacea</em> and <em>C. nigra</em> can generate invasive genotypes that are environmentally selected for.</p>
-</section>
 </section>
 <section id="research-systems" class="level1 page-columns page-full">
 <h1>Research systems</h1>
 <section id="red-spruce" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="red-spruce">Red spruce</h2>
 <p><strong>Status:</strong> Ongoing<br>
-<strong>Publications:</strong> <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/eva.12985">Capblancq et al.&nbsp;(2020)</a> | <a href="https://link.springer.com/article/10.1007/s10592-021-01378-7">Capblancq et al.&nbsp;(2021)</a> | <a href="https://royalsocietypublishing.org/doi/full/10.1098/rstb.2021.0008">Prakash et al.&nbsp;(2022)</a> | <a href="https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593">Lachmuth et al.&nbsp;(2023) in Ecological Monographs</a> | <a href="https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11600">Prakash et al.&nbsp;(2024)</a></p>
+<strong>Publications:</strong> <a href="https://royalsocietypublishing.org/doi/full/10.1098/rstb.2021.0008">Prakash et al.&nbsp;(2022)</a> | <a href="https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11600">Prakash et al.&nbsp;(2024)</a></p>
 <div class="column-screen page-columns page-full">
 
 <div class="no-row-height column-margin column-container"><div class="">
@@ -419,12 +414,12 @@ ul.task-list li input[type="checkbox"] {
 <p>One of our lab’s major goals is to disseminate the findings of the scientific research to the broader community to inform conservation and restoration efforts on the ground. Red spruce is a species of conservation concern due to high climate change vulnerability and is the focus of several major restoration initiatives, notably the Central Appalachian Red Spruce Restoration Initiative (CASRI) and the Southern Appalachian Red Spruce Restoration Initiative (SASRI), which have planted tens of thousands of seedlings supported by The Nature Conservancy.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Red spruce restoration in collaboration with CASRI and TNC
+<span class="screen-reader-only">Note</span>Red spruce restoration in collaboration with CASRI and TNC
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -442,23 +437,9 @@ Red spruce restoration in collaboration with CASRI and TNC
 </div>
 </div>
 </div>
-<div class="column-screen page-columns page-full">
-
-<div class="no-row-height column-margin column-container"><div class="">
-<div class="margin-photo">
-<p><a href="spruce/img1.jpeg" class="lightbox" data-gallery="spruce"><img src="spruce/img1.jpeg" class="img-fluid"></a></p>
-</div>
-</div></div><p><strong>Spruce orchard project</strong></p>
-<p>In a project funded by the USDA-FS Forest Health Protection program, we are applying the genomic offset model, a method for forecasting genomic maladaptation to climate change, to establish a red spruce seed orchard in the Green Mountain National Forest. Forest managers have traditionally applied a “local is best” framework when choosing where to source seeds for restoration plantings. However, the genotypes currently found in a particular region may not be the ones best adapted to survive the future climate conditions that the region is likely to experience by the end of the century. We have sourced red spruce cuttings from trees that capture a diversity of genotypes predicted by our genomic offset models to be well-adapted to future climates in New England. Once the grafted seedlings become reproductive in 5-7 years, they will produce significant quantities of future climate-adapted seed to support reforestation and assisted migration plantings, a key need expressed by conservation partners in a workshop on red spruce hosted by our lab group in 2021.</p>
-<p><strong>Assisted migration project</strong></p>
-<p>We are working with our partners at The Nature Conservancy, the U.S. Fish and Wildlife Service, and the Vermont Agency of Natural Resources to collect seedling performance data from a network of recently established assisted migration field trials.</p>
-</div>
-<center>
-<p><img src="../img/UVM_logo_green.png" style="height: 25%; width: 25%; object-fit: contain" onclick="window.open('https://www.uvm.edu', 'blank');"></p>
-<center>
 
 
-</center></center></section>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -526,13 +507,14 @@ Red spruce restoration in collaboration with CASRI and TNC
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

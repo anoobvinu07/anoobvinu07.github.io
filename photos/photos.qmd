@@ -11,42 +11,6 @@ format:
       body-width: 1000px
       margin-width: 200px
 ---
-## Pining for Alpine  
-
-![](alpine/panorama.jpg){.panorama-photo width=100% .lightbox group="alpine"}
-
-::: {.photo-grid}
-![](alpine/img1.jpg){.lightbox group="alpine"}
-![](alpine/img2.jpg){.lightbox group="alpine"}
-![](alpine/img3.jpg){.lightbox group="alpine"}
-![](alpine/img4.jpg){.lightbox group="alpine"}
-:::
-
-## In pursuit of spruce  
-
-![](spruce_orchard/panorama.jpg){.panorama-photo width=100% .lightbox group="orchard"}
-
-::: {.photo-grid}
-![](spruce_orchard/img1.jpeg){.lightbox group="orchard"}
-![](spruce_orchard/img2.jpeg){.lightbox group="orchard"}
-![](spruce_orchard/img3.jpeg){.lightbox group="orchard"}
-![](spruce_orchard/img4.jpeg){.lightbox group="orchard"}
-:::
-
-::: {.photo-grid}
-![](spruce_orchard/img6.jpeg){.lightbox group="orchard"}
-![](spruce_orchard/img5.jpeg){.lightbox group="orchard"}
-![](spruce_orchard/img8.jpg){.lightbox group="orchard"}
-![](spruce_orchard/img7.jpg){.lightbox group="orchard"}
-:::
-::: {.photo-grid}
-![](spruce_orchard/img9.jpeg){.lightbox group="orchard"}
-![](spruce_orchard/img10.jpg){.lightbox group="orchard"}
-![](spruce_orchard/img11.JPG){.lightbox group="orchard"}
-![](spruce_orchard/img12.jpeg){.lightbox group="orchard"}
-
-
-:::
 
 ## Alaska  
 
@@ -146,15 +110,15 @@ format:
 ![](building_the_common_gardens/unnamed_2.jpg){.lightbox group="CG"}
 :::
 
-## Keller lab over the years 
+## Keller days. 
 
 ::: {.photo-grid}
-
 ![](time_line/img0.jpg){.lightbox group="timeless"}
-![](time_line/img1.jpg){.lightbox group="timeless"}
 ![](time_line/img2.jpg){.lightbox group="timeless"}
 ![](time_line/img3.jpg){.lightbox group="timeless"}
+
 :::
+
 ::: {.photo-grid}
 ![](time_line/img4.jpg){.lightbox group="timeless"}
 ![](time_line/img5.jpg){.lightbox group="timeless"}
