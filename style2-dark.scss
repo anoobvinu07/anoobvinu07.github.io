@@ -9,7 +9,7 @@ $light-sage-green: #D1D9CE;
 $dark-sage-green: #98A08D;
 $cream: #f8f8ff ; //main bg color used here - make changes here    //#FDFBF7; //originial
 $cream1: #FDFBF7;
-$white: #f8f8ff;
+$white: #f6f6f2;
 $dark-gray: #5A5856;
 $gray: #64605f;
 $light-gray: #949799;
@@ -22,13 +22,13 @@ $lightgreen: #c2edce;
 $ember: #b82601;
 
 // Base document colors
-$navbar-bg: $cream1;
+$navbar-bg: $teal;
 $navbar-fg: $black; 
-$navbar-hl: $ember; 
-$body-bg: $cream;
-$body-color: $gray;
-$footer-bg: $cream; 
-$link-color: $ember;
+$navbar-hl: $white; 
+$body-bg: $black;
+$body-color: $white;
+$footer-bg: $black; 
+$link-color: $lightgreen;
 
 // Inline code
 $code-bg: $cream;
@@ -272,8 +272,3 @@ div.quarto-about-jolla .about-link {
   transform: scale(1.50);  /* zoom on hover */
 }
 
-/* make about-page social icons bigger */
-.quarto-about .about-link .bi,
-.quarto-about .about-link .fa {
-  font-size: 3.8rem; // tweak as needed
-}

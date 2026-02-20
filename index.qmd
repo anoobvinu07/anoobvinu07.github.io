@@ -7,50 +7,29 @@ format:
 # image: "img/Logo_website_update2.png"
 #title: "Home"
 about:
-  template: marquee
+  template: jolla
   id: about-block
-  
-  
+  image: "img/illustrated_AP.jpg"
   links:
     - icon: linkedin
-      text: LinkedIn
+      # text: LinkedIn
       href: https://www.linkedin.com/in/anoob-prakash/
     - icon: github
-      text: Github
+      # text: Github
       href: https://github.com/anoobvinu07
     - icon: google
-      text: Google Scholar
+      # text: Google Scholar
       href: https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ
     - icon: envelope
-      text: Email
-      href: "mailto:anoobvinu@gmail.com"  
+      # text: Email
+      href: "mailto:anoobvinu@gmail.com"
 ---
 
-::: {#edu-exp}
+::: {#bio}
+
+[Hi there! I'm Anoob Prakash]{style="font-size: 2.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"}
+
+[Welcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how tree species respond to changing climate. Learn more [about me](about/about.qmd) on this site, you’ll find my research, projects (data visualization and analysis) and interests.]{style="font-size: 1.6rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"}
+
 :::
 
-Highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings.
-
-::::: grid
-::: {.g-col-12 .g-col-md-8 style="text-align: left;"}
-## Education
-
--   ***Ph.D.*** **Plant Biology**\
-    *University of Vermont, USA*
-
--   ***M.Sc.*** **Tree Physiology and Breeding**\
-    *Kerala Agricultural University, India*
-
--   ***B.Sc.*** **(*Hons.*) Forestry**\
-    *Kerala Agricultural University, India*
-:::
-
-::: {.g-col-12 .g-col-md-4 style="text-align: left;"}
-## Interests
-
--   Basketball
--   Data Analysis
--   Data Visualization
--   Gaming
-:::
-:::::
