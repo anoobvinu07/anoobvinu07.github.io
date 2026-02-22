@@ -396,6 +396,25 @@ div.quarto-about-jolla .about-link {
   margin-bottom: 0.3rem;
 }
 
+/* Make the layout row stretch children to equal height */
+.quarto-layout-row {
+  align-items: stretch;
+}
+
+/* Ensure each column behaves like a flex column so .cv-section fills */
+#first-column,
+#second-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Let the cv-section expand to fill the column height if needed */
+#first-column .cv-section,
+#second-column .cv-section {
+  flex: 1 1 auto;
+}
+
+
 /* Responsive width */
 main.content {
   max-width: 900px;
@@ -444,4 +463,21 @@ main.content {
   color: #c0c0c0;
   display: block;
   margin-top: 0.1rem;
+}
+
+.about-photo {
+  display: block;
+  margin: 2em auto;        /* centers the image horizontally */
+  width: 100%;            /* sets a fixed width for the profile photo */
+  max-width: 100%;         /* makes the photo responsive */
+  transition: transform 0.2s;
+}
+.about-photo:hover {
+  transform: scale(1.20);  /* zoom on hover */
+}
+
+li.no-bullet {
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 0;
 }

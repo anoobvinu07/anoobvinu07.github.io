@@ -7,7 +7,6 @@ format:
     toc-depth: 3
     number-sections: false
     page-layout: full
-    css: styles-cv.css
 ---
 
 _Last updated on July 2025_
@@ -16,10 +15,10 @@ _Last updated on July 2025_
 <div class="cv-name">Anoob Prakash</div>
 <div class="cv-title">Ecological & Evolutionary Genomics · Climate Adaptation · Bioinformatics</div>
 <div class="cv-meta">
-  <span><a href="mailto:anoobvinu@gmail.com">E-mail</a></span> ·
   <span><a href="https://www.linkedin.com/in/anoob-prakash/" target="_blank">LinkedIn</a></span> ·
   <span><a href="https://github.com/anoobvinu07" target="_blank">GitHub</a></span> ·
-  <span><a href="https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ" target="_blank">Google Scholar</a></span>
+  <span><a href="https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ" target="_blank">Google Scholar</a></span> ·
+  <span><a href="https://orcid.org/0000-0002-7207-934X" target="_blank">ORCID</a></span>
 </div>
 
 <div class="cv-actions">
@@ -28,56 +27,110 @@ _Last updated on July 2025_
 </div>
 :::
 
-::: {.cv-section}
-## Professional Profile
 
-Highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change, and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings.
+::::: {layout="[ 50, 50 ]"}
+::: {#first-column}
+
+::: {.cv-section}
+#### Professional Profile  
+Highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change, and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings. Reach out to me for discussing ideas and for collaboration. 
+
+
+<div class="cv-actions">
+  [Personal E-mail](mailto:anoobvinu@gmail.com){.btn .btn-outline-primary} [Purdue E-mail](mailto:prakas89@purdue.edu){.btn .btn-outline-primary}
+</div>
+
 :::
-
-::: {.cv-section}
-## Education
-
-**Ph.D., Plant Biology** – University of Vermont, USA (2018–2025)  
-Advisor: Dr. Stephen R. Keller
-
-**M.Sc., Tree Physiology and Breeding** – Kerala Agricultural University, India (2011–2014)  
-Advisor: Dr. A. V. Santhoshkumar
-
-**B.Sc., Forestry** – Kerala Agricultural University, India (2007–2011)  
-Advisor: Dr. T. K. Kunhamu
 :::
+::: {#second-column}
 
 ::: {.cv-section}
-## Skills
-
-#### Technical Skills
+#### Skills
+::: {.callout-note collapse="true" appearance="minimal"}
+### Technical skills
 
 - Programming and scripting: R (proficient), Unix/Linux (proficient), Python (basic).
 - Data tools: ArcGIS (advanced), QGIS (basic), tidyverse (proficient).
 - Data analysis and bioinformatics: Management and analysis of large-scale genomic, phenotypic, and climate datasets; application of bioinformatic pipelines and climate forecasting methods; graphical data visualization.
+:::
 
-#### Communication and Design
+::: {.callout-note collapse="true" appearance="minimal"}
+### Communication and design
 
 - Design and visualization: Affinity Designer (proficient), Adobe Illustrator (proficient), Adobe After Effects (advanced).
 - Presentation and documentation: Microsoft Office, Quarto (proficient), R Markdown (proficient).
+:::
 
-#### Research and Field Skills
+::: {.callout-note collapse="true" appearance="minimal"}
+### Research and field skills
 
-- Statistical data analysis.
-- Wet lab techniques.
+- Statistical data analysis.  
+- Wet lab techniques.  
 - Field data collection methodologies.
+:::
 
-#### Collaboration and Networking
+::: {.callout-note collapse="true" appearance="minimal"}
+### Collaboration and networking
 
-- Built strong collaborative relationships with researchers at the University of Maryland.
+- Built strong collaborative relationships with researchers at the University of Maryland.  
 - Engaged with scientists, ecologists, and practitioners at The Nature Conservancy (Maryland, West Virginia, Virginia) and the Central Appalachian Spruce Restoration Initiative (CASRI).
+:::
 
-#### Leadership and Service
+::: {.callout-note collapse="true" appearance="minimal"}
+### Leadership and service
 
-- Graduate Student Senator, Department of Plant Biology, University of Vermont (2018–2020).
-- Captain, college basketball team – led team to inter-collegiate championship (2012).
+- Graduate Student Senator, Department of Plant Biology, University of Vermont (2018–2020).  
+- Captain, college basketball team – led team to inter-collegiate championship (2012).  
 - Assistant Hostel Secretary, College of Forestry, Kerala Agricultural University (2009).
 :::
+:::
+:::
+:::::
+
+
+
+
+::: {.cv-section}
+## Education
+
+::::: {layout="[ 75, 25 ]"}
+::: {#first-column}
+#### Ph.D., Plant Biology  
+**University of Vermont, USA**   
+_Advisor: Dr. Stephen R. Keller_  
+
+:::
+::: {#second-column}
+#### 2018-2025
+:::
+:::::
+
+::::: {layout="[ 75, 25 ]"}
+::: {#first-column}
+#### M.Sc., Tree Physiology and Breeding  
+**Kerala Agricultural University, India**   
+_Advisor: Dr. A. V. Santhoshkumar_  
+
+:::
+::: {#second-column}
+#### 2011-2013
+:::
+:::::
+
+::::: {layout="[ 75, 25 ]"}
+::: {#first-column}
+#### B.Sc., Forestry  
+**Kerala Agricultural University, India**   
+_Advisor: Dr. T. K. Kunhamu_  
+
+:::
+::: {#second-column}
+#### 2007-2011
+:::
+:::::
+
+:::
+
 
 ::: {.cv-section}
 ## Research and Professional Experience  
@@ -109,21 +162,21 @@ Advisor: Dr. T. K. Kunhamu
 
 Investigated genotypic and phenotypic variation and climate change adaptation in red spruce (*Picea rubens*).
 
-::: {.callout-note collapse="true" appearance="\"minimal"}
+::: {.callout-note collapse="true" appearance="minimal"}
 ### Project 1: Genotypic variation and plasticity in climate-adaptive traits  
 
 - Quantified biomass and trait variance to identify patterns of genotypic and phenotypic responses to climate gradients using quantitative genetics and Bayesian approaches.
 - Collaborated with interdisciplinary teams to collect and manage large, multi-year datasets from multiple field sources.
 :::
 
-::: {.callout-note collapse="true" appearance="\"minimal"}
+::: {.callout-note collapse="true" appearance="minimal"}
 ### Project 2: Introgression and local adaptation  
 
 - Utilized molecular approaches to investigate the role of introgression underlying local adaptation.
 - Identified patterns of local and climate adaptation to inform conservation strategies for fragmented red spruce populations.
 :::
 
-::: {.callout-note collapse="true" appearance="\"minimal"}
+::: {.callout-note collapse="true" appearance="minimal"}
 ### Project 3: Molecular basis of local adaptation and climate-response forecasting 
 
 - Used genome-wide association studies (GWAS) to detect loci underlying polygenic traits.
@@ -142,7 +195,7 @@ Investigated genotypic and phenotypic variation and climate change adaptation in
 
 Conducted grading, lab instruction, report writing guidance, peer-review facilitation, and lab setup for wet and dry labs.  
 
-::: {.callout-note collapse="true" appearance="\"minimal"}  
+::: {.callout-note collapse="true" appearance="minimal"}  
 
 ### Course list
 **Principles of Biology I and II (2018–2021)**
@@ -174,7 +227,7 @@ Conducted grading, lab instruction, report writing guidance, peer-review facilit
 
 Applied genomics-assisted seed source selection to identify viable seed sources for restoration of red spruce in the fragmented southern range edge, resulting in more than 58,000 seedlings planted across three U.S. states.
 
-::: {.callout-note collapse="true" appearance="\"minimal"}
+::: {.callout-note collapse="true" appearance="minimal"}
 ### Objectives achieved
 - Collected data from experimental plots after restoration planting to monitor and assess genomic-assisted seed sourcing strategies in Virginia, West Virginia, and Maryland.
 - Communicated results in a peer-reviewed scientific journal and at national and international conferences.
@@ -192,13 +245,15 @@ Applied genomics-assisted seed source selection to identify viable seed sources 
 :::
 :::::
 
-::: {.callout-note collapse="true" appearance="\"minimal"}
+::: {.callout-note collapse="true" appearance="minimal"}
 ### Teaching Assistant (2014–2016)
 
 - Taught undergraduate and graduate courses including biochemistry, biotechnology, tree improvement, tree physiology, world forest systems, and ecophysiology.
 - Managed laboratory space and inventory; assisted students with bench work and scientific writing for coursework and research.  
 
-**Courses taught**  
+
+**Courses taught**    
+
   - Forest Ecophysiology, 2013, 2014, 2015  
   - Plant Biochemistry, 2013, 2014  
   - Ethnobotany, 2015  
@@ -211,7 +266,7 @@ Applied genomics-assisted seed source selection to identify viable seed sources 
 
 :::  
 
-::: {.callout-note collapse="true" appearance="\"minimal"}
+::: {.callout-note collapse="true" appearance="minimal"}
 
 ### Graduate Research Assistant (2011–2014)
 
@@ -222,7 +277,7 @@ Investigated the impact of particulate pollution on growth, physiology, and anat
 - Compared wood anatomical properties of pollution-exposed and control populations, identifying significant differences in wood quality and structure.
 :::  
 
-::: {.callout-note collapse="true" appearance="\"minimal"}
+::: {.callout-note collapse="true" appearance="minimal"}
 
 ### Independent Undergraduate Researcher (2010–2011)
 
@@ -291,6 +346,8 @@ Investigated the impact of particulate pollution on growth, physiology, and anat
 </a>
 </li>
 
+::: {.callout-note collapse="true" appearance="minimal"}
+## Publications before 2020  
 <li>
 <a class="pub-btn" href="pubs/reshma_etal_2019_Fodder yield and nutritive value of mulberry (Morus indica L.) under varying plant density.pdf" target="_blank" rel="noopener">
   <span class="pub-title">Fodder yield and nutritive value of mulberry (<em>Morus indica</em>) under varying plant density and pruning frequency in coconut garden</span>
@@ -318,7 +375,7 @@ Investigated the impact of particulate pollution on growth, physiology, and anat
   <span class="pub-meta">Prakash, A., Santhoshkumar, A. V., & Roby, P. C. (2016). <em>International Journal of Science, Environment and Technology</em>, 5, 537–546.</span>
 </a>
 </li>
-
+:::
 </ul>
 :::
 
@@ -336,61 +393,323 @@ Investigated the impact of particulate pollution on growth, physiology, and anat
 ::: {.cv-section}
 ## Conference Presentations
 
-#### Conference Talks
+#### Conference Talks  
 
-- “Unraveling the genetic architecture of local adaptation in species with a history of introgression.”  
-  3rd Joint Congress on Evolutionary Biology, Montreal, Canada (2024).
-- “Unraveling the effects of introgression on local adaptation in red spruce (*Picea rubens*): Genetic rescue and shaping of adaptive traits.”  
-  XXVI World Congress of IUFRO, Stockholm, Sweden (2024).
-- “Understanding the role of introgression on local adaptation in red spruce (*Picea rubens*).”  
-  UVM Student Research Conference, Burlington, Vermont, USA (2024).
-- “Exploring the drivers of selection in a range-fragmented forest tree: A case study in red spruce (*Picea rubens*).”  
-  Evolution 2023, Albuquerque, New Mexico, USA (2023).
-- “Detecting signals of polygenic adaptation in the face of demographic history and population structure in red spruce (*Picea rubens*).”  
-  Botany 2022, Anchorage, Alaska, USA (2022).
-- “The evolution of species’ ranges in the face of changing environments.”  
-  Forest Genetics Student and Postdoc Symposium, virtual (2021).
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2024
+:::
+::: {#second-column}
+**Unraveling the genetic architecture of local adaptation in species with a history of introgression.**  
+_3rd Joint Congress on Evolutionary Biology, Montreal, Canada_  
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2024
+:::
+::: {#second-column}
+**Unraveling the effects of introgression on local adaptation in red spruce (*Picea rubens*): Genetic rescue and shaping of adaptive traits.**  
+_XXVI World Congress of IUFRO, Stockholm, Sweden_  
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2024
+:::
+::: {#second-column}
+**Understanding the role of introgression on local adaptation in red spruce (*Picea rubens*).**  
+_UVM Student Research Conference, Burlington, Vermont, USA_  
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2024
+:::
+::: {#second-column}
+**Exploring the drivers of selection in a range-fragmented forest tree: A case study in red spruce (*Picea rubens*).**  
+_Evolution 2023, Albuquerque, New Mexico, USA_  
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2024
+:::
+::: {#second-column}
+**Detecting signals of polygenic adaptation in the face of demographic history and population structure in red spruce (*Picea rubens*).**  
+_Botany 2022, Anchorage, Alaska, USA_  
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2024
+:::
+::: {#second-column}
+**The evolution of species’ ranges in the face of changing environments.**  
+_Forest Genetics Student and Postdoc Symposium, Virtual._  
+:::
+:::::
 
 #### Outreach
 
-- “Using genomics to assist red spruce conservation and restoration under a changing climate.”  
-  CASRI Annual Meeting, Davis, West Virginia, USA (2023, virtual).
-- “Science Sparks: Plant Biology.”  
-  Science Olympiad outreach talk for grades 7–10, University of Vermont (2023).
-- “Demographic history of red spruce and genotypic variation in climate-adaptive traits after range expansion and fragmentation.”  
-  NSF-funded Red Spruce Climate Change Workshop, Burlington, Vermont, USA (2021).
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2023
+:::
+::: {#second-column}
+**Using genomics to assist red spruce conservation and restoration under a changing climate.**  
+_CASRI Annual Meeting, Davis, West Virginia, USA_  
+:::
+:::::
 
-#### Poster Presentations
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2023
+:::
+::: {#second-column}
+**Science Sparks: Plant Biology.**  
+_Science Olympiad outreach talk for grades 7–10, University of Vermont, USA_  
+:::
+:::::
 
-- “Seeds of Hope: Sprucing up forest restoration with genomics.”  
-  3rd Joint Congress on Evolutionary Biology, Montreal, Canada (2024).  
-  Invited poster at UVM CALS and Food Systems Research Center Board of Trustees event (2024).
-- “Investigating population differentiation in red spruce (*Picea rubens*) due to climate change.”  
-  UVM Student Research Conference, Burlington, Vermont, USA (2019).  
-  Evolution, Providence, Rhode Island, USA (2019).
-- “Anatomical changes in the wood properties of *Tectona grandis* due to particulate pollution.”  
-  National Biodiversity Congress, Thiruvananthapuram, Kerala, India (2015).
-- “Vegetational composition and regeneration status of mangroves in Chetuwai backwaters, Kerala.”  
-  Indian Biodiversity Congress, Chennai, Tamil Nadu, India (2014).
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2021
+:::
+::: {#second-column}
+**Demographic history of red spruce and genotypic variation in climate-adaptive traits after range expansion and fragmentation.**  
+_NSF-funded Red Spruce Climate Change Workshop, Burlington, Vermont, USA_  
+:::
+:::::
+
+
+#### Poster Presentations  
+
+<li class="no-bullet">
+  <a class="pub-btn" href="poster/seeds_of_hope/APrakash_evolution_2024_poster_v2.pdf" target="_blank" rel="noopener">
+    <span class="pub-title">Seeds of Hope: Sprucing up forest restoration with genomics</span>
+  </a>
+</li>
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2024
+:::
+::: {#second-column}
+Invited poster at UVM CALS and Food Systems Research Center Board of Trustees event (2024)
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2024
+:::
+::: {#second-column}
+3rd Joint Congress on Evolutionary Biology, Montreal, Canada
+:::
+:::::
+
+::: {.callout-note collapse="true" appearance="minimal"}
+## Poster Presentations before 2020  
+
+**Investigating population differentiation in red spruce (*Picea rubens*) due to climate change.**  
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2019
+:::
+::: {#second-column}
+_Evolution, Providence, Rhode Island, USA_
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2019
+:::
+::: {#second-column}
+_UVM Student Research Conference, Burlington, Vermont, USA_
+:::
+:::::
+
+**Anatomical changes in the wood properties of *Tectona grandis* due to particulate pollution.**  
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2019
+:::
+::: {#second-column}
+_National Biodiversity Congress, Thiruvananthapuram, Kerala, India_
+:::
+:::::
+
+**Vegetational composition and regeneration status of mangroves in Chetuwai backwaters, Kerala.**  
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2014
+:::
+::: {#second-column}
+_Indian Biodiversity Congress, Chennai, Tamil Nadu, India_
+:::
+:::::
+
+:::
 :::
 
 ::: {.cv-section}
-## Training and Workshops  
+## Trainings and Workshops  
 
-- Computational Biology Upskilling Workshop – Dean Lee and Tommy Tang, The Festival of Genomics & Biodata (June 2025).
-- Enhancing Variant Analysis and Interpretation – Heidi Rehm and Suganthi Balasubramanian, The Festival of Genomics & Biodata (June 2025).
-- Mastering Spatial Data Analysis: From Basics to Cutting-Edge Innovations – Abdul Hassan Samee and Ilya Korsunsky, The Festival of Genomics & Biodata (June 2025).
-- Computational analysis of single-cell RNA-seq data – The Festival of Genomics & Biodata (June 2025).
-- Data and Open Science Summit – UVM and NASA (January 2025).
-- Next Generation Sequencing Webinar – HelixOmics Analytics (May 2024).
-- Schrödinger Educators Week – Schrödinger (May 2024).
-- De novo genome assembly and annotation workshop – Botany 2022 (July 2022).
-- Echoes in Space – Introduction to RADAR Remote Sensing, EO College and ESA (November 2017).
-- UAV Remote Sensing and Applications, Indian Institute of Remote Sensing and ISRO (July 2017).
-- Conservation Genetics, Salim Ali Centre for Ornithology and Natural History (2017).
-- Statistics and R (PH525.1X), HarvardX/edX (2017).
-- Introduction to Python for Data Science (DAT208X), Microsoft/edX (2017).
-- Multiple remote sensing and GIS trainings through IIRS, ISRO, and Kerala Agricultural University (2014–2016).
+<!-- ::::: {layout="[ 10, 90 ]"} -->
+<!-- ::: {#first-column} -->
+<!-- June -->
+<!-- 2025 -->
+<!-- ::: -->
+<!-- ::: {#second-column} -->
+<!-- **Computational Biology Upskilling Workshop**   -->
+<!-- _The Festival of Genomics & Biodata_    -->
+
+<!-- _Instructors: Dean Lee and Tommy Tang_ -->
+<!-- ::: -->
+<!-- ::::: -->
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+June
+2025
+:::
+::: {#second-column}
+_The Festival of Genomics & Biodata, Boston, USA_  
+
+**Computational Biology Upskilling Workshop**  
+_Instructors: Dean Lee and Tommy Tang_
+
+**Enhancing Variant Analysis and Interpretation**  
+_Instructors: Heidi Rehm and Suganthi Balasubramanian_ 
+
+**Mastering Spatial Data Analysis: From Basics to Cutting-Edge Innovations**  
+_Instructors: Abdul Hassan Samee and Ilya Korsunsky_ 
+
+**How to Better Computationally Analyze Your SingleCell RNA Sequencing (scRNA-seq) Data**  
+_Instructors: Gracie Gordon, Mary Piper, Meeta Mistry and Zhaleh Safikhani_ 
+:::
+:::::
+
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+Jan
+2025
+:::
+::: {#second-column}
+**Data and Open Science Summit**  
+_UVM and NASA, Vermont, USA_
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+May
+2024
+:::
+::: {#second-column}
+**Next Generation Sequencing Webinar**  
+_HelixOmics Analytics, Virtual_
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+May
+2024
+:::
+::: {#second-column}
+**Schrödinger Educators Week**  
+_Schrödinger, New York, USA_
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+July
+2022
+:::
+::: {#second-column}
+**De novo genome assembly and annotation workshop**  
+_Botany, Alaska, USA_
+:::
+:::::
+
+::: {.callout-note collapse="true" appearance="minimal"}
+## Trainings and Workshops before 2020  
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+Nov  
+2017
+:::
+::: {#second-column}
+**Echoes in Space: Introduction to RADAR Remote Sensing**  
+_EO College and ESA, Virtual_
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+Nov  
+2017
+:::
+::: {#second-column}
+**UAV Remote Sensing and Applications**  
+_Indian Institute of Remote Sensing and ISRO, Virtual_
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2017
+:::
+::: {#second-column}
+**Conservation Genetics**  
+_Salim Ali Centre for Ornithology and Natural History, India_
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2017
+:::
+::: {#second-column}
+**Statistics and R (PH525.1X)**  
+_HarvardX/edX_
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2017
+:::
+::: {#second-column}
+**Introduction to Python for Data Science (DAT208X)**  
+_Microsoft/edX_
+:::
+:::::
+
+::::: {layout="[ 10, 90 ]"}
+::: {#first-column}
+2014–16
+:::
+::: {#second-column}
+**Multiple remote sensing and GIS trainings**  
+_IIRS, ISRO, and Kerala Agricultural University_
+:::
+:::::
+
+:::
 :::
 
 ::: {.cv-section}

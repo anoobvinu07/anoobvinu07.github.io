@@ -10,7 +10,7 @@ format:
       body-width: 1000px
       margin-width: 300px
 
-# lightbox: auto
+lightbox: false
 ---
 
 ::: {.column-screen}

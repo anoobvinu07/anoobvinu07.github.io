@@ -3,7 +3,6 @@ title: ""
 format: 
   html:
     page-layout: full
-    css: styles2.css
     toc: true
     lightbox: true
     grid:
