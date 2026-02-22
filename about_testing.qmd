@@ -1,0 +1,67 @@
+---
+title: "Anoob Prakash"
+
+format: 
+  html:
+    page-layout: full
+    toc: false
+
+about:
+  template: marquee
+  image: "img/prakash_2024.jpg"  
+  image-width: 20em
+  image-shape: round
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:anoobvinu@gmail.com
+    - icon: github
+      text: GitHub
+      href: https://github.com/anoobvinu07
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/anoob-prakash/
+    - text: Research Gate
+      href: https://www.researchgate.net/profile/Anoob-Prakash
+    - text: Google Scholar
+      href: https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ
+    - text: ORCID
+      href: https://orcid.org/0000-0002-7207-934X
+    - icon: instagram
+      text: Instagram
+      href: https://www.instagram.com/anoobprakash/
+---
+
+
+::: {#hero-heading}  
+
+### A little bit about me
+
+I’m a plant biologist and forest genomicist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I work at the intersection of ecological and evolutionary genomics, climate science, and data science, using large genomic and environmental datasets to understand – and hopefully help guide – the future of forests.
+
+### What I work on
+**Most of my research asks a simple but hard question: how will tree species respond to climate change, and what can we do about it?**  
+
+During my PhD at the [University of Vermont](https://www.uvm.edu/) with [Dr. Stephen R. Keller](https://www.uvm.edu/cals/plantbiology/profile/stephen-r-keller), I focused on red spruce (_Picea rubens_ Sarg.). I combined genomics, climate data, and trait measurements from common gardens to study genotypic and phenotypic variation, local adaptation, and the role of introgression with black spruce (_Picea mariana_). Along the way, I managed three common gardens, ran GWAS to identify adaptive loci, and spent a lot of time turning messy datasets into interpretable stories.
+
+That work led to collaborations with [The Nature Conservancy (TNC)](https://www.nature.org/en-us/) and [Central Appalachian Spruce Restoration initiative (CASRI)](https://restoreredspruce.org/). Together, we used genomic information to select seed sources for restoration in the southern range edge of red spruce, which ultimately informed the planting of ~58,000 seedlings across West Virginia, Virginia, and Maryland. It was a satisfying example of science's real world impact.
+
+### What I’m doing now
+**I’m currently a postdoctoral researcher at Purdue University**, working with Dr. Matthew Ginzel and Dr. Vikram Chhatre. Here, I’m extending the same ideas to black walnut, white oak, and shortleaf pine – species with high restoration potential and major ecological and economic importance. I use machine-learning approaches to detect climate pre‑adaptation and mal‑adaptation, and to identify seed sources that are likely to perform well in future climates. A big goal of this work is to provide actionable guidance to practitioners so restoration and reforestation projects can make informed, climate‑savvy seed sourcing decisions.
+
+### Where I’m coming from
+Before moving into conifers and temperate forests, my master’s work in India focused on something more immediate and local: particulate pollution. Near the Walayar Cement Factory, **I studied how dust pollution affects growth, physiology, and wood anatomy of moist deciduous tree species, and which species might be more resilient**. That early work shaped my interest in how environmental stressors leave signatures in plant physiology.
+
+Over the years, I’ve also invested heavily in data skills and open, quantitative science. As an NSF Research Trainee in the [Biological Data Science (BilDS)](https://www.uvm.edu/cas/bilds) program (formerly QuEST), I collaborated across disciplines at UVM and learned to use quantitative tools to tackle environmental and global health questions. As part of this program, I interned with TNC on large‑scale reforestation planning, which closely aligned with my dissertation work and showed me how genomic data can support real‑world decisions.
+
+I was also a [USDA GradCAMP Climate scholar](https://www.climatehubs.usda.gov/hubs/northeast/project/gradcamp), participating in a year-long, cohort-based experience focused on climate adaptation, mitigation, and climate justice. That year involved interdisciplinary research, networking with climate professionals, and science communication, including developing “forests of the future” factsheets. At UVM, I served two years as a graduate student senator for Plant Biology, working on issues related to graduate stipends, mental health, and governance.
+
+### What I care about
+**Scientifically, I’m drawn to climate change adaptation, population and landscape genomics, environmental data science, and transparent, reproducible workflows**. I enjoy projects that sit at the interface of fundamental evolutionary questions and applied conservation or restoration decisions.
+
+Outside of research, you’ll usually find me on a basketball court, tinkering with data visualizations, learning new illustration tools, or playing games. I enjoy the creative side of science communication – turning complex models and genomic results into visuals and narratives that are intuitive for both scientists and non‑scientists.
+
+
+:::
+
+

@@ -24,6 +24,7 @@ about:
   #     # text: Email
   #     href: "mailto:anoobvinu@gmail.com"
 ---
+
 ::: {.column-screen}
 ::: {#bio}
 [Hi there! I'm Anoob Prakash]{style="font-size: 2.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"}
