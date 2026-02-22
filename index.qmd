@@ -24,12 +24,14 @@ about:
   #     # text: Email
   #     href: "mailto:anoobvinu@gmail.com"
 ---
-
+::: {.column-screen}
 ::: {#bio}
 [Hi there! I'm Anoob Prakash]{style="font-size: 2.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"}
 
 [Welcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how species respond to a changing climate. Learn more [about me](about.qmd). On this site, you’ll find my research, projects in data visualization and analysis, and other interests.]{style="font-size: 1.6rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"}
 :::
+
+
 
 <div class="section-separator"></div>
 
@@ -53,3 +55,5 @@ about:
     <img src="img/square-instagram-brands-solid-full.svg" alt="ORCID">
   </a>
 </div>
+
+:::

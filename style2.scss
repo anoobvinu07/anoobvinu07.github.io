@@ -432,3 +432,17 @@ main.content {
   margin-top: 0.1rem;
 }
 
+/* Make the trestles about column fixed on the left */
+.about-trestles .about-entity {
+  position: sticky;
+  top: 5rem;          /* distance from top (adjust if navbar overlaps) */
+}
+
+/* Right-hand content scrolls; constrain width for readability */
+.about-main-scroll {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+}

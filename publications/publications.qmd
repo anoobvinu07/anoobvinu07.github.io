@@ -1,75 +1,49 @@
 ---
 title: "Scientific output from my research"
 subtitle: "~ the results of my curiosity" 
----  
+---
 
+------------------------------------------------------------------------
 
-*** 
+# Pre-prints or manuscripts in review:
 
-# Pre-prints or manuscripts in review:  
-:::: {.column-default}
-
-::::{layout="[ 1, 99 ]"}  
-
+:::::: column-default
+::::: {layout="[ 1, 99 ]"}
 ::: {#first-column}
+:::
 
-:::  
+::: {#second-column}
+-   Prakash, A.,... , Capblancq, T., Fitzpatrick, M.C. and S.R. Keller. Introgression paper. (In prep for Molecular Ecology)
+:::
+:::::
+::::::
 
-::: {#second-column}  
-
-- Prakash, A.,... , Capblancq, T., Fitzpatrick, M.C. and S.R. Keller. Introgression paper. (In prep for Molecular Ecology)
-
-
-
-:::  
-::::
-::::
-
-
-***  
+------------------------------------------------------------------------
 
 # Published
-## 2024  
 
+## 2024
 
-::::{layout="[ 1, 99 ]"}  
-
+::::: {layout="[ 1, 99 ]"}
 ::: {#first-column}
+:::
 
-:::  
+::: {#second-column}
+-   Prakash, A., Capblancq, T., Shallows, K., Saville, D., Landau, D., Landress, C., Jacobs, T., and S.R. Keller. Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration. Applications in Plant Sciences 12(3), e11600. <https://doi.org/10.1002/aps3.11600>
 
-::: {#second-column}  
+-   Lachmuth, S., T. Capblancq, A. Prakash, S.R. Keller, and M.C. Fitzpatrick. 2024. Novel genomic offset metrics account for local adaptation in climate suitability forecasts and inform assisted migration. Ecological Monographs, 94 (1), e1593. <https://doi.org.10.1002/ecm.1593>
+:::
+:::::
 
-- Prakash, A., Capblancq, T., Shallows, K., Saville, D., Landau, D., Landress, C., Jacobs, T., and S.R. Keller. Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration. Applications in Plant Sciences 12(3), e11600. <https://doi.org/10.1002/aps3.11600>
+## 2022
 
-- Lachmuth, S., T. Capblancq, A. Prakash, S.R. Keller, and M.C. Fitzpatrick. 2024. Novel genomic offset metrics account for local adaptation in climate suitability forecasts and inform assisted migration. Ecological Monographs, 94 (1), e1593. <https://doi.org.10.1002/ecm.1593>
-
-
-:::  
-
-::::
-
-
-
-
-## 2022  
-
-::::{layout="[ 1, 99 ]"}  
-
+::::: {layout="[ 1, 99 ]"}
 ::: {#first-column}
+:::
 
-:::  
-
-::: {#second-column}  
-
-- Prakash, A., S. DeYoung, S. Lachmuth, J.L. Adams, K. Johnsen, J.R. Butnor, D.M. Nelson, M.C. Fitzpatrick and S.R. Keller. 2022. Genotypic variation and plasticity in climate-adaptive traits after range expansion and fragmentation of red spruce (Picea rubens Sarg.) Philosophical Transactions of the Royal Society B, 377(1848).
-
-:::  
-
-::::
-
-
+::: {#second-column}
+-   Prakash, A., S. DeYoung, S. Lachmuth, J.L. Adams, K. Johnsen, J.R. Butnor, D.M. Nelson, M.C. Fitzpatrick and S.R. Keller. 2022. Genotypic variation and plasticity in climate-adaptive traits after range expansion and fragmentation of red spruce (Picea rubens Sarg.) Philosophical Transactions of the Royal Society B, 377(1848).
+:::
+:::::
 
 ## 2020 and prior
-
-
