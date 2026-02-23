@@ -1,5 +1,33 @@
 [
   {
+    "objectID": "research/research.html",
+    "href": "research/research.html",
+    "title": "Adaptation and response to environmental change",
+    "section": "",
+    "text": "~ the questions that drive me"
+  },
+  {
+    "objectID": "research/research.html#genomic-forecasting",
+    "href": "research/research.html#genomic-forecasting",
+    "title": "Adaptation and response to environmental change",
+    "section": "Genomic Forecasting",
+    "text": "Genomic Forecasting\nStatus: Ongoing\nPublications: Lachmuth et al. (2024) in Ecological Monographs\n\n\n\n\nGenomic forecasting workflow. \n\nForecasting the responses of populations to climate change is a complex but important issue to understand as we face the potential for widespread climate maladaptation in the coming decades. This hits especially hard for long-lived, sessile organisms like forest trees, whose long-generation times and limited dispersal potential constrain the ability to adapt or track shifting climate. Recently, there has been increasing interest in combining genomics with climate models to forecast the short-term impacts of climate change on population adaptation. Our lab, in close collaboration with Matt Fitzaptrick’s lab has been developing computational approaches to predict short-term disruption of climate adaptation, known as “genomic offset” modelling. Since first introducing the concept and statistical framework for genomic offset in 2015 (Fitzpatrick and Keller, 2015), we have worked to refine and extend the scope and application of offset models to predicting climate change maladaptation. This has involved simulation testing of genomic offset predictions, in collaboration with Katie Lotterhos’ lab, as well as testing the sensitivity of offset models to model choices such as the genomic loci used and the climate variables and future projection scenarios (Lachmuth et al., 2023).\nIn addition to building and refining the computational pipeline of genomic offset for forecasting climate change responses, our lab has been working on empirical testing of offset predictions, using a space-for-time approach that evaluates the effect of transferring genotypes from their source climate into one or more common garden sites, and predicting growth and fitness-traits from genomic offsets calculated between the source and garden site climates. Using poplar trees as a study system, we provided the first such common garden test of offset predictions, showing a strong negative response of growth with increasing genomic offset (Fitzpatrick et al. 2021). We have recently shown a similar result in red spruce (Picea rubens) across 3 seedling common gardens (Lachmuth et al., 2023), as well as in a 60 year old red spruce provenance trial in northern New Hampshire (Verrico et al., in prep.)."
+  },
+  {
+    "objectID": "research/research.html#red-spruce",
+    "href": "research/research.html#red-spruce",
+    "title": "Adaptation and response to environmental change",
+    "section": "Red spruce",
+    "text": "Red spruce\nStatus: Ongoing\nPublications: Prakash et al. (2022) | Prakash et al. (2024)\n\n\n\n\nHarvesting the red spruce common gardens after two years of growth. \n\nRangewide population genetics and local adaptation\nRed spruce (Picea rubens) is an ecologically important conifer adapted to cool, moist, high-elevation sites mainly in the northeastern U.S. and southeastern Canada, but the southern tail of the range extends down into fragmented mountaintop populations in the Central and Southern Appalachians. Red spruce provides timber, critical habitat for rare and endemic wildlife species, and recreational value to humans. Our lab has explored how population size, range limits, and genetic diversity have impacted local adaptation to climate across red spruce’s range (Capblancq et al., 2020, Capblancq et al., 2021, Prakash et al, 2022 )\n\n\n\n\n\nRed spruce stands in Colebrooke, NH \n\n\nSpruce regeneration monitoring in West Virginia. \n\nHybridization and adaptive introgression\nFor long-lived species with low genetic diversity, introgression—the transfer of genetic material from one lineage into the genome of another through repeated backcrossing—can be a powerful source of adaptive variation in the face of climate change. Red spruce hybridizes with its sister species black spruce (Picea mariana), and most red spruce trees found in the overlap between the two species’ ranges derive significant portions of their genome from past hybridization with black spruce. Recent work by our lab suggests that introgression from black spruce plays a key role in supporting red spruce’s capacity to adapt to climate gradients across its range Prakash et al. (in prep). We use a combination of spatial modeling and landscape and population genomics to characterize the spatial and temporal natural history of hybridization, understand the role of selection in preserving introgressed regions of the genome, and determine under what conditions this introgression may be adaptive. We are also establishing a provenance trial of red and black spruce hybrids, which will serve as a long-term resource for linking the genomics of hybridization with adaptive traits.\nApplied conservation\nOne of our lab’s major goals is to disseminate the findings of the scientific research to the broader community to inform conservation and restoration efforts on the ground. Red spruce is a species of conservation concern due to high climate change vulnerability and is the focus of several major restoration initiatives, notably the Central Appalachian Red Spruce Restoration Initiative (CASRI) and the Southern Appalachian Red Spruce Restoration Initiative (SASRI), which have planted tens of thousands of seedlings supported by The Nature Conservancy.\n\n\n\n\n\n\n\nRed spruce restoration in collaboration with CASRI and TNC\n\n\n\n\n\nKathryn Shallows from TNC approached the Keller lab in 2019 regarding red spruce restoration towards the southern range edge of its distribution, mainly in Maryland, Virginia and West Virginia. This led to a larger partnership that culminated in genomic assisted seed source selection for the restoration initiative at these sites. Instead of opting for a single source restoration initiative, we used a multiple seed source approach to improve the genetic diversity of the restoration stands to withstand the changing climate and environmental stressors. This source selection was carried out in the light of research done by Keller lab using the exome capture data and the common gardens set up at Vermont, Maryland and North Carolina. Three to four sources combinations per restoration site were selected for high genetic diversity and low genetic load.\n\nCapblancq et al. (2021) has observed that early-life fitness of the red spruce had strong positive association with genetic diversity and negative association with genetic load, especially for the southern range edge of the red spruce distribution range. These seed source combinations were used as a recommendation list to Dave Seville (CASRI) to assess the seed production situation on the ground and raise them in the nursery for the restoration initiative. In 2021, TNC planted 58,000 red spruce seedlings at the restoration sites. Keller lab then carried out the restoration monitoring of these restoration sites in 2022, a whole year after the seedlings had been planted in the ground to assess the success of genomic assisted restoration of red spruce. Using this information, Prakash et al. (2024) found that there were no “Super Seed Source” that outperformed other seed sources and the combination of seed sources outperformed any single source for the restoration success.\n\n\n\nGenomic assisted red spruce restoration at Maryland, West-Viginia and Virginia, USA."
+  },
+  {
+    "objectID": "research/research.html#red-spruce-1",
+    "href": "research/research.html#red-spruce-1",
+    "title": "Adaptation and response to environmental change",
+    "section": "Red spruce",
+    "text": "Red spruce\nStatus: Ongoing\nPublications: Prakash et al. (2022) | Prakash et al. (2024)\n\n\n\n\nHarvesting the red spruce common gardens after two years of growth. \n\nRangewide population genetics and local adaptation\nRed spruce (Picea rubens) is an ecologically important conifer adapted to cool, moist, high-elevation sites mainly in the northeastern U.S. and southeastern Canada, but the southern tail of the range extends down into fragmented mountaintop populations in the Central and Southern Appalachians. Red spruce provides timber, critical habitat for rare and endemic wildlife species, and recreational value to humans. Our lab has explored how population size, range limits, and genetic diversity have impacted local adaptation to climate across red spruce’s range (Capblancq et al., 2020, Capblancq et al., 2021, Prakash et al, 2022 )\n\n\n\n\n\nRed spruce stands in Colebrooke, NH \n\n\nSpruce regeneration monitoring in West Virginia. \n\nHybridization and adaptive introgression\nFor long-lived species with low genetic diversity, introgression—the transfer of genetic material from one lineage into the genome of another through repeated backcrossing—can be a powerful source of adaptive variation in the face of climate change. Red spruce hybridizes with its sister species black spruce (Picea mariana), and most red spruce trees found in the overlap between the two species’ ranges derive significant portions of their genome from past hybridization with black spruce. Recent work by our lab suggests that introgression from black spruce plays a key role in supporting red spruce’s capacity to adapt to climate gradients across its range Prakash et al. (in prep). We use a combination of spatial modeling and landscape and population genomics to characterize the spatial and temporal natural history of hybridization, understand the role of selection in preserving introgressed regions of the genome, and determine under what conditions this introgression may be adaptive. We are also establishing a provenance trial of red and black spruce hybrids, which will serve as a long-term resource for linking the genomics of hybridization with adaptive traits.\nApplied conservation\nOne of our lab’s major goals is to disseminate the findings of the scientific research to the broader community to inform conservation and restoration efforts on the ground. Red spruce is a species of conservation concern due to high climate change vulnerability and is the focus of several major restoration initiatives, notably the Central Appalachian Red Spruce Restoration Initiative (CASRI) and the Southern Appalachian Red Spruce Restoration Initiative (SASRI), which have planted tens of thousands of seedlings supported by The Nature Conservancy.\n\n\n\n\n\n\n\nRed spruce restoration in collaboration with CASRI and TNC\n\n\n\n\n\nKathryn Shallows from TNC approached the Keller lab in 2019 regarding red spruce restoration towards the southern range edge of its distribution, mainly in Maryland, Virginia and West Virginia. This led to a larger partnership that culminated in genomic assisted seed source selection for the restoration initiative at these sites. Instead of opting for a single source restoration initiative, we used a multiple seed source approach to improve the genetic diversity of the restoration stands to withstand the changing climate and environmental stressors. This source selection was carried out in the light of research done by Keller lab using the exome capture data and the common gardens set up at Vermont, Maryland and North Carolina. Three to four sources combinations per restoration site were selected for high genetic diversity and low genetic load.\n\nCapblancq et al. (2021) has observed that early-life fitness of the red spruce had strong positive association with genetic diversity and negative association with genetic load, especially for the southern range edge of the red spruce distribution range. These seed source combinations were used as a recommendation list to Dave Seville (CASRI) to assess the seed production situation on the ground and raise them in the nursery for the restoration initiative. In 2021, TNC planted 58,000 red spruce seedlings at the restoration sites. Keller lab then carried out the restoration monitoring of these restoration sites in 2022, a whole year after the seedlings had been planted in the ground to assess the success of genomic assisted restoration of red spruce. Using this information, Prakash et al. (2024) found that there were no “Super Seed Source” that outperformed other seed sources and the combination of seed sources outperformed any single source for the restoration success.\n\n\n\nGenomic assisted red spruce restoration at Maryland, West-Viginia and Virginia, USA."
+  },
+  {
     "objectID": "cv/cv.html",
     "href": "cv/cv.html",
     "title": "Curriculum Vitae",
@@ -7,25 +35,11 @@
     "text": "Last updated on July 2025"
   },
   {
-    "objectID": "cv/cv.html#professional-profile",
-    "href": "cv/cv.html#professional-profile",
-    "title": "Curriculum Vitae",
-    "section": "Professional Profile",
-    "text": "Professional Profile\nHighly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change, and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings."
-  },
-  {
     "objectID": "cv/cv.html#education",
     "href": "cv/cv.html#education",
     "title": "Curriculum Vitae",
     "section": "Education",
     "text": "Education\n\n\n\n\nPh.D., Plant Biology\nUniversity of Vermont, USA\nAdvisor: Dr. Stephen R. Keller\n\n\n\n\n2018-2025\n\n\n\n\n\n\n\n\nM.Sc., Tree Physiology and Breeding\nKerala Agricultural University, India\nAdvisor: Dr. A. V. Santhoshkumar\n\n\n\n\n2011-2013\n\n\n\n\n\n\n\n\nB.Sc., Forestry\nKerala Agricultural University, India\nAdvisor: Dr. T. K. Kunhamu\n\n\n\n\n2007-2011"
-  },
-  {
-    "objectID": "cv/cv.html#skills",
-    "href": "cv/cv.html#skills",
-    "title": "Curriculum Vitae",
-    "section": "Skills",
-    "text": "Skills\n\n\n\n\n\n\nTechnical skills\n\n\n\n\n\n\nProgramming and scripting: R (proficient), Unix/Linux (proficient), Python (basic).\nData tools: ArcGIS (advanced), QGIS (basic), tidyverse (proficient).\nData analysis and bioinformatics: Management and analysis of large-scale genomic, phenotypic, and climate datasets; application of bioinformatic pipelines and climate forecasting methods; graphical data visualization.\n\n\n\n\n\n\n\n\n\n\nCommunication and design\n\n\n\n\n\n\nDesign and visualization: Affinity Designer (proficient), Adobe Illustrator (proficient), Adobe After Effects (advanced).\nPresentation and documentation: Microsoft Office, Quarto (proficient), R Markdown (proficient).\n\n\n\n\n\n\n\n\n\n\nResearch and field skills\n\n\n\n\n\n\nStatistical data analysis.\n\nWet lab techniques.\n\nField data collection methodologies.\n\n\n\n\n\n\n\n\n\n\nCollaboration and networking\n\n\n\n\n\n\nBuilt strong collaborative relationships with researchers at the University of Maryland.\n\nEngaged with scientists, ecologists, and practitioners at The Nature Conservancy (Maryland, West Virginia, Virginia) and the Central Appalachian Spruce Restoration Initiative (CASRI).\n\n\n\n\n\n\n\n\n\n\nLeadership and service\n\n\n\n\n\n\nGraduate Student Senator, Department of Plant Biology, University of Vermont (2018–2020).\n\nCaptain, college basketball team – led team to inter-collegiate championship (2012).\n\nAssistant Hostel Secretary, College of Forestry, Kerala Agricultural University (2009)."
   },
   {
     "objectID": "cv/cv.html#research-and-professional-experience",
@@ -84,60 +98,11 @@
     "text": "References\nAvailable upon request."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "",
-    "section": "",
-    "text": "Hi there! I’m Anoob Prakash\nWelcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how species respond to a changing climate. Learn more about me. On this site, you’ll find my research, projects in data visualization and analysis, and other interests."
-  },
-  {
-    "objectID": "research/research.html#hybridization-and-adaptive-introgression",
-    "href": "research/research.html#hybridization-and-adaptive-introgression",
-    "title": "Adaptation and response to environmental change",
-    "section": "Hybridization and Adaptive Introgression",
-    "text": "Hybridization and Adaptive Introgression\nStatus: Ongoing\nPublications\n\n\n\n\nPoplar hybridization in the Pacific Northwest.\n\n\nWhile we often think of species as being reproductively isolated from one another, this is not always the case. As a consequence of weak reproductive barriers, members of different species can interbreed in nature. When hybrids between two species are fertile, hybrids may then interbreed with members of the original species in a process known as backcrossing. Multiple generations of hybridization and subsequent backcrossing can facilitate the exchange of genetic material between parental species, a process known as introgression. Much of the research conducted in the Keller lab aims to understand if this exchange of genetic material is an adaptive process. For example, does genetic variation that increases tolerance to environmental stress in one species play the same role when it is introgressed into another species?\nOne current area of interest in the Keller lab is the susceptibility of hybrid poplars to infection by rust fungi in the genus Melampsora. One overarching question in the lab that this work addresses is the relationship between hybridization and local adaptation. The potential roles of ancestry and adaptation to local climatic variables as indicators of disease susceptibility in common garden experiments are being investigated."
-  },
-  {
-    "objectID": "research/research.html#genomic-forecasting",
-    "href": "research/research.html#genomic-forecasting",
-    "title": "Adaptation and response to environmental change",
-    "section": "Genomic Forecasting",
-    "text": "Genomic Forecasting\nStatus: Ongoing\nPublications: Lachmuth et al. (2024) in Ecological Monographs\n\n\n\n\nGenomic forecasting workflow. \n\nForecasting the responses of populations to climate change is a complex but important issue to understand as we face the potential for widespread climate maladaptation in the coming decades. This hits especially hard for long-lived, sessile organisms like forest trees, whose long-generation times and limited dispersal potential constrain the ability to adapt or track shifting climate. Recently, there has been increasing interest in combining genomics with climate models to forecast the short-term impacts of climate change on population adaptation. Our lab, in close collaboration with Matt Fitzaptrick’s lab has been developing computational approaches to predict short-term disruption of climate adaptation, known as “genomic offset” modelling. Since first introducing the concept and statistical framework for genomic offset in 2015 (Fitzpatrick and Keller, 2015), we have worked to refine and extend the scope and application of offset models to predicting climate change maladaptation. This has involved simulation testing of genomic offset predictions, in collaboration with Katie Lotterhos’ lab, as well as testing the sensitivity of offset models to model choices such as the genomic loci used and the climate variables and future projection scenarios (Lachmuth et al., 2023).\nIn addition to building and refining the computational pipeline of genomic offset for forecasting climate change responses, our lab has been working on empirical testing of offset predictions, using a space-for-time approach that evaluates the effect of transferring genotypes from their source climate into one or more common garden sites, and predicting growth and fitness-traits from genomic offsets calculated between the source and garden site climates. Using poplar trees as a study system, we provided the first such common garden test of offset predictions, showing a strong negative response of growth with increasing genomic offset (Fitzpatrick et al. 2021). We have recently shown a similar result in red spruce (Picea rubens) across 3 seedling common gardens (Lachmuth et al., 2023), as well as in a 60 year old red spruce provenance trial in northern New Hampshire (Verrico et al., in prep.)."
-  },
-  {
-    "objectID": "research/research.html#red-spruce",
-    "href": "research/research.html#red-spruce",
+    "objectID": "research/research.html#red-spruce-2",
+    "href": "research/research.html#red-spruce-2",
     "title": "Adaptation and response to environmental change",
     "section": "Red spruce",
     "text": "Red spruce\nStatus: Ongoing\nPublications: Prakash et al. (2022) | Prakash et al. (2024)\n\n\n\n\nHarvesting the red spruce common gardens after two years of growth. \n\nRangewide population genetics and local adaptation\nRed spruce (Picea rubens) is an ecologically important conifer adapted to cool, moist, high-elevation sites mainly in the northeastern U.S. and southeastern Canada, but the southern tail of the range extends down into fragmented mountaintop populations in the Central and Southern Appalachians. Red spruce provides timber, critical habitat for rare and endemic wildlife species, and recreational value to humans. Our lab has explored how population size, range limits, and genetic diversity have impacted local adaptation to climate across red spruce’s range (Capblancq et al., 2020, Capblancq et al., 2021, Prakash et al, 2022 )\n\n\n\n\n\nRed spruce stands in Colebrooke, NH \n\n\nSpruce regeneration monitoring in West Virginia. \n\nHybridization and adaptive introgression\nFor long-lived species with low genetic diversity, introgression—the transfer of genetic material from one lineage into the genome of another through repeated backcrossing—can be a powerful source of adaptive variation in the face of climate change. Red spruce hybridizes with its sister species black spruce (Picea mariana), and most red spruce trees found in the overlap between the two species’ ranges derive significant portions of their genome from past hybridization with black spruce. Recent work by our lab suggests that introgression from black spruce plays a key role in supporting red spruce’s capacity to adapt to climate gradients across its range Prakash et al. (in prep). We use a combination of spatial modeling and landscape and population genomics to characterize the spatial and temporal natural history of hybridization, understand the role of selection in preserving introgressed regions of the genome, and determine under what conditions this introgression may be adaptive. We are also establishing a provenance trial of red and black spruce hybrids, which will serve as a long-term resource for linking the genomics of hybridization with adaptive traits.\nApplied conservation\nOne of our lab’s major goals is to disseminate the findings of the scientific research to the broader community to inform conservation and restoration efforts on the ground. Red spruce is a species of conservation concern due to high climate change vulnerability and is the focus of several major restoration initiatives, notably the Central Appalachian Red Spruce Restoration Initiative (CASRI) and the Southern Appalachian Red Spruce Restoration Initiative (SASRI), which have planted tens of thousands of seedlings supported by The Nature Conservancy.\n\n\n\n\n\n\n\nRed spruce restoration in collaboration with CASRI and TNC\n\n\n\n\n\nKathryn Shallows from TNC approached the Keller lab in 2019 regarding red spruce restoration towards the southern range edge of its distribution, mainly in Maryland, Virginia and West Virginia. This led to a larger partnership that culminated in genomic assisted seed source selection for the restoration initiative at these sites. Instead of opting for a single source restoration initiative, we used a multiple seed source approach to improve the genetic diversity of the restoration stands to withstand the changing climate and environmental stressors. This source selection was carried out in the light of research done by Keller lab using the exome capture data and the common gardens set up at Vermont, Maryland and North Carolina. Three to four sources combinations per restoration site were selected for high genetic diversity and low genetic load.\n\nCapblancq et al. (2021) has observed that early-life fitness of the red spruce had strong positive association with genetic diversity and negative association with genetic load, especially for the southern range edge of the red spruce distribution range. These seed source combinations were used as a recommendation list to Dave Seville (CASRI) to assess the seed production situation on the ground and raise them in the nursery for the restoration initiative. In 2021, TNC planted 58,000 red spruce seedlings at the restoration sites. Keller lab then carried out the restoration monitoring of these restoration sites in 2022, a whole year after the seedlings had been planted in the ground to assess the success of genomic assisted restoration of red spruce. Using this information, Prakash et al. (2024) found that there were no “Super Seed Source” that outperformed other seed sources and the combination of seed sources outperformed any single source for the restoration success.\n\n\n\nGenomic assisted red spruce restoration at Maryland, West-Viginia and Virginia, USA."
-  },
-  {
-    "objectID": "photos/photos.html#poplar-garden",
-    "href": "photos/photos.html#poplar-garden",
-    "title": "",
-    "section": "Poplar garden",
-    "text": "Poplar garden"
-  },
-  {
-    "objectID": "photos/photos.html#spruce-gardens",
-    "href": "photos/photos.html#spruce-gardens",
-    "title": "",
-    "section": "Spruce Gardens",
-    "text": "Spruce Gardens"
-  },
-  {
-    "objectID": "photos/photos.html#building-the-common-garden",
-    "href": "photos/photos.html#building-the-common-garden",
-    "title": "",
-    "section": "Building the Common Garden",
-    "text": "Building the Common Garden"
-  },
-  {
-    "objectID": "photos/photos.html#keller-days.",
-    "href": "photos/photos.html#keller-days.",
-    "title": "",
-    "section": "Keller days.",
-    "text": "Keller days."
   },
   {
     "objectID": "about.html",
@@ -175,11 +140,39 @@
     "text": "What I care about\nScientifically, I’m drawn to climate change adaptation, population and landscape genomics, environmental data science, and transparent, reproducible workflows. I enjoy projects that sit at the interface of fundamental evolutionary questions and applied conservation or restoration decisions.\nOutside of research, you’ll usually find me on a basketball court, tinkering with data visualizations, learning new illustration tools, or playing games. I enjoy the creative side of science communication – turning complex models and genomic results into visuals and narratives that are intuitive for both scientists and non‑scientists."
   },
   {
-    "objectID": "cv/cv.html#skills-1",
-    "href": "cv/cv.html#skills-1",
-    "title": "Curriculum Vitae",
-    "section": "Skills",
-    "text": "Skills\n\n\n\n\n\n\nTechnical skills\n\n\n\n\n\n\nProgramming and scripting: R (proficient), Unix/Linux (proficient), Python (basic).\nData tools: ArcGIS (advanced), QGIS (basic), tidyverse (proficient).\nData analysis and bioinformatics: Management and analysis of large-scale genomic, phenotypic, and climate datasets; application of bioinformatic pipelines and climate forecasting methods; graphical data visualization.\n\n\n\n\n\n\n\n\n\n\nCommunication and design\n\n\n\n\n\n\nDesign and visualization: Affinity Designer (proficient), Adobe Illustrator (proficient), Adobe After Effects (advanced).\nPresentation and documentation: Microsoft Office, Quarto (proficient), R Markdown (proficient).\n\n\n\n\n\n\n\n\n\n\nResearch and field skills\n\n\n\n\n\n\nStatistical data analysis.\n\nWet lab techniques.\n\nField data collection methodologies.\n\n\n\n\n\n\n\n\n\n\nCollaboration and networking\n\n\n\n\n\n\nBuilt strong collaborative relationships with researchers at the University of Maryland.\n\nEngaged with scientists, ecologists, and practitioners at The Nature Conservancy (Maryland, West Virginia, Virginia) and the Central Appalachian Spruce Restoration Initiative (CASRI).\n\n\n\n\n\n\n\n\n\n\nLeadership and service\n\n\n\n\n\n\nGraduate Student Senator, Department of Plant Biology, University of Vermont (2018–2020).\n\nCaptain, college basketball team – led team to inter-collegiate championship (2012).\n\nAssistant Hostel Secretary, College of Forestry, Kerala Agricultural University (2009)."
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "",
+    "section": "",
+    "text": "Hi there! I’m Anoob Prakash\nWelcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how species respond to a changing climate. Learn more about me. On this site, you’ll find my research, projects in data visualization and analysis, and other interests."
+  },
+  {
+    "objectID": "photos/photos.html#poplar-garden",
+    "href": "photos/photos.html#poplar-garden",
+    "title": "",
+    "section": "Poplar garden",
+    "text": "Poplar garden"
+  },
+  {
+    "objectID": "photos/photos.html#spruce-gardens",
+    "href": "photos/photos.html#spruce-gardens",
+    "title": "",
+    "section": "Spruce Gardens",
+    "text": "Spruce Gardens"
+  },
+  {
+    "objectID": "photos/photos.html#building-the-common-garden",
+    "href": "photos/photos.html#building-the-common-garden",
+    "title": "",
+    "section": "Building the Common Garden",
+    "text": "Building the Common Garden"
+  },
+  {
+    "objectID": "photos/photos.html#keller-days.",
+    "href": "photos/photos.html#keller-days.",
+    "title": "",
+    "section": "Keller days.",
+    "text": "Keller days."
   },
   {
     "objectID": "publications/publications.html#section",

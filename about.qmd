@@ -62,7 +62,7 @@ lightbox: false
 
 During my PhD at the [University of Vermont](https://www.uvm.edu/) with [Dr. Stephen R. Keller](https://www.uvm.edu/cals/plantbiology/profile/stephen-r-keller), I focused on red spruce (_Picea rubens_ Sarg.). I combined genomics, climate data, and trait measurements from common gardens to study genotypic and phenotypic variation, local adaptation, and the role of introgression with black spruce (_Picea mariana_). Along the way, I managed three common gardens, ran GWAS to identify adaptive loci, and spent a lot of time turning messy datasets into interpretable stories.
 
-::: {.callout-note collapse="true" appearance="\"minimal"}
+::: {.callout-note collapse="true" appearance="minimal"}
 ## Collaboration with TNC and CASRI
 PhD research work led to collaborations with [The Nature Conservancy (TNC)](https://www.nature.org/en-us/) and the [Central Appalachian Spruce Restoration Initiative (CASRI)](https://restoreredspruce.org/). Together, we used genomic information to select seed sources for restoration in the southern range edge of red spruce, which ultimately informed the planting of ~58,000 seedlings across West Virginia, Virginia, and Maryland. It was a satisfying example of science’s real world impact. Read more in the [research section](research/research.qmd)
 :::
@@ -81,12 +81,12 @@ I use machine‑learning approaches to detect climate pre‑adaptation and mal�
 
 Before moving into conifers and temperate forests, my master’s work in India focused on something more immediate and local: particulate pollution. Near the Walayar Cement Factory, **I studied how dust pollution affects growth, physiology, and wood anatomy of moist deciduous tree species, and which species might be more resilient**. That early work shaped my interest in how environmental stressors leave signatures in plant physiology.
 
-::: {.callout-note collapse="true" appearance="\"minimal"}
+::: {.callout-note collapse="true" appearance="minimal"}
 ## NSF Traineeship  
 Over the years, I’ve also invested heavily in data skills and open, quantitative science. As an NSF Research Trainee in the [Biological Data Science (BilDS)](https://www.uvm.edu/cas/bilds) program (formerly QuEST), I collaborated across disciplines at UVM and learned to use quantitative tools to tackle environmental and global health questions. As part of this program, I interned with TNC on large‑scale reforestation planning, which closely aligned with my dissertation work and showed me how genomic data can support real‑world decisions.
 :::
 
-::: {.callout-note collapse="true" appearance="\"minimal"}
+::: {.callout-note collapse="true" appearance="minimal"}
 ## USDA Climate Scholar
 I was also a [USDA GradCAMP Climate scholar](https://www.climatehubs.usda.gov/hubs/northeast/project/gradcamp), participating in a year‑long, cohort‑based experience focused on climate adaptation, mitigation, and climate justice. That year involved interdisciplinary research, networking with climate professionals, and science communication, including developing “forests of the future” factsheets. At UVM, I served two years as a graduate student senator for Plant Biology, working on issues related to graduate stipends, mental health, and governance.
 :::

@@ -1,41 +1,254 @@
 ---
-title: "Adaptation and response to environmental change"
-subtitle: "~ the questions that drive me" 
+title: ""
+subtitle: "" 
 format: 
   html:
     page-layout: full
-    toc: true
-    grid:
-      sidebar-width: 100px
-      body-width: 1000px
-      margin-width: 300px
+    toc: false
 
-lightbox: auto
+# lightbox: auto
 ---
 
-::: {.column-screen .center}
-![](website_banner_research_transparent_background3.png){.nolightbox}
+
+:::{.column-screen}
+# Adaptation and response to environmental change    
+_~ the questions that drive me_  
+![](website_banner_research_transparent_background3.png){.title-photo width=100%}
+
 :::
 
-# Research themes
 
-## Hybridization and Adaptive Introgression
-
-**Status:** Ongoing\
-**Publications**
 
 ::::: column-screen
-:::: column-margin
-::: margin-photo
-Poplar hybridization in the Pacific Northwest.\
-![Poplar hybridization in the Pacific Northwest.](poplar_introgression.jpg){.lightbox group="Introgression"}
+::: {.cv-hero}
+<div class="cv-name">Climate change adaptation in trees</div>
+<div class="cv-title">**Status**: _Ongoing_ · **Publication**: [Prakash et al. (2022)](https://doi.org/10.1098/rstb.2021.0008)</div>
 :::
-::::
+::::: 
 
-While we often think of species as being reproductively isolated from one another, this is not always the case. As a consequence of weak reproductive barriers, members of different species can interbreed in nature. When hybrids between two species are fertile, hybrids may then interbreed with members of the original species in a process known as backcrossing. Multiple generations of hybridization and subsequent backcrossing can facilitate the exchange of genetic material between parental species, a process known as introgression. Much of the research conducted in the Keller lab aims to understand if this exchange of genetic material is an adaptive process. For example, does genetic variation that increases tolerance to environmental stress in one species play the same role when it is introgressed into another species?
+::::: column-screen
 
-One current area of interest in the Keller lab is the susceptibility of hybrid poplars to infection by rust fungi in the genus Melampsora. One overarching question in the lab that this work addresses is the relationship between hybridization and local adaptation. The potential roles of ancestry and adaptation to local climatic variables as indicators of disease susceptibility in common garden experiments are being investigated.
+::::: {layout="[ 50, 50 ]"}
+::: {#first-column}
+
+::: {.cv-section}
+#### Background  
+Species distributions are shaped by a combination of historical and contemporary processes, including past range expansions, migration, and patterns of adaptation to diverse environmental conditions across their ranges. Today, global climate change is a major driver of new changes in species distributions. 
+
+Warming temperatures, shifting precipitation patterns, and more frequent climate extremes have led to widespread responses like altered phenology, range shifts, and physiological changes observed across many taxa. Long-lived, sessile organisms like trees are especially vulnerable because their migration and adaptation rates cannot keep pace with rapid climate changes.  
+
+
+:::
+:::
+::: {#second-column}
+
+::: {.cv-section}
+#### Red spruce  
+
+I used multidisciplinary approaches to understand the genotypic and phenotypic variation and climate change adaptation present in red spruce (Picea rubens Sarg.), a climate sensitive conifer species found in eastern North America. Red spruce populations have declined over the past century due to logging, acid rain, climate stress, and exhibit low genetic diversity, particularly in the fragmented southern part of its range. To assess genetic and environmental influences on key traits like phenology and growth, I planted seeds from across the species range in three common gardens (Vermont, Maryland, and North Carolina) and performed whole-genome exome capture of mother trees. Genetic analysis revealed moderate heritability and regional differentiation for phenology and growth, alongside high plasticity.   
+
+:::
+:::
 :::::
+:::::
+
+::::: column-screen
+::: {.cv-section}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+ 
+```{r message=FALSE, warning=FALSE, paged.print=FALSE, echo=F}
+# packages  
+suppressPackageStartupMessages({
+  require(sp)
+  require(leaflet)
+})
+
+# data
+meta <- read.csv("spruce/data/RS_Exome_metadata.txt",
+                 header=T,
+                 sep="\t")
+Fam <- meta[,c("Pop","Family","Region","Latitude","Longitude","Elevation")]
+Fam$Longitude <- Fam$Longitude * -1
+Fam$Region <- plyr::revalue(Fam$Region,
+                               c("C" = "Core", "M" = "Margin", "E" = "Edge"))
+
+Fam$Region <- factor(Fam$Region,levels = c("Core", "Margin", "Edge"))
+
+Garden <- data.frame("Garden"   = c("Vermont","Maryland","North_Carolina"),
+                     "Latitude" = c(44.4759,39.642483,35.504163),
+                     "Longitude"= c(-73.2121,-78.939213,-82.5995),
+                     "Elevation"= c(59,588,665))
+
+data <- Fam[,c(3:6)]
+g2 <- Garden
+names(g2)[1] <- "Region"
+data <- rbind(data,g2)
+
+
+## range cover of red spruce
+
+range <- raster::shapefile("spruce/data/rangemap/picerube/picerube.shp")
+
+# sp::proj4string(range) # describes data’s current coordinate reference system
+
+# to change to correct projection:
+range <- spTransform(range,
+                     CRS("+proj=longlat +datum=WGS84"))
+
+
+
+# leaflet  
+
+map <- leaflet(data = range)
+
+
+pal <- colorFactor(c("goldenrod2","green2","steelblue"), domain = c("Core", "Margin","Edge"))
+
+
+map %>%
+  # setView(lng = -70 ,lat= 43, zoom = 5.3) %>%
+  setMaxBounds(lng1 = -76.5, lat1 = 41.5, 
+               lng2 = -74,
+               lat2 = 41 ) %>% 
+  addProviderTiles("OpenTopoMap") %>% 
+  addPolygons(
+    stroke = FALSE,
+    fillOpacity = 0.7,
+    smoothFactor = 0.1,
+    color="red"
+    ) %>% 
+  
+  addCircleMarkers(
+    data = Fam, 
+    lng=~Longitude,
+    lat=~Latitude,
+    color = "black",
+    radius=5,
+    stroke=T,
+    weight = 0.8,
+    fillColor =~pal(Region),
+    fillOpacity = 0.9,
+    popup = paste0("<strong>Population: </strong>", Fam$Pop, "</br>",
+                   "<strong>Family: </strong>", Fam$Family)
+) %>% 
+  addCircleMarkers(
+    data = Garden, 
+    lng=~Longitude,
+    lat=~Latitude,
+    color = "black",
+    radius=8,
+    stroke=T,
+    weight = 0.8,
+    fillColor ="grey50",
+    fillOpacity = 0.9,
+    popup = paste0("<strong>Garden site: </strong>", Garden$Garden, "</br>",
+                   "<strong>Elevation: </strong>", Garden$Elevation)
+) %>% 
+  addPopups(data = Garden, 
+    lng=~Longitude,
+    lat=~Latitude, Garden$Garden,
+    options = popupOptions(closeButton = T)
+  ) %>% 
+  addLegend('bottomright', pal = pal, values = Fam$Region,
+            title = 'Region',
+            opacity = 1)
+
+```
+
+
+:::
+:::::
+
+
+
+::::: column-screen 
+::::: {layout="[ 50, 50 ]"}
+
+::: {#first-column}
+::: {.cv-section}
+
+#### Genotypic and phenotypic variations in RS  
+
+The common gardens were raised for 2 years, recording their phenotypic and phenological traits and harvested for biomass and isotope analysis. The results of the common garden experiment to investigate the phenotypic plasticity and genotypic variations in red spruce was published in 2022. The results of this paper laid the foundations for extending our understanding of the species and further apply it in the field.   
+
+::: {.cv-hero}
+<div class="cv-actions">
+  [Paper](https://doi.org/10.1098/rstb.2021.0008){.btn .btn-outline-primary}
+  
+  [Code repo](https://github.com/anoobvinu07/NSF_RedSpruce_CG){.btn .btn-outline-primary}
+  
+  [Code html](https://anoobvinu07.github.io/NSF_RedSpruce_CG/){.btn .btn-outline-primary}
+</div>
+::: 
+
+:::
+:::
+
+::: {#second-column}
+::: {.cv-section}
+
+#### Harvesting  
+
+![Common gardens at Vermont, Maryland and North Carolina](spruce/spruce_CG.png){.lightbox group="spruce"}   
+
+![Harvesting the red spruce common gardens after two years of growth.](../photos/spruce_garden/harvest.gif){.lightbox group="spruce"}
+
+:::
+:::
+
+:::::
+:::::
+
+
+
+
+
+
+
+::::: column-screen
+::: {.cv-hero}
+<div class="cv-name">Hybridization and Adaptive Introgression</div>
+<div class="cv-title">**Status**: _Ongoing_ · **Publication**: _In prep_</div>
+:::
+::::: 
+
+::::: column-screen
+
+::::: {layout="[ 50, 50 ]"}
+::: {#first-column}
+
+::: {.cv-section}
+#### Background  
+We often think of species as being reproductively isolated from one another, this is not always the case. As a consequence of weak reproductive barriers, members of different species can interbreed in nature. When hybrids between two species are fertile, hybrids may then interbreed with members of the original species in a process known as backcrossing. Multiple generations of hybridization and subsequent backcrossing can facilitate the exchange of genetic material between parental species, a process known as introgression. 
+
+
+:::
+:::
+::: {#second-column}
+
+::: {.cv-section}
+#### Introgression in red spruce  
+
+Northern red spruce populations shows extensive introgression from black spruce (Picea mariana), which contributes adaptive genetic diversity for key traits such as biomass and height. These advanced-generation hybrids may play a key role in climate adaptation and evolutionary rescue for red spruce populations in a changing environment. This work advances our understanding of climate adaptation in red spruce and highlights the importance of introgression as a source of adaptive genetic diversity for vulnerable forest tree species.  
+
+:::
+:::
+:::::
+::::: 
+
+
+::::: column-screen
+::: {.cv-section}
+Admix plot showing the introgression between red spruce and allopatric black spruce outside the current range of red spruce. 
+![](hybridization/rs_bs_admix.png){.panorama-photo width=100% .lightbox group="hybrid"}
+:::
+::::: 
+
+
 
 ## Genomic Forecasting
 
