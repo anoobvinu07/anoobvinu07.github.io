@@ -60,103 +60,105 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
  
-```{r message=FALSE, warning=FALSE, paged.print=FALSE, echo=F}
+```{r}
 #| cache: true
-# packages  
+#| column: screen-inset-shaded
+#| message: false
+#| warning: false
+#| echo: false
+
 suppressPackageStartupMessages({
-  require(sp)
-  require(leaflet)
+  library(sp)
+  library(raster)
+  library(leaflet)
+  library(plyr)
 })
 
-# data
-meta <- read.csv("spruce/data/RS_Exome_metadata.txt",
-                 header=T,
-                 sep="\t")
-Fam <- meta[,c("Pop","Family","Region","Latitude","Longitude","Elevation")]
+# metadata
+meta <- read.csv(
+  "spruce/data/RS_Exome_metadata.txt",
+  header = TRUE,
+  sep = "\t"
+)
+
+Fam <- meta[, c("Pop", "Family", "Region", "Latitude", "Longitude", "Elevation")]
 Fam$Longitude <- Fam$Longitude * -1
-Fam$Region <- plyr::revalue(Fam$Region,
-                               c("C" = "Core", "M" = "Margin", "E" = "Edge"))
+Fam$Region <- plyr::revalue(
+  Fam$Region,
+  c("C" = "Core", "M" = "Margin", "E" = "Edge")
+)
+Fam$Region <- factor(Fam$Region, levels = c("Core", "Margin", "Edge"))
 
-Fam$Region <- factor(Fam$Region,levels = c("Core", "Margin", "Edge"))
+Garden <- data.frame(
+  Garden    = c("Vermont",  "Maryland",     "North_Carolina"),
+  Latitude  = c(44.4759,    39.642483,      35.504163),
+  Longitude = c(-73.2121,   -78.939213,     -82.5995),
+  Elevation = c(59,         588,            665)
+)
 
-Garden <- data.frame("Garden"   = c("Vermont","Maryland","North_Carolina"),
-                     "Latitude" = c(44.4759,39.642483,35.504163),
-                     "Longitude"= c(-73.2121,-78.939213,-82.5995),
-                     "Elevation"= c(59,588,665))
-
-data <- Fam[,c(3:6)]
-g2 <- Garden
-names(g2)[1] <- "Region"
-data <- rbind(data,g2)
-
-
-## range cover of red spruce
-
+# range map
 range <- raster::shapefile("spruce/data/rangemap/picerube/picerube.shp")
+range <- spTransform(range, CRS("+proj=longlat +datum=WGS84"))
 
-# sp::proj4string(range) # describes data’s current coordinate reference system
+pal <- colorFactor(
+  palette = c("goldenrod2", "green2", "steelblue"),
+  domain  = c("Core", "Margin", "Edge")
+)
 
-# to change to correct projection:
-range <- spTransform(range,
-                     CRS("+proj=longlat +datum=WGS84"))
-
-
-
-# leaflet  
-
-map <- leaflet(data = range)
-
-
-pal <- colorFactor(c("goldenrod2","green2","steelblue"), domain = c("Core", "Margin","Edge"))
-
-
-map %>%
-  # setView(lng = -70 ,lat= 43, zoom = 5.3) %>%
-  setMaxBounds(lng1 = -76.5, lat1 = 41.5, 
-               lng2 = -74,
-               lat2 = 41 ) %>% 
-  addProviderTiles("OpenTopoMap") %>% 
+leaflet() %>%
+  addProviderTiles("OpenTopoMap") %>%
   addPolygons(
-    stroke = FALSE,
+    data        = range,
+    stroke      = FALSE,
     fillOpacity = 0.7,
     smoothFactor = 0.1,
-    color="red"
-    ) %>% 
-  
+    color       = "red"
+  ) %>%
   addCircleMarkers(
-    data = Fam, 
-    lng=~Longitude,
-    lat=~Latitude,
-    color = "black",
-    radius=5,
-    stroke=T,
-    weight = 0.8,
-    fillColor =~pal(Region),
+    data       = Fam,
+    lng        = ~Longitude,
+    lat        = ~Latitude,
+    color      = "black",
+    radius     = 5,
+    stroke     = TRUE,
+    weight     = 0.8,
+    fillColor  = ~pal(Region),
     fillOpacity = 0.9,
-    popup = paste0("<strong>Population: </strong>", Fam$Pop, "</br>",
-                   "<strong>Family: </strong>", Fam$Family)
-) %>% 
+    popup      = paste0(
+      "<strong>Population: </strong>", Fam$Pop, "<br>",
+      "<strong>Family: </strong>",     Fam$Family
+    )
+  ) %>%
   addCircleMarkers(
-    data = Garden, 
-    lng=~Longitude,
-    lat=~Latitude,
-    color = "black",
-    radius=8,
-    stroke=T,
-    weight = 0.8,
-    fillColor ="grey50",
+    data       = Garden,
+    lng        = ~Longitude,
+    lat        = ~Latitude,
+    color      = "black",
+    radius     = 8,
+    stroke     = TRUE,
+    weight     = 0.8,
+    fillColor  = "grey50",
     fillOpacity = 0.9,
-    popup = paste0("<strong>Garden site: </strong>", Garden$Garden, "</br>",
-                   "<strong>Elevation: </strong>", Garden$Elevation)
-) %>% 
-  addPopups(data = Garden, 
-    lng=~Longitude,
-    lat=~Latitude, Garden$Garden,
-    options = popupOptions(closeButton = T)
-  ) %>% 
-  addLegend('bottomright', pal = pal, values = Fam$Region,
-            title = 'Region',
-            opacity = 1)
+    popup      = paste0(
+      "<strong>Garden site: </strong>", Garden$Garden, "<br>",
+      "<strong>Elevation: </strong>",   Garden$Elevation
+    )
+  ) %>%
+  addPopups(
+    data    = Garden,
+    lng     = ~Longitude,
+    lat     = ~Latitude,
+    popup   = Garden$Garden,
+    options = popupOptions(closeButton = TRUE)
+  ) %>%
+  addLegend(
+    "bottomright",
+    pal     = pal,
+    values  = Fam$Region,
+    title   = "Region",
+    opacity = 1
+  )
+
 
 ```
 
@@ -250,76 +252,89 @@ Admix plot showing the introgression between red spruce and allopatric black spr
 ::::: 
 
 
-
-## Genomic Forecasting
-
-**Status:** Ongoing\
-**Publications:** [Lachmuth et al. (2024) in Ecological Monographs](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593)  
+::::: column-screen
+::: {.cv-hero}
+<div class="cv-name">Genomic Forecasting</div>
+<div class="cv-title">**Status**: _Ongoing_ · **Publication**: [Lachmuth et al. (2024) in Ecological Monographs](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593)</div>
+:::
+::::: 
 
 ::::: column-screen
-:::: column-margin
-::: margin-photo
-Genomic forecasting workflow. ![Genomic forecasting workflow.](genomic_forecasting.png){.lightbox group="forecasting"}
+
+::::: {layout="[ 50, 50 ]"}
+::: {#first-column}
+
+::: {.cv-section}
+#### Background  
+Long‑lived, sessile organisms like forest trees have long generation times and limited dispersal, so they may not keep pace with rapid anthropogenic climate change, making climate maladaptation a major concern over the coming decades. Genomic offset provides a way to integrate genomic data and climate projections to forecast where adaptive mismatches are likely to emerge, helping identify vulnerable populations, evaluate seed transfer and assisted migration strategies, and prioritize conservation and restoration actions under changing climates.
+
+<div class="cv-actions">
+[Must read: Fitzpatrick & Keller (2015)](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.12376?casa_token=UzFn4XEGK5YAAAAA%3AOYxrXBlWekOGbZtUR6Y4HxQqmbzjNoPtw5eGy0zPIWbaUghNl_faUZ82YYCtz93JBrPWhSnnlJF1K_w){.btn .btn-outline-primary} 
+</div>
+
+
 :::
-::::
+:::
+::: {#second-column}
 
-Forecasting the responses of populations to climate change is a complex but important issue to understand as we face the potential for widespread climate maladaptation in the coming decades. This hits especially hard for long-lived, sessile organisms like forest trees, whose long-generation times and limited dispersal potential constrain the ability to adapt or track shifting climate. Recently, there has been increasing interest in combining genomics with climate models to forecast the short-term impacts of climate change on population adaptation. Our lab, in close collaboration with [Matt Fitzaptrick’s lab](https://mfitzpatrick.al.umces.edu/Site/Welcome.html) has been developing computational approaches to predict short-term disruption of climate adaptation, known as “genomic offset” modelling. Since first introducing the concept and statistical framework for genomic offset in 2015 ([Fitzpatrick and Keller, 2015](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.12376)), we have worked to refine and extend the scope and application of offset models to predicting climate change maladaptation. This has involved simulation testing of genomic offset predictions, in collaboration with [Katie Lotterhos’ lab](https://sites.google.com/site/katielotterhos/home), as well as testing the sensitivity of offset models to model choices such as the genomic loci used and the climate variables and future projection scenarios ([Lachmuth et al., 2023](https://www.frontiersin.org/journals/ecology-and-evolution/articles/10.3389/fevo.2023.1155783/full)).
+::: {.cv-section}
+#### What is genomic offset? 
 
-In addition to building and refining the computational pipeline of genomic offset for forecasting climate change responses, our lab has been working on empirical testing of offset predictions, using a space-for-time approach that evaluates the effect of transferring genotypes from their source climate into one or more common garden sites, and predicting growth and fitness-traits from genomic offsets calculated between the source and garden site climates. Using poplar trees as a study system, we provided the first such common garden test of offset predictions, showing a strong negative response of growth with increasing genomic offset ([Fitzpatrick et al. 2021](https://onlinelibrary.wiley.com/doi/pdf/10.1111/1755-0998.13374)). We have recently shown a similar result in red spruce (Picea rubens) across 3 seedling common gardens ([Lachmuth et al., 2023](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593)), as well as in a 60 year old red spruce provenance trial in northern New Hampshire (Verrico et al., in prep.).
+Genomic offset is a quantitative measure of how much the allele frequencies underlying local climate adaptation would need to change for a population to remain adapted under a new climate. It is typically estimated by fitting genotype–environment association or genomic prediction models under current conditions, then projecting those models onto future or novel climates to compute the expected shift in climate‑adaptive genomic composition at each location. Large genomic offset values indicate a strong mismatch between the current genomic makeup and the climate it will experience, implying high risk of climate maladaptation.
+
+:::
+:::
+:::::
 :::::
 
-
-# Research systems
-
-## Red spruce
-
-**Status:** Ongoing\
-**Publications:** [Prakash et al. (2022)](https://royalsocietypublishing.org/doi/full/10.1098/rstb.2021.0008) \| [Prakash et al. (2024)](https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11600)
 
 ::::: column-screen
-:::: column-margin
-::: margin-photo
-Harvesting the red spruce common gardens after two years of growth. ![Harvesting the red spruce common gardens after two years of growth.](../photos/spruce_garden/harvest.gif){.lightbox group="spruce"}
-:::
-::::
+::: {.cv-section} 
+![Genomic offset as a measure of climate maladaptation. Left: conceptual fitness curves showing how local populations (grey peaks) collectively form a species‑level climate response curve (green) along a climate gradient. Right: genomic offset quantifies the expected change in the adaptive genetic component needed for populations to remain climatically adapted when climate shifts from current (green points A, B) to future conditions (red points A′, B′), with larger vertical distances indicating greater disruption of local adaptation.](offset/genoffset_twofigs.png){.lightbox group="forecasting"} 
+Genomic offset as a measure of climate maladaptation.  <div class="cv-actions">
+[Capblancq et al (2020)](https://www.annualreviews.org/content/journals/10.1146/annurev-ecolsys-020720-042553) : [Genomic offset workflow](offset/genomic_offset_workflow.gif){.btn .btn-outline-primary .lightbox group="forecasting"} 
+</div>
 
-**Rangewide population genetics and local adaptation**
-
-Red spruce (*Picea rubens*) is an ecologically important conifer adapted to cool, moist, high-elevation sites mainly in the northeastern U.S. and southeastern Canada, but the southern tail of the range extends down into fragmented mountaintop populations in the Central and Southern Appalachians. Red spruce provides timber, critical habitat for rare and endemic wildlife species, and recreational value to humans. Our lab has explored how population size, range limits, and genetic diversity have impacted local adaptation to climate across red spruce’s range ([Capblancq et al., 2020](https://onlinelibrary.wiley.com/doi/full/10.1111/eva.12985), [Capblancq et al., 2021](https://link.springer.com/article/10.1007/s10592-021-01378-7), [Prakash et al, 2022](https://royalsocietypublishing.org/doi/full/10.1098/rstb.2021.0008) )
-:::::
-
-:::::: column-screen
-::::: column-margin
-::: margin-photo
-Red spruce stands in Colebrooke, NH ![Red spruce stands in Colebrooke, NH](spruce/img2.jpeg){.lightbox group="spruce"}
-:::
-
-::: margin-photo
-Spruce regeneration monitoring in West Virginia. ![Spruce regeneration monitoring in West Virginia.](spruce/img3.jpg){.lightbox group="spruce"}
 :::
 :::::
 
-**Hybridization and adaptive introgression**
 
-For long-lived species with low genetic diversity, introgression—the transfer of genetic material from one lineage into the genome of another through repeated backcrossing—can be a powerful source of adaptive variation in the face of climate change. Red spruce hybridizes with its sister species black spruce (*Picea mariana*), and most red spruce trees found in the overlap between the two species’ ranges derive significant portions of their genome from past hybridization with black spruce. Recent work by our lab suggests that introgression from black spruce plays a key role in supporting red spruce’s capacity to adapt to climate gradients across its range Prakash et al. (in prep). We use a combination of spatial modeling and landscape and population genomics to characterize the spatial and temporal natural history of hybridization, understand the role of selection in preserving introgressed regions of the genome, and determine under what conditions this introgression may be adaptive. We are also establishing a provenance trial of red and black spruce hybrids, which will serve as a long-term resource for linking the genomics of hybridization with adaptive traits.
+::::: column-screen
+::: {.cv-hero}
+<div class="cv-name">Conservation biology</div>
+<div class="cv-title">**Status**: _Ongoing_ · **Publication**: [Prakash et al. (2024)](https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11600)</div>
+:::
+::::: 
 
-**Applied conservation**
+::::: column-screen
 
-One of our lab’s major goals is to disseminate the findings of the scientific research to the broader community to inform conservation and restoration efforts on the ground. Red spruce is a species of conservation concern due to high climate change vulnerability and is the focus of several major restoration initiatives, notably the Central Appalachian Red Spruce Restoration Initiative (CASRI) and the Southern Appalachian Red Spruce Restoration Initiative (SASRI), which have planted tens of thousands of seedlings supported by The Nature Conservancy.
-::::::
+::::: {layout="[ 50, 50 ]"}
+::: {#first-column}
 
-::: {.callout-note collapse="true" appearance="\"minimal"}
+::: {.cv-section}
 ## Red spruce restoration in collaboration with CASRI and TNC
 
-Kathryn Shallows from TNC approached the Keller lab in 2019 regarding red spruce restoration towards the southern range edge of its distribution, mainly in Maryland, Virginia and West Virginia. This led to a larger partnership that culminated in genomic assisted seed source selection for the restoration initiative at these sites. Instead of opting for a single source restoration initiative, we used a multiple seed source approach to improve the genetic diversity of the restoration stands to withstand the changing climate and environmental stressors. This source selection was carried out in the light of research done by Keller lab using the exome capture data and the common gardens set up at Vermont, Maryland and North Carolina. Three to four sources combinations per restoration site were selected for high genetic diversity and low genetic load.
+Kathryn Shallows from TNC approached the Keller lab in 2019 regarding red spruce restoration towards the southern range edge of its distribution, mainly in Maryland, Virginia and West Virginia. This led to a larger partnership that culminated in genomic assisted seed source selection for the restoration initiative at these sites. Instead of opting for a single source restoration initiative, we used a multiple seed source approach to improve the genetic diversity of the restoration stands to withstand the changing climate and environmental stressors. This source selection was carried out in the light of research done on red spruce using the exome capture data and the common gardens set up at Vermont, Maryland and North Carolina. Three to four sources combinations per restoration site were selected for high genetic diversity and low genetic load. 
 
-| 
+
+:::
+:::
+::: {#second-column}
+
+::: {.cv-section}
+## Seed sources: No one for all  
 
 [Capblancq et al. (2021)](https://link.springer.com/article/10.1007/s10592-021-01378-7) has observed that early-life fitness of the red spruce had strong positive association with genetic diversity and negative association with genetic load, especially for the southern range edge of the red spruce distribution range. These seed source combinations were used as a recommendation list to Dave Seville (CASRI) to assess the seed production situation on the ground and raise them in the nursery for the restoration initiative. In 2021, TNC planted 58,000 red spruce seedlings at the restoration sites. Keller lab then carried out the restoration monitoring of these restoration sites in 2022, a whole year after the seedlings had been planted in the ground to assess the success of genomic assisted restoration of red spruce. Using this information, [Prakash et al. (2024)](https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11600) found that there were no “Super Seed Source” that outperformed other seed sources and the combination of seed sources outperformed any single source for the restoration success.
 
-![Genomic assisted red spruce restoration at Maryland, West-Viginia and Virginia, USA.](genomics_to_the_field_snippet.png){.lightbox group="red-spruce"}
 :::
+:::
+:::::
+:::::
 
+::::: column-screen
+::: {.cv-section}
 
-
+![Genomic assisted red spruce restoration at Maryland, West-Viginia and Virginia, USA.](genomics_to_the_field_snippet.png){.lightbox group="red-spruce"}
+::: 
+::::: 
 
