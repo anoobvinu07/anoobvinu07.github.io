@@ -427,7 +427,7 @@ _UVM Student Research Conference, Burlington, Vermont, USA_
 
 ::::: {layout="[ 10, 90 ]"}
 ::: {#first-column}
-2024
+2023
 :::
 ::: {#second-column}
 **Exploring the drivers of selection in a range-fragmented forest tree: A case study in red spruce (*Picea rubens*).**  
@@ -437,7 +437,7 @@ _Evolution 2023, Albuquerque, New Mexico, USA_
 
 ::::: {layout="[ 10, 90 ]"}
 ::: {#first-column}
-2024
+2022
 :::
 ::: {#second-column}
 **Detecting signals of polygenic adaptation in the face of demographic history and population structure in red spruce (*Picea rubens*).**  
@@ -447,7 +447,7 @@ _Botany 2022, Anchorage, Alaska, USA_
 
 ::::: {layout="[ 10, 90 ]"}
 ::: {#first-column}
-2024
+2021
 :::
 ::: {#second-column}
 **The evolution of species’ ranges in the face of changing environments.**  

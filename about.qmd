@@ -10,7 +10,7 @@ format:
       body-width: 1000px
       margin-width: 300px
 
-lightbox: false
+lightbox: auto
 ---
 
 ::: {.column-screen}
@@ -42,10 +42,10 @@ lightbox: false
     <img src="img/orcid-brands-solid-full.svg" alt="ORCID">
   </a>
   <a href="mailto:anoobvinu@gmail.com" target="_blank">
-    <img src="img/envelope-solid-full.svg" alt="ORCID">
+    <img src="img/envelope-solid-full.svg" alt="Email">
   </a>
   <a href="https://www.instagram.com/anoobprakash/" target="_blank">
-    <img src="img/square-instagram-brands-solid-full.svg" alt="ORCID">
+    <img src="img/square-instagram-brands-solid-full.svg" alt="Instagram">
   </a>
 </div>
 
@@ -60,26 +60,44 @@ lightbox: false
 
 **Most of my research asks a simple but hard question: how will tree species respond to climate change, and what can we do about it?**  
 
+::: {.callout-note collapse="true" appearance="minimal"}
+## PhD life
 During my PhD at the [University of Vermont](https://www.uvm.edu/) with [Dr. Stephen R. Keller](https://www.uvm.edu/cals/plantbiology/profile/stephen-r-keller), I focused on red spruce (_Picea rubens_ Sarg.). I combined genomics, climate data, and trait measurements from common gardens to study genotypic and phenotypic variation, local adaptation, and the role of introgression with black spruce (_Picea mariana_). Along the way, I managed three common gardens, ran GWAS to identify adaptive loci, and spent a lot of time turning messy datasets into interpretable stories.
+:::
 
 ::: {.callout-note collapse="true" appearance="minimal"}
-## Collaboration with TNC and CASRI
-PhD research work led to collaborations with [The Nature Conservancy (TNC)](https://www.nature.org/en-us/) and the [Central Appalachian Spruce Restoration Initiative (CASRI)](https://restoreredspruce.org/). Together, we used genomic information to select seed sources for restoration in the southern range edge of red spruce, which ultimately informed the planting of ~58,000 seedlings across West Virginia, Virginia, and Maryland. It was a satisfying example of science’s real world impact. Read more in the [research section](research/research.qmd)
+## Collaboration with TNC and CASRI  
+
+PhD research work led to collaborations with [The Nature Conservancy (TNC)](https://www.nature.org/en-us/) and the [Central Appalachian Spruce Restoration Initiative (CASRI)](https://restoreredspruce.org/). Together, we used genomic information to select seed sources for restoration in the southern range edge of red spruce, which ultimately informed the planting of ~58,000 seedlings across West Virginia, Virginia, and Maryland. It was a satisfying example of science’s real world impact. Read more in the [research section](/research/)
 :::
 :::
 
 ::: {.cv-section}
 ## What I’m doing now
 
-**I’m currently a postdoctoral researcher at Purdue University**, working with Dr. Matthew Ginzel and Dr. Vikram Chhatre. Here, I’m extending the same ideas to black walnut, white oak, and shortleaf pine – species with high restoration potential and major ecological and economic importance.
+**I’m currently a postdoctoral researcher at Purdue University**, working with Dr. Matthew Ginzel and Dr. Vikram Chhatre. Here, I’m using population genetics to understand climate change adaptation in black walnut, white oak, and short leaf pine – species with high restoration potential and major ecological and economic importance.
+
+::: {.callout-note collapse="true" appearance="minimal"}
+## More  
 
 I use machine‑learning approaches to detect climate pre‑adaptation and mal‑adaptation, and to identify seed sources that are likely to perform well in future climates. A big goal of this work is to provide actionable guidance to practitioners so restoration and reforestation projects can make informed, climate‑savvy seed sourcing decisions.
+:::
 :::
 
 ::: {.cv-section}
 ## Where I’m coming from
 
-Before moving into conifers and temperate forests, my master’s work in India focused on something more immediate and local: particulate pollution. Near the Walayar Cement Factory, **I studied how dust pollution affects growth, physiology, and wood anatomy of moist deciduous tree species, and which species might be more resilient**. That early work shaped my interest in how environmental stressors leave signatures in plant physiology.
+Before moving into conifers and temperate forests, my master’s work in India focused on something more immediate and local: particulate pollution. 
+
+::: {.callout-note collapse="true" appearance="minimal"}
+## Early days of research  
+
+**I studied how dust pollution affects growth, physiology, and wood anatomy of moist deciduous tree species, and which species might be more resilient** near the Walayar Cement Factory, for my master’s research. That early work shaped my interest in how environmental stressors leave signatures in plant physiology.
+:::
+:::
+
+::: {.cv-section}
+## What I’m trained in   
 
 ::: {.callout-note collapse="true" appearance="minimal"}
 ## NSF Traineeship  
@@ -87,15 +105,18 @@ Over the years, I’ve also invested heavily in data skills and open, quantitati
 :::
 
 ::: {.callout-note collapse="true" appearance="minimal"}
-## USDA Climate Scholar
+## USDA Climate Scholar  
 I was also a [USDA GradCAMP Climate scholar](https://www.climatehubs.usda.gov/hubs/northeast/project/gradcamp), participating in a year‑long, cohort‑based experience focused on climate adaptation, mitigation, and climate justice. That year involved interdisciplinary research, networking with climate professionals, and science communication, including developing “forests of the future” factsheets. At UVM, I served two years as a graduate student senator for Plant Biology, working on issues related to graduate stipends, mental health, and governance.
 :::
 :::
 
 ::: {.cv-section}
-## What I care about
+## What I care about  
 
 **Scientifically, I’m drawn to climate change adaptation, population and landscape genomics, environmental data science, and transparent, reproducible workflows**. I enjoy projects that sit at the interface of fundamental evolutionary questions and applied conservation or restoration decisions.
+
+::: {.callout-note collapse="true" appearance="minimal"}
+## Fun side of things  
 
 Outside of research, you’ll usually find me on a basketball court, tinkering with data visualizations, learning new illustration tools, or playing games. I enjoy the creative side of science communication – turning complex models and genomic results into visuals and narratives that are intuitive for both scientists and non‑scientists.
 :::

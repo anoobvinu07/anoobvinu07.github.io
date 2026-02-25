@@ -19,10 +19,11 @@ website:
         href: about.qmd
       - text: "Research"
         href: research/research.qmd
+      - text: "Photo Blog"
+        href: photos/photos.qmd
       - text: "CV"
         href: cv/cv.qmd
-      - text: "Blog"
-        href: photos/photos.qmd
+
       
     
     # your social media handles
