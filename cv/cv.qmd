@@ -172,8 +172,9 @@ Investigated genotypic and phenotypic variation and climate change adaptation in
 ::: {.callout-note collapse="true" appearance="minimal"}
 ### Project 2: Introgression and local adaptation  
 
-- Utilized molecular approaches to investigate the role of introgression underlying local adaptation.
 - Identified patterns of local and climate adaptation to inform conservation strategies for fragmented red spruce populations.
+- Utilized molecular approaches to investigate the role of introgression underlying local adaptation.
+
 :::
 
 ::: {.callout-note collapse="true" appearance="minimal"}
