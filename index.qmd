@@ -25,7 +25,7 @@ title: ""
 
 
 ::: {.column-screen}
-![](img/landing_graphic.svg)
+![](img/landing_graphic3.svg)
 ::: 
 
 
