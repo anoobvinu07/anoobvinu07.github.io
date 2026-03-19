@@ -1,0 +1,38 @@
+.hero-container {
+  position: relative;
+  overflow: hidden;
+  min-height: 75vh;              /* tall, cinematic */
+}
+
+.hero-illustrated {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),  /* darken for text */
+    url("img/landing_graphic3.png");  /* use your file name here */
+  background-size: cover;
+  background-position: center bottom;  /* emphasize water + cliff */
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-content {
+  max-width: 900px;
+  padding: 0 8vw;
+  text-align: center;
+  color: #f8f8ff;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+  margin: 0;
+  opacity: 0.95;
+}

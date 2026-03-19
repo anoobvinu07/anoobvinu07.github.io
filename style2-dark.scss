@@ -22,9 +22,9 @@ $lightgreen: #c2edce;
 $ember: #b82601;
 
 // Base document colors
-$navbar-bg: $teal;
-$navbar-fg: $black; 
-$navbar-hl: $white; 
+$navbar-bg: $black;
+$navbar-fg: $white; 
+$navbar-hl: $ember; 
 $body-bg: $black;
 $body-color: $white;
 $footer-bg: $black; 
@@ -416,11 +416,12 @@ div.quarto-about-jolla .about-link {
 
 
 /* Responsive width */
-main.content {
+/* main.content {
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
 }
+*/
 
 /* Publication cards */
 .pub-list {
@@ -481,3 +482,51 @@ li.no-bullet {
   margin-left: 0;
   padding-left: 0;
 }
+
+// title photo layout
+.title-photo {
+  display: block;
+  margin: 2em auto;        /* centers the image horizontally */
+  width: 100%;            /* sets a fixed width for the profile photo */
+  max-width: 100%;         /* makes the photo responsive */
+  border-radius: 8px;      /* makes the photo circular */
+  transition: transform 0.2s;
+}
+.title-photo:hover {
+  transform: scale(1.20);  /* zoom on hover */
+}
+
+
+// index page tile sets
+.tile-logos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18px, 5fr));
+  justify-content: center;
+  /*gap: 1rem;    bigger gap between logos */
+  
+  column-gap: 10.5rem;   /* smaller space between columns */
+  row-gap: 10rem;        /* larger space between rows */
+  border-radius: 8px;
+  //box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  padding-inline: 0.5rem;
+}
+
+.tile-logos a {
+  display: inline-block;
+}
+
+.tile-logos img {
+  width: 250px;              /* smaller size */
+  height: 250px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: grayscale(30%) brightness(0.9);  /* muted default */
+}
+
+/* hover: zoom + colorize */
+.tile-logos a:hover img {
+  transform: scale(1.03);
+  filter: grayscale(0%) brightness(1.1) saturate(1.2);
+}
+

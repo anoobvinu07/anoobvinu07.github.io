@@ -1,40 +1,75 @@
 ---
-pagetitle: "Anoob Prakash"
 format: 
   html:
-    page-layout: full
+    page-layout: article
     toc: false
-# image: "img/Logo_website_update2.png"
-#title: "Home"
-about:
-  template: jolla
-  id: about-block
-  image: "img/illustrated_AP.jpg"
-  # links:
-  #   - icon: linkedin
-  #     # text: LinkedIn
-  #     href: https://www.linkedin.com/in/anoob-prakash/
-  #   - icon: github
-  #     # text: Github
-  #     href: https://github.com/anoobvinu07
-  #   - icon: google
-  #     # text: Google Scholar
-  #     href: https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ
-  #   - icon: envelope
-  #     # text: Email
-  #     href: "mailto:anoobvinu@gmail.com"
+    sidebar: false
+    anchor-sections: false
+    theme:
+      light: style2.scss
+      dark: style2-dark.scss
+    css: [index.css]
+image: "img/landing_graphic2.svg"
+title: ""
+# about:
+#   template: marquee
+  # id: about-block
+  # image-width: "100%"
 ---
 
-::: {.column-screen}
-::: {#bio}
-[Hi there! I'm Anoob Prakash]{style="font-size: 2.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"}
 
-[Welcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how species respond to a changing climate. Learn more [about me](about.qmd). On this site, you’ll find my research, projects in data visualization and analysis, and other interests.]{style="font-size: 1.6rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"}
-:::
-:::
+<!-- ::: {.column-screen} -->
+<!-- <img src="img/landing_graphic3.png" alt="Landing graphic" -->
+<!--      style="display:block; width:auto; height:auto; margin:0; padding:0;"> -->
+<!-- :::  -->
+
+
+::: {.column-screen}
+![](img/landing_graphic.svg)
+::: 
+
+
+
 
 ::: {.column-screen}
 <div class="section-separator"></div>
+
+<div class="tile-logos">
+<a href="https://www.youtube.com/watch?v=S_EklrfsIVw" target="_blank">
+    <img src="img/conservation.png" alt="TNC red spruce restoration initiative">
+  </a>
+  <a href="https://anoobvinu07.github.io/Genomic_assisted_selection/" target="_blank">
+    <img src="img/genomics2.png" alt="Genomics assisted seed sourcing">
+  </a>
+  <a href="https://github.com/anoobvinu07" target="_blank">
+    <img src="img/data_science2.png" alt="Code repository">
+  </a>
+  <a href="cv/cv.qmd#publications" target="_blank">
+    <img src="img/open_science.png" alt="Open Science and publications">
+  </a>
+</div>
+
+
+<div class="section-separator"></div>
+:::
+
+::: {.column-page}
+::: {.cv-section}
+::::: {layout="[ 30, 70 ]"}
+::: {#first-column}
+
+![](img/profile_circle2.png){.about-photo width=30%}
+
+:::
+::: {#second-column}
+
+[A little bit about me]{style="font-size: 1.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"}
+
+[I’m a plant biologist and forest genomicist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I utilize large genomic and environmental datasets to understand – and hopefully help guide **the future of forests**.]{style="font-size: 1.3rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"} 
+
+[**More >>**](about.qmd)
+
+[Please reach out to me if you like to discuss science or collaborate or to just chill over a game of basketball or co-op gaming.]{style="font-size: 1.3rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"}
 
 <div class="footer-logos">
 <a href="https://www.linkedin.com/in/anoob-prakash/" target="_blank">
@@ -57,4 +92,58 @@ about:
   </a>
 </div>
 
+
 :::
+:::::
+:::
+
+
+
+
+
+
+
+
+
+
+:::::: {.column-body}
+::::: {layout="[ 20,20,20,20 ]"}
+::: {#first-column}
+![](img/tile-layout1.svg){.about-photo width=30%}
+:::
+::: {#second-column}
+![](img/vermont_gothic.svg){.about-photo width=30%}
+:::
+::: {#third-column}
+![](img/alaska.svg){.about-photo width=30%}
+:::
+::: {#fourth-column}
+![](img/eggs.svg){.about-photo width=30%}
+:::
+:::::
+::::::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ::: {.column-full} -->
+<!-- ::: {#bio} -->
+<!-- [Hi there! I'm Anoob Prakash]{style="font-size: 2.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"} -->
+
+<!-- [Welcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how species respond to a changing climate. Learn more [about me](about.qmd). On this site, you’ll find my research, projects in data visualization and analysis, and other interests.]{style="font-size: 1.6rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"} -->
+<!-- ::: -->
+<!-- ::: -->
+
+

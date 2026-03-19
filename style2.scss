@@ -402,11 +402,21 @@ div.quarto-about-jolla .about-link {
 }
 
 
-/* Responsive width */
+.navbar {
+  margin-bottom: 0 !important;
+}
+
 main.content {
-  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+
+.column-screen:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
 }
 
 
@@ -482,4 +492,36 @@ li.no-bullet {
 }
 
 
+// index page tile sets
+.tile-logos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18px, 5fr));
+  justify-content: center;
+  /*gap: 1rem;    bigger gap between logos */
+  
+  column-gap: 10.5rem;   /* smaller space between columns */
+  row-gap: 10rem;        /* larger space between rows */
+  border-radius: 8px;
+  //box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  padding-inline: 0.5rem;
+}
+
+.tile-logos a {
+  display: inline-block;
+}
+
+.tile-logos img {
+  width: 250px;              /* smaller size */
+  height: 250px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: grayscale(30%) brightness(0.9);  /* muted default */
+}
+
+/* hover: zoom + colorize */
+.tile-logos a:hover img {
+  transform: scale(1.03);
+  filter: grayscale(0%) brightness(1.1) saturate(1.2);
+}
 

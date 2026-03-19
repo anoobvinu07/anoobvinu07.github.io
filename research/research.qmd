@@ -10,23 +10,26 @@ format:
 ---
 
 
-:::{.column-screen}
+:::{.column-page}
 # Adaptation and response to environmental change    
 _~ the questions that drive me_  
-![](website_banner_research_transparent_background3.png){.title-photo width=100%}
-
 :::
 
-
-
 ::::: column-screen
+![](website_banner_research_transparent_background3.png){.title-photo width=100%}
+
+:::::
+
+
+
+::::: .column-page
 ::: {.cv-hero}
 <div class="cv-name">Climate change adaptation in trees</div>
-<div class="cv-title">**Status**: _Ongoing_ · **Publication**: [Prakash et al. (2022)](https://doi.org/10.1098/rstb.2021.0008)</div>
+<div class="cv-title">**Publication**: [Prakash et al. (2022)](https://doi.org/10.1098/rstb.2021.0008)</div>
 :::
 ::::: 
 
-::::: column-screen
+::::: .column-page
 
 ::::: {layout="[ 50, 50 ]"}
 ::: {#first-column}
@@ -168,7 +171,7 @@ leaflet() %>%
 
 
 
-::::: column-screen 
+::::: .column-page 
 ::::: {layout="[ 50, 50 ]"}
 
 ::: {#first-column}
@@ -212,14 +215,14 @@ The common gardens were raised for 2 years, recording their phenotypic and pheno
 
 
 
-::::: column-screen
+::::: .column-page
 ::: {.cv-hero}
 <div class="cv-name">Hybridization and Adaptive Introgression</div>
-<div class="cv-title">**Status**: _Ongoing_ · **Publication**: _In prep_</div>
+<div class="cv-title">**Publication**: _In prep_</div>
 :::
 ::::: 
 
-::::: column-screen
+::::: .column-page
 
 ::::: {layout="[ 50, 50 ]"}
 ::: {#first-column}
@@ -244,7 +247,7 @@ Northern red spruce populations shows extensive introgression from black spruce 
 ::::: 
 
 
-::::: column-screen
+::::: .column-page
 ::: {.cv-section}
 Admix plot showing the introgression between red spruce and allopatric black spruce outside the current range of red spruce. 
 ![](hybridization/rs_bs_admix.png){.panorama-photo width=100% .lightbox group="hybrid"}
@@ -252,14 +255,14 @@ Admix plot showing the introgression between red spruce and allopatric black spr
 ::::: 
 
 
-::::: column-screen
+::::: .column-page
 ::: {.cv-hero}
 <div class="cv-name">Genomic Forecasting</div>
-<div class="cv-title">**Status**: _Ongoing_ · **Publication**: [Lachmuth et al. (2024) in Ecological Monographs](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593)</div>
+<div class="cv-title">**Publication**: [Lachmuth et al. (2024) in Ecological Monographs](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593)</div>
 :::
 ::::: 
 
-::::: column-screen
+::::: .column-page
 
 ::::: {layout="[ 50, 50 ]"}
 ::: {#first-column}
@@ -288,7 +291,7 @@ Genomic offset is a quantitative measure of how much the allele frequencies unde
 :::::
 
 
-::::: column-screen
+::::: .column-page
 ::: {.cv-section} 
 ![Genomic offset as a measure of climate maladaptation. Left: conceptual fitness curves showing how local populations (grey peaks) collectively form a species‑level climate response curve (green) along a climate gradient. Right: genomic offset quantifies the expected change in the adaptive genetic component needed for populations to remain climatically adapted when climate shifts from current (green points A, B) to future conditions (red points A′, B′), with larger vertical distances indicating greater disruption of local adaptation.](offset/genoffset_twofigs.png){.lightbox group="forecasting"} 
 Genomic offset as a measure of climate maladaptation.  <div class="cv-actions">
@@ -299,14 +302,14 @@ Genomic offset as a measure of climate maladaptation.  <div class="cv-actions">
 :::::
 
 
-::::: column-screen
+::::: .column-page
 ::: {.cv-hero}
 <div class="cv-name">Conservation biology</div>
-<div class="cv-title">**Status**: _Ongoing_ · **Publication**: [Prakash et al. (2024)](https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11600)</div>
+<div class="cv-title">**Publication**: [Prakash et al. (2024)](https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11600)</div>
 :::
 ::::: 
 
-::::: column-screen
+::::: .column-page
 
 ::::: {layout="[ 50, 50 ]"}
 ::: {#first-column}

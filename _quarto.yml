@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: ""
+  title: "Anoob Prakash"
   description: "Personal website for Anoob Prakash"
   image: img/AP_logo.png
   favicon: img/AP_logo.png
@@ -15,8 +15,6 @@ website:
     
     # your sub-pages
     left:
-      - text: "About"
-        href: about.qmd
       - text: "Research"
         href: research/research.qmd
       - text: "Photo Blog"
