@@ -28,31 +28,21 @@ title: ""
 ![](img/landing_graphic3.svg)
 ::: 
 
-
-
-
 ::: {.column-screen}
 <div class="section-separator"></div>
+::: {.photo-grid2}
 
-<div class="tile-logos">
-<a href="https://www.youtube.com/watch?v=S_EklrfsIVw" target="_blank">
-    <img src="img/conservation.png" alt="TNC red spruce restoration initiative">
-  </a>
-  <a href="https://anoobvinu07.github.io/Genomic_assisted_selection/" target="_blank">
-    <img src="img/genomics2.png" alt="Genomics assisted seed sourcing">
-  </a>
-  <a href="https://github.com/anoobvinu07" target="_blank">
-    <img src="img/data_science2.png" alt="Code repository">
-  </a>
-  <a href="cv/cv.qmd#publications" target="_blank">
-    <img src="img/open_science.png" alt="Open Science and publications">
-  </a>
-</div>
+[![](img/conservation.png)](https://www.youtube.com/watch?v=S_EklrfsIVw)
 
+[![](img/genomics2.png)](https://anoobvinu07.github.io/Genomic_assisted_selection/)
 
+[![](img/data_science2.png)](https://github.com/anoobvinu07)
+
+[![](img/open_science.png)](cv/cv.qmd#publications)
+
+:::
 <div class="section-separator"></div>
 :::
-
 
 
 <div class="scroll-down-wrap">

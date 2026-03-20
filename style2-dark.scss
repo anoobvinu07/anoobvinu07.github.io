@@ -497,38 +497,6 @@ li.no-bullet {
 }
 
 
-// index page tile sets
-.tile-logos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18px, 5fr));
-  justify-content: center;
-  /*gap: 1rem;    bigger gap between logos */
-  
-  column-gap: 10.5rem;   /* smaller space between columns */
-  row-gap: 10rem;        /* larger space between rows */
-  border-radius: 8px;
-  //box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  padding-inline: 0.5rem;
-}
-
-.tile-logos a {
-  display: inline-block;
-}
-
-.tile-logos img {
-  width: 250px;              /* smaller size */
-  height: 250px;
-  transition: transform 0.2s ease, filter 0.2s ease;
-  filter: grayscale(30%) brightness(0.9);  /* muted default */
-}
-
-/* hover: zoom + colorize */
-.tile-logos a:hover img {
-  transform: scale(1.03);
-  filter: grayscale(0%) brightness(1.1) saturate(1.2);
-}
 
 /* scroll effect  */
 .scroll-down-wrap {
@@ -549,3 +517,118 @@ li.no-bullet {
   transform: scale(1.15);
   opacity: 0.9;
 }
+
+
+/* scroll down -not used */
+.scroll-reveal summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.scroll-reveal summary::-webkit-details-marker {
+  display: none;
+}
+
+.reveal-content {
+  animation: fadeDown 0.6s ease-out;
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+/* photo grid version 2*/
+
+.photo-grid2 a {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.photo-grid2 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 2em auto;
+  max-width: 1200px;
+  justify-items: center;
+  align-items: center;
+}
+.photo-grid2 img:hover {
+  transform: scale(1.05);
+}
+
+.photo-grid2 img {
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: grayscale(30%) brightness(0.9);  /* muted default */
+}
+
+.photo-grid2 a:hover img {
+  transform: scale(1.03);
+  filter: grayscale(0%) brightness(1.1) saturate(1.2);
+}
+
+/* photo grid photos modified to be envenly shaped*/
+.photo-item {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.photo-item img {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.photo-item img:hover {
+  transform: scale(1.05);
+}
+
+
+// index page tile sets
+.tile-logos a {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.tile-logos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 2em auto;
+  max-width: 1200px;
+  justify-items: center;
+  align-items: center;
+}
+.tile-logos img:hover {
+  transform: scale(1.05);
+}
+
+.tile-logos img {
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: grayscale(30%) brightness(0.9);  /* muted default */
+}
+
+.tile-logos a:hover img {
+  transform: scale(1.03);
+  filter: grayscale(0%) brightness(1.1) saturate(1.2);
+}
+
+

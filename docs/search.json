@@ -264,5 +264,19 @@
     "title": "Anoob Prakash",
     "section": "# image: “img/illustrated_AP.jpg”",
     "text": "# image: “img/illustrated_AP.jpg”\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                 \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n \n\n\n&lt;div style=\"max-width: 720px;\"&gt;\n\n  &lt;h1 style=\"\n       margin: 0 0 0.75rem 0;\n       font-size: clamp(2.2rem, 3vw, 3rem);\n       font-weight: 650;\n     \"&gt;\n    Ecological & Evolutionary Genomics in a Changing Climate\n  &lt;/h1&gt;\n\n  &lt;p style=\"\n       margin: 0 0 1.5rem 0;\n       font-size: clamp(1.0rem, 1.2vw, 1.2rem);\n       line-height: 1.5;\n       color: rgba(255, 255, 255, 0.9);\n     \"&gt;\n    I study how tree species respond to environmental change using population genomics,\n    genomic offset, and data‑intensive statistical methods.\n  &lt;/p&gt;\n\n  &lt;!-- Links as pill buttons --&gt;\n  &lt;div class=\"hero-links\"\n       style=\"display: flex; flex-wrap: wrap; gap: 0.75rem;\"&gt;\n\n    &lt;a href=\"research.qmd\"\n       style=\"\n         padding: 0.55rem 1.2rem;\n         border-radius: 999px;\n         background-color: #6fb3b8;\n         color: #0b2027;\n         font-size: 0.95rem;\n         font-weight: 500;\n         text-decoration: none;\n       \"&gt;\n      Research\n    &lt;/a&gt;\n\n    &lt;a href=\"publications.qmd\"\n       style=\"\n         padding: 0.55rem 1.2rem;\n         border-radius: 999px;\n         border: 1px solid rgba(255, 255, 255, 0.7);\n         color: #ffffff;\n         font-size: 0.95rem;\n         text-decoration: none;\n       \"&gt;\n      Publications\n    &lt;/a&gt;\n\n    &lt;a href=\"projects.qmd\"\n       style=\"\n         padding: 0.55rem 1.2rem;\n         border-radius: 999px;\n         border: 1px solid rgba(255, 255, 255, 0.7);\n         color: #ffffff;\n         font-size: 0.95rem;\n         text-decoration: none;\n       \"&gt;\n      Projects\n    &lt;/a&gt;\n\n    &lt;a href=\"blog.qmd\"\n       style=\"\n         padding: 0.55rem 1.2rem;\n         border-radius: 999px;\n         border: 1px solid rgba(255, 255, 255, 0.7);\n         color: #ffffff;\n         font-size: 0.95rem;\n         text-decoration: none;\n       \"&gt;\n      Notes & Blog\n    &lt;/a&gt;\n\n  &lt;/div&gt;\n&lt;/div&gt;"
+  },
+  {
+    "objectID": "photos/photos.html",
+    "href": "photos/photos.html",
+    "title": "Anoob Prakash",
+    "section": "",
+    "text": "alaska_2022/img1.jpg\n\n\n\n\n\n\n\nalaska_2022/img2.jpg\n\n\n\n\n\n\n\nalaska_2022/img15.jpg\n\n\n\n\n\n\n\nalaska_2022/img16.jpg"
+  },
+  {
+    "objectID": "photos/photos.html#alaska",
+    "href": "photos/photos.html#alaska",
+    "title": "Anoob Prakash",
+    "section": "",
+    "text": "alaska_2022/img1.jpg\n\n\n\n\n\n\n\nalaska_2022/img2.jpg\n\n\n\n\n\n\n\nalaska_2022/img15.jpg\n\n\n\n\n\n\n\nalaska_2022/img16.jpg"
   }
 ]

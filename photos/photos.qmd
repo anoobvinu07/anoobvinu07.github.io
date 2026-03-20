@@ -18,12 +18,26 @@ format:
 # {width=82% .lightbox group="alaska"}
 ```
 
-::: {.photo-grid}
-![](alaska_2022/img1.jpg){.lightbox group="alaska"}
-![](alaska_2022/img2.jpg){.lightbox group="alaska"}
-![](alaska_2022/img15.jpg){.lightbox group="alaska"}
-![](alaska_2022/img16.jpg){.lightbox group="alaska"}
+
+
+::: {.photo-grid2}
+<div class="photo-item">
+  ![](alaska_2022/img1.jpg){.lightbox group="alaska"}
+</div>
+<div class="photo-item">
+  ![](alaska_2022/img2.jpg){.lightbox group="alaska"}
+</div>
+<div class="photo-item">
+  ![](alaska_2022/img15.jpg){.lightbox group="alaska"}
+</div>
+<div class="photo-item">
+  ![](alaska_2022/img16.jpg){.lightbox group="alaska"}
+</div>
 :::
+
+
+
+
 
 ::: {.photo-grid}
 ![](alaska_2022/img3.jpg){.lightbox group="alaska"}
