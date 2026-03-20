@@ -41,8 +41,11 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-18f4af1a359000cee02cd3b91db90714.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-5a157ff68a888acf3fd19277c0596991.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-dark-00318a841356faae26f4b1ff7edddd3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="site_libs/bootstrap/bootstrap-18f4af1a359000cee02cd3b91db90714.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -330,7 +333,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="scroll-down-wrap">
 <p><img src="img/scroll_down2.svg" class="scroll-down-gif" alt="Scroll down"></p>
 </div>
-<div class="column-page page-columns page-full">
+<div class="column-page">
 <div class="cv-section">
 <div class="quarto-layout-panel" data-layout="[ 30, 70 ]">
 <div class="quarto-layout-row">
@@ -349,6 +352,45 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+</div>
+<!---start news here --->
+<div class="column-page">
+<p><span style="font-size: 2.0rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #cfd217">News and updates</span></p>
+<div class="section-separator">
+
+</div>
+<div class="quarto-layout-panel" data-layout="[ 20, 80 ]">
+<div class="quarto-layout-row">
+<div id="first-column" class="quarto-layout-cell" style="flex-basis: 20.0%;justify-content: center;">
+<p><a href="img/Purdue/PFEN226.jpg" class="lightbox" data-gallery="news"><img src="img/Purdue/PFEN226.jpg" class="img-fluid"></a></p>
+</div>
+<div id="second-column" class="quarto-layout-cell" style="flex-basis: 80.0%;justify-content: flex-start;">
+<p><span style="font-size: 1.2rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;">Jan 20th, 2026</span></p>
+<p>Joined Purdue University as a Post doctoral research associate under Dr.&nbsp;Matthew Ginzel and Dr.&nbsp;Vikram Chhatre to investigate climate change adaptation and potential pre- or mal-adaptation of eastern hardwoods. The project objectives are in alignment with the goals of <a href="https://htirc.org/">HTIRC</a>.</p>
+</div>
+</div>
+</div>
+<div class="section-separator">
+
+</div>
+<div class="quarto-layout-panel" data-layout="[ 20, 80 ]">
+<div class="quarto-layout-row">
+<div id="first-column" class="quarto-layout-cell" style="flex-basis: 20.0%;justify-content: center;">
+<p><a href="img/PhD/withLabbies.jpg" class="lightbox" data-gallery="news"><img src="img/PhD/withLabbies.jpg" class="img-fluid"></a></p>
+</div>
+<div id="second-column" class="quarto-layout-cell" style="flex-basis: 80.0%;justify-content: flex-start;">
+<p><span style="font-size: 1.2rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;">Nov 14th, 2025</span></p>
+<p>Successfully defended my PhD titled “Range wide genotypic and phenotypic variation and climate change adaptation in red spruce”. Bringing one of the most wonderful chapters in my life to an end.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="column-screen">
+<div class="section-separator">
+
+</div>
+</div>
+<!---footer figs --->
 <div class="column-body">
 <div class="quarto-layout-panel" data-layout="[ 20,20,20,20 ]">
 <div class="quarto-layout-row">
@@ -375,7 +417,6 @@ ul.task-list li input[type="checkbox"] {
 <!-- ::: -->
 
 
-</div>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -800,6 +841,38 @@ ul.task-list li input[type="checkbox"] {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

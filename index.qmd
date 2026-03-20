@@ -104,6 +104,60 @@ title: ""
 :::
 :::::
 :::
+:::
+
+
+
+
+
+
+
+<!---start news here --->
+
+::: {.column-page}
+
+
+[News and updates]{style="font-size: 2.0rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #cfd217"}
+
+<div class="section-separator"></div>
+
+::::: {layout="[ 20, 80 ]"}
+::: {#first-column}
+
+![](img/Purdue/PFEN226.jpg){width=30% .lightbox group="news"}
+
+:::
+::: {#second-column}
+
+[Jan 20th, 2026]{style="font-size: 1.2rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"}  
+
+Joined Purdue University as a Post doctoral research associate under Dr. Matthew Ginzel and Dr. Vikram Chhatre to investigate climate change adaptation and potential pre- or mal-adaptation of eastern hardwoods. The project objectives are in alignment with the goals of [HTIRC](https://htirc.org/).
+
+:::
+:::::
+
+
+<div class="section-separator"></div>
+
+::::: {layout="[ 20, 80 ]"}
+::: {#first-column}
+
+![](img/PhD/withLabbies.jpg){width=30% .lightbox group="news"}
+
+:::
+::: {#second-column}
+
+[Nov 14th, 2025]{style="font-size: 1.2rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"}  
+
+Successfully defended my PhD titled "Range wide genotypic and phenotypic variation and climate change adaptation in red spruce". Bringing one of the most wonderful chapters in my life to an end.
+
+:::
+:::::
+
+
+
+
+:::
 
 
 
@@ -113,6 +167,16 @@ title: ""
 
 
 
+
+
+
+
+
+::: {.column-screen}
+<div class="section-separator"></div>
+:::
+
+<!---footer figs --->
 
 :::::: {.column-body}
 ::::: {layout="[ 20,20,20,20 ]"}

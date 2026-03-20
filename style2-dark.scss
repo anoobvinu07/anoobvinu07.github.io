@@ -530,3 +530,22 @@ li.no-bullet {
   filter: grayscale(0%) brightness(1.1) saturate(1.2);
 }
 
+/* scroll effect  */
+.scroll-down-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0 2rem 0;
+}
+
+.scroll-down-gif {
+  width: 150px;
+  /* max-width: 180vw; */
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  cursor: pointer;
+}
+
+.scroll-down-gif:hover {
+  transform: scale(1.15);
+  opacity: 0.9;
+}
