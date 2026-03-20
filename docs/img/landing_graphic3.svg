@@ -1,41 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 7539 5808" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-miterlimit:1.5;">
-    <g transform="matrix(1,0,0,1,-411.584,-156.82)">
-        <g transform="matrix(0.855902,0,0,0.445476,-9.82623,-7.99885)">
-            <g transform="matrix(1.16836,0,0,2.26597,-1126.76,-18.5881)">
+<svg width="100%" height="100%" viewBox="0 0 7539 5191" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,-442.597,-5053.53)">
+        <g transform="matrix(0.855902,0,0,0.445476,21.1868,4888.71)">
+            <g transform="matrix(1.16836,0,0,2.26597,-1072.16,401.047)">
                 <path d="M8341.38,3786.99C8341.38,3638.46 8219.66,3517.87 8069.72,3517.87L2240.48,3517.87C2090.55,3517.87 1968.82,3638.46 1968.82,3786.99L1968.82,4325.23C1968.82,4473.76 2090.55,4594.35 2240.48,4594.35L8069.72,4594.35C8219.66,4594.35 8341.38,4473.76 8341.38,4325.23L8341.38,3786.99Z" style="fill:rgb(215,215,215);fill-opacity:0.61;stroke:white;stroke-width:2.7px;"/>
             </g>
         </g>
-        <g transform="matrix(0.855902,0,0,0.445476,-9.82623,-7.99885)">
-            <g transform="matrix(1.16836,0,0,2.24479,-1267.6,-7.91854)">
+        <g transform="matrix(0.855902,0,0,0.445476,21.1868,4888.71)">
+            <g transform="matrix(1.16836,0,0,2.24479,-1213,411.716)">
                 <text x="2639.29px" y="3960.37px" style="font-family:'AntiqueOlive', 'Antique Olive', sans-serif;font-size:333.333px;">Hi there!, I&apos;m</text>
                 <text x="4956.34px" y="3960.37px" style="font-family:'AntiqueOlive', 'Antique Olive', sans-serif;font-size:333.333px;fill:rgb(216,49,49);">Anoob</text>
                 <text x="6203.9px" y="3960.37px" style="font-family:'AntiqueOlive', 'Antique Olive', sans-serif;font-size:333.333px;">Prakash</text>
             </g>
         </g>
-        <g transform="matrix(0.855902,0,0,0.445476,-9.82623,-7.99885)">
-            <g transform="matrix(1.16836,0,0,2.24479,-986.398,55.9125)">
+        <g transform="matrix(0.855902,0,0,0.445476,21.1868,4888.71)">
+            <g transform="matrix(1.16836,0,0,2.24479,-931.795,475.547)">
                 <text x="2124.1px" y="4194.48px" style="font-family:'AntiqueOlive', 'Antique Olive', sans-serif;font-size:150px;fill:rgb(35,31,32);">I’m a researcher working at the intersection of ecological and evolutionary</text>
                 <text x="3165.27px" y="4394.48px" style="font-family:'AntiqueOlive', 'Antique Olive', sans-serif;font-size:150px;fill:rgb(35,31,32);">genomics, climate adaptation, and data science.</text>
             </g>
         </g>
-        <g transform="matrix(0.855902,0,0,0.445476,-9.82623,-7.99885)">
-            <g transform="matrix(1.16536,0,0,0.942587,-938.963,-484.824)">
-                <g transform="matrix(1.01271,0,0,2.17616,1443.85,-17365)">
-                    <path d="M2315.58,13610.2L3573.09,14135L4721.69,13570.6" style="fill:none;stroke:rgb(35,31,32);stroke-width:136.22px;"/>
-                </g>
-                <g transform="matrix(0.642615,0,0,1.38088,2748.11,-6792.54)">
-                    <path d="M2315.58,13610.2L3573.09,14135L4721.69,13570.6" style="fill:none;stroke:rgb(216,49,49);stroke-width:214.67px;"/>
-                </g>
-            </g>
-        </g>
-        <g transform="matrix(0.855902,0,0,0.445476,-9.82623,-7.99885)">
-            <g transform="matrix(1.16836,0,0,2.24479,11.4806,-23145.6)">
+        <g transform="matrix(0.855902,0,0,0.445476,21.1868,4888.71)">
+            <g transform="matrix(1.16836,0,0,2.00657,11.4806,-20650.2)">
                 <rect x="411.584" y="10475.6" width="7538.59" height="5807.16" style="fill:none;"/>
             </g>
         </g>
-        <g transform="matrix(0.855902,0,0,0.445476,-9.82623,-7.99885)">
+        <g transform="matrix(0.855902,0,0,0.445476,21.1868,4888.71)">
             <g transform="matrix(1.38558,0,0,2.66215,-1225.69,-1838.34)">
                 <circle cx="4418.3" cy="2579.86" r="908.764" style="fill:rgb(215,215,215);fill-opacity:0.61;"/>
                 <clipPath id="_clip1">

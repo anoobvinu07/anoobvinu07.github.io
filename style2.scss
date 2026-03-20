@@ -513,8 +513,8 @@ li.no-bullet {
 }
 
 .tile-logos img {
-  width: 250px;              /* smaller size */
-  height: 250px;
+   width: clamp(250px, 12vw, 120px);
+  height: clamp(250px, 12vw, 120px);
   transition: transform 0.2s ease, filter 0.2s ease;
   filter: grayscale(30%) brightness(0.9);  /* muted default */
 }
@@ -523,5 +523,54 @@ li.no-bullet {
 .tile-logos a:hover img {
   transform: scale(1.03);
   filter: grayscale(0%) brightness(1.1) saturate(1.2);
+}
+
+
+/* scroll effect  */
+.scroll-down-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0 2rem 0;
+}
+
+.scroll-down-gif {
+  width: 150px;
+  /* max-width: 180vw; */
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  cursor: pointer;
+}
+
+.scroll-down-gif:hover {
+  transform: scale(1.15);
+  opacity: 0.9;
+}
+
+
+
+
+/* scroll down */
+.scroll-reveal summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.scroll-reveal summary::-webkit-details-marker {
+  display: none;
+}
+
+.reveal-content {
+  animation: fadeDown 0.6s ease-out;
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 

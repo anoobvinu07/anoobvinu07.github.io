@@ -53,6 +53,14 @@ title: ""
 <div class="section-separator"></div>
 :::
 
+
+
+<div class="scroll-down-wrap">
+  <img src="img/scroll_down2.svg" class="scroll-down-gif" alt="Scroll down">
+</div>
+
+
+
 ::: {.column-page}
 ::: {.cv-section}
 ::::: {layout="[ 30, 70 ]"}

@@ -13246,29 +13246,48 @@ li.no-bullet {
   transform: scale(1.20);  /* zoom on hover */
 }
 
-.hero-container {
-  overflow: hidden;
-  position: relative;
-  # max-height: 52vh;
-  height: 252vh;
-}
 
-.hero-image {
-  position: absolute;
-  bottom: 0;
-  /* liner gradient tints the image darker for readability*/
-  background-image: linear-gradient( rgba(0,0,0,.3), rgba(0,0,0,.3) ), url(img/landing_graphic.png);
-  background-size: cover;
-  height: 100vw;
-  width: 100vw;
-  background-color: #141c25;
-  display: flex; /* Change to `display: none` for no hero image */
+// index page tile sets
+.tile-logos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18px, 5fr));
   justify-content: center;
-  align-items: center;
-  background-repeat: no-repeat;
-  padding: 21vh 0;
+  /*gap: 1rem;    bigger gap between logos */
+  
+  column-gap: 10.5rem;   /* smaller space between columns */
+  row-gap: 10rem;        /* larger space between rows */
+  border-radius: 8px;
+  //box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  padding-inline: 0.5rem;
 }
 
+.tile-logos a {
+  display: inline-block;
+}
+
+.tile-logos img {
+   width: clamp(250px, 12vw, 120px);
+  height: clamp(250px, 12vw, 120px);
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: grayscale(30%) brightness(0.9);  /* muted default */
+}
+
+/* hover: zoom + colorize */
+.tile-logos a:hover img {
+  transform: scale(1.03);
+  filter: grayscale(0%) brightness(1.1) saturate(1.2);
+}
+
+@media (max-width: 600px) {
+  .tile-logos {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 0.4rem;
+    overflow-x: auto;
+  }
 
 
 // quarto-scss-analysis-annotation { "origin": null }
