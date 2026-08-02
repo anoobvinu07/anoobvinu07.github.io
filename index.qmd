@@ -25,7 +25,7 @@ title: ""
 
 
 ::: {.column-screen}
-![](img/landing_graphic3.svg)
+![](img/landing_graphic5.svg)
 ::: 
 
 ::: {.column-screen}
@@ -45,9 +45,14 @@ title: ""
 :::
 
 
-<div class="scroll-down-wrap">
-  <img src="img/scroll_down2.svg" class="scroll-down-gif" alt="Scroll down">
-</div>
+
+<!-- ::: {.column-page} -->
+
+<!-- <div class="scroll-down-wrap"> -->
+<!--   <img src="img/scroll_down4.svg" class="scroll-down-gif" alt="Scroll down"> -->
+<!-- </div> -->
+<!-- ::: -->
+
 
 
 
@@ -56,7 +61,7 @@ title: ""
 ::::: {layout="[ 30, 70 ]"}
 ::: {#first-column}
 
-![](img/profile_circle2.png){.about-photo width=30%}
+![](img/narcissism/anoob-cadillac-sunrise_circle.png){.about-photo width=30%}
 
 :::
 ::: {#second-column}
@@ -67,7 +72,6 @@ title: ""
 
 [**More >>**](about.qmd)
 
-[Please reach out to me if you like to discuss science or collaborate or to just chill over a game of basketball or co-op gaming.]{style="font-size: 1.3rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"}
 
 <div class="footer-logos">
 <a href="https://www.linkedin.com/in/anoob-prakash/" target="_blank">
@@ -114,7 +118,7 @@ title: ""
 ::::: {layout="[ 20, 80 ]"}
 ::: {#first-column}
 
-![](img/Purdue/PFEN226.jpg){width=30% .lightbox group="news"}
+![](img/Purdue/anoob-purdue.jpg){width=30% .lightbox group="news"}
 
 :::
 ::: {#second-column}

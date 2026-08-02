@@ -1,28 +1,45 @@
-.hero-container {
-  position: relative;
-  overflow: hidden;
-  min-height: 75vh;              /* tall, cinematic */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-.hero-illustrated {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),  /* darken for text */
-    url("img/landing_graphic3.png");  /* use your file name here */
-  background-size: cover;
-  background-position: center bottom;  /* emphasize water + cliff */
-  background-repeat: no-repeat;
+#quarto-content,
+main.content,
+.page-columns,
+.page-columns .content {
+  max-width: none !important;
+  /*width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.hero {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  min-height: 100vh;
+  background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+              url("img/cadillac_landing_graphic.png") center center / cover no-repeat;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  margin-bottom: 0 !important;
+  margin-top: -18px;
 }
 
 .hero-content {
-  max-width: 900px;
-  padding: 0 8vw;
+  position: relative;
+  z-index: 2;
   text-align: center;
   color: #f8f8ff;
+  padding: 0 8vw;
 }
 
 .hero-title {
@@ -35,4 +52,13 @@
   font-size: clamp(1.1rem, 1.4vw, 1.3rem);
   margin: 0;
   opacity: 0.95;
+}
+
+.navbar {
+  background: transparent !important;
+  box-shadow: none !important;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
 }

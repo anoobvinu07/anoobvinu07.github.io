@@ -5,13 +5,13 @@ project:
 website:
   title: "Anoob Prakash"
   description: "Personal website for Anoob Prakash"
-  image: img/AP_logo.png
-  favicon: img/AP_logo.png
+  image: img/illustrated_AP.jpg
+  favicon: img/illustrated_AP.jpg
   
   # start of the navigation bar at the top of the website
   navbar:
     pinned: true
-    logo: /img/AP_logo.png
+    logo: /img/AP_logo2.png
     
     # your sub-pages
     right:
@@ -21,15 +21,16 @@ website:
         href: photos/photos.qmd
       - text: "CV"
         href: cv/cv.qmd
-      - icon: linkedin
-        href: https://www.linkedin.com/in/anoob-prakash/
-      - icon: google
-        href: https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ
-      - icon: github
-        href: https://github.com/anoobvinu07
-      - icon: envelope
-        aria-label: email
-        href: "mailto:anoobvinu@gmail.com"
+      # - icon: linkedin
+      #   href: https://www.linkedin.com/in/anoob-prakash/
+      # - icon: google
+      #   href: https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ
+      # - icon: github
+      #   href: https://github.com/anoobvinu07
+      # - icon: envelope
+      #   aria-label: email
+      #   href: "mailto:anoobvinu@gmail.com"
+      
       
 
         
@@ -39,19 +40,35 @@ website:
 # Don't touch unless you know what you are doing :) ------------
   search: 
     location: navbar
-    type: textbox
+    type: overlay
   page-footer: 
+    left:
+        - icon: github
+          href: https://github.com/anoobvinu07
+        - icon: mortarboard
+          href: https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ
+        - icon: envelope
+          href: mailto:anoobvinu@gmail.com
+
+    right:
+        - icon: building
+          href: https://ag.purdue.edu/directory/prakas89
+        - text: Purdue
+          href: https://www.purdue.edu
+        - text: HTIRC
+          href: https://htirc.org/      
     center: |
-      <span class="faux-block">
-      © Copyright <span id="year"></span> | Anoob Prakash
-      </span>
+      
+      © <span id="year"></span> · Anoob Prakash
       <script>
         document.getElementById("year").textContent = new Date().getFullYear();
       </script>
+  
+
  
 format:
   html:
-    fontsize: 1.1em
+    fontsize: 1.4em
     theme: 
       light: style2.scss
       dark:  style2-dark.scss

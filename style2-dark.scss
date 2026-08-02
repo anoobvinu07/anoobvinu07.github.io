@@ -20,6 +20,7 @@ $darkteal: #388087;
 $teal: #6fb3b8;
 $lightgreen: #c2edce;
 $ember: #b82601;
+$dark-blue: #000066;
 
 // Base document colors
 $navbar-bg: $black;
@@ -27,7 +28,7 @@ $navbar-fg: $white;
 $navbar-hl: $ember; 
 $body-bg: $black;
 $body-color: $white;
-$footer-bg: $black; 
+$footer-bg: $dark-blue; 
 $link-color: $lightgreen;
 
 // Inline code
@@ -630,5 +631,6 @@ li.no-bullet {
   transform: scale(1.03);
   filter: grayscale(0%) brightness(1.1) saturate(1.2);
 }
+
 
 
