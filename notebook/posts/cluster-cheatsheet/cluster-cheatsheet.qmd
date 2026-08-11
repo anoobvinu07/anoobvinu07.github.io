@@ -1,6 +1,6 @@
 ---
 title: "Cheat sheet for bash and SLURM"
-description: "Quick reference cheatsheet for rfrequently used bash commands and SLURM commands to submit or manage jobs on a HPC"
+description: "Quick reference cheatsheet for frequently used bash commands and SLURM commands to submit or manage jobs on a HPC"
 author:
   - name: "Anoob Prakash"
 #    email: "your.email@example.edu"
