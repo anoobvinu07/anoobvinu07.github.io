@@ -1,0 +1,22 @@
+[
+  {
+    "listing": "/workflow/index.html",
+    "items": [
+      "/workflow/posts/bashing-the-cluster/Bashing the cluster.html"
+    ]
+  },
+  {
+    "listing": "/workflow/workflow.html",
+    "items": [
+      "/workflow/posts/bashing-the-cluster/blog-post.html",
+      "/workflow/posts/bashing-the-cluster/Bashing the cluster.html"
+    ]
+  },
+  {
+    "listing": "/notebook/notebook.html",
+    "items": [
+      "/notebook/posts/bashing-the-cluster/Bashing the cluster.html",
+      "/notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html"
+    ]
+  }
+]

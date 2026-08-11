@@ -1,0 +1,339 @@
+---
+title: "Working on the Cluster with Red Spruce Fitness-Trait Data"
+description: "A reproducible workflow for downloading a public dataset, exploring it with bash, analyzing it in R, and submitting the analysis with Slurm."
+author:
+  - name: "Anoob Prakash"
+#    email: "your.email@example.edu"
+#    orcid: "0000-0000-0000-0000"
+date: "2026-08-10"
+listed: false
+categories:
+  - HPC
+  - Bash
+  - R
+  - Slurm
+  - Red spruce
+  - Reproducibility
+image: ""
+format:
+  html:
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-overflow: wrap
+---
+
+## Overview
+
+This tutorial walks through a small, reproducible high-performance computing (HPC) workflow using a public red spruce fitness-trait dataset. Rather than receiving a copy of the data by email or flash drive, you will download the source file into your project directory, inspect it from the command line, analyze it in R, and submit that R analysis to Slurm.
+
+The source file is `FitnessTraits_GeneticParameters_RedSpruce.txt` from the [Genomic_assisted_selection repository](https://github.com/anoobvinu07/Genomic_assisted_selection). The repository supports the manuscript *Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration*.
+
+## Learning objectives
+
+By the end, you should be able to:
+
+- Navigate a cluster filesystem with bash.
+- Organize a project using reproducible relative paths.
+- Download a tab-delimited data file with `curl`.
+- Inspect a file with `head`, `less`, `grep`, and `wc`.
+- Run an R script interactively and non-interactively.
+- Submit and monitor a simple Slurm job with `sbatch` and `squeue`.
+- Locate output tables, figures, and job logs.
+
+## Project setup
+
+Log in to your cluster, then create a dedicated project directory:
+
+```bash
+cd ~
+pwd
+
+mkdir -p projects/red-spruce-cluster-exercise/{data/raw,results,logs,scripts}
+cd ~/projects/red-spruce-cluster-exercise
+
+pwd
+ls -R
+```
+
+Your project should have this structure:
+
+```text
+red-spruce-cluster-exercise/
+├── data/
+│   └── raw/       # downloaded, unchanged source data
+├── logs/          # Slurm standard output and error logs
+├── results/       # analysis products created by R
+└── scripts/       # R and Slurm scripts
+```
+
+Using a consistent project structure makes your paths portable. For example, `data/raw/red_spruce_traits.txt` works for anyone who has the project folder, whereas `/home/your_username/...` works only on your account and only on one system.
+
+### Bash quick reference
+
+| Command | Purpose | Example |
+|---|---|---|
+| `~` | Your home directory | `cd ~` |
+| `/` | Filesystem root and path separator | `cd /scratch` |
+| `pwd` | Print working directory | `pwd` |
+| `ls` | List files and directories | `ls -lh results` |
+| `cd` | Change directory | `cd data/raw` |
+| `cd ..` | Move up one directory | `cd ..` |
+| `mkdir -p` | Create directory/directories | `mkdir -p logs results` |
+| `head` | Show the beginning of a file | `head -n 5 file.txt` |
+| `less` | View a file interactively; press `q` to exit | `less file.txt` |
+| `grep` | Search for text in a file | `grep "value" file.txt` |
+| `wc -l` | Count lines | `wc -l file.txt` |
+| `curl -L -o` | Download URL into a named file | `curl -L -o file.txt URL` |
+
+## Download the data
+
+Download the raw GitHub file directly into `data/raw/`:
+
+```bash
+curl -L \
+  -o data/raw/red_spruce_fitness_traits.txt \
+  https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt
+```
+
+The `-L` flag tells `curl` to follow redirects, and `-o` specifies the local output file. Verify the download before doing any analysis:
+
+```bash
+ls -lh data/raw/red_spruce_fitness_traits.txt
+head -n 5 data/raw/red_spruce_fitness_traits.txt
+```
+
+This is a tab-delimited text file. Print the header with one field per line to inspect its variable names:
+
+```bash
+head -n 1 data/raw/red_spruce_fitness_traits.txt | tr '\t' '\n'
+```
+
+Other useful checks are:
+
+```bash
+# Count total lines, including the header
+wc -l data/raw/red_spruce_fitness_traits.txt
+
+# View the complete file interactively; press q to quit
+less data/raw/red_spruce_fitness_traits.txt
+
+# Search for a known trait, population, family, or other text value
+# Replace SEARCH_TERM with a value that occurs in the data.
+grep "SEARCH_TERM" data/raw/red_spruce_fitness_traits.txt | head
+```
+
+::: {.callout-note}
+## Checkpoint
+
+Before continuing, identify the data-file header, count the total lines, and write down two variables you expect to be numeric. Do not assume a column's type from its name alone: check the data.
+:::
+
+## Create an R script
+
+Create a script using a terminal editor:
+
+```bash
+nano scripts/analyze_red_spruce.R
+```
+
+Paste the following code. It uses base R only, so it does not require installing packages. The script detects numeric variables, writes a descriptive-statistics table, creates a correlation matrix, and makes a histogram for the first numeric variable it finds.
+
+```r
+#!/usr/bin/env Rscript
+
+input_file <- "data/raw/red_spruce_fitness_traits.txt"
+results_dir <- "results"
+
+if (!file.exists(input_file)) {
+  stop(
+    "Input file not found: ", input_file,
+    "\nDownload the data first, from the project root."
+  )
+}
+
+if (!dir.exists(results_dir)) {
+  dir.create(results_dir, recursive = TRUE)
+}
+
+red_spruce <- read.table(
+  input_file,
+  header = TRUE,
+  sep = "\t",
+  stringsAsFactors = FALSE,
+  check.names = FALSE
+)
+
+cat("Rows:", nrow(red_spruce), "\n")
+cat("Columns:", ncol(red_spruce), "\n\n")
+cat("Column names:\n")
+print(names(red_spruce))
+cat("\nFirst six rows:\n")
+print(head(red_spruce))
+
+numeric_vars <- names(red_spruce)[vapply(red_spruce, is.numeric, logical(1))]
+cat("\nNumeric variables:\n")
+print(numeric_vars)
+
+if (length(numeric_vars) == 0) {
+  stop("No numeric variables were detected. Inspect the file delimiter and header.")
+}
+
+trait_summary <- data.frame(
+  variable = numeric_vars,
+  n_nonmissing = vapply(red_spruce[numeric_vars], function(x) sum(!is.na(x)), numeric(1)),
+  mean = vapply(red_spruce[numeric_vars], function(x) mean(x, na.rm = TRUE), numeric(1)),
+  sd = vapply(red_spruce[numeric_vars], function(x) sd(x, na.rm = TRUE), numeric(1)),
+  minimum = vapply(red_spruce[numeric_vars], function(x) min(x, na.rm = TRUE), numeric(1)),
+  maximum = vapply(red_spruce[numeric_vars], function(x) max(x, na.rm = TRUE), numeric(1))
+)
+
+write.csv(
+  trait_summary,
+  file.path(results_dir, "red_spruce_numeric_summary.csv"),
+  row.names = FALSE
+)
+
+if (length(numeric_vars) >= 2) {
+  correlation_matrix <- cor(
+    red_spruce[numeric_vars],
+    use = "pairwise.complete.obs"
+  )
+
+  write.csv(
+    correlation_matrix,
+    file.path(results_dir, "red_spruce_numeric_correlations.csv")
+  )
+}
+
+first_trait <- numeric_vars[1]
+pdf(file.path(results_dir, "first_numeric_trait_histogram.pdf"), width = 7, height = 5)
+hist(
+  red_spruce[[first_trait]],
+  main = paste("Distribution of", first_trait),
+  xlab = first_trait,
+  col = "grey80",
+  border = "white"
+)
+dev.off()
+
+cat("\nCreated files:\n")
+print(list.files(results_dir, full.names = TRUE))
+```
+
+Save in `nano` with `Ctrl + O`, press `Enter`, then exit with `Ctrl + X`.
+
+## Run R on the terminal
+
+First, determine which R modules are available on your cluster:
+
+```bash
+module avail R
+```
+
+Load an available version; for example:
+
+```bash
+module load R/4.3.0
+```
+
+Run the script from the **project root**:
+
+```bash
+Rscript scripts/analyze_red_spruce.R
+ls -lh results
+```
+
+You can also start an interactive R session for exploration:
+
+```bash
+R
+```
+
+Then run:
+
+```r
+red_spruce <- read.table(
+  "data/raw/red_spruce_fitness_traits.txt",
+  header = TRUE,
+  sep = "\t"
+)
+
+str(red_spruce)
+summary(red_spruce)
+```
+
+Exit R with:
+
+```r
+q()
+```
+
+## Submit the analysis with Slurm
+
+Create a Slurm submission script:
+
+```bash
+nano scripts/run_red_spruce.sbatch
+```
+
+Paste this content. Change the R module and `--partition` to names supported by your cluster.
+
+```bash
+#!/bin/bash
+#SBATCH --job-name=red_spruce
+#SBATCH --output=logs/red_spruce_%j.out
+#SBATCH --error=logs/red_spruce_%j.err
+#SBATCH --time=00:10:00
+#SBATCH --partition=standard
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=2G
+
+set -euo pipefail
+
+module load R/4.3.0
+
+# Run relative paths from the directory where sbatch was issued.
+cd "$SLURM_SUBMIT_DIR"
+mkdir -p results logs
+
+echo "Job ID: ${SLURM_JOB_ID}"
+echo "Host: $(hostname)"
+echo "Started: $(date)"
+echo "Working directory: $(pwd)"
+
+Rscript scripts/analyze_red_spruce.R
+
+echo "Finished: $(date)"
+```
+
+Submit and monitor your job:
+
+```bash
+sbatch scripts/run_red_spruce.sbatch
+squeue -u "$USER"
+```
+
+After the job has completed, replace `<JOBID>` with the number returned by `sbatch`:
+
+```bash
+cat logs/red_spruce_<JOBID>.out
+cat logs/red_spruce_<JOBID>.err
+ls -lh results
+```
+
+## Exercises
+
+1. Explain why raw data are saved in `data/raw/` and should not be altered by the analysis script.
+2. Use `head`, `less`, and `grep` to inspect the source data before opening R.
+3. Identify what files the R script writes to `results/`.
+4. Deliberately run the R script from the wrong directory. Read the error, then explain why the project-relative input path fails.
+5. Edit the R script to make a histogram for a different numeric variable.
+6. After inspecting `names(red_spruce)`, create a plot that is biologically meaningful for two variables in this dataset.
+7. Add a `README.md` containing the GitHub source URL, date accessed, and exact `curl` command used to obtain the data.
+
+## Take-home message
+
+A reproducible cluster workflow separates source data, scripts, outputs, and logs. Downloading a documented raw-data copy into a project, using relative paths, and running the same script interactively and through Slurm are habits that scale from a small teaching exercise to genomic and quantitative-genetic analyses.

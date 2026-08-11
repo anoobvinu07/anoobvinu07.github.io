@@ -21,6 +21,8 @@ website:
         href: photos/photos.qmd
       - text: "CV"
         href: cv/cv.qmd
+      - text: Notebook
+        href: notebook/notebook.qmd      
       # - icon: linkedin
       #   href: https://www.linkedin.com/in/anoob-prakash/
       # - icon: google
@@ -57,6 +59,7 @@ website:
           href: https://www.purdue.edu
         - text: HTIRC
           href: https://htirc.org/      
+          
     center: |
       
       © <span id="year"></span> · Anoob Prakash

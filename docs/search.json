@@ -299,5 +299,257 @@
     "title": "Anoob Prakash",
     "section": "Keller days",
     "text": "Keller days"
+  },
+  {
+    "objectID": "workflow/index.html",
+    "href": "workflow/index.html",
+    "title": "Data // Notes",
+    "section": "",
+    "text": "Bashing the cluster\n\n\n\nhpc\n\nworkflow\n\nbash\n\nR\n\n\n\nLearn the basics of bash and how to use SLURM to submit jobs on a cluster\n\n\n\n\n\nAug 10, 2026\n\n\nAnoob Prakash\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/Bashing the cluster.html",
+    "href": "workflow/posts/bashing-the-cluster/Bashing the cluster.html",
+    "title": "Bashing the cluster",
+    "section": "",
+    "text": "Cluster exercise: Download and analyze public red-spruce fitness-trait data\nIn this exercise you will create a reproducible project on the cluster, download a tab-delimited red-spruce dataset directly from a public GitHub repository, inspect it with bash, analyze it in R, and run the analysis through Slurm.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the Genomic_assisted_selection repository. The repository supports the manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration.\n\n\n\n\n\n\nImportant: Although the file extension is .txt, treat it as a tab-delimited table, not a comma-separated CSV. Read it in R with read.delim() or read.table(sep = “), rather than read.csv().\n\n\n\n\n\nBy the end, you should be able to:\n\nNavigate a cluster filesystem with bash.\nOrganize a project using reproducible relative paths.\nDownload a tab-delimited data file with curl.\nInspect a file with head, less, grep, and wc.\nRun an R script interactively and non-interactively.\nSubmit and monitor a simple Slurm job with sbatch and squeue.\nLocate output tables, figures, and job logs."
+  },
+  {
+    "objectID": "workflow/workflow.html",
+    "href": "workflow/workflow.html",
+    "title": "Data // Notes",
+    "section": "",
+    "text": "Working on the Cluster with Red Spruce Fitness-Trait Data\n\n\n\nHPC\n\nBash\n\nR\n\nSlurm\n\nRed spruce\n\nReproducibility\n\n\n\nA reproducible workflow for downloading a public dataset, exploring it with bash, analyzing it in R, and submitting the analysis with Slurm.\n\n\n\n\n\nAug 10, 2026\n\n\nAnoob Prakash\n\n\n\n\n\n\n\n\n\n\n\n\nBashing the cluster\n\n\n\nhpc\n\nworkflow\n\nbash\n\nR\n\n\n\nLearn the basics of bash and how to use SLURM to submit jobs on a cluster\n\n\n\n\n\nAug 10, 2026\n\n\nAnoob Prakash\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/Bashing the cluster.html#goal",
+    "href": "workflow/posts/bashing-the-cluster/Bashing the cluster.html#goal",
+    "title": "Bashing the cluster",
+    "section": "",
+    "text": "Cluster exercise: Download and analyze public red-spruce fitness-trait data\nIn this exercise you will create a reproducible project on the cluster, download a tab-delimited red-spruce dataset directly from a public GitHub repository, inspect it with bash, analyze it in R, and run the analysis through Slurm.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the Genomic_assisted_selection repository. The repository supports the manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration.\n\n\n\n\n\n\nImportant: Although the file extension is .txt, treat it as a tab-delimited table, not a comma-separated CSV. Read it in R with read.delim() or read.table(sep = “), rather than read.csv().\n\n\n\n\n\nBy the end, you should be able to:\n\nNavigate a cluster filesystem with bash.\nOrganize a project using reproducible relative paths.\nDownload a tab-delimited data file with curl.\nInspect a file with head, less, grep, and wc.\nRun an R script interactively and non-interactively.\nSubmit and monitor a simple Slurm job with sbatch and squeue.\nLocate output tables, figures, and job logs."
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/Bashing the cluster.html#goal.",
+    "href": "workflow/posts/bashing-the-cluster/Bashing the cluster.html#goal.",
+    "title": "Bashing the cluster",
+    "section": "",
+    "text": "Cluster exercise: Download and analyze public red-spruce fitness-trait data\nIn this exercise you will create a reproducible project on the cluster, download a tab-delimited red-spruce dataset directly from a public GitHub repository, inspect it with bash, analyze it in R, and run the analysis through Slurm.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt in the anoobvinu07/Genomic_assisted_selection repository. The repository documents an integrative genomics approach to seed sourcing for forest restoration.\n\n\n\n\n\n\nImportant: Although the file extension is .txt, treat it as a tab-delimited table, not a comma-separated CSV. Read it in R with read.delim() or read.table(sep = “), rather than read.csv()."
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/Bashing the cluster.html#learning-objectives",
+    "href": "workflow/posts/bashing-the-cluster/Bashing the cluster.html#learning-objectives",
+    "title": "Bashing the cluster",
+    "section": "Learning objectives",
+    "text": "Learning objectives\n\nUse ~, /, pwd, ls, cd, grep, head, and less to work with files on a cluster.\nCreate a project with separate raw data, scripts, results, and log directories.\nDownload a source data file reproducibly with curl.\nIdentify the delimiter and column names before choosing an analysis.\nRead a tab-delimited data file in R using a relative path.\nSubmit an R analysis as a Slurm job and inspect its output."
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/Bashing the cluster.html#project-setup",
+    "href": "workflow/posts/bashing-the-cluster/Bashing the cluster.html#project-setup",
+    "title": "Bashing the cluster",
+    "section": "Project setup",
+    "text": "Project setup\nLog in to your cluster, then create a dedicated project directory:\n\ncd ~ # change directory [cd] to home [~]\npwd  # get the present working directory [pwd]\nmkdir projects \nThis makes a directory [mkdir] or folder at the current location titled “projects”\ncd projects # move inside the projects directory\nIn order to create multiple directories at the same time you can use :\n\n-p : Create directory/directories\n{folder-1/subfolder,folder-2,folder-3} : Name of the multiple directory/directories [folders and sub-folders] at the same time\n\n\n\n\n\n\n\nWarning\n\n\n\nDo not add spaces between the names {folder-1/subfolder,folder-2,folder-3}\nThis would disrupt the naming convention\n\n\nmkdir -p cluster-exercise/{data/raw,results,logs,scripts}\ncd ~/projects/red-spruce-cluster-exercise\n\npwd\nls -R\n\nYour project should have this structure:\nred-spruce-cluster-exercise/\n├── data/\n│   └── raw/       # downloaded, unchanged source data\n├── logs/          # Slurm standard output and error logs\n├── results/       # analysis products created by R\n└── scripts/       # R and Slurm scripts"
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/blog-post.html",
+    "href": "workflow/posts/bashing-the-cluster/blog-post.html",
+    "title": "Bashing",
+    "section": "",
+    "text": "This tutorial walks through a small, reproducible high-performance computing (HPC) workflow using a public red spruce fitness-trait dataset. Rather than receiving a copy of the data by email or flash drive, you will download the source file into your project directory, inspect it from the command line, analyze it in R, and submit that R analysis to Slurm.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the Genomic_assisted_selection repository. The repository supports the manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration."
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/blog-post.html#overview",
+    "href": "workflow/posts/bashing-the-cluster/blog-post.html#overview",
+    "title": "Bashing",
+    "section": "",
+    "text": "This tutorial walks through a small, reproducible high-performance computing (HPC) workflow using a public red spruce fitness-trait dataset. Rather than receiving a copy of the data by email or flash drive, you will download the source file into your project directory, inspect it from the command line, analyze it in R, and submit that R analysis to Slurm.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the Genomic_assisted_selection repository. The repository supports the manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration."
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/blog-post.html#learning-objectives",
+    "href": "workflow/posts/bashing-the-cluster/blog-post.html#learning-objectives",
+    "title": "Bashing",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nBy the end, you should be able to:\n\nNavigate a cluster filesystem with bash.\nOrganize a project using reproducible relative paths.\nDownload a tab-delimited data file with curl.\nInspect a file with head, less, grep, and wc.\nRun an R script interactively and non-interactively.\nSubmit and monitor a simple Slurm job with sbatch and squeue.\nLocate output tables, figures, and job logs."
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/blog-post.html#project-setup",
+    "href": "workflow/posts/bashing-the-cluster/blog-post.html#project-setup",
+    "title": "Bashing",
+    "section": "Project setup",
+    "text": "Project setup\nLog in to your cluster, then create a dedicated project directory:\ncd ~\npwd\n\nmkdir -p projects/red-spruce-cluster-exercise/{data/raw,results,logs,scripts}\ncd ~/projects/red-spruce-cluster-exercise\n\npwd\nls -R\nYour project should have this structure:\nred-spruce-cluster-exercise/\n├── data/\n│   └── raw/       # downloaded, unchanged source data\n├── logs/          # Slurm standard output and error logs\n├── results/       # analysis products created by R\n└── scripts/       # R and Slurm scripts\nUsing a consistent project structure makes your paths portable. For example, data/raw/red_spruce_traits.txt works for anyone who has the project folder, whereas /home/your_username/... works only on your account and only on one system."
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/blog-post.html#bash-quick-reference",
+    "href": "workflow/posts/bashing-the-cluster/blog-post.html#bash-quick-reference",
+    "title": "Bashing",
+    "section": "Bash quick reference",
+    "text": "Bash quick reference\n\n\n\n\n\n\n\n\nCommand\nPurpose\nExample\n\n\n\n\n~\nYour home directory\ncd ~\n\n\n/\nFilesystem root and path separator\ncd /scratch\n\n\npwd\nPrint working directory\npwd\n\n\nls\nList files and directories\nls -lh results\n\n\ncd\nChange directory\ncd data/raw\n\n\ncd ..\nMove up one directory\ncd ..\n\n\nmkdir -p\nCreate directory/directories\nmkdir -p logs results\n\n\nhead\nShow the beginning of a file\nhead -n 5 file.txt\n\n\nless\nView a file interactively; press q to exit\nless file.txt\n\n\ngrep\nSearch for text in a file\ngrep \"value\" file.txt\n\n\nwc -l\nCount lines\nwc -l file.txt\n\n\ncurl -L -o\nDownload URL into a named file\ncurl -L -o file.txt URL"
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/blog-post.html#download-the-data",
+    "href": "workflow/posts/bashing-the-cluster/blog-post.html#download-the-data",
+    "title": "Bashing",
+    "section": "Download the data",
+    "text": "Download the data\nDownload the raw GitHub file directly into data/raw/:\ncurl -L \\\n  -o data/raw/red_spruce_fitness_traits.txt \\\n  https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt\nThe -L flag tells curl to follow redirects, and -o specifies the local output file. Verify the download before doing any analysis:\nls -lh data/raw/red_spruce_fitness_traits.txt\nhead -n 5 data/raw/red_spruce_fitness_traits.txt\nThis is a tab-delimited text file. Print the header with one field per line to inspect its variable names:\nhead -n 1 data/raw/red_spruce_fitness_traits.txt | tr '\\t' '\\n'\nOther useful checks are:\n# Count total lines, including the header\nwc -l data/raw/red_spruce_fitness_traits.txt\n\n# View the complete file interactively; press q to quit\nless data/raw/red_spruce_fitness_traits.txt\n\n# Search for a known trait, population, family, or other text value\n# Replace SEARCH_TERM with a value that occurs in the data.\ngrep \"SEARCH_TERM\" data/raw/red_spruce_fitness_traits.txt | head\n\n\n\n\n\n\nNoteCheckpoint\n\n\n\nBefore continuing, identify the data-file header, count the total lines, and write down two variables you expect to be numeric. Do not assume a column’s type from its name alone: check the data."
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/blog-post.html#create-an-r-script",
+    "href": "workflow/posts/bashing-the-cluster/blog-post.html#create-an-r-script",
+    "title": "Bashing",
+    "section": "Create an R script",
+    "text": "Create an R script\nCreate a script using a terminal editor:\nnano scripts/analyze_red_spruce.R\nPaste the following code. It uses base R only, so it does not require installing packages. The script detects numeric variables, writes a descriptive-statistics table, creates a correlation matrix, and makes a histogram for the first numeric variable it finds.\n#!/usr/bin/env Rscript\n\ninput_file &lt;- \"data/raw/red_spruce_fitness_traits.txt\"\nresults_dir &lt;- \"results\"\n\nif (!file.exists(input_file)) {\n  stop(\n    \"Input file not found: \", input_file,\n    \"\\nDownload the data first, from the project root.\"\n  )\n}\n\nif (!dir.exists(results_dir)) {\n  dir.create(results_dir, recursive = TRUE)\n}\n\nred_spruce &lt;- read.table(\n  input_file,\n  header = TRUE,\n  sep = \"\\t\",\n  stringsAsFactors = FALSE,\n  check.names = FALSE\n)\n\ncat(\"Rows:\", nrow(red_spruce), \"\\n\")\ncat(\"Columns:\", ncol(red_spruce), \"\\n\\n\")\ncat(\"Column names:\\n\")\nprint(names(red_spruce))\ncat(\"\\nFirst six rows:\\n\")\nprint(head(red_spruce))\n\nnumeric_vars &lt;- names(red_spruce)[vapply(red_spruce, is.numeric, logical(1))]\ncat(\"\\nNumeric variables:\\n\")\nprint(numeric_vars)\n\nif (length(numeric_vars) == 0) {\n  stop(\"No numeric variables were detected. Inspect the file delimiter and header.\")\n}\n\ntrait_summary &lt;- data.frame(\n  variable = numeric_vars,\n  n_nonmissing = vapply(red_spruce[numeric_vars], function(x) sum(!is.na(x)), numeric(1)),\n  mean = vapply(red_spruce[numeric_vars], function(x) mean(x, na.rm = TRUE), numeric(1)),\n  sd = vapply(red_spruce[numeric_vars], function(x) sd(x, na.rm = TRUE), numeric(1)),\n  minimum = vapply(red_spruce[numeric_vars], function(x) min(x, na.rm = TRUE), numeric(1)),\n  maximum = vapply(red_spruce[numeric_vars], function(x) max(x, na.rm = TRUE), numeric(1))\n)\n\nwrite.csv(\n  trait_summary,\n  file.path(results_dir, \"red_spruce_numeric_summary.csv\"),\n  row.names = FALSE\n)\n\nif (length(numeric_vars) &gt;= 2) {\n  correlation_matrix &lt;- cor(\n    red_spruce[numeric_vars],\n    use = \"pairwise.complete.obs\"\n  )\n\n  write.csv(\n    correlation_matrix,\n    file.path(results_dir, \"red_spruce_numeric_correlations.csv\")\n  )\n}\n\nfirst_trait &lt;- numeric_vars[1]\npdf(file.path(results_dir, \"first_numeric_trait_histogram.pdf\"), width = 7, height = 5)\nhist(\n  red_spruce[[first_trait]],\n  main = paste(\"Distribution of\", first_trait),\n  xlab = first_trait,\n  col = \"grey80\",\n  border = \"white\"\n)\ndev.off()\n\ncat(\"\\nCreated files:\\n\")\nprint(list.files(results_dir, full.names = TRUE))\nSave in nano with Ctrl + O, press Enter, then exit with Ctrl + X."
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/blog-post.html#run-r-on-the-terminal",
+    "href": "workflow/posts/bashing-the-cluster/blog-post.html#run-r-on-the-terminal",
+    "title": "Bashing",
+    "section": "Run R on the terminal",
+    "text": "Run R on the terminal\nFirst, determine which R modules are available on your cluster:\nmodule avail R\nLoad an available version; for example:\nmodule load R/4.3.0\nRun the script from the project root:\nRscript scripts/analyze_red_spruce.R\nls -lh results\nYou can also start an interactive R session for exploration:\nR\nThen run:\nred_spruce &lt;- read.table(\n  \"data/raw/red_spruce_fitness_traits.txt\",\n  header = TRUE,\n  sep = \"\\t\"\n)\n\nstr(red_spruce)\nsummary(red_spruce)\nExit R with:\nq()"
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/blog-post.html#submit-the-analysis-with-slurm",
+    "href": "workflow/posts/bashing-the-cluster/blog-post.html#submit-the-analysis-with-slurm",
+    "title": "Bashing",
+    "section": "Submit the analysis with Slurm",
+    "text": "Submit the analysis with Slurm\nCreate a Slurm submission script:\nnano scripts/run_red_spruce.sbatch\nPaste this content. Change the R module and --partition to names supported by your cluster.\n#!/bin/bash\n#SBATCH --job-name=red_spruce\n#SBATCH --output=logs/red_spruce_%j.out\n#SBATCH --error=logs/red_spruce_%j.err\n#SBATCH --time=00:10:00\n#SBATCH --partition=standard\n#SBATCH --nodes=1\n#SBATCH --ntasks=1\n#SBATCH --cpus-per-task=1\n#SBATCH --mem=2G\n\nset -euo pipefail\n\nmodule load R/4.3.0\n\n# Run relative paths from the directory where sbatch was issued.\ncd \"$SLURM_SUBMIT_DIR\"\nmkdir -p results logs\n\necho \"Job ID: ${SLURM_JOB_ID}\"\necho \"Host: $(hostname)\"\necho \"Started: $(date)\"\necho \"Working directory: $(pwd)\"\n\nRscript scripts/analyze_red_spruce.R\n\necho \"Finished: $(date)\"\nSubmit and monitor your job:\nsbatch scripts/run_red_spruce.sbatch\nsqueue -u \"$USER\"\nAfter the job has completed, replace &lt;JOBID&gt; with the number returned by sbatch:\ncat logs/red_spruce_&lt;JOBID&gt;.out\ncat logs/red_spruce_&lt;JOBID&gt;.err\nls -lh results"
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/blog-post.html#exercises",
+    "href": "workflow/posts/bashing-the-cluster/blog-post.html#exercises",
+    "title": "Bashing",
+    "section": "Exercises",
+    "text": "Exercises\n\nExplain why raw data are saved in data/raw/ and should not be altered by the analysis script.\nUse head, less, and grep to inspect the source data before opening R.\nIdentify what files the R script writes to results/.\nDeliberately run the R script from the wrong directory. Read the error, then explain why the project-relative input path fails.\nEdit the R script to make a histogram for a different numeric variable.\nAfter inspecting names(red_spruce), create a plot that is biologically meaningful for two variables in this dataset.\nAdd a README.md containing the GitHub source URL, date accessed, and exact curl command used to obtain the data."
+  },
+  {
+    "objectID": "workflow/posts/bashing-the-cluster/blog-post.html#take-home-message",
+    "href": "workflow/posts/bashing-the-cluster/blog-post.html#take-home-message",
+    "title": "Bashing",
+    "section": "Take-home message",
+    "text": "Take-home message\nA reproducible cluster workflow separates source data, scripts, outputs, and logs. Downloading a documented raw-data copy into a project, using relative paths, and running the same script interactively and through Slurm are habits that scale from a small teaching exercise to genomic and quantitative-genetic analyses."
+  },
+  {
+    "objectID": "notebook/notebook.html",
+    "href": "notebook/notebook.html",
+    "title": "Notes & Thoughts",
+    "section": "",
+    "text": "Getting started with bash on HPC\n\n\n\nhpc\n\nworkflow\n\nbash\n\ngithub\n\n\n\nLearn the basics of using bash to work on a cluster\n\n\n\n\n\nAug 10, 2026\n\n\nAnoob Prakash\n\n\n\n\n\n\n\n\n\n\n\n\nCheat sheet for bash and SLURM\n\n\n\nHPC\n\nBash\n\nSlurm\n\n\n\nQuick reference cheatsheet for rfrequently used bash commands and SLURM commands to submit or manage jobs on a HPC\n\n\n\n\n\nAug 9, 2026\n\n\nAnoob Prakash\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "",
+    "text": "This tutorial walks through a small, reproducible high-performance computing (HPC) workflow using a public red spruce fitness-trait dataset. Rather than receiving a copy of the data by email or flash drive, you will download the source file into your project directory, inspect it from the command line, analyze it in R, and submit that R analysis to Slurm.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the Genomic_assisted_selection repository. The repository supports the manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#overview",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#overview",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "",
+    "text": "This tutorial walks through a small, reproducible high-performance computing (HPC) workflow using a public red spruce fitness-trait dataset. Rather than receiving a copy of the data by email or flash drive, you will download the source file into your project directory, inspect it from the command line, analyze it in R, and submit that R analysis to Slurm.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the Genomic_assisted_selection repository. The repository supports the manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#learning-objectives",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#learning-objectives",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nBy the end, you should be able to:\n\nNavigate a cluster filesystem with bash.\nOrganize a project using reproducible relative paths.\nDownload a tab-delimited data file with curl.\nInspect a file with head, less, grep, and wc.\nRun an R script interactively and non-interactively.\nSubmit and monitor a simple Slurm job with sbatch and squeue.\nLocate output tables, figures, and job logs."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#project-setup",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#project-setup",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Project setup",
+    "text": "Project setup\nLog in to your cluster, then create a dedicated project directory:\ncd ~\npwd\n\nmkdir -p projects/red-spruce-cluster-exercise/{data/raw,results,logs,scripts}\ncd ~/projects/red-spruce-cluster-exercise\n\npwd\nls -R\nYour project should have this structure:\nred-spruce-cluster-exercise/\n├── data/\n│   └── raw/       # downloaded, unchanged source data\n├── logs/          # Slurm standard output and error logs\n├── results/       # analysis products created by R\n└── scripts/       # R and Slurm scripts\nUsing a consistent project structure makes your paths portable. For example, data/raw/red_spruce_traits.txt works for anyone who has the project folder, whereas /home/your_username/... works only on your account and only on one system.\n\nBash quick reference\n\n\n\n\n\n\n\n\nCommand\nPurpose\nExample\n\n\n\n\n~\nYour home directory\ncd ~\n\n\n/\nFilesystem root and path separator\ncd /scratch\n\n\npwd\nPrint working directory\npwd\n\n\nls\nList files and directories\nls -lh results\n\n\ncd\nChange directory\ncd data/raw\n\n\ncd ..\nMove up one directory\ncd ..\n\n\nmkdir -p\nCreate directory/directories\nmkdir -p logs results\n\n\nhead\nShow the beginning of a file\nhead -n 5 file.txt\n\n\nless\nView a file interactively; press q to exit\nless file.txt\n\n\ngrep\nSearch for text in a file\ngrep \"value\" file.txt\n\n\nwc -l\nCount lines\nwc -l file.txt\n\n\ncurl -L -o\nDownload URL into a named file\ncurl -L -o file.txt URL"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#bash-quick-reference",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#bash-quick-reference",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Bash quick reference",
+    "text": "Bash quick reference\n\n\n\n\n\n\n\n\nCommand\nPurpose\nExample\n\n\n\n\n~\nYour home directory\ncd ~\n\n\n/\nFilesystem root and path separator\ncd /scratch\n\n\npwd\nPrint working directory\npwd\n\n\nls\nList files and directories\nls -lh results\n\n\ncd\nChange directory\ncd data/raw\n\n\ncd ..\nMove up one directory\ncd ..\n\n\nmkdir -p\nCreate directory/directories\nmkdir -p logs results\n\n\nhead\nShow the beginning of a file\nhead -n 5 file.txt\n\n\nless\nView a file interactively; press q to exit\nless file.txt\n\n\ngrep\nSearch for text in a file\ngrep \"value\" file.txt\n\n\nwc -l\nCount lines\nwc -l file.txt\n\n\ncurl -L -o\nDownload URL into a named file\ncurl -L -o file.txt URL"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#download-the-data",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#download-the-data",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Download the data",
+    "text": "Download the data\nDownload the raw GitHub file directly into data/raw/:\ncurl -L \\\n  -o data/raw/red_spruce_fitness_traits.txt \\\n  https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt\nThe -L flag tells curl to follow redirects, and -o specifies the local output file. Verify the download before doing any analysis:\nls -lh data/raw/red_spruce_fitness_traits.txt\nhead -n 5 data/raw/red_spruce_fitness_traits.txt\nThis is a tab-delimited text file. Print the header with one field per line to inspect its variable names:\nhead -n 1 data/raw/red_spruce_fitness_traits.txt | tr '\\t' '\\n'\nOther useful checks are:\n# Count total lines, including the header\nwc -l data/raw/red_spruce_fitness_traits.txt\n\n# View the complete file interactively; press q to quit\nless data/raw/red_spruce_fitness_traits.txt\n\n# Search for a known trait, population, family, or other text value\n# Replace SEARCH_TERM with a value that occurs in the data.\ngrep \"SEARCH_TERM\" data/raw/red_spruce_fitness_traits.txt | head\n\n\n\n\n\n\nNoteCheckpoint\n\n\n\nBefore continuing, identify the data-file header, count the total lines, and write down two variables you expect to be numeric. Do not assume a column’s type from its name alone: check the data."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#create-an-r-script",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#create-an-r-script",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Create an R script",
+    "text": "Create an R script\nCreate a script using a terminal editor:\nnano scripts/analyze_red_spruce.R\nPaste the following code. It uses base R only, so it does not require installing packages. The script detects numeric variables, writes a descriptive-statistics table, creates a correlation matrix, and makes a histogram for the first numeric variable it finds.\n#!/usr/bin/env Rscript\n\ninput_file &lt;- \"data/raw/red_spruce_fitness_traits.txt\"\nresults_dir &lt;- \"results\"\n\nif (!file.exists(input_file)) {\n  stop(\n    \"Input file not found: \", input_file,\n    \"\\nDownload the data first, from the project root.\"\n  )\n}\n\nif (!dir.exists(results_dir)) {\n  dir.create(results_dir, recursive = TRUE)\n}\n\nred_spruce &lt;- read.table(\n  input_file,\n  header = TRUE,\n  sep = \"\\t\",\n  stringsAsFactors = FALSE,\n  check.names = FALSE\n)\n\ncat(\"Rows:\", nrow(red_spruce), \"\\n\")\ncat(\"Columns:\", ncol(red_spruce), \"\\n\\n\")\ncat(\"Column names:\\n\")\nprint(names(red_spruce))\ncat(\"\\nFirst six rows:\\n\")\nprint(head(red_spruce))\n\nnumeric_vars &lt;- names(red_spruce)[vapply(red_spruce, is.numeric, logical(1))]\ncat(\"\\nNumeric variables:\\n\")\nprint(numeric_vars)\n\nif (length(numeric_vars) == 0) {\n  stop(\"No numeric variables were detected. Inspect the file delimiter and header.\")\n}\n\ntrait_summary &lt;- data.frame(\n  variable = numeric_vars,\n  n_nonmissing = vapply(red_spruce[numeric_vars], function(x) sum(!is.na(x)), numeric(1)),\n  mean = vapply(red_spruce[numeric_vars], function(x) mean(x, na.rm = TRUE), numeric(1)),\n  sd = vapply(red_spruce[numeric_vars], function(x) sd(x, na.rm = TRUE), numeric(1)),\n  minimum = vapply(red_spruce[numeric_vars], function(x) min(x, na.rm = TRUE), numeric(1)),\n  maximum = vapply(red_spruce[numeric_vars], function(x) max(x, na.rm = TRUE), numeric(1))\n)\n\nwrite.csv(\n  trait_summary,\n  file.path(results_dir, \"red_spruce_numeric_summary.csv\"),\n  row.names = FALSE\n)\n\nif (length(numeric_vars) &gt;= 2) {\n  correlation_matrix &lt;- cor(\n    red_spruce[numeric_vars],\n    use = \"pairwise.complete.obs\"\n  )\n\n  write.csv(\n    correlation_matrix,\n    file.path(results_dir, \"red_spruce_numeric_correlations.csv\")\n  )\n}\n\nfirst_trait &lt;- numeric_vars[1]\npdf(file.path(results_dir, \"first_numeric_trait_histogram.pdf\"), width = 7, height = 5)\nhist(\n  red_spruce[[first_trait]],\n  main = paste(\"Distribution of\", first_trait),\n  xlab = first_trait,\n  col = \"grey80\",\n  border = \"white\"\n)\ndev.off()\n\ncat(\"\\nCreated files:\\n\")\nprint(list.files(results_dir, full.names = TRUE))\nSave in nano with Ctrl + O, press Enter, then exit with Ctrl + X."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#run-r-on-the-terminal",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#run-r-on-the-terminal",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Run R on the terminal",
+    "text": "Run R on the terminal\nFirst, determine which R modules are available on your cluster:\nmodule avail R\nLoad an available version; for example:\nmodule load R/4.3.0\nRun the script from the project root:\nRscript scripts/analyze_red_spruce.R\nls -lh results\nYou can also start an interactive R session for exploration:\nR\nThen run:\nred_spruce &lt;- read.table(\n  \"data/raw/red_spruce_fitness_traits.txt\",\n  header = TRUE,\n  sep = \"\\t\"\n)\n\nstr(red_spruce)\nsummary(red_spruce)\nExit R with:\nq()"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#submit-the-analysis-with-slurm",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#submit-the-analysis-with-slurm",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Submit the analysis with Slurm",
+    "text": "Submit the analysis with Slurm\nCreate a Slurm submission script:\nnano scripts/run_red_spruce.sbatch\nPaste this content. Change the R module and --partition to names supported by your cluster.\n#!/bin/bash\n#SBATCH --job-name=red_spruce\n#SBATCH --output=logs/red_spruce_%j.out\n#SBATCH --error=logs/red_spruce_%j.err\n#SBATCH --time=00:10:00\n#SBATCH --partition=standard\n#SBATCH --nodes=1\n#SBATCH --ntasks=1\n#SBATCH --cpus-per-task=1\n#SBATCH --mem=2G\n\nset -euo pipefail\n\nmodule load R/4.3.0\n\n# Run relative paths from the directory where sbatch was issued.\ncd \"$SLURM_SUBMIT_DIR\"\nmkdir -p results logs\n\necho \"Job ID: ${SLURM_JOB_ID}\"\necho \"Host: $(hostname)\"\necho \"Started: $(date)\"\necho \"Working directory: $(pwd)\"\n\nRscript scripts/analyze_red_spruce.R\n\necho \"Finished: $(date)\"\nSubmit and monitor your job:\nsbatch scripts/run_red_spruce.sbatch\nsqueue -u \"$USER\"\nAfter the job has completed, replace &lt;JOBID&gt; with the number returned by sbatch:\ncat logs/red_spruce_&lt;JOBID&gt;.out\ncat logs/red_spruce_&lt;JOBID&gt;.err\nls -lh results"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#exercises",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#exercises",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Exercises",
+    "text": "Exercises\n\nExplain why raw data are saved in data/raw/ and should not be altered by the analysis script.\nUse head, less, and grep to inspect the source data before opening R.\nIdentify what files the R script writes to results/.\nDeliberately run the R script from the wrong directory. Read the error, then explain why the project-relative input path fails.\nEdit the R script to make a histogram for a different numeric variable.\nAfter inspecting names(red_spruce), create a plot that is biologically meaningful for two variables in this dataset.\nAdd a README.md containing the GitHub source URL, date accessed, and exact curl command used to obtain the data."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#take-home-message",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#take-home-message",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Take-home message",
+    "text": "Take-home message\nA reproducible cluster workflow separates source data, scripts, outputs, and logs. Downloading a documented raw-data copy into a project, using relative paths, and running the same script interactively and through Slurm are habits that scale from a small teaching exercise to genomic and quantitative-genetic analyses."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/Bashing the cluster.html",
+    "href": "notebook/posts/bashing-the-cluster/Bashing the cluster.html",
+    "title": "Getting started with bash on HPC",
+    "section": "",
+    "text": "Cluster exercise: Download and analyze public red-spruce fitness-trait data\nIn this exercise you will create a reproducible project on the cluster, download a tab-delimited red-spruce dataset directly from a public GitHub repository and inspect it with bash.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the GitHub repository. The repository supports a published manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration.\n\n\nBy the end, you should be able to:\n\nNavigate a cluster filesystem with bash.\nOrganize a project using reproducible relative paths.\nDownload a tab-delimited data file with curl.\nInspect a file with head, less, grep, and wc."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#goal",
+    "href": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#goal",
+    "title": "Getting started with bash on HPC",
+    "section": "",
+    "text": "Cluster exercise: Download and analyze public red-spruce fitness-trait data\nIn this exercise you will create a reproducible project on the cluster, download a tab-delimited red-spruce dataset directly from a public GitHub repository and inspect it with bash.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the GitHub repository. The repository supports a published manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration.\n\n\nBy the end, you should be able to:\n\nNavigate a cluster filesystem with bash.\nOrganize a project using reproducible relative paths.\nDownload a tab-delimited data file with curl.\nInspect a file with head, less, grep, and wc."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#project-setup",
+    "href": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#project-setup",
+    "title": "Getting started with bash on HPC",
+    "section": "Project setup",
+    "text": "Project setup\nStep 1: Log in to your cluster, then create a dedicated project directory:\n\ncd ~ # change directory [cd] to home [~]\npwd  # get the present working directory [pwd]\nmkdir projects \nThis makes a directory (mkdir) or folder at the current location titled “projects”\ncd projects # move inside the projects directory\nStep 2: Create sub folders under the project folder\nmkdir -p cluster-exercise/{data/raw,results,logs,scripts}\nIn order to create multiple directories at the same time you can use :\n\n-p : Create directory/directories\n{folder-1/subfolder,folder-2,folder-3} : Name of the multiple directory/directories [folders and sub-folders] at the same time\n\n\n\n\n\n\n\nWarning\n\n\n\nDo not add spaces between the names {folder-1/subfolder,folder-2,folder-3}\nThis would disrupt the naming convention\n\n\n\nStep 3: Move inside the working directory cluster-exercise and check the layout\n\n\n\n\n\n\nTipHow to?\n\n\n\nBefore we download the data, move inside working directory- which would be the cluster-exercise directory. How do you do that? Hint: You need to change directory inside cluster-exercise directory\n\n\nIf you are in the right folder on your home (~) directory then run pwd in the terminal. The path would be something like this: /home/alias/projects/cluster-exercise where alias would be your username on the cluster.\nOnce inside the ‘cluster-exercise’ directory, check the directory layout with tree\ntree\nYour project should have this structure:\ncluster-exercise/\n├── data/\n│   └── raw/       # downloaded, unchanged source data\n├── logs/          # Slurm standard output and error logs\n├── results/       # analysis products created by R\n└── src/           # R and Slurm scripts\nUsing a consistent project structure makes your paths portable. For example, data/raw/red_spruce_traits.txt works for anyone who has the project folder, whereas /home/your_username/... works only on your account and only on one system.\n\nBash quick reference\n\n\n\n\n\n\n\n\nCommand\nPurpose\nExample\n\n\n\n\n~\nYour home directory\ncd ~\n\n\n/\nFilesystem root and path separator\ncd /scratch\n\n\npwd\nPrint working directory\npwd\n\n\nls\nList files and directories\nls -lh results\n\n\ncd\nChange directory\ncd data/raw\n\n\ncd ..\nMove up one directory\ncd ..\n\n\nmkdir -p\nCreate directory/directories\nmkdir -p logs results\n\n\nhead\nShow the beginning of a file\nhead -n 5 file.txt\n\n\nless\nView a file interactively; press q to exit\nless file.txt\n\n\ngrep\nSearch for text in a file\ngrep \"value\" file.txt\n\n\nwc -l\nCount lines\nwc -l file.txt\n\n\ncurl -L -o\nDownload URL into a named file\ncurl -L -o file.txt URL"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#bash-quick-reference",
+    "href": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#bash-quick-reference",
+    "title": "Basics of working on the cluster",
+    "section": "Bash quick reference",
+    "text": "Bash quick reference\n\n\n\n\n\n\n\n\nCommand\nPurpose\nExample\n\n\n\n\n~\nYour home directory\ncd ~\n\n\n/\nFilesystem root and path separator\ncd /scratch\n\n\npwd\nPrint working directory\npwd\n\n\nls\nList files and directories\nls -lh results\n\n\ncd\nChange directory\ncd data/raw\n\n\ncd ..\nMove up one directory\ncd ..\n\n\nmkdir -p\nCreate directory/directories\nmkdir -p logs results\n\n\nhead\nShow the beginning of a file\nhead -n 5 file.txt\n\n\nless\nView a file interactively; press q to exit\nless file.txt\n\n\ngrep\nSearch for text in a file\ngrep \"value\" file.txt\n\n\nwc -l\nCount lines\nwc -l file.txt\n\n\ncurl -L -o\nDownload URL into a named file\ncurl -L -o file.txt URL"
+  },
+  {
+    "objectID": "notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html",
+    "href": "notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html",
+    "title": "Cheat sheet for bash and SLURM",
+    "section": "",
+    "text": "Bash quick reference\n\n\n\n\n\n\n\n\nCommand\nPurpose\nExample\n\n\n\n\n~\nYour home directory\ncd ~\n\n\n/\nFilesystem root and path separator\ncd /scratch\n\n\npwd\nPrint working directory\npwd\n\n\nls\nList files and directories\nls -lh results\n\n\ncd\nChange directory\ncd data/raw\n\n\ncd ..\nMove up one directory\ncd ..\n\n\nmkdir -p\nCreate directory/directories\nmkdir -p logs results\n\n\nhead\nShow the beginning of a file\nhead -n 5 file.txt\n\n\nless\nView a file interactively; press q to exit\nless file.txt\n\n\ngrep\nSearch for text in a file\ngrep \"value\" file.txt\n\n\nwc -l\nCount lines\nwc -l file.txt\n\n\ncurl -L -o\nDownload URL into a named file\ncurl -L -o file.txt URL"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#download-the-data",
+    "href": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#download-the-data",
+    "title": "Getting started with bash on HPC",
+    "section": "Download the data",
+    "text": "Download the data\n\nStep 1: Download the raw GitHub file directly into data/raw/\nCopy the code below and run it inside the cluster-exercise directory\ncurl -L \\\n  -o data/raw/red_spruce_fitness_traits.txt \\\n  https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt\nThe -L flag tells curl to follow redirects, and -o specifies the local output file. Verify the download before doing any analysis:\n\n\n\n\n\n\nNoteHow to use curl\n\n\n\ncurl -L -o location/path/for-download url-of-an-online-data.file\n\ncurl is a tool for transferring data from or to a server using URLs\n-L is the location of the file and allows redirects if the file is moved\n-o writes an output to a given file instead of a standardard output\n\nmore details…\n\n\nStep 2: Check if the files were downloaded correctly Check the file exists with ls - ls : list files inside a directory\n- lh : list them in a human readable form\nls -lh data/raw/red_spruce_fitness_traits.txt\nhead -n 5 data/raw/red_spruce_fitness_traits.txt\nThis is a tab-delimited text file. Print the header with one field per line to inspect its variable names:\nhead -n 1 data/raw/red_spruce_fitness_traits.txt | tr '\\t' '\\n'\n\n\n\n\n\n\nTipThings to understand\n\n\n\nWhat does tr do in the command above?\nThe | in the command is a called a pipe. What does it do?\n\n\nStep 3: Explore the data\nCount the total lines present in the file, including the header.\n\nwc -l data/raw/red_spruce_fitness_traits.txt\nView the file with cat.\ncat data/raw/red_spruce_fitness_traits.txt\nThat is too much data to look at. Lets just peek at the header for the file.\nhead data/raw/red_spruce_fitness_traits.txt\nView the complete file interactively; press q to quit.\nless data/raw/red_spruce_fitness_traits.txt\nSearch for a known trait, population, family, or other text value.\n\nReplace SEARCH_TERM with a value that occurs in the data.\n\nLets search for the population ALB in the data set.\n\ngrep \"SEARCH_TERM\" data/raw/red_spruce_fitness_traits.txt | head\n\n\n\n\n\n\nTipCan you find the how many families/individuals are from VT (Vermont) location?\n\n\n\nHint!\n1. Break it down into individual steps.\n2. Then combine them together with pipes.\n\n\n\n\n\n\n\n\nNoteWrap Up\n\n\n\nBefore continuing, identify the data-file header, count the total lines, and write down two variables you expect to be numeric. Do not assume a column’s type from its name alone: check the data."
   }
 ]

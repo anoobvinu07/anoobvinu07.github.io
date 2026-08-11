@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Anoob Prakash">
+<meta name="dcterms.date" content="2026-08-09">
+<meta name="description" content="Quick reference cheatsheet for rfrequently used bash commands and SLURM commands to submit or manage jobs on a HPC">
 
-<title>Anoob Prakash</title>
+<title>Cheat sheet for bash and SLURM – Anoob Prakash</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,29 +29,27 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./img/illustrated_AP.jpg" rel="icon" type="image/jpeg">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-25b16580daa27f5adef8012b18f55fd5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-80c26cca29430711bcc14ea0e416dca0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-25b16580daa27f5adef8012b18f55fd5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
-<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../img/illustrated_AP.jpg" rel="icon" type="image/jpeg">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-86a606ad57031528b704bf0d2cadf4c3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-0d1cdb54619a5fa15f799b4432b999c0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-86a606ad57031528b704bf0d2cadf4c3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -77,10 +78,9 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="index.css">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -249,11 +249,11 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./img/AP_logo2.png" alt="" class="navbar-logo light-content">
-    <img src="./img/AP_logo2.png" alt="" class="navbar-logo dark-content">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo light-content">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo dark-content">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">Anoob Prakash</span>
     </a>
   </div>
@@ -264,19 +264,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./research/research.html"> 
+    <a class="nav-link" href="../../../research/research.html"> 
 <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./photos/photos.html"> 
+    <a class="nav-link" href="../../../photos/photos.html"> 
 <span class="menu-text">Gallery</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./cv/cv.html"> 
+    <a class="nav-link" href="../../../cv/cv.html"> 
 <span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./notebook/notebook.html"> 
+    <a class="nav-link" href="../../../notebook/notebook.html"> 
 <span class="menu-text">Notebook</span></a>
   </li>  
 </ul>
@@ -290,124 +290,145 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#bash-quick-reference" id="toc-bash-quick-reference" class="nav-link active" data-scroll-target="#bash-quick-reference">Bash quick reference</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
 
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Cheat sheet for bash and SLURM</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">HPC</div>
+    <div class="quarto-category">Bash</div>
+    <div class="quarto-category">Slurm</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Quick reference cheatsheet for rfrequently used bash commands and SLURM commands to submit or manage jobs on a HPC
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
 
-<!-- ::: {.column-screen} -->
-<!-- <img src="img/landing_graphic3.png" alt="Landing graphic" -->
-<!--      style="display:block; width:auto; height:auto; margin:0; padding:0;"> -->
-<!-- :::  -->
-<div class="column-screen">
-<p><img src="img/landing_graphic5.svg" class="img-fluid"></p>
-</div>
-<div class="column-screen">
-<div class="section-separator">
-
-</div>
-<div class="photo-grid2">
-<p><a href="https://www.youtube.com/watch?v=S_EklrfsIVw"><img src="img/conservation.png" class="img-fluid"></a></p>
-<p><a href="https://anoobvinu07.github.io/Genomic_assisted_selection/"><img src="img/genomics2.png" class="img-fluid"></a></p>
-<p><a href="https://github.com/anoobvinu07"><img src="img/data_science2.png" class="img-fluid"></a></p>
-<p><a href="./cv/cv.html#publications"><img src="img/open_science.png" class="img-fluid"></a></p>
-</div>
-<div class="section-separator">
-
-</div>
-</div>
-<!-- ::: {.column-page} -->
-<!-- <div class="scroll-down-wrap"> -->
-<!--   <img src="img/scroll_down4.svg" class="scroll-down-gif" alt="Scroll down"> -->
-<!-- </div> -->
-<!-- ::: -->
-<div class="column-page">
-<div class="cv-section">
-<div class="quarto-layout-panel" data-layout="[ 30, 70 ]">
-<div class="quarto-layout-row">
-<div id="first-column" class="quarto-layout-cell" style="flex-basis: 30.0%;justify-content: center;">
-<p><img src="img/narcissism/anoob-cadillac-sunrise_circle.png" class="about-photo img-fluid"></p>
-</div>
-<div id="second-column" class="quarto-layout-cell" style="flex-basis: 70.0%;justify-content: flex-start;">
-<p><span style="font-size: 1.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;">A little bit about me</span></p>
-<p><span style="font-size: 1.3rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;">I’m a plant biologist and forest geneticist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I utilize large genomic and environmental datasets to understand – and hopefully help guide <strong>the future of forests</strong>.</span></p>
-<p><a href="./about.html"><strong>More &gt;&gt;</strong></a></p>
-<div class="footer-logos">
-<p><a href="https://www.linkedin.com/in/anoob-prakash/" target="_blank"> <img src="img/linkedin-brands-solid-full.svg" alt="LinkedIn"> </a> <a href="https://github.com/anoobvinu07" target="_blank"> <img src="img/github-brands-solid-full.svg" alt="GitHub"> </a> <a href="https://scholar.google.com/citations?hl=en&amp;user=jIOSRMkAAAAJ" target="_blank"> <img src="img/google-scholar-brands-solid-full.svg" alt="Google Scholar"> </a> <a href="https://orcid.org/0000-0002-7207-934X" target="_blank"> <img src="img/orcid-brands-solid-full.svg" alt="ORCID"> </a> <a href="mailto:anoobvinu@gmail.com" target="_blank"> <img src="img/envelope-solid-full.svg" alt="GMAIL"> </a> <a href="https://www.instagram.com/anoobprakash/" target="_blank"> <img src="img/square-instagram-brands-solid-full.svg" alt="INSTAGRAM"> </a></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!---start news here --->
-<div class="column-page">
-<p><span style="font-size: 2.0rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #cfd217">News and updates</span></p>
-<div class="section-separator">
-
-</div>
-<div class="quarto-layout-panel" data-layout="[ 20, 80 ]">
-<div class="quarto-layout-row">
-<div id="first-column" class="quarto-layout-cell" style="flex-basis: 20.0%;justify-content: center;">
-<p><a href="img/Purdue/anoob-purdue.jpg" class="lightbox" data-gallery="news"><img src="img/Purdue/anoob-purdue.jpg" class="img-fluid"></a></p>
-</div>
-<div id="second-column" class="quarto-layout-cell" style="flex-basis: 80.0%;justify-content: flex-start;">
-<p><span style="font-size: 1.2rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;">Jan 20th, 2026</span></p>
-<p>Joined Purdue University as a Post doctoral research associate under Dr.&nbsp;Matthew Ginzel and Dr.&nbsp;Vikram Chhatre to investigate climate change adaptation and potential pre- or mal-adaptation of eastern hardwoods. The project objectives are in alignment with the goals of <a href="https://htirc.org/">HTIRC</a>.</p>
-</div>
-</div>
-</div>
-<div class="section-separator">
-
-</div>
-<div class="quarto-layout-panel" data-layout="[ 20, 80 ]">
-<div class="quarto-layout-row">
-<div id="first-column" class="quarto-layout-cell" style="flex-basis: 20.0%;justify-content: center;">
-<p><a href="img/PhD/withLabbies.jpg" class="lightbox" data-gallery="news"><img src="img/PhD/withLabbies.jpg" class="img-fluid"></a></p>
-</div>
-<div id="second-column" class="quarto-layout-cell" style="flex-basis: 80.0%;justify-content: flex-start;">
-<p><span style="font-size: 1.2rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;">Nov 14th, 2025</span></p>
-<p>Successfully defended my PhD titled “Range wide genotypic and phenotypic variation and climate change adaptation in red spruce”. Bringing one of the most wonderful chapters in my life to an end.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="column-screen">
-<div class="section-separator">
-
-</div>
-</div>
-<!---footer figs --->
-<div class="column-body">
-<div class="quarto-layout-panel" data-layout="[ 20,20,20,20 ]">
-<div class="quarto-layout-row">
-<div id="first-column" class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><img src="img/tile-layout1.svg" class="about-photo img-fluid"></p>
-</div>
-<div id="second-column" class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><img src="img/vermont_gothic.svg" class="about-photo img-fluid"></p>
-</div>
-<div id="third-column" class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><img src="img/alaska.svg" class="about-photo img-fluid"></p>
-</div>
-<div id="fourth-column" class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><img src="img/eggs.svg" class="about-photo img-fluid"></p>
-</div>
-</div>
-</div>
-</div>
-<!-- ::: {.column-full} -->
-<!-- ::: {#bio} -->
-<!-- [Hi there! I'm Anoob Prakash]{style="font-size: 2.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"} -->
-<!-- [Welcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how species respond to a changing climate. Learn more [about me](about.qmd). On this site, you’ll find my research, projects in data visualization and analysis, and other interests.]{style="font-size: 1.6rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"} -->
-<!-- ::: -->
-<!-- ::: -->
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Anoob Prakash </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 9, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
+</header>
+
+
+<section id="bash-quick-reference" class="level3">
+<h3 class="anchored" data-anchor-id="bash-quick-reference">Bash quick reference</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>~</code></td>
+<td>Your home directory</td>
+<td><code>cd ~</code></td>
+</tr>
+<tr class="even">
+<td><code>/</code></td>
+<td>Filesystem root and path separator</td>
+<td><code>cd /scratch</code></td>
+</tr>
+<tr class="odd">
+<td><code>pwd</code></td>
+<td>Print working directory</td>
+<td><code>pwd</code></td>
+</tr>
+<tr class="even">
+<td><code>ls</code></td>
+<td>List files and directories</td>
+<td><code>ls -lh results</code></td>
+</tr>
+<tr class="odd">
+<td><code>cd</code></td>
+<td>Change directory</td>
+<td><code>cd data/raw</code></td>
+</tr>
+<tr class="even">
+<td><code>cd ..</code></td>
+<td>Move up one directory</td>
+<td><code>cd ..</code></td>
+</tr>
+<tr class="odd">
+<td><code>mkdir -p</code></td>
+<td>Create directory/directories</td>
+<td><code>mkdir -p logs results</code></td>
+</tr>
+<tr class="even">
+<td><code>head</code></td>
+<td>Show the beginning of a file</td>
+<td><code>head -n 5 file.txt</code></td>
+</tr>
+<tr class="odd">
+<td><code>less</code></td>
+<td>View a file interactively; press <code>q</code> to exit</td>
+<td><code>less file.txt</code></td>
+</tr>
+<tr class="even">
+<td><code>grep</code></td>
+<td>Search for text in a file</td>
+<td><code>grep "value" file.txt</code></td>
+</tr>
+<tr class="odd">
+<td><code>wc -l</code></td>
+<td>Count lines</td>
+<td><code>wc -l file.txt</code></td>
+</tr>
+<tr class="even">
+<td><code>curl -L -o</code></td>
+<td>Download URL into a named file</td>
+<td><code>curl -L -o file.txt URL</code></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -425,6 +446,13 @@ ul.task-list li input[type="checkbox"] {
       window.document.body.appendChild(a);
     }
     setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -869,38 +897,6 @@ ul.task-list li input[type="checkbox"] {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
-(function() {
-  let previousOnload = window.onload;
-  window.onload = () => {
-    if (previousOnload) {
-      previousOnload();
-    }
-    lightboxQuarto.on('slide_before_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      const href = trigger.getAttribute('href');
-      if (href !== null) {
-        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-        if (imgEl !== null) {
-          const srcAttr = imgEl.getAttribute("src");
-          if (srcAttr && srcAttr.startsWith("data:")) {
-            slideConfig.href = srcAttr;
-          }
-        }
-      } 
-    });
-  
-    lightboxQuarto.on('slide_after_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(slideNode);
-      }
-    });
-  
-  };
-  
-})();
-          </script>
 
 
 

@@ -1,0 +1,19 @@
+---
+title: "Notes & Thoughts"
+subtitle: "" 
+format: 
+  html:
+    page-layout: article
+    toc: false
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  image-align: left
+  categories: true
+  exclude:
+    listed: false
+# lightbox: auto
+---
+
+

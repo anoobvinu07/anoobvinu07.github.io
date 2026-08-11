@@ -1,0 +1,243 @@
+---
+title: "Getting started with bash on HPC"
+description: "Learn the basics of using bash to work on a cluster"
+author: "Anoob Prakash"
+author-email: "prakas89@purdue.edu"
+author-orcid: "0000-0000-0000-0000"   # optional
+date: "8/10/2026"
+categories:
+  - hpc
+  - workflow
+  - bash
+  - github
+image: "/notebook/posts/bashing-the-cluster/spruce-computing.png"
+format:
+  html:
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-overflow: wrap
+    code-copy: true
+    code-tools: false
+    code-block-border-left: "#583C88"
+    code-block-border-left-size: 5px
+    code-block-border-left-style: solid
+
+---
+
+
+
+## Goal 
+**Cluster exercise: Download and analyze public red-spruce fitness-trait data** 
+
+In this exercise you will create a reproducible project on the cluster, download a tab-delimited red-spruce dataset directly from a public GitHub repository and inspect it with bash.
+
+The source file is [FitnessTraits_GeneticParameters_RedSpruce.txt](https://github.com/anoobvinu07/Genomic_assisted_selection/blob/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt) from the [GitHub repository](https://github.com/anoobvinu07/Genomic_assisted_selection). The repository supports a published manuscript [Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration](https://doi.org/10.1002/aps3.11600).
+
+### Learning objectives 
+
+By the end, you should be able to:
+
+- Navigate a cluster filesystem with bash.
+- Organize a project using reproducible relative paths.
+- Download a tab-delimited data file with `curl`.
+- Inspect a file with `head`, `less`, `grep`, and `wc`.
+
+
+## Project setup 
+
+**Step 1:** Log in to your cluster, then create a dedicated project directory:
+
+:::: {.column-body}
+```bash
+cd ~ # change directory [cd] to home [~]
+pwd  # get the present working directory [pwd]
+```
+
+```bash
+mkdir projects 
+```
+This **m**a**k**es a **dir**ectory (**mkdir**) or folder at the current location titled "projects"
+
+```bash
+cd projects # move inside the projects directory
+```
+
+**Step 2:** Create sub folders under the project folder  
+
+```bash
+mkdir -p cluster-exercise/{data/raw,results,logs,scripts}
+```
+
+In order to create multiple directories at the same time you can use :  
+
+- `-p` : Create directory/directories  
+
+- `{folder-1/subfolder,folder-2,folder-3}` : Name of the multiple directory/directories [folders and sub-folders] at the same time  
+
+:::{.callout-warning}
+Do not add spaces between the names `{folder-1/subfolder,folder-2,folder-3}`  
+
+This would disrupt the naming convention
+:::
+
+
+::::
+
+
+**Step 3:** Move inside the working directory `cluster-exercise` and check the layout
+
+::: {.callout-tip}
+## How to?
+
+Before we download the data, move inside working directory- which would be the `cluster-exercise` directory. How do you do that? 
+_Hint:_ You need to **c**hange **d**irectory inside `cluster-exercise` directory
+:::
+
+If you are in the right folder on your home (~) directory then run `pwd` in the terminal. The path would be something like this: `/home/alias/projects/cluster-exercise` where `alias` would be your username on the cluster.   
+
+Once inside the 'cluster-exercise' directory, check the directory layout with `tree`   
+```bash
+tree
+```
+
+**Your project should have this structure:** 
+
+<pre style="color: #F8F9FA; background-color: #22252A; padding: 1rem; border-radius: 6px;"><code>cluster-exercise/
+├── data/
+│   └── raw/       # downloaded, unchanged source data
+├── logs/          # Slurm standard output and error logs
+├── results/       # analysis products created by R
+└── src/           # R and Slurm scripts</code></pre>
+
+
+Using a consistent project structure makes your paths portable. For example, `data/raw/red_spruce_traits.txt` works for anyone who has the project folder, whereas `/home/your_username/...` works only on your account and only on one system.
+
+### Bash quick reference
+
+| Command | Purpose | Example |
+|---|---|---|
+| `~` | Your home directory | `cd ~` |
+| `/` | Filesystem root and path separator | `cd /scratch` |
+| `pwd` | Print working directory | `pwd` |
+| `ls` | List files and directories | `ls -lh results` |
+| `cd` | Change directory | `cd data/raw` |
+| `cd ..` | Move up one directory | `cd ..` |
+| `mkdir -p` | Create directory/directories | `mkdir -p logs results` |
+| `head` | Show the beginning of a file | `head -n 5 file.txt` |
+| `less` | View a file interactively; press `q` to exit | `less file.txt` |
+| `grep` | Search for text in a file | `grep "value" file.txt` |
+| `wc -l` | Count lines | `wc -l file.txt` |
+| `curl -L -o` | Download URL into a named file | `curl -L -o file.txt URL` |
+
+
+
+
+## Download the data
+:::: {.column-body}
+
+**Step 1:** Download the raw GitHub file directly into `data/raw/`
+
+**Copy the code below and run it inside the** `cluster-exercise` **directory**  
+```bash
+curl -L \
+  -o data/raw/red_spruce_fitness_traits.txt \
+  https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt
+```
+
+The `-L` flag tells `curl` to follow redirects, and `-o` specifies the local output file. Verify the download before doing any analysis:
+
+::: {.callout-note}
+
+# How to use curl
+curl -L -o location/path/for-download url-of-an-online-data.file
+
+- `curl` is a tool for transferring data from or to a server using URLs
+- `-L` is the location of the file and allows redirects if the file is moved
+- `-o` writes an output to a given file instead of a standardard output 
+
+[more details...](https://curl.se/docs/manpage.html)
+:::
+
+**Step 2:** Check if the files were downloaded correctly
+Check the file exists with `ls`
+- `ls` : list files inside a directory  
+- `lh` : list them in a human readable form  
+```bash
+ls -lh data/raw/red_spruce_fitness_traits.txt
+```
+
+```bash
+head -n 5 data/raw/red_spruce_fitness_traits.txt
+```
+
+This is a tab-delimited text file. Print the header with one field per line to inspect its variable names:
+
+```bash
+head -n 1 data/raw/red_spruce_fitness_traits.txt | tr '\t' '\n'
+```
+
+::: {.callout-tip}
+## Things to understand
+
+What does `tr` do in the command above?
+
+The `|` in the command is a called a `pipe`. What does it do?
+:::
+
+**Step 3:** Explore the data  
+
+
+Count the total lines present in the file, including the header.
+
+```bash
+
+wc -l data/raw/red_spruce_fitness_traits.txt
+```
+
+View the file with `cat`. 
+```bash
+cat data/raw/red_spruce_fitness_traits.txt
+```
+That is too much data to look at. Lets just peek at the header for the file.  
+
+```bash
+head data/raw/red_spruce_fitness_traits.txt
+```
+
+View the complete file interactively; press q to quit.  
+```bash
+less data/raw/red_spruce_fitness_traits.txt
+```
+
+Search for a known trait, population, family, or other text value.   
+
+- Replace SEARCH_TERM with a value that occurs in the data.  
+- Lets search for the population ALB in the data set.   
+
+```bash
+grep "SEARCH_TERM" data/raw/red_spruce_fitness_traits.txt | head
+```
+
+
+
+::: {.callout-tip}
+## Can you find the how many families/individuals are from VT (Vermont) location? 
+
+_Hint!_  
+1. Break it down into individual steps.  
+2. Then combine them together with pipes.   
+
+:::
+
+::: {.callout-note}
+## Wrap Up
+
+Before continuing, identify the data-file header, count the total lines, and write down two variables you expect to be numeric. Do not assume a column's type from its name alone: check the data.
+:::
+
+::::
+
+
+
+

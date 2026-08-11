@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Anoob Prakash</title>
+<title>Data // Notes – Anoob Prakash</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,29 +26,29 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./img/illustrated_AP.jpg" rel="icon" type="image/jpeg">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-25b16580daa27f5adef8012b18f55fd5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-80c26cca29430711bcc14ea0e416dca0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-25b16580daa27f5adef8012b18f55fd5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
-<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../img/illustrated_AP.jpg" rel="icon" type="image/jpeg">
+<script src="../site_libs/quarto-listing/list.min.js"></script>
+<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-25b16580daa27f5adef8012b18f55fd5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-80c26cca29430711bcc14ea0e416dca0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-25b16580daa27f5adef8012b18f55fd5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -75,12 +75,69 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
 
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
 
-<link rel="stylesheet" href="index.css">
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 </head>
 
-<body class="nav-fixed fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -249,11 +306,11 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./img/AP_logo2.png" alt="" class="navbar-logo light-content">
-    <img src="./img/AP_logo2.png" alt="" class="navbar-logo dark-content">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../img/AP_logo2.png" alt="" class="navbar-logo light-content">
+    <img src="../img/AP_logo2.png" alt="" class="navbar-logo dark-content">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Anoob Prakash</span>
     </a>
   </div>
@@ -264,19 +321,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./research/research.html"> 
+    <a class="nav-link" href="../research/research.html"> 
 <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./photos/photos.html"> 
+    <a class="nav-link" href="../photos/photos.html"> 
 <span class="menu-text">Gallery</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./cv/cv.html"> 
+    <a class="nav-link" href="../cv/cv.html"> 
 <span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./notebook/notebook.html"> 
+    <a class="nav-link active" href="../workflow/index.html" aria-current="page"> 
 <span class="menu-text">Notebook</span></a>
   </li>  
 </ul>
@@ -288,128 +345,79 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="YmFzaA==">bash <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aHBj">hpc <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Ug==">R <span class="quarto-category-count">(1)</span></div><div class="category" data-category="d29ya2Zsb3c=">workflow <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content column-page-left" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data // Notes</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-left">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 
 
 
-<!-- ::: {.column-screen} -->
-<!-- <img src="img/landing_graphic3.png" alt="Landing graphic" -->
-<!--      style="display:block; width:auto; height:auto; margin:0; padding:0;"> -->
-<!-- :::  -->
-<div class="column-screen">
-<p><img src="img/landing_graphic5.svg" class="img-fluid"></p>
-</div>
-<div class="column-screen">
-<div class="section-separator">
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="aHBjJTJDd29ya2Zsb3clMkNiYXNoJTJDUg==" data-listing-date-sort="1786334400000" data-listing-file-modified-sort="1786390991549" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
+<div class="thumbnail"><a href="../workflow/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="../workflow/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">Bashing the cluster</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('aHBj'); return false;">hpc</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('d29ya2Zsb3c='); return false;">workflow</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YmFzaA=='); return false;">bash</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Ug=='); return false;">R</div>
 
 </div>
-<div class="photo-grid2">
-<p><a href="https://www.youtube.com/watch?v=S_EklrfsIVw"><img src="img/conservation.png" class="img-fluid"></a></p>
-<p><a href="https://anoobvinu07.github.io/Genomic_assisted_selection/"><img src="img/genomics2.png" class="img-fluid"></a></p>
-<p><a href="https://github.com/anoobvinu07"><img src="img/data_science2.png" class="img-fluid"></a></p>
-<p><a href="./cv/cv.html#publications"><img src="img/open_science.png" class="img-fluid"></a></p>
+<div class="delink listing-description"><a href="../workflow/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">
+<p>Learn the basics of bash and how to use SLURM to submit jobs on a cluster</p>
+</a></div>
 </div>
-<div class="section-separator">
-
+<div class="metadata">
+<a href="../workflow/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">
+<div class="listing-date">
+Aug 10, 2026
 </div>
+<div class="listing-author">
+Anoob Prakash
 </div>
-<!-- ::: {.column-page} -->
-<!-- <div class="scroll-down-wrap"> -->
-<!--   <img src="img/scroll_down4.svg" class="scroll-down-gif" alt="Scroll down"> -->
-<!-- </div> -->
-<!-- ::: -->
-<div class="column-page">
-<div class="cv-section">
-<div class="quarto-layout-panel" data-layout="[ 30, 70 ]">
-<div class="quarto-layout-row">
-<div id="first-column" class="quarto-layout-cell" style="flex-basis: 30.0%;justify-content: center;">
-<p><img src="img/narcissism/anoob-cadillac-sunrise_circle.png" class="about-photo img-fluid"></p>
-</div>
-<div id="second-column" class="quarto-layout-cell" style="flex-basis: 70.0%;justify-content: flex-start;">
-<p><span style="font-size: 1.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;">A little bit about me</span></p>
-<p><span style="font-size: 1.3rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;">I’m a plant biologist and forest geneticist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I utilize large genomic and environmental datasets to understand – and hopefully help guide <strong>the future of forests</strong>.</span></p>
-<p><a href="./about.html"><strong>More &gt;&gt;</strong></a></p>
-<div class="footer-logos">
-<p><a href="https://www.linkedin.com/in/anoob-prakash/" target="_blank"> <img src="img/linkedin-brands-solid-full.svg" alt="LinkedIn"> </a> <a href="https://github.com/anoobvinu07" target="_blank"> <img src="img/github-brands-solid-full.svg" alt="GitHub"> </a> <a href="https://scholar.google.com/citations?hl=en&amp;user=jIOSRMkAAAAJ" target="_blank"> <img src="img/google-scholar-brands-solid-full.svg" alt="Google Scholar"> </a> <a href="https://orcid.org/0000-0002-7207-934X" target="_blank"> <img src="img/orcid-brands-solid-full.svg" alt="ORCID"> </a> <a href="mailto:anoobvinu@gmail.com" target="_blank"> <img src="img/envelope-solid-full.svg" alt="GMAIL"> </a> <a href="https://www.instagram.com/anoobprakash/" target="_blank"> <img src="img/square-instagram-brands-solid-full.svg" alt="INSTAGRAM"> </a></p>
+</a>
 </div>
 </div>
 </div>
-</div>
-</div>
-</div>
-<!---start news here --->
-<div class="column-page">
-<p><span style="font-size: 2.0rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #cfd217">News and updates</span></p>
-<div class="section-separator">
-
-</div>
-<div class="quarto-layout-panel" data-layout="[ 20, 80 ]">
-<div class="quarto-layout-row">
-<div id="first-column" class="quarto-layout-cell" style="flex-basis: 20.0%;justify-content: center;">
-<p><a href="img/Purdue/anoob-purdue.jpg" class="lightbox" data-gallery="news"><img src="img/Purdue/anoob-purdue.jpg" class="img-fluid"></a></p>
-</div>
-<div id="second-column" class="quarto-layout-cell" style="flex-basis: 80.0%;justify-content: flex-start;">
-<p><span style="font-size: 1.2rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;">Jan 20th, 2026</span></p>
-<p>Joined Purdue University as a Post doctoral research associate under Dr.&nbsp;Matthew Ginzel and Dr.&nbsp;Vikram Chhatre to investigate climate change adaptation and potential pre- or mal-adaptation of eastern hardwoods. The project objectives are in alignment with the goals of <a href="https://htirc.org/">HTIRC</a>.</p>
-</div>
-</div>
-</div>
-<div class="section-separator">
-
-</div>
-<div class="quarto-layout-panel" data-layout="[ 20, 80 ]">
-<div class="quarto-layout-row">
-<div id="first-column" class="quarto-layout-cell" style="flex-basis: 20.0%;justify-content: center;">
-<p><a href="img/PhD/withLabbies.jpg" class="lightbox" data-gallery="news"><img src="img/PhD/withLabbies.jpg" class="img-fluid"></a></p>
-</div>
-<div id="second-column" class="quarto-layout-cell" style="flex-basis: 80.0%;justify-content: flex-start;">
-<p><span style="font-size: 1.2rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;">Nov 14th, 2025</span></p>
-<p>Successfully defended my PhD titled “Range wide genotypic and phenotypic variation and climate change adaptation in red spruce”. Bringing one of the most wonderful chapters in my life to an end.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="column-screen">
-<div class="section-separator">
-
-</div>
-</div>
-<!---footer figs --->
-<div class="column-body">
-<div class="quarto-layout-panel" data-layout="[ 20,20,20,20 ]">
-<div class="quarto-layout-row">
-<div id="first-column" class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><img src="img/tile-layout1.svg" class="about-photo img-fluid"></p>
-</div>
-<div id="second-column" class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><img src="img/vermont_gothic.svg" class="about-photo img-fluid"></p>
-</div>
-<div id="third-column" class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><img src="img/alaska.svg" class="about-photo img-fluid"></p>
-</div>
-<div id="fourth-column" class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><img src="img/eggs.svg" class="about-photo img-fluid"></p>
-</div>
-</div>
-</div>
-</div>
-<!-- ::: {.column-full} -->
-<!-- ::: {#bio} -->
-<!-- [Hi there! I'm Anoob Prakash]{style="font-size: 2.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"} -->
-<!-- [Welcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how species respond to a changing climate. Learn more [about me](about.qmd). On this site, you’ll find my research, projects in data visualization and analysis, and other interests.]{style="font-size: 1.6rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"} -->
-<!-- ::: -->
-<!-- ::: -->
-
-
-
-</main> <!-- /main -->
+<div class="listing-no-matching d-none">No matching items</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -425,6 +433,13 @@ ul.task-list li input[type="checkbox"] {
       window.document.body.appendChild(a);
     }
     setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -869,38 +884,6 @@ ul.task-list li input[type="checkbox"] {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
-(function() {
-  let previousOnload = window.onload;
-  window.onload = () => {
-    if (previousOnload) {
-      previousOnload();
-    }
-    lightboxQuarto.on('slide_before_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      const href = trigger.getAttribute('href');
-      if (href !== null) {
-        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-        if (imgEl !== null) {
-          const srcAttr = imgEl.getAttribute("src");
-          if (srcAttr && srcAttr.startsWith("data:")) {
-            slideConfig.href = srcAttr;
-          }
-        }
-      } 
-    });
-  
-    lightboxQuarto.on('slide_after_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(slideNode);
-      }
-    });
-  
-  };
-  
-})();
-          </script>
 
 
 
