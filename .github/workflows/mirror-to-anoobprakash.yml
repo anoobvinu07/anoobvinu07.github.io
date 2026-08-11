@@ -3,36 +3,33 @@ name: Mirror to anoobprakash.github.io
 on:
   push:
     branches:
-      - main
-
-  workflow_dispatch:
+      - main  # change if your default branch is different
 
 jobs:
   mirror:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source repository
+      - name: Checkout source repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-          persist-credentials: false
+          fetch-depth: 0  # full history so --mirror works if you ever use it
 
-      - name: Configure Git
+      - name: Configure git
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-      - name: Push main branch to website repository
+      - name: Remove extra GitHub auth header
+        run: |
+          git config --unset-all http.https://github.com/.extraheader || true
+
+      - name: Add target remote and push
         env:
           TARGET_REPO_PAT: ${{ secrets.TARGET_REPO_PAT }}
         run: |
-          if [ -z "$TARGET_REPO_PAT" ]; then
-            echo "TARGET_REPO_PAT is missing."
-            exit 1
-          fi
+          # Add remote pointing at target repo on anoobprakash account
+          git remote add target https://x-access-token:${TARGET_REPO_PAT}@github.com/anoobprakash/anoobprakash.github.io.git
 
-          git remote add target \
-            "https://x-access-token:${TARGET_REPO_PAT}@github.com/anoobprakash/anoobprakash.github.io.git"
-
-          git push target main:main --force
+          # Push source main branch to target main, overwriting target if necessary
+          git push target main --force
