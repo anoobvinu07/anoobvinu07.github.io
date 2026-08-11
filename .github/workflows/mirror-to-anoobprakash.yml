@@ -5,6 +5,9 @@ on:
     branches:
       - main  # change if your default branch is different
 
+permissions:
+  contents: write
+  
 jobs:
   mirror:
     runs-on: ubuntu-latest
