@@ -90,7 +90,8 @@ This would disrupt the naming convention
 ::: {.callout-tip}
 ## How to?
 
-Before we download the data, move inside working directory- which would be the `cluster-exercise` directory. How do you do that? 
+Before we download the data, move inside working directory- which would be the `cluster-exercise` directory. How do you do that?   
+
 _Hint:_ You need to **c**hange **d**irectory inside `cluster-exercise` directory
 :::
 
