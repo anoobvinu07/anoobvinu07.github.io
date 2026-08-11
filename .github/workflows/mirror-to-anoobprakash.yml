@@ -1,35 +1,48 @@
-name: Mirror to anoobprakash.github.io
+name: Render Quarto and publish website
 
 on:
   push:
     branches:
-      - main  # change if your default branch is different
+      - main
+  workflow_dispatch:
 
 jobs:
-  mirror:
+  render-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source repo
+      - name: Check out Quarto source
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # full history so --mirror works if you ever use it
+          persist-credentials: false
 
-      - name: Configure git
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
 
-      - name: Remove extra GitHub auth header
-        run: |
-          git config --unset-all http.https://github.com/.extraheader || true
+      - name: Render Quarto website
+        run: quarto render
 
-      - name: Add target remote and push
+      - name: Publish rendered site to target repository
         env:
           TARGET_REPO_PAT: ${{ secrets.TARGET_REPO_PAT }}
         run: |
-          # Add remote pointing at target repo on anoobprakash account
-          git remote add target https://x-access-token:${TARGET_REPO_PAT}@github.com/anoobprakash/anoobprakash.github.io.git
+          if [ -z "$TARGET_REPO_PAT" ]; then
+            echo "TARGET_REPO_PAT is missing."
+            exit 1
+          fi
 
-          # Push source main branch to target main, overwriting target if necessary
-          git push target main --force
+          cd _site
+
+          git init
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          git add --all
+          git commit -m "Deploy Quarto site from ${GITHUB_SHA}"
+
+          git branch -M gh-pages
+
+          git remote add target \
+            "https://x-access-token:${TARGET_REPO_PAT}@github.com/anoobprakash/anoobprakash.github.io.git"
+
+          git push --force target gh-pages
