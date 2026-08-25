@@ -7,9 +7,9 @@ author:
 #    orcid: "0000-0000-0000-0000"
 date: "2026-08-09"
 categories:
-  - HPC
-  - Bash
-  - Slurm
+  - hpc
+  - bash
+  - slurm
 image: "/notebook/posts/cluster-cheatsheet/cheatsheet.png"
 format:
   html:

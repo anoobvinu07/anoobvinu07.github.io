@@ -8,12 +8,12 @@ author:
 date: "2026-08-10"
 listed: false
 categories:
-  - HPC
-  - Bash
+  - hpc
+  - bash
   - R
-  - Slurm
-  - Red spruce
-  - Reproducibility
+  - slurm
+  - red spruce
+  - reproducibility
 image: ""
 format:
   html:

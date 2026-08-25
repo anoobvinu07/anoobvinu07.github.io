@@ -24,11 +24,11 @@ $ember: #b82601;
 // Base document colors
 $navbar-bg: $white;
 $navbar-fg: $black; 
-$navbar-hl: $ember; 
+$navbar-hl: $teal; 
 $body-bg: $cream;
 $body-color: $gray;
 $footer-bg: $cream; 
-$link-color: $ember;
+$link-color: $darkteal;
 
 // Inline code
 $code-bg: $cream;
@@ -44,7 +44,7 @@ $code-block-bg: $cream;
 h1, h2, h3, h4, h5, h6 {
   letter-spacing: 1px;
   font-weight: 500;
-  color: $ember;
+  color: $teal;
 }
 
 h3 {
@@ -252,7 +252,7 @@ div.quarto-about-jolla .about-link {
   transition: transform 0.2s;
 }
 .panorama-photo:hover {
-  transform: scale(1.20);  /* zoom on hover */
+  transform: scale(1.009);  /* zoom on hover */
 }
 
 
@@ -363,7 +363,7 @@ div.quarto-about-jolla .about-link {
 
 /* Section “cards” */
 .cv-section {
-  background-color: rgba(232, 245, 233, 0.9);
+  background-color: rgba(239, 247, 247, 0.1);
   border-radius: 12px;
   padding: 1.4rem 1.6rem;
   margin-bottom: 1.1rem;
