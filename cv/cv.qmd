@@ -9,7 +9,7 @@ format:
     page-layout: full
 ---
 
-_Last updated on July 2025_
+_Last updated on August 2026_
 
 ::: {.cv-hero}
 <div class="cv-name">Anoob Prakash</div>
@@ -22,7 +22,7 @@ _Last updated on July 2025_
 </div>
 
 <div class="cv-actions">
-  [Download CV (PDF)](current/Prakash_CV.pdf){.btn .btn-outline-primary}
+  [Download CV (PDF)](/cv/current/Prakash_CV.pdf){.btn .btn-outline-primary}
   [Download Resume (PDF)](https://anoobvinu07.github.io/Resume_CV/Resume/1-page/prakash_resume_1page.pdf){.btn .btn-outline-primary}
 </div>
 :::
