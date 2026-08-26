@@ -1,0 +1,73 @@
+```{=html}
+<section class="skills-section">
+  <div class="skills-heading">
+    <!-- Uncomment if you want a heading -->
+    <!-- <h2>Technical Skills</h2> -->
+    <!-- <p>Research computing, genomics, and reproducible workflows.</p> -->
+  </div>
+
+  <div class="skills-grid">
+
+    <div class="skill-item">
+      <div class="skill-label">
+        <span>Data Science</span>
+        <span>10+ yrs</span>
+      </div>
+      <div class="skill-track">
+        <div class="skill-fill" style="width: 100%;"></div>
+      </div>
+    </div>
+
+    <div class="skill-item">
+      <div class="skill-label">
+        <span>Bioinformatics</span>
+        <span>5+ yrs</span>
+      </div>
+      <div class="skill-track">
+        <div class="skill-fill" style="width: 55%;"></div>
+      </div>
+    </div>
+
+    <div class="skill-item">
+      <div class="skill-label">
+        <span>M. Learning</span>
+        <span>3+ yrs</span>
+      </div>
+      <div class="skill-track">
+        <div class="skill-fill" style="width: 40%;"></div>
+      </div>
+    </div>
+
+    <div class="skill-item">
+      <div class="skill-label">
+        <span>R</span>
+        <span>8+ yrs</span>
+      </div>
+      <div class="skill-track">
+        <div class="skill-fill" style="width: 85%;"></div>
+      </div>
+    </div>
+
+    <div class="skill-item">
+      <div class="skill-label">
+        <span>UNIX</span>
+        <span>7+ yrs</span>
+      </div>
+      <div class="skill-track">
+        <div class="skill-fill" style="width: 90%;"></div>
+      </div>
+    </div>
+
+    <div class="skill-item">
+      <div class="skill-label">
+        <span>Python</span>
+        <span>2+ yrs</span>
+      </div>
+      <div class="skill-track">
+        <div class="skill-fill" style="width: 30%;"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+```

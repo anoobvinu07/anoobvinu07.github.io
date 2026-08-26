@@ -4,7 +4,7 @@ pagetitle: "Anoob Prakash – Curriculum Vitae"
 format:
   html:
     toc: true
-    toc-depth: 3
+    toc-depth: 4
     number-sections: false
     page-layout: full
 ---
@@ -37,7 +37,7 @@ Highly skilled researcher with expertise in ecological and evolutionary genomics
 
 
 <div class="cv-actions">
-  [Personal E-mail](mailto:anoobvinu@gmail.com){.btn .btn-outline-primary} [Purdue E-mail](mailto:prakas89@purdue.edu){.btn .btn-outline-primary}
+  [Personal E-mail](mailto:anoobvinu@gmail.com){.btn .btn-outline-primary}
 </div>
 
 :::
@@ -88,6 +88,15 @@ Highly skilled researcher with expertise in ecological and evolutionary genomics
 :::::
 
 
+::: {.cv-section}
+
+## Technical Skills  
+Research computing, genomics, and reproducible workflows  
+
+{{< include /includes/_skills.qmd >}}
+
+:::
+
 
 
 ::: {.cv-section}
@@ -133,9 +142,9 @@ _Advisor: Dr. T. K. Kunhamu_
 
 
 ::: {.cv-section}
-## Research and Professional Experience  
+## Experience  
 
-::::: {layout="[ 75, 25 ]"}
+::::: {layout="[ 70, 30 ]"}
 ::: {#first-column}
 #### Postdoctoral Research Associate  
 **Purdue University, USA**
@@ -150,7 +159,7 @@ _Advisor: Dr. T. K. Kunhamu_
 
 <div class="section-separator"></div>
 
-::::: {layout="[ 75, 25 ]"}
+::::: {layout="[ 70, 30 ]"}
 ::: {#first-column}
 #### Graduate Research Assistant  
 **University of Vermont, USA**
@@ -184,7 +193,7 @@ Investigated genotypic and phenotypic variation and climate change adaptation in
 - Applied advanced bioinformatic approaches to assess the genetic architecture of locally adaptive traits.
 :::
 
-::::: {layout="[ 75, 25 ]"}
+::::: {layout="[ 70, 30 ]"}
 ::: {#first-column}
 #### Graduate Teaching Assistant  
 **University of Vermont, USA**
@@ -216,7 +225,7 @@ Conducted grading, lab instruction, report writing guidance, peer-review facilit
 
 <div class="section-separator"></div>
 
-::::: {layout="[ 75, 25 ]"}
+::::: {layout="[ 70, 30 ]"}
 ::: {#first-column}
 #### Graduate Research Intern  
 **The Nature Conservancy, USA**
@@ -236,7 +245,7 @@ Applied genomics-assisted seed source selection to identify viable seed sources 
 
 <div class="section-separator"></div>
 
-::::: {layout="[ 75, 25 ]"}
+::::: {layout="[ 70, 30 ]"}
 ::: {#first-column}
 #### Kerala Agricultural University  
 **College of Forestry, India**
@@ -315,7 +324,7 @@ Investigated the impact of particulate pollution on growth, physiology, and anat
 ::: {.cv-section}
 ## Publications  
 
-#### Peer-Reviewed Publications
+**Peer-Reviewed Publications** 
 
 <ul class="pub-list">
 
@@ -380,19 +389,9 @@ Investigated the impact of particulate pollution on growth, physiology, and anat
 </ul>
 :::
 
-::: {.cv-section}
-#### Peer-Review Activities
-
-- Journal of Heredity (2025)
-- Molecular Biology and Evolution (2025)
-- New Phytologist (2024)
-- G3: Genes, Genomes, Genetics (2023)
-- Ecological Monographs (2022)
-- Frontiers in Plant Science (2022)
-:::
 
 ::: {.cv-section}
-## Conference Presentations
+## Talks  
 
 #### Conference Talks  
 
@@ -564,20 +563,8 @@ _Indian Biodiversity Congress, Chennai, Tamil Nadu, India_
 :::
 
 ::: {.cv-section}
-## Trainings and Workshops  
+## Trainings     
 
-<!-- ::::: {layout="[ 10, 90 ]"} -->
-<!-- ::: {#first-column} -->
-<!-- June -->
-<!-- 2025 -->
-<!-- ::: -->
-<!-- ::: {#second-column} -->
-<!-- **Computational Biology Upskilling Workshop**   -->
-<!-- _The Festival of Genomics & Biodata_    -->
-
-<!-- _Instructors: Dean Lee and Tommy Tang_ -->
-<!-- ::: -->
-<!-- ::::: -->
 
 ::::: {layout="[ 10, 90 ]"}
 ::: {#first-column}
@@ -758,14 +745,10 @@ with 100% departmental match
 
 :::
 
-::: {.cv-section}
-## Professional Memberships
-
-- Botanical Society of America (BSA).
-- Society for the Study of Evolution (SSE).
-- American Society of Naturalists (ASN).
-:::
 
 ## References
 
 Available upon request.
+
+
+
