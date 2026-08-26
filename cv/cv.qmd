@@ -37,7 +37,7 @@ Highly skilled researcher with expertise in ecological and evolutionary genomics
 
 
 <div class="cv-actions">
-  [Personal E-mail](mailto:anoobvinu@gmail.com){.btn .btn-outline-primary}
+  [Contact Me!](mailto:anoobvinu@gmail.com){.btn .btn-outline-primary}
 </div>
 
 :::
@@ -49,16 +49,31 @@ Highly skilled researcher with expertise in ecological and evolutionary genomics
 ::: {.callout-note collapse="true" appearance="minimal"}
 ### Technical skills
 
-- Programming and scripting: R (proficient), Unix/Linux (proficient), Python (basic).
-- Data tools: ArcGIS (advanced), QGIS (basic), tidyverse (proficient).
-- Data analysis and bioinformatics: Management and analysis of large-scale genomic, phenotypic, and climate datasets; application of bioinformatic pipelines and climate forecasting methods; graphical data visualization.
+- Programming and scripting: 
+  - R (proficient)  
+  - Unix/Linux (proficient)  
+  - Python (basic)
+- Data tools  
+  - ArcGIS (advanced)  
+  - QGIS (basic)  
+  - tidyverse (proficient)
+- Data analysis and bioinformatics  
+- Management and analysis of large-scale genomic, phenotypic, and climate datasets
+- Climate forecasting    
+- Data visualization
 :::
 
 ::: {.callout-note collapse="true" appearance="minimal"}
 ### Communication and design
 
-- Design and visualization: Affinity Designer (proficient), Adobe Illustrator (proficient), Adobe After Effects (advanced).
-- Presentation and documentation: Microsoft Office, Quarto (proficient), R Markdown (proficient).
+- Design and visualization  
+  - Affinity Designer (proficient)   
+  - Adobe Illustrator (proficient)  
+  - Adobe After Effects (advanced)  
+- Presentation and documentation   
+  - Microsoft Office  
+  - Quarto (proficient)  
+  - R Markdown (proficient)
 :::
 
 ::: {.callout-note collapse="true" appearance="minimal"}
@@ -79,9 +94,23 @@ Highly skilled researcher with expertise in ecological and evolutionary genomics
 ::: {.callout-note collapse="true" appearance="minimal"}
 ### Leadership and service
 
-- Graduate Student Senator, Department of Plant Biology, University of Vermont (2018–2020).  
-- Captain, college basketball team – led team to inter-collegiate championship (2012).  
-- Assistant Hostel Secretary, College of Forestry, Kerala Agricultural University (2009).
+- **Graduate Student Senator**  
+    Department of Plant Biology  
+    University of Vermont  
+    _2018–2020_    
+- **Captain**  
+    University basketball team  
+    Kerala Agricultural University 
+    
+    College basketball team   
+    College of Forestry  
+    
+    Inter-collegiate champion   
+    _2012_   
+- **Assistant Hostel Secretary**  
+    College of Forestry  
+    Kerala Agricultural University 
+    _2009_
 :::
 :::
 :::
