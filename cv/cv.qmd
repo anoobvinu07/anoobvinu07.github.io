@@ -128,46 +128,60 @@ Research computing, genomics, and reproducible workflows
 
 
 
+
 ::: {.cv-section}
-## Education
 
-::::: {layout="[ 75, 25 ]"}
-::: {#first-column}
-#### Ph.D., Plant Biology  
-**University of Vermont, USA**   
-_Advisor: Dr. Stephen R. Keller_  
+## Education  
+
+{{< include /includes/_education.qmd >}}
 
 :::
-::: {#second-column}
-#### 2018-2025
-:::
-:::::
 
-::::: {layout="[ 75, 25 ]"}
-::: {#first-column}
-#### M.Sc., Tree Physiology and Breeding  
-**Kerala Agricultural University, India**   
-_Advisor: Dr. A. V. Santhoshkumar_  
 
-:::
-::: {#second-column}
-#### 2011-2013
-:::
-:::::
 
-::::: {layout="[ 75, 25 ]"}
-::: {#first-column}
-#### B.Sc., Forestry  
-**Kerala Agricultural University, India**   
-_Advisor: Dr. T. K. Kunhamu_  
 
-:::
-::: {#second-column}
-#### 2007-2011
-:::
-:::::
 
-:::
+
+<!-- ::: {.cv-section} -->
+<!-- ## Education -->
+
+<!-- ::::: {layout="[ 75, 25 ]"} -->
+<!-- ::: {#first-column} -->
+<!-- #### Ph.D., Plant Biology   -->
+<!-- **University of Vermont, USA**    -->
+<!-- _Advisor: Dr. Stephen R. Keller_   -->
+
+<!-- ::: -->
+<!-- ::: {#second-column} -->
+<!-- #### 2018-2025 -->
+<!-- ::: -->
+<!-- ::::: -->
+
+<!-- ::::: {layout="[ 75, 25 ]"} -->
+<!-- ::: {#first-column} -->
+<!-- #### M.Sc., Tree Physiology and Breeding   -->
+<!-- **Kerala Agricultural University, India**    -->
+<!-- _Advisor: Dr. A. V. Santhoshkumar_   -->
+
+<!-- ::: -->
+<!-- ::: {#second-column} -->
+<!-- #### 2011-2013 -->
+<!-- ::: -->
+<!-- ::::: -->
+
+<!-- ::::: {layout="[ 75, 25 ]"} -->
+<!-- ::: {#first-column} -->
+<!-- #### B.Sc., Forestry   -->
+<!-- **Kerala Agricultural University, India**    -->
+<!-- _Advisor: Dr. T. K. Kunhamu_   -->
+
+<!-- ::: -->
+<!-- ::: {#second-column} -->
+<!-- #### 2007-2011 -->
+<!-- ::: -->
+<!-- ::::: -->
+
+<!-- ::: -->
 
 
 ::: {.cv-section}

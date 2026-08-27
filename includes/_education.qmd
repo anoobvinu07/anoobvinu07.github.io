@@ -1,0 +1,56 @@
+```{=html}
+<section class="education-zigzag">
+
+  <div class="education-zigzag-track">
+
+    <!-- B.Sc. -->
+    <article class="edu-zigzag-item edu-top edu-bsc">
+      <div class="edu-date">
+        <span>2011</span>
+      </div>
+
+      <div class="edu-stem"></div>
+      <div class="edu-arrow"></div>
+
+      <div class="edu-details">
+        <h3>B.Sc. Forestry</h3>
+        <p class="edu-institution">Kerala Agricultural University, India</p>
+        <!-- <p class="edu-advisor">Advisor: Dr. T. K. Kunhamu</p> -->
+      </div>
+    </article>
+
+    <!-- M.Sc. -->
+    <article class="edu-zigzag-item edu-bottom edu-msc">
+      <div class="edu-details">
+        <h3>M.Sc. Tree Physiology and Breeding</h3>
+        <p class="edu-institution">Kerala Agricultural University, India</p>
+        <!-- <p class="edu-advisor">Advisor: Dr. A. V. Santhoshkumar</p> -->
+      </div>
+
+      <div class="edu-arrow"></div>
+      <div class="edu-stem"></div>
+
+      <div class="edu-date">
+        <span>2013</span>
+      </div>
+    </article>
+
+    <!-- Ph.D. -->
+    <article class="edu-zigzag-item edu-top edu-phd">
+      <div class="edu-date">
+        <span>2025</span>
+      </div>
+
+      <div class="edu-stem"></div>
+      <div class="edu-arrow"></div>
+
+      <div class="edu-details">
+        <h3>Ph.D. Plant Biology</h3>
+        <p class="edu-institution">University of Vermont, USA</p>
+        <!-- <p class="edu-advisor">Advisor: Dr. Stephen R. Keller</p> -->
+      </div>
+    </article>
+
+  </div>
+</section>
+```
