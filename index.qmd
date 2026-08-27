@@ -114,6 +114,9 @@ title: ""
 [News and updates]{style="font-size: 1.5rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #cfd217"}
 
 
+{{< include /includes/_news.qmd >}}
+
+
 
 ::::: {layout="[ 20, 80 ]"}
 ::: {#first-column}

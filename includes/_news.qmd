@@ -1,0 +1,65 @@
+```{=html}
+<section class="news-gradient-timeline" aria-label="News timeline">
+
+  <div class="news-gradient-track">
+
+    <!-- 2023 -->
+    <article class="news-gradient-item news-top news-amber">
+      <div class="news-year">
+        <span>2023</span>
+      </div>
+
+      <div class="news-stem"></div>
+      <div class="news-node"></div>
+
+      <div class="news-content">
+        <h3>
+          <a href="https://www.climatehubs.usda.gov/hubs/northeast/2023-2024-gradcamp-scholars">
+            GradCAMP Fellow
+          </a>
+        </h3>
+        <p>Selected as a USDA GradCAMP Fellow.</p>
+      </div>
+    </article>
+
+    <!-- 2025 -->
+    <article class="news-gradient-item news-bottom news-blue">
+      <div class="news-content">
+        <h3>
+          <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=jIOSRMkAAAAJ&sortby=pubdate&citation_for_view=jIOSRMkAAAAJ:hqOjcs7Dif8C">
+            Ph.D. Defense
+          </a>
+        </h3>
+        <p>Successfully defended my Ph.D. in Plant Biology.</p>
+      </div>
+
+      <div class="news-node"></div>
+      <div class="news-stem"></div>
+
+      <div class="news-year">
+        <span>2025</span>
+      </div>
+    </article>
+
+    <!-- 2026 -->
+    <article class="news-gradient-item news-top news-purple">
+      <div class="news-year">
+        <span>2026</span>
+      </div>
+
+      <div class="news-stem"></div>
+      <div class="news-node"></div>
+
+      <div class="news-content">
+        <h3>
+          <a href="https://ag.purdue.edu/directory/prakas89">
+            Postdoctoral Researcher at Purdue
+          </a>
+        </h3>
+        <p>Joined Purdue University as a postdoctoral researcher.</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+```
