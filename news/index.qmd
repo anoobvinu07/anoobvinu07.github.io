@@ -81,19 +81,19 @@ Successfully defended my PhD titled "Range wide genotypic and phenotypic variati
 
 <!---footer figs --->
 
-:::::: {.column-body}
+:::::: {.column-page}
 ::::: {layout="[ 20,20,20,20 ]"}
 ::: {#first-column}
-![](/img/tile-layout1.svg){.about-photo width=30%}
+![](/img/tile-layout1.svg){.about-photo width=10%}
 :::
 ::: {#second-column}
-![](/img/vermont_gothic.svg){.about-photo width=30%}
+![](/img/vermont_gothic.svg){.about-photo width=10%}
 :::
 ::: {#third-column}
-![](/img/alaska.svg){.about-photo width=30%}
+![](/img/alaska.svg){.about-photo width=10%}
 :::
 ::: {#fourth-column}
-![](/img/eggs.svg){.about-photo width=30%}
+![](/img/eggs.svg){.about-photo width=10%}
 :::
 :::::
 ::::::
