@@ -18,5 +18,12 @@
       "/notebook/posts/bashing-the-cluster/Bashing the cluster.html",
       "/notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html"
     ]
+  },
+  {
+    "listing": "/Notebook/Notebook.html",
+    "items": [
+      "/Notebook/posts/bashing-the-cluster/Bashing the cluster.html",
+      "/Notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html"
+    ]
   }
 ]

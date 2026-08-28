@@ -1,16 +1,16 @@
 ```{=html}
-<section class="education-zigzag">
+<section class="education-zigzag" aria-label="Education timeline">
 
   <div class="education-zigzag-track">
 
-    <!-- B.Sc. -->
+    <!-- B.Sc. Forestry -->
     <article class="edu-zigzag-item edu-top edu-bsc">
       <div class="edu-date">
         <span>2011</span>
       </div>
 
       <div class="edu-stem"></div>
-      <div class="edu-arrow"></div>
+      <div class="edu-node"></div>
 
       <div class="edu-details">
         <h3>B.Sc. Forestry</h3>
@@ -19,7 +19,7 @@
       </div>
     </article>
 
-    <!-- M.Sc. -->
+    <!-- M.Sc. Tree Physiology and Breeding -->
     <article class="edu-zigzag-item edu-bottom edu-msc">
       <div class="edu-details">
         <h3>M.Sc. Tree Physiology and Breeding</h3>
@@ -27,7 +27,7 @@
         <!-- <p class="edu-advisor">Advisor: Dr. A. V. Santhoshkumar</p> -->
       </div>
 
-      <div class="edu-arrow"></div>
+      <div class="edu-node"></div>
       <div class="edu-stem"></div>
 
       <div class="edu-date">
@@ -35,14 +35,14 @@
       </div>
     </article>
 
-    <!-- Ph.D. -->
+    <!-- Ph.D. Plant Biology -->
     <article class="edu-zigzag-item edu-top edu-phd">
       <div class="edu-date">
         <span>2025</span>
       </div>
 
       <div class="edu-stem"></div>
-      <div class="edu-arrow"></div>
+      <div class="edu-node"></div>
 
       <div class="edu-details">
         <h3>Ph.D. Plant Biology</h3>

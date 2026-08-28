@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.29">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Notes &amp; Thoughts – Anoob Prakash</title>
+<title>Notebook – Anoob Prakash</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -38,14 +41,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9cfdc87e16b2bf3d6786c761657ef46f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-7aec7cc9dfb2c75810a9b33bf1e33a24.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-7444b7a958b33b8288c93f067336b92c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-7aec7cc9dfb2c75810a9b33bf1e33a24.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-262773d7763246d6f85d8761e517b3a8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-b360415e7b4e7c30e30571e58d11e07f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-262773d7763246d6f85d8761e517b3a8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -103,7 +106,7 @@ ul.task-list li input[type="checkbox"] {
   </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -116,7 +119,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -288,6 +291,7 @@ window.Quarto = {
       toggleColorMode(toAlternate);
       setStyleSentinel(toAlternate);
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
     };
     // Switch to dark mode if need be
     if (hasAlternateSentinel()) {
@@ -303,7 +307,8 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../img/AP_logo2.png" alt="" class="navbar-logo">
+    <img src="../img/AP_logo2.png" alt="" class="navbar-logo light-content">
+    <img src="../img/AP_logo2.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Anoob Prakash</span>
@@ -320,20 +325,24 @@ window.Quarto = {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../research/research.html"> 
+    <a class="nav-link" href="../Research/Research.html"> 
 <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../photos/photos.html"> 
+    <a class="nav-link active" href="../Notebook/Notebook.html" aria-current="page"> 
+<span class="menu-text">Notebook</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../Gallery/Gallery.html"> 
 <span class="menu-text">Gallery</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../cv/cv.html"> 
-<span class="menu-text">CV</span></a>
+    <a class="nav-link" href="../News/News.html"> 
+<span class="menu-text">News</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../notebook/notebook.html" aria-current="page"> 
-<span class="menu-text">Notebook</span></a>
+    <a class="nav-link" href="../CV/CV.html"> 
+<span class="menu-text">CV</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -355,7 +364,8 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Notes &amp; Thoughts</h1>
+<h1 class="title">Notebook</h1>
+<p class="subtitle lead">Jotting down notes for later</p>
 </div>
 
 
@@ -378,15 +388,15 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-left" data-index="0" data-categories="aHBjJTJDd29ya2Zsb3clMkNiYXNoJTJDZ2l0aHVi" data-listing-date-sort="1786334400000" data-listing-file-modified-sort="1787791233911" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="925">
-<div class="thumbnail"><a href="../notebook/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">
+<div class="quarto-post image-left" data-index="0" data-categories="aHBjJTJDd29ya2Zsb3clMkNiYXNoJTJDZ2l0aHVi" data-listing-date-sort="1786334400000" data-listing-file-modified-sort="1786478975575" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="925">
+<div class="thumbnail"><a href="../Notebook/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">
 
 <img loading="lazy" src="../notebook/posts/bashing-the-cluster/spruce-computing.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
-<a href="../notebook/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">Getting started with bash on HPC</a>
+<a href="../Notebook/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">Getting started with bash on HPC</a>
 </h3>
 <div class="listing-categories">
 
@@ -399,12 +409,12 @@ window.Quarto = {
 <div class="listing-category" onclick="window.quartoListingCategory('Z2l0aHVi'); return false;">github</div>
 
 </div>
-<div class="delink listing-description"><a href="../notebook/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">
+<div class="delink listing-description"><a href="../Notebook/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">
 <p>Learn the basics of using bash to work on a cluster</p>
 </a></div>
 </div>
 <div class="metadata">
-<a href="../notebook/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">
+<a href="../Notebook/posts/bashing-the-cluster/Bashing the cluster.html" class="no-external">
 <div class="listing-date">
 Aug 10, 2026
 </div>
@@ -414,15 +424,15 @@ Anoob Prakash
 </a>
 </div>
 </div>
-<div class="quarto-post image-left" data-index="1" data-categories="aHBjJTJDYmFzaCUyQ3NsdXJt" data-listing-date-sort="1786248000000" data-listing-file-modified-sort="1787791233940" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="144">
-<div class="thumbnail"><a href="../notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">
+<div class="quarto-post image-left" data-index="1" data-categories="aHBjJTJDYmFzaCUyQ3NsdXJt" data-listing-date-sort="1786248000000" data-listing-file-modified-sort="1787681915721" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="144">
+<div class="thumbnail"><a href="../Notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">
 
 <img loading="lazy" src="../notebook/posts/cluster-cheatsheet/cheatsheet.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
-<a href="../notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">Cheat sheet for bash and SLURM</a>
+<a href="../Notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">Cheat sheet for bash and SLURM</a>
 </h3>
 <div class="listing-categories">
 
@@ -433,12 +443,12 @@ Anoob Prakash
 <div class="listing-category" onclick="window.quartoListingCategory('c2x1cm0='); return false;">slurm</div>
 
 </div>
-<div class="delink listing-description"><a href="../notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">
+<div class="delink listing-description"><a href="../Notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">
 <p>Quick reference cheatsheet for frequently used bash commands and SLURM commands to submit or manage jobs on a HPC</p>
 </a></div>
 </div>
 <div class="metadata">
-<a href="../notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">
+<a href="../Notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">
 <div class="listing-date">
 Aug 9, 2026
 </div>
@@ -515,13 +525,14 @@ Anoob Prakash
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

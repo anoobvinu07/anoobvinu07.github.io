@@ -709,11 +709,12 @@ li.no-bullet {
 
 
 
-/*-- education:rules- stored in includes/_education.qmd --*/
+/*-- EDUCATION TIMELINE RULES --*/
 
 .education-zigzag {
   --edu-ink: $ember;
   --edu-muted: #5d6b65;
+  --edu-track: #41B7C4;
 
   max-width: 1150px;
   margin: 0.5rem auto;
@@ -721,28 +722,46 @@ li.no-bullet {
 }
 
 .education-zigzag-track {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
   align-items: center;
-  gap: 0.8rem;
+}
+
+/* One continuous fixed-color timeline behind every degree */
+.education-zigzag-track::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  right: 5%;
+  left: 5%;
+  height: 0.55rem;
+  transform: translateY(-50%);
+  border: 1px solid rgba(38, 51, 45, 0.35);
+  border-radius: 999px;
+  background: var(--edu-track);
+  box-shadow: 0 2px 5px rgba(38, 51, 45, 0.12);
 }
 
 .edu-zigzag-item {
-  /* Default palette; overridden by degree-specific classes */
+  /* Default values; overwritten by degree classes */
   --edu-color: #41B7C4;
   --edu-dark: #267b85;
   --edu-light: #e4f8fa;
 
   position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-rows: 135px 54px 135px;
+  grid-template-rows: 105px 32px 105px;
   justify-items: center;
   min-width: 0;
   text-align: center;
 }
 
-/* Degree-specific palettes */
-.edu-bsc { 
+/* Fixed degree-specific palettes */
+.edu-bsc {
   --edu-color: #F2B134;
   --edu-dark: #A56800;
   --edu-light: #FFF3D6;
@@ -760,25 +779,21 @@ li.no-bullet {
   --edu-light: #EEE8FF;
 }
 
-/* Timeline bars */
-.edu-arrow {
+/* Circle marking the specific degree on the central timeline */
+.edu-node {
   position: relative;
-  z-index: 2;
+  z-index: 3;
+  grid-row: 2;
   align-self: center;
-  width: 100%;
-  height: 0.9rem;
-  border: 2px solid var(--edu-dark);
-  border-radius: 999px;
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
   background: var(--edu-color);
-  box-shadow: 0 2px 5px rgba(38, 51, 45, 0.14);
+  box-shadow: 0 0 0 2px var(--edu-color);
 }
 
-/* Keep disabled unless you decide to restore arrowheads */
-.edu-arrow::after {
-  display: none;
-}
-
-/* Year circles */
+/* Year circle */
 .edu-date {
   position: relative;
   z-index: 3;
@@ -788,61 +803,57 @@ li.no-bullet {
   height: 3rem;
   border: 3px solid var(--edu-color);
   border-radius: 50%;
-  background: transparent;
+  background: #ffffff;
   color: var(--edu-dark);
-  box-shadow: 0 3px 10px rgba(38, 51, 45, 0.12);
+  box-shadow: 0 0 10px rgba(38, 51, 45, 0.12);
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-/* Vertical connector */
+/* Connector between the date circle and the central node */
 .edu-stem {
   position: absolute;
-  z-index: 0;
+  z-index: 2;
   width: 3px;
-  height: 3.15rem;
+  height: 2rem;
   background: var(--edu-color);
 }
 
-/* Items with the date above the timeline */
+/* Date above, text below */
 .edu-top .edu-date {
   grid-row: 1;
   align-self: end;
+  margin-bottom: 0.35rem;
 }
 
 .edu-top .edu-stem {
-  top: 6.15rem;
-}
-
-.edu-top .edu-arrow {
-  grid-row: 2;
+  top: 5.45rem;
 }
 
 .edu-top .edu-details {
   grid-row: 3;
   align-self: start;
+  margin-top: 0.6rem;
 }
 
-/* Items with the date below the timeline */
+/* Text above, date below */
 .edu-bottom .edu-details {
   grid-row: 1;
   align-self: end;
-}
-
-.edu-bottom .edu-arrow {
-  grid-row: 2;
+  margin-bottom: 0.3rem;
 }
 
 .edu-bottom .edu-stem {
-  bottom: 6.15rem;
+  bottom: 5.45rem;
 }
 
 .edu-bottom .edu-date {
   grid-row: 3;
   align-self: start;
+  margin-top: 0.35rem;
 }
 
-/* Degree and affiliation text */
+/* Degree text: retain original education timeline typography */
 .edu-details {
   width: 100%;
   max-width: 200px;
@@ -853,6 +864,7 @@ li.no-bullet {
   margin: 0 0 0.45rem;
   color: var(--edu-dark);
   font-size: 0.6rem;
+  font-weight: 400;
   line-height: 1.1;
 }
 
@@ -872,42 +884,49 @@ li.no-bullet {
   line-height: 1.4;
 }
 
-/* Medium screens */
-@media (max-width: 900px) {
-  .education-zigzag-track {
-    gap: 0.3rem;
-  }
-
+/* Medium widths */
+@media (max-width: 850px) {
   .edu-zigzag-item {
-    grid-template-rows: 150px 48px 150px;
+    grid-template-rows: 115px 32px 115px;
   }
 
   .edu-date {
-    width: 5.3rem;
-    height: 5.3rem;
-    font-size: 0.88rem;
+    width: 2.7rem;
+    height: 2.7rem;
+    font-size: 0.82rem;
   }
 
   .edu-top .edu-stem {
-    top: 6.4rem;
+    top: 5.95rem;
   }
 
   .edu-bottom .edu-stem {
-    bottom: 6.4rem;
+    bottom: 5.95rem;
   }
 
   .edu-details h3 {
     font-size: 0.98rem;
   }
+
+  .edu-institution,
+  .edu-advisor {
+    font-size: 0.52rem;
+  }
 }
 
-/* Phones: vertical version */
+/* Phones: readable vertical timeline */
 @media (max-width: 680px) {
   .education-zigzag-track {
     display: block;
-    margin-left: 2.1rem;
-    padding-left: 3.4rem;
-    border-left: 3px solid #41B7C4;
+    margin-left: 1.4rem;
+    padding-left: 4.25rem;
+    border-left: 3px solid var(--edu-track);
+  }
+
+  .education-zigzag-track::before,
+  .edu-node,
+  .edu-stem {
+    display: none;
   }
 
   .edu-zigzag-item,
@@ -915,34 +934,27 @@ li.no-bullet {
   .edu-zigzag-item.edu-bottom {
     display: block;
     min-height: 0;
-    margin-bottom: 2rem;
-    padding: 0 0 0 0.5rem;
+    margin-bottom: 1.8rem;
     text-align: left;
   }
 
-  .edu-arrow,
-  .edu-stem {
-    display: none;
-  }
-
   .edu-date {
-    position: relative;
     display: inline-grid;
     width: auto;
     height: auto;
-    margin: 0 0 0.75rem -2.75rem;
-    padding: 0.35rem 0.7rem;
+    margin: 0 0 0.6rem -3.1rem;
+    padding: 0.3rem 0.65rem;
     border-radius: 999px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   .edu-date::before {
     content: "";
     position: absolute;
     top: 50%;
-    left: -1.72rem;
-    width: 0.85rem;
-    height: 0.85rem;
+    left: -1.78rem;
+    width: 0.8rem;
+    height: 0.8rem;
     transform: translateY(-50%);
     border: 3px solid #ffffff;
     border-radius: 50%;
@@ -950,35 +962,27 @@ li.no-bullet {
     box-shadow: 0 0 0 2px var(--edu-color);
   }
 
-  .edu-details {
+  .edu-details,
+  .edu-top .edu-details,
+  .edu-bottom .edu-details {
     max-width: none;
+    margin: 0;
     padding: 0;
+  }
+
+  .edu-details h3 {
+    font-size: 0.9rem;
+  }
+
+  .edu-institution,
+  .edu-advisor {
+    font-size: 0.78rem;
   }
 }
 
+/*-- END EDUCATION TIMELINE RULES --*/
 
 
-
-.news-zigzag .edu-details h3 a {
-  color: inherit;
-  text-decoration: none;
-  transition: opacity 0.2s ease, text-decoration-color 0.2s ease;
-}
-
-.news-zigzag .edu-details h3 a:hover {
-  opacity: 0.8;
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-.news-zigzag .edu-details h3 a:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 0.2rem;
-  border-radius: 0.15rem;
-}
-
-
-/*-- end of education:rules- stored in includes/_education.qmd --*/
 
 
 
@@ -1226,7 +1230,7 @@ li.no-bullet {
   .news-gradient-track {
     display: block;
     margin-left: 1.4rem;
-    padding-left: 2.1rem;
+    padding-left: 4.25rem;
     border-left: 3px solid transparent;
     border-image: linear-gradient(
       to bottom,

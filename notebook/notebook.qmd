@@ -1,6 +1,6 @@
 ---
-title: "Notes & Thoughts"
-subtitle: "" 
+title: "Notebook"
+subtitle: "Jotting down notes for later" 
 format: 
   html:
     page-layout: article

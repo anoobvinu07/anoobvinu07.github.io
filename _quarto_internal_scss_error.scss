@@ -1,4 +1,4 @@
-// quarto-scss-analysis-annotation { "quarto-version": "1.7.29" }
+// quarto-scss-analysis-annotation { "quarto-version": "1.9.38" }
 
 // quarto-scss-analysis-annotation { "origin": "'use' section from format" }
 
@@ -1062,13 +1062,13 @@ $lightgreen: #c2edce;
 $ember: #b82601;
 
 // Base document colors
-$navbar-bg: $cream1;
+$navbar-bg: $white;
 $navbar-fg: $black; 
-$navbar-hl: $ember; 
+$navbar-hl: $teal; 
 $body-bg: $cream;
 $body-color: $gray;
 $footer-bg: $cream; 
-$link-color: $ember;
+$link-color: $darkteal;
 
 // Inline code
 $code-bg: $cream;
@@ -1139,7 +1139,7 @@ $btn-code-copy-color-active: #204a87 !default;
 
 // quarto-scss-analysis-annotation { "origin": "Defaults from Quarto's SCSS" }
 
-$code-copy-selector: "pre.sourceCode:hover > " !default;
+$code-copy-selector: "div.code-copy-outer-scaffold:hover > " !default;
 $code-white-space: pre !default;
 $tbl-cap-location: top !default;
 $sidebar-bg: if(variable-exists(body-bg), $body-bg, #fff) !default;
@@ -1183,7 +1183,11 @@ $code-block-theme-dark-threshhold: 40% !default;
 
 /* Inline Code Formatting */
 // $code-bg, $code-color, $code-padding
-$code-color: #7d12ba !default;
+$code-color: if(
+  variable-exists(pre-color) and $pre-color != null,
+  $pre-color,
+  #7d12ba
+) !default;
 
 // Set a default body emphasis color
 $code-bg: $gray-100 !default;
@@ -3250,7 +3254,7 @@ $nested-kbd-font-weight:            null !default; // Deprecated in v5.2.0, remo
 $pre-bg:                            $code-bg  !default;
 $pre-color:                         $body-emphasis-color !default;
 $pre-line-height:                   $line-height-base !default;
-$font-size-root: 1.1em;
+$font-size-root: 1.4em;
 
 
 
@@ -5237,7 +5241,6 @@ $grid-default-toc-mid-body: minmax(
 @import "type";
 @import "images";
 @import "containers";
-@import "light-dark";
 @import "grid";
 @import "tables";
 @import "forms";
@@ -5272,10 +5275,79 @@ $grid-default-toc-mid-body: minmax(
 @import "utilities/api";
 // scss-docs-end import-stack
 
+// color-contrast() was introduced in Bootstrap 5.
+// We include our own version for a few reasons:
+// 1. Easily turn off warnings options(bslib.color_contrast_warnings=F)
+// 2. Allow Bootstrap 3 & 4 to use color-contrast() in variable definitions
+// 3. Allow Bootstrap 3 & 4 to use bs_get_contrast()
+
+// Also note that color-contrast() lives in sass-utils since projects like Quarto
+// and flexdashboard currently assume it exists there....
+@import "../sass-utils/color-contrast.scss";
+
+
+@function is-css-variable($x) {
+  @if (type-of($x) != string) {
+    @return false;
+  } @else {
+    @return str-slice($x, 1, 6) == 'var(--';
+  }
+}
+
 @import "spacer";
 @import "tab-fill";
 @import "color-utilities";
 
+.tab-content {
+  // Workaround for pkgdown's CSS to make tab-pane all a consistent height
+  // https://github.com/r-lib/pkgdown/blob/956f07/inst/BS5/assets/pkgdown.scss#L342-L355
+  >.tab-pane.html-fill-container {
+    display: none;
+  }
+
+  // Take precedence over Bootstrap's `display:block` rule
+  >.active.html-fill-container {
+    display: flex;
+  }
+
+  // Another workaround for pkgdown adding extra padding we didn't ask for
+  // https://github.com/r-lib/pkgdown/blob/956f07/inst/BS5/assets/pkgdown.scss#L335-L337
+  &.html-fill-container {
+    padding: 0;
+  }
+}
+
+$spacer: 1rem !default;
+
+:root {
+  // Controls default spacing in layout containers (e.g, layout_columns())
+  --bslib-spacer: #{$spacer};
+  --bslib-mb-spacer: var(--bslib-spacer, 1rem);
+}
+
+// Some things like card(), p(), inputs, etc. want some margin-bottom by default
+// so you can plop them anywhere and you get spacing between rows. However, now
+// that we have layout utilities like page_fillable(), layout_columns(),
+// layout_sidebar(), etc. where we can control the gap between rows/columns, we
+// need a way to reset those margin-bottom to 0 in those special contexts
+//
+// We do this by adding this class to components (e.g., card())...
+.bslib-mb-spacing {
+  margin-bottom: var(--bslib-mb-spacer);
+}
+
+// ...And this class for layout containers (e.g, layout_columns())
+.bslib-gap-spacing {
+  gap: var(--bslib-mb-spacer);
+  > .bslib-mb-spacing, > .form-group, > p, > pre {
+    margin-bottom: 0;
+  }
+}
+
+// We generally don't want mb spacing for _activated_ fill items
+.html-fill-container > .html-fill-item.bslib-mb-spacing {
+  margin-bottom: 0;
+}
 $bslib-enable-color-utilities: $bootstrap-version >= 5 !default;
 
 @if ($bslib-enable-color-utilities) {
@@ -5351,94 +5423,293 @@ $bslib-enable-color-utilities: $bootstrap-version >= 5 !default;
   }
 }
 
-// color-contrast() was introduced in Bootstrap 5.
-// We include our own version for a few reasons:
-// 1. Easily turn off warnings options(bslib.color_contrast_warnings=F)
-// 2. Allow Bootstrap 3 & 4 to use color-contrast() in variable definitions
-// 3. Allow Bootstrap 3 & 4 to use bs_get_contrast()
-
-// Also note that color-contrast() lives in sass-utils since projects like Quarto
-// and flexdashboard currently assume it exists there....
-@import "../sass-utils/color-contrast.scss";
-
-
-@function is-css-variable($x) {
-  @if (type-of($x) != string) {
-    @return false;
-  } @else {
-    @return str-slice($x, 1, 6) == 'var(--';
-  }
-}
-
-$spacer: 1rem !default;
+$bslib-value-box-enable-border: "auto" !default; // "auto" | "never" | "always"
+$bslib-value-box-enable-shadow: $enable-shadows !default;
+$bslib-value-box-horizontal-break-point: 300px;
 
 :root {
-  // Controls default spacing in layout containers (e.g, layout_columns())
-  --bslib-spacer: #{$spacer};
-  --bslib-mb-spacer: var(--bslib-spacer, 1rem);
+  --bslib-value-box-shadow: #{if($bslib-value-box-enable-shadow, #{$box-shadow}, none)};
+  // value box border width is set to "-auto-yes" when the card has .border-auto
+  // or "-auto-no" by default. These cards all use "-baseline", where the border
+  // can be disabled entirely by setting $bslib-value-box-enable-border: "never"
+  // or --bslib-value-box-border-width-baseline: 0. In "auto" mode, the border
+  // is disabled without the border-auto class, or disabled if shadow is enabled.
+  --bslib-value-box-border-width-auto-yes: #{if($bslib-value-box-enable-shadow, 0, var(--bslib-value-box-border-width-baseline))};
+  --bslib-value-box-border-width-auto-no: #{if($bslib-value-box-enable-border == "auto", 0, var(--bslib-value-box-border-width-baseline))};
+  --bslib-value-box-border-width-baseline: #{if($bslib-value-box-enable-border == "never", 0, $card-border-width)};
 }
 
-// Some things like card(), p(), inputs, etc. want some margin-bottom by default
-// so you can plop them anywhere and you get spacing between rows. However, now
-// that we have layout utilities like page_fillable(), layout_columns(),
-// layout_sidebar(), etc. where we can control the gap between rows/columns, we
-// need a way to reset those margin-bottom to 0 in those special contexts
-//
-// We do this by adding this class to components (e.g., card())...
-.bslib-mb-spacing {
-  margin-bottom: var(--bslib-mb-spacer);
-}
+// CSS variables that start with --- (3 dashes instead of 2) are private vars
+// that are set by user arguments in the R calls. The CSS properties below only
+// apply to the default value box style; the standard way to theme individual
+// value boxes is with CSS classes on the value box container.
+// :root {
+//   --bslib-value-box-color:;
+//   --bslib-value-box-bg:;
+//   --bslib-value-box-border-color:;
+// }
 
-// ...And this class for layout containers (e.g, layout_columns())
-.bslib-gap-spacing {
-  gap: var(--bslib-mb-spacer);
-  > .bslib-mb-spacing, > .form-group, > p, > pre {
-    margin-bottom: 0;
-  }
-}
-
-// We generally don't want mb spacing for _activated_ fill items
-.html-fill-container > .html-fill-item.bslib-mb-spacing {
-  margin-bottom: 0;
-}
-.tab-content {
-  // Workaround for pkgdown's CSS to make tab-pane all a consistent height
-  // https://github.com/r-lib/pkgdown/blob/956f07/inst/BS5/assets/pkgdown.scss#L342-L355
-  >.tab-pane.html-fill-container {
-    display: none;
+.bslib-value-box {
+  &.card {
+    // .card also sets box-shadow by default, likely to an empty css variable
+    box-shadow: var(--bslib-value-box-shadow);
   }
 
-  // Take precedence over Bootstrap's `display:block` rule
-  >.active.html-fill-container {
-    display: flex;
+  border-width: var(--bslib-value-box-border-width-auto-no, var(--bslib-value-box-border-width-baseline));
+  &.border-auto {
+    border-width: var(--bslib-value-box-border-width-auto-yes, var(--bslib-value-box-border-width-baseline));
   }
 
-  // Another workaround for pkgdown adding extra padding we didn't ask for
-  // https://github.com/r-lib/pkgdown/blob/956f07/inst/BS5/assets/pkgdown.scss#L335-L337
-  &.html-fill-container {
-    padding: 0;
+  &.default {
+    --bslib-value-box-bg-default: var(--bs-card-bg, #{$body-bg});
+    --bslib-value-box-border-color-default: var(--bs-card-border-color, #{$card-border-color});
+    color: var(--bslib-value-box-color);
+    background-color: var(--bslib-value-box-bg, var(--bslib-value-box-bg-default));
+    border-color: var(--bslib-value-box-border-color, var(--bslib-value-box-border-color-default));
   }
-}
 
-.accordion {
-  .accordion-header {
-    @include bootstrap-heading($h2-font-size);
-    margin-bottom: 0;
+  container-name: bslib-value-box;
+  container-type: inline-size;
+
+  .value-box-grid {
+    display: grid;
+    grid-template-areas: "left right";
+    align-items: center;
+    overflow: hidden;
   }
-  .accordion-icon:not(:empty) {
-    margin-right: 0.75rem;
-    display: flex; /* Without flex, the height/alignment is messed up */
-  }
-  .accordion-button:not(.collapsed) {
-    box-shadow: none;
-    // This none overrides the box-shadow applied to
-    // .accordion-button:focus (and, as a result, non-collapsed buttons
-    // won't show a visual indication of focus, #488).
-    // So, repeat the .accordion-button:focus below to give it a
-    // higher priority.
-    &:focus {
-      box-shadow: var(--#{$prefix}accordion-btn-focus-box-shadow);
+
+  .value-box-showcase {
+    height: 100%;
+    max-height: var(---bslib-value-box-showcase-max-h, 100%);
+    &, > .html-fill-item {
+      width: 100%;
     }
+  }
+
+  &[data-full-screen="true"] {
+    .value-box-showcase {
+      max-height: var(---bslib-value-box-showcase-max-h-fs, 100%);
+    }
+  }
+
+  // When value boxes get too small, we lay them out vertically using a container query.
+  // But we don't need this for mobile, where we have one box per row. This media query
+  // is the inverse of `@include media-breakpoint-down(sm)` but that mixin doesn't work
+  // inside nested queries.
+  @media screen and (min-width: breakpoint-max(sm, $grid-breakpoints)) {
+    @container bslib-value-box (max-width: #{$bslib-value-box-horizontal-break-point}) {
+      &:not(.showcase-bottom) .value-box-grid {
+        // override specificity of showcase layouts for small value boxes
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+          "top"
+          "bottom";
+
+        .value-box-showcase {
+          grid-area: top !important;
+        }
+
+        .value-box-area {
+          grid-area: bottom !important;
+          justify-content: end;
+        }
+      }
+    }
+  }
+
+  // Should also be fillable/fill (i.e., d-flex; flex: 1)
+  .value-box-area {
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    font-size: .9rem;
+    font-weight: 500;
+    * {
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+  }
+
+  .value-box-title {
+    @include bootstrap-heading-font-and-spacing($h6-font-size);
+    // add a non-breaking space to ensure it's not 0 height
+    &:empty::after {
+      content: '\00a0 ';
+    }
+  }
+
+  .value-box-value {
+    @include bootstrap-heading-font-and-spacing($h2-font-size);
+    // add a non-breaking space to ensure it's not 0 height
+    &:empty::after {
+      content: '\00a0 ';
+    }
+  }
+
+  // Should also be fillable/fill (i.e., d-flex; flex: 1)
+  .value-box-showcase {
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 1rem;
+
+    .bi, .fa, .fab, .fas, .far {
+      opacity: .85;
+      min-width: 50px;
+      max-width: 125%;
+    }
+    // We set font size because {bsicons}/{fontawesome} both
+    // set height/width to 1em by default (as an inline style)
+     .bi, .fa, .fab, .fas, .far { font-size: 4rem; }
+  }
+
+
+  &.showcase-top-right {
+    .value-box-grid {
+      grid-template-columns: 1fr var(---bslib-value-box-showcase-w, 50%);
+
+      .value-box-showcase {
+        grid-area: right;
+        margin-left: auto;
+        align-self: start;
+        align-items: end;
+        padding-left: 0;
+        padding-bottom: 0;
+      }
+
+      .value-box-area {
+        grid-area: left;
+        align-self: end;
+      }
+    }
+
+    &[data-full-screen="true"] {
+      .value-box-grid {
+        grid-template-columns: auto var(---bslib-value-box-showcase-w-fs, 1fr);
+        > div {
+          align-self: center;
+        }
+      }
+    }
+
+    &:not([data-full-screen="true"]) {
+      .value-box-showcase {
+        margin-top: 0;
+      }
+
+      @container bslib-value-box (max-width: #{$bslib-value-box-horizontal-break-point}) {
+        .value-box-grid {
+          .value-box-showcase { // reset padding on showcase_container
+            padding-left: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  &.showcase-left-center {
+    .value-box-grid {
+      grid-template-columns: var(---bslib-value-box-showcase-w, 30%) auto;
+    }
+
+    &[data-full-screen="true"] {
+      .value-box-grid {
+        grid-template-columns: var(---bslib-value-box-showcase-w-fs, 1fr) auto;
+      }
+    }
+
+    &:not([data-fill-screen="true"]) {
+      .value-box-grid {
+        .value-box-showcase {
+          grid-area: left;
+        }
+
+        .value-box-area {
+          grid-area: right;
+        }
+      }
+    }
+  }
+
+  &.showcase-bottom {
+    .value-box-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr var(---bslib-value-box-showcase-h, auto);
+      grid-template-areas:
+          "top"
+          "bottom";
+      overflow: hidden;
+
+      .value-box-showcase {
+        grid-area: bottom;
+        padding: 0;
+        margin: 0;
+      }
+
+      .value-box-area {
+        grid-area: top;
+      }
+    }
+
+    &[data-full-screen="true"] {
+      .value-box-grid {
+        grid-template-rows: 1fr var(---bslib-value-box-showcase-h-fs, 2fr);
+
+        .value-box-showcase {
+          padding: 1rem;
+        }
+      }
+    }
+  }
+}
+
+@include color-mode(dark) {
+  .bslib-value-box {
+    // Bootstrap doesn't have a dark shadow, but the default isn't quite right
+    --bslib-value-box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 50%);
+  }
+}
+
+/* CSS behind nav_spacer() */
+@mixin nav-spacer() {
+  .nav:not(.nav-hidden) {
+    /* Make sure nav container is flexbox (they aren't in BS3) */
+    display: flex !important;
+    display: -webkit-flex !important;
+    // Logic for horizontal nav (e.g., navset_tab(), etc)
+    &:not(.nav-stacked):not(.flex-column) {
+      float: none !important;
+      > .bslib-nav-spacer {
+        margin-left: auto !important;
+      }
+      /* .form-inline doesn't vertically align in BS3? */
+      > .form-inline {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+    }
+    // Logic for vertical nav (e.g., navset_pill_list())
+    &.nav-stacked {
+      flex-direction: column;
+      -webkit-flex-direction: column;
+      height: 100%;
+      > .bslib-nav-spacer {
+        margin-top: auto !important;
+      }
+    }
+  }
+}
+
+/* BS4+ uses this mixin for configurable breakpoints */
+@if mixin-exists("media-breakpoint-up") {
+  @include media-breakpoint-up(sm) {
+    @include nav-spacer();
+  }
+} @else {
+  /* BS3 default navbar breakpoint */
+  @media (min-width: 768px) {
+    @include nav-spacer();
   }
 }
 
@@ -5639,63 +5910,25 @@ $spacer: 1rem !default;
   }
 }
 
-/* CSS behind nav_spacer() */
-@mixin nav-spacer() {
-  .nav:not(.nav-hidden) {
-    /* Make sure nav container is flexbox (they aren't in BS3) */
-    display: flex !important;
-    display: -webkit-flex !important;
-    // Logic for horizontal nav (e.g., navset_tab(), etc)
-    &:not(.nav-stacked):not(.flex-column) {
-      float: none !important;
-      > .bslib-nav-spacer {
-        margin-left: auto !important;
-      }
-      /* .form-inline doesn't vertically align in BS3? */
-      > .form-inline {
-        margin-top: auto;
-        margin-bottom: auto;
-      }
+.accordion {
+  .accordion-header {
+    @include bootstrap-heading($h2-font-size);
+    margin-bottom: 0;
+  }
+  .accordion-icon:not(:empty) {
+    margin-right: 0.75rem;
+    display: flex; /* Without flex, the height/alignment is messed up */
+  }
+  .accordion-button:not(.collapsed) {
+    box-shadow: none;
+    // This none overrides the box-shadow applied to
+    // .accordion-button:focus (and, as a result, non-collapsed buttons
+    // won't show a visual indication of focus, #488).
+    // So, repeat the .accordion-button:focus below to give it a
+    // higher priority.
+    &:focus {
+      box-shadow: var(--#{$prefix}accordion-btn-focus-box-shadow);
     }
-    // Logic for vertical nav (e.g., navset_pill_list())
-    &.nav-stacked {
-      flex-direction: column;
-      -webkit-flex-direction: column;
-      height: 100%;
-      > .bslib-nav-spacer {
-        margin-top: auto !important;
-      }
-    }
-  }
-}
-
-/* BS4+ uses this mixin for configurable breakpoints */
-@if mixin-exists("media-breakpoint-up") {
-  @include media-breakpoint-up(sm) {
-    @include nav-spacer();
-  }
-} @else {
-  /* BS3 default navbar breakpoint */
-  @media (min-width: 768px) {
-    @include nav-spacer();
-  }
-}
-
-html {
-  height: 100%;
-}
-
-.bslib-page-fill {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: var(--bslib-spacer, 1rem);
-  gap: var(--bslib-spacer, 1rem);
-}
-
-@include media-breakpoint-down(sm) {
-  .bslib-page-fill {
-    height: var(--bslib-page-fill-mobile-height, auto);
   }
 }
 
@@ -5738,6 +5971,24 @@ html {
 .navbar+div>.bslib-sidebar-layout {
   border-top: var(--bslib-sidebar-border);
 }
+html {
+  height: 100%;
+}
+
+.bslib-page-fill {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: var(--bslib-spacer, 1rem);
+  gap: var(--bslib-spacer, 1rem);
+}
+
+@include media-breakpoint-down(sm) {
+  .bslib-page-fill {
+    height: var(--bslib-page-fill-mobile-height, auto);
+  }
+}
+
 $bslib-page-sidebar-title-bg: if($navbar-bg, $navbar-bg, $dark) !default;
 $bslib-page-sidebar-title-color: color-contrast($bslib-page-sidebar-title-bg) !default;
 $bslib-sidebar-padding: $spacer * 1.5 !default;
@@ -6098,254 +6349,6 @@ $bslib-sidebar-column-sidebar: Min(calc(100% - var(--bslib-sidebar-icon-size)), 
         opacity: 1;
       }
     }
-  }
-}
-
-$bslib-value-box-enable-border: "auto" !default; // "auto" | "never" | "always"
-$bslib-value-box-enable-shadow: $enable-shadows !default;
-$bslib-value-box-horizontal-break-point: 300px;
-
-:root {
-  --bslib-value-box-shadow: #{if($bslib-value-box-enable-shadow, #{$box-shadow}, none)};
-  // value box border width is set to "-auto-yes" when the card has .border-auto
-  // or "-auto-no" by default. These cards all use "-baseline", where the border
-  // can be disabled entirely by setting $bslib-value-box-enable-border: "never"
-  // or --bslib-value-box-border-width-baseline: 0. In "auto" mode, the border
-  // is disabled without the border-auto class, or disabled if shadow is enabled.
-  --bslib-value-box-border-width-auto-yes: #{if($bslib-value-box-enable-shadow, 0, var(--bslib-value-box-border-width-baseline))};
-  --bslib-value-box-border-width-auto-no: #{if($bslib-value-box-enable-border == "auto", 0, var(--bslib-value-box-border-width-baseline))};
-  --bslib-value-box-border-width-baseline: #{if($bslib-value-box-enable-border == "never", 0, $card-border-width)};
-}
-
-// CSS variables that start with --- (3 dashes instead of 2) are private vars
-// that are set by user arguments in the R calls. The CSS properties below only
-// apply to the default value box style; the standard way to theme individual
-// value boxes is with CSS classes on the value box container.
-// :root {
-//   --bslib-value-box-color:;
-//   --bslib-value-box-bg:;
-//   --bslib-value-box-border-color:;
-// }
-
-.bslib-value-box {
-  &.card {
-    // .card also sets box-shadow by default, likely to an empty css variable
-    box-shadow: var(--bslib-value-box-shadow);
-  }
-
-  border-width: var(--bslib-value-box-border-width-auto-no, var(--bslib-value-box-border-width-baseline));
-  &.border-auto {
-    border-width: var(--bslib-value-box-border-width-auto-yes, var(--bslib-value-box-border-width-baseline));
-  }
-
-  &.default {
-    --bslib-value-box-bg-default: var(--bs-card-bg, #{$body-bg});
-    --bslib-value-box-border-color-default: var(--bs-card-border-color, #{$card-border-color});
-    color: var(--bslib-value-box-color);
-    background-color: var(--bslib-value-box-bg, var(--bslib-value-box-bg-default));
-    border-color: var(--bslib-value-box-border-color, var(--bslib-value-box-border-color-default));
-  }
-
-  container-name: bslib-value-box;
-  container-type: inline-size;
-
-  .value-box-grid {
-    display: grid;
-    grid-template-areas: "left right";
-    align-items: center;
-    overflow: hidden;
-  }
-
-  .value-box-showcase {
-    height: 100%;
-    max-height: var(---bslib-value-box-showcase-max-h, 100%);
-    &, > .html-fill-item {
-      width: 100%;
-    }
-  }
-
-  &[data-full-screen="true"] {
-    .value-box-showcase {
-      max-height: var(---bslib-value-box-showcase-max-h-fs, 100%);
-    }
-  }
-
-  // When value boxes get too small, we lay them out vertically using a container query.
-  // But we don't need this for mobile, where we have one box per row. This media query
-  // is the inverse of `@include media-breakpoint-down(sm)` but that mixin doesn't work
-  // inside nested queries.
-  @media screen and (min-width: breakpoint-max(sm, $grid-breakpoints)) {
-    @container bslib-value-box (max-width: #{$bslib-value-box-horizontal-break-point}) {
-      &:not(.showcase-bottom) .value-box-grid {
-        // override specificity of showcase layouts for small value boxes
-        grid-template-columns: 1fr !important;
-        grid-template-rows: auto auto;
-        grid-template-areas:
-          "top"
-          "bottom";
-
-        .value-box-showcase {
-          grid-area: top !important;
-        }
-
-        .value-box-area {
-          grid-area: bottom !important;
-          justify-content: end;
-        }
-      }
-    }
-  }
-
-  // Should also be fillable/fill (i.e., d-flex; flex: 1)
-  .value-box-area {
-    justify-content: center;
-    padding: 1.5rem 1rem;
-    font-size: .9rem;
-    font-weight: 500;
-    * {
-      margin-bottom: 0;
-      margin-top: 0;
-    }
-  }
-
-  .value-box-title {
-    @include bootstrap-heading-font-and-spacing($h6-font-size);
-    // add a non-breaking space to ensure it's not 0 height
-    &:empty::after {
-      content: '\00a0 ';
-    }
-  }
-
-  .value-box-value {
-    @include bootstrap-heading-font-and-spacing($h2-font-size);
-    // add a non-breaking space to ensure it's not 0 height
-    &:empty::after {
-      content: '\00a0 ';
-    }
-  }
-
-  // Should also be fillable/fill (i.e., d-flex; flex: 1)
-  .value-box-showcase {
-    align-items: center;
-    justify-content: center;
-    margin-top: auto;
-    margin-bottom: auto;
-    padding: 1rem;
-
-    .bi, .fa, .fab, .fas, .far {
-      opacity: .85;
-      min-width: 50px;
-      max-width: 125%;
-    }
-    // We set font size because {bsicons}/{fontawesome} both
-    // set height/width to 1em by default (as an inline style)
-     .bi, .fa, .fab, .fas, .far { font-size: 4rem; }
-  }
-
-
-  &.showcase-top-right {
-    .value-box-grid {
-      grid-template-columns: 1fr var(---bslib-value-box-showcase-w, 50%);
-
-      .value-box-showcase {
-        grid-area: right;
-        margin-left: auto;
-        align-self: start;
-        align-items: end;
-        padding-left: 0;
-        padding-bottom: 0;
-      }
-
-      .value-box-area {
-        grid-area: left;
-        align-self: end;
-      }
-    }
-
-    &[data-full-screen="true"] {
-      .value-box-grid {
-        grid-template-columns: auto var(---bslib-value-box-showcase-w-fs, 1fr);
-        > div {
-          align-self: center;
-        }
-      }
-    }
-
-    &:not([data-full-screen="true"]) {
-      .value-box-showcase {
-        margin-top: 0;
-      }
-
-      @container bslib-value-box (max-width: #{$bslib-value-box-horizontal-break-point}) {
-        .value-box-grid {
-          .value-box-showcase { // reset padding on showcase_container
-            padding-left: 1rem;
-          }
-        }
-      }
-    }
-  }
-
-  &.showcase-left-center {
-    .value-box-grid {
-      grid-template-columns: var(---bslib-value-box-showcase-w, 30%) auto;
-    }
-
-    &[data-full-screen="true"] {
-      .value-box-grid {
-        grid-template-columns: var(---bslib-value-box-showcase-w-fs, 1fr) auto;
-      }
-    }
-
-    &:not([data-fill-screen="true"]) {
-      .value-box-grid {
-        .value-box-showcase {
-          grid-area: left;
-        }
-
-        .value-box-area {
-          grid-area: right;
-        }
-      }
-    }
-  }
-
-  &.showcase-bottom {
-    .value-box-grid {
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr var(---bslib-value-box-showcase-h, auto);
-      grid-template-areas:
-          "top"
-          "bottom";
-      overflow: hidden;
-
-      .value-box-showcase {
-        grid-area: bottom;
-        padding: 0;
-        margin: 0;
-      }
-
-      .value-box-area {
-        grid-area: top;
-      }
-    }
-
-    &[data-full-screen="true"] {
-      .value-box-grid {
-        grid-template-rows: 1fr var(---bslib-value-box-showcase-h-fs, 2fr);
-
-        .value-box-showcase {
-          padding: 1rem;
-        }
-      }
-    }
-  }
-}
-
-@include color-mode(dark) {
-  .bslib-value-box {
-    // Bootstrap doesn't have a dark shadow, but the default isn't quite right
-    --bslib-value-box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 50%);
   }
 }
 
@@ -9813,8 +9816,7 @@ details > summary > p:only-child {
 }
 
 // codeCopy
-pre.sourceCode,
-code.sourceCode {
+div.code-copy-outer-scaffold {
   position: relative;
 }
 
@@ -10293,6 +10295,16 @@ $mermaid-node-fg-color: $primary !default;
   figcaption {
     color: #666;
   }
+}
+
+// light and dark content
+
+body.quarto-light .dark-content {
+  display: none !important;
+}
+
+body.quarto-dark .light-content {
+  display: none !important;
 }
 
 .code-copy-button {
@@ -10975,7 +10987,11 @@ h1.title {
   margin-top: 0;
 }
 
-main.content > section:first-of-type > h2:first-child {
+main.content > p:has(+ section) {
+  margin-bottom: 2rem;
+}
+
+main.content > section:first-of-type > h2:nth-child(1) {
   margin-top: 0;
 }
 
@@ -11068,6 +11084,12 @@ aside,
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   display: block;
+}
+
+// Fix for light/dark renderings in column-margin: when light-content is hidden
+// in dark mode, remove padding-top from dark-content so it aligns correctly
+body.quarto-dark .column-margin.column-container > .light-content + .dark-content {
+  padding-top: 0;
 }
 
 .column-margin.column-container > *.collapse:not(.show) {
@@ -11217,7 +11239,8 @@ pre.sourceCode {
     border: none;
   }
   font-size: $code-block-font-size;
-  overflow: visible !important;
+  overflow-y: visible !important;
+  // overflow-y: auto !important;
   @if $code-block-bg {
     padding: $code-block-bg-padding;
   }
@@ -11231,6 +11254,7 @@ pre.sourceCode > code.sourceCode {
 
 div.sourceCode {
   overflow-y: hidden;
+  // position: relative;
 }
 
 .callout div.sourceCode {
@@ -11261,6 +11285,26 @@ pre {
   border: initial;
 }
 
+p code.sourceCode,
+li code.sourceCode,
+td code.sourceCode {
+  $calculated-bg: if(
+    variable-exists(code-bg),
+    if(
+      $code-bg == $gray-100 and variable-exists(code-block-bg-color),
+      $code-block-bg-color,
+      $code-bg
+    ),
+    null
+  );
+
+  @if variable-exists(mono-background-color) {
+    background-color: $mono-background-color;
+  } @else if variable-exists(calculated-bg) {
+    background-color: $calculated-bg;
+  }
+}
+
 // Maps the pandoc 'monobackgroundcolor' to bootstrap
 // Note this only targets code outside of sourceCode blocks
 @if variable-exists(mono-background-color) {
@@ -11280,14 +11324,23 @@ pre code:not(.sourceCode) {
   background-color: initial;
 }
 
-// Default padding if background is set
 p code:not(.sourceCode),
 li code:not(.sourceCode),
 td code:not(.sourceCode) {
+  $calculated-bg: if(
+    variable-exists(code-bg),
+    if(
+      $code-bg == $gray-100 and variable-exists(code-block-bg-color),
+      $code-block-bg-color,
+      $code-bg
+    ),
+    null
+  );
+
   @if variable-exists(mono-background-color) {
     background-color: $mono-background-color;
-  } @else if variable-exists(code-bg) {
-    background-color: $code-bg;
+  } @else if variable-exists(calculated-bg) {
+    background-color: $calculated-bg;
   }
 
   @if variable-exists(code-padding) {
@@ -11726,6 +11779,8 @@ kbd,
 .callout.callout-style-simple .callout-body {
   font-size: 0.9rem;
   font-weight: 400;
+  margin-bottom: -0.4em;
+  margin-top: 0.5em;
 }
 
 .callout.callout-style-default .callout-body {
@@ -11742,6 +11797,15 @@ kbd,
   margin-bottom: -0.2em;
 }
 
+.callout.callout-empty-content > .callout-header {
+  margin-bottom: 0em;
+  border-bottom-right-radius: add($border-radius, -1px);
+}
+
+.callout > .callout-header.collapsed {
+  border-bottom-right-radius: add($border-radius, -1px);
+}
+
 .callout.callout-style-simple > div.callout-header {
   border-bottom: none;
   font-size: 0.9rem;
@@ -11756,6 +11820,7 @@ kbd,
   font-size: 0.9rem;
   padding-left: 0.5em;
   padding-right: 0.5em;
+  border-top-right-radius: add($border-radius, -1px);
 }
 
 .callout.callout-style-default .callout-body {
@@ -11793,6 +11858,11 @@ kbd,
 .callout:not(.callout-titled) .callout-body > :last-child,
 .callout:not(.callout-titled) .callout-body > div > :last-child {
   margin-bottom: 0.2rem;
+}
+
+.callout.callout-style-simple:not(.callout-titled) .callout-body > :last-child,
+.callout.callout-style-simple:not(.callout-titled) .callout-body > div > :last-child {
+  margin-bottom: 0.5em;
 }
 
 $code-block-border-left-color: $table-border-color !default;
@@ -12521,6 +12591,18 @@ a {
   text-decoration: $link-decoration;
 }
 
+// screen-reader-only, cf https://github.com/quarto-dev/quarto-cli/issues/726#issuecomment-1112486100
+.screen-reader-only {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  border: 0;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  width: 1px;
+}
+
 
   $font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
   /*! quarto-variables-start */
@@ -12799,7 +12881,7 @@ main.quarto-banner-title-block > section:first-child > h4 {
 h1, h2, h3, h4, h5, h6 {
   letter-spacing: 1px;
   font-weight: 500;
-  color: $ember;
+  color: $teal;
 }
 
 h3 {
@@ -13007,7 +13089,7 @@ div.quarto-about-jolla .about-link {
   transition: transform 0.2s;
 }
 .panorama-photo:hover {
-  transform: scale(1.20);  /* zoom on hover */
+  transform: scale(1.009);  /* zoom on hover */
 }
 
 
@@ -13118,7 +13200,7 @@ div.quarto-about-jolla .about-link {
 
 /* Section “cards” */
 .cv-section {
-  background-color: rgba(248, 248, 255, 0.9);
+  background-color: rgba(239, 247, 247, 0.1);
   border-radius: 12px;
   padding: 1.4rem 1.6rem;
   margin-bottom: 1.1rem;
@@ -13157,9 +13239,6 @@ div.quarto-about-jolla .about-link {
 }
 
 
-.navbar {
-  margin-bottom: 0 !important;
-}
 
 main.content {
   margin-left: auto;
@@ -13247,47 +13326,852 @@ li.no-bullet {
 }
 
 
-// index page tile sets
-.tile-logos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18px, 5fr));
+
+
+/* scroll effect  */
+.scroll-down-wrap {
+  display: flex;
   justify-content: center;
-  /*gap: 1rem;    bigger gap between logos */
-  
-  column-gap: 10.5rem;   /* smaller space between columns */
-  row-gap: 10rem;        /* larger space between rows */
-  border-radius: 8px;
-  //box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  padding-inline: 0.5rem;
+  align-items: center;
+  margin: 1rem 0 2rem 0;
 }
 
-.tile-logos a {
-  display: inline-block;
+.scroll-down-gif {
+  width: 150px;
+  /* max-width: 180vw; */
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  cursor: pointer;
 }
 
-.tile-logos img {
-   width: clamp(250px, 12vw, 120px);
-  height: clamp(250px, 12vw, 120px);
+.scroll-down-gif:hover {
+  transform: scale(1.15);
+  opacity: 0.9;
+}
+
+
+/* scroll down -not used */
+.scroll-reveal summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.scroll-reveal summary::-webkit-details-marker {
+  display: none;
+}
+
+.reveal-content {
+  animation: fadeDown 0.6s ease-out;
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+/* photo grid version 2*/
+
+.photo-grid2 a {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.photo-grid2 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 2em auto;
+  max-width: 1200px;
+  justify-items: center;
+  align-items: center;
+}
+.photo-grid2 img:hover {
+  transform: scale(1.05);
+}
+
+.photo-grid2 img {
   transition: transform 0.2s ease, filter 0.2s ease;
   filter: grayscale(30%) brightness(0.9);  /* muted default */
 }
 
-/* hover: zoom + colorize */
+.photo-grid2 a:hover img {
+  transform: scale(1.03);
+  filter: grayscale(0%) brightness(1.1) saturate(1.2);
+}
+
+/* photo grid photos modified to be envenly shaped*/
+.photo-item {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.photo-item img {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.photo-item img:hover {
+  transform: scale(1.05);
+}
+
+
+// index page tile sets
+.tile-logos a {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.tile-logos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 2em auto;
+  max-width: 1200px;
+  justify-items: center;
+  align-items: center;
+}
+.tile-logos img:hover {
+  transform: scale(1.05);
+}
+
+.tile-logos img {
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: grayscale(30%) brightness(0.9);  /* muted default */
+}
+
 .tile-logos a:hover img {
   transform: scale(1.03);
   filter: grayscale(0%) brightness(1.1) saturate(1.2);
 }
 
-@media (max-width: 600px) {
-  .tile-logos {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    gap: 0.4rem;
-    overflow-x: auto;
+
+
+
+
+
+
+/*-- experience:rules- stored in includes/_skills.qmd --*/
+
+.skills-section {
+  max-width: 900px;
+  margin: 1rem auto;
+  padding: 1.2rem;
+  border-radius: 1rem;
+  background: transparent;
+}
+
+.skills-heading {
+  margin-bottom: 1.0rem;
+}
+
+.skills-heading h2 {  /* add <h2></h2> to include/_skills.qmd */
+  color: $teal; 
+  margin-bottom: 0.4rem;
+}
+
+.skills-heading p {
+  color: #000000;
+  margin-bottom: 0;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem 2rem;
+}
+
+.skill-item {
+  min-width: 0;
+}
+
+.skill-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #26332d;
+}
+
+.skill-track {
+  height: 0.6rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #dce7e1;
+}
+
+.skill-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #FEFFD9, #41B7C4);
+}
+
+@media (max-width: 700px) {
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*-- end of experience:rules- stored in includes/_skills.qmd --*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*-- EDUCATION TIMELINE RULES --*/
+
+.education-zigzag {
+  --edu-ink: $ember;
+  --edu-muted: #5d6b65;
+  --edu-track: #41B7C4;
+
+  max-width: 1150px;
+  margin: 0.5rem auto;
+  padding: 0.25rem 0.5rem;
+}
+
+.education-zigzag-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  align-items: center;
+}
+
+/* One continuous fixed-color timeline behind every degree */
+.education-zigzag-track::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  right: 5%;
+  left: 5%;
+  height: 0.55rem;
+  transform: translateY(-50%);
+  border: 1px solid rgba(38, 51, 45, 0.35);
+  border-radius: 999px;
+  background: var(--edu-track);
+  box-shadow: 0 2px 5px rgba(38, 51, 45, 0.12);
+}
+
+.edu-zigzag-item {
+  /* Default values; overwritten by degree classes */
+  --edu-color: #41B7C4;
+  --edu-dark: #267b85;
+  --edu-light: #e4f8fa;
+
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: 105px 32px 105px;
+  justify-items: center;
+  min-width: 0;
+  text-align: center;
+}
+
+/* Fixed degree-specific palettes */
+.edu-bsc {
+  --edu-color: #F2B134;
+  --edu-dark: #A56800;
+  --edu-light: #FFF3D6;
+}
+
+.edu-msc {
+  --edu-color: #2F80ED;
+  --edu-dark: #1455A6;
+  --edu-light: #DCEBFF;
+}
+
+.edu-phd {
+  --edu-color: #8A6AD9;
+  --edu-dark: #59429A;
+  --edu-light: #EEE8FF;
+}
+
+/* Circle marking the specific degree on the central timeline */
+.edu-node {
+  position: relative;
+  z-index: 3;
+  grid-row: 2;
+  align-self: center;
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  background: var(--edu-color);
+  box-shadow: 0 0 0 2px var(--edu-color);
+}
+
+/* Year circle */
+.edu-date {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid var(--edu-color);
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--edu-dark);
+  box-shadow: 0 0 10px rgba(38, 51, 45, 0.12);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Connector between the date circle and the central node */
+.edu-stem {
+  position: absolute;
+  z-index: 2;
+  width: 3px;
+  height: 2rem;
+  background: var(--edu-color);
+}
+
+/* Date above, text below */
+.edu-top .edu-date {
+  grid-row: 1;
+  align-self: end;
+  margin-bottom: 0.35rem;
+}
+
+.edu-top .edu-stem {
+  top: 5.45rem;
+}
+
+.edu-top .edu-details {
+  grid-row: 3;
+  align-self: start;
+  margin-top: 0.6rem;
+}
+
+/* Text above, date below */
+.edu-bottom .edu-details {
+  grid-row: 1;
+  align-self: end;
+  margin-bottom: 0.3rem;
+}
+
+.edu-bottom .edu-stem {
+  bottom: 5.45rem;
+}
+
+.edu-bottom .edu-date {
+  grid-row: 3;
+  align-self: start;
+  margin-top: 0.35rem;
+}
+
+/* Degree text: retain original education timeline typography */
+.edu-details {
+  width: 100%;
+  max-width: 200px;
+  padding: 0.8rem 0.5rem;
+}
+
+.edu-details h3 {
+  margin: 0 0 0.45rem;
+  color: var(--edu-dark);
+  font-size: 0.6rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.edu-institution {
+  margin: 0 0 0.35rem;
+  color: var(--edu-dark);
+  font-size: 0.5rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.edu-advisor {
+  margin: 0;
+  color: var(--edu-muted);
+  font-size: 0.5rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Medium widths */
+@media (max-width: 850px) {
+  .edu-zigzag-item {
+    grid-template-rows: 115px 32px 115px;
   }
 
+  .edu-date {
+    width: 2.7rem;
+    height: 2.7rem;
+    font-size: 0.82rem;
+  }
+
+  .edu-top .edu-stem {
+    top: 5.95rem;
+  }
+
+  .edu-bottom .edu-stem {
+    bottom: 5.95rem;
+  }
+
+  .edu-details h3 {
+    font-size: 0.98rem;
+  }
+
+  .edu-institution,
+  .edu-advisor {
+    font-size: 0.52rem;
+  }
+}
+
+/* Phones: vertical timeline, always year then degree details */
+@media (max-width: 680px) {
+  .education-zigzag-track {
+    display: block;
+    margin-left: 1.4rem;
+    padding-left: 2.1rem;
+    border-left: 3px solid var(--edu-track);
+  }
+
+  .education-zigzag-track::before,
+  .edu-node,
+  .edu-stem {
+    display: none;
+  }
+
+  .edu-zigzag-item,
+  .edu-zigzag-item.edu-top,
+  .edu-zigzag-item.edu-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 0;
+    margin-bottom: 1.8rem;
+    padding: 0 0 0 0.5rem;
+    text-align: left;
+  }
+
+  .edu-date {
+    order: 1;
+    position: relative;
+    display: inline-grid;
+    width: auto;
+    height: auto;
+    margin: 0 0 0.6rem -3.1rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+  }
+
+  .edu-date::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -1.78rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    transform: translateY(-50%);
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+    background: var(--edu-color);
+    box-shadow: 0 0 0 2px var(--edu-color);
+  }
+
+  .edu-details,
+  .edu-top .edu-details,
+  .edu-bottom .edu-details {
+    order: 2;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .edu-details h3 {
+    font-size: 0.9rem;
+  }
+
+  .edu-institution,
+  .edu-advisor {
+    font-size: 0.78rem;
+  }
+/*-- END EDUCATION TIMELINE RULES --*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*-- NEWS scss:rules --*/
+
+/* Gradient News Timeline */
+.news-gradient-timeline {
+ --amber: #D68A00;
+  --amber-text: #7A4A00;
+
+  --blue: #1769C2;
+  --blue-text: #0B3D78;
+
+  --purple: #7750B5;
+  --purple-text: #482878;
+
+  --muted: #4F5D57;
+
+  max-width: 1100px;
+  margin: 0.5rem auto;
+  padding: 0.25rem 0.5rem;
+}
+
+.news-gradient-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  align-items: center;
+}
+
+/* One continuous gradient timeline behind all three events */
+.news-gradient-track::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  right: 4%;
+  left: 4%;
+  height: 0.9rem;
+  transform: translateY(-50%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--amber) 0%,
+    var(--blue) 50%,
+    var(--purple) 100%
+  );
+  box-shadow: 0 2px 10px rgba(77, 163, 255, 0.25);
+}
+
+/* Arrow point at the right end */
+.news-gradient-track::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  right: 3.5%;
+  width: 1.35rem;
+  height: 1.35rem;
+  transform: translateY(-50%) rotate(45deg);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-right: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0.18rem;
+  background: var(--purple);
+}
+
+.news-gradient-item {
+  --event-color: var(--blue);
+  --event-text: var(--blue-text);
+
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: 80px 32px 80px;
+  justify-items: center;
+  min-width: 0;
+  text-align: center;
+}
+
+/* Each item uses the color at its approximate gradient position */
+.news-amber {
+  --event-color: var(--amber);
+  --event-text: var(--amber-text);
+}
+
+.news-blue {
+  --event-color: var(--blue);
+  --event-text: var(--blue-text);
+}
+
+.news-purple {
+  --event-color: var(--purple);
+  --event-text: var(--purple-text);
+}
+
+/* Date circles */
+.news-year {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid var(--event-color);
+  border-radius: 50%;
+  background: #fdfdfd;
+  color: var(--event-text);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--event-color) 38%, transparent);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* Small point on the shared timeline */
+.news-node {
+  position: relative;
+  z-index: 3;
+  grid-row: 2;
+  align-self: center;
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  background: var(--event-color);
+  box-shadow: 0 0 0 2px var(--event-color);
+}
+
+/* Connecting line between circle and node */
+.news-stem {
+  position: absolute;
+  z-index: 2;
+  width: 3px;
+  height: 1.8rem;
+  background: var(--event-color);
+}
+
+/* Date above, content below */
+.news-top .news-year {
+  grid-row: 1;
+  align-self: end;
+}
+
+.news-top .news-stem {
+  top: 3.9rem;
+}
+
+.news-top .news-content {
+  grid-row: 3;
+  align-self: start;
+}
+
+/* Content above, date below */
+.news-bottom .news-content {
+  grid-row: 1;
+  align-self: end;
+}
+
+.news-bottom .news-stem {
+  bottom: 3.9rem;
+}
+
+.news-bottom .news-year {
+  grid-row: 3;
+  align-self: start;
+}
+
+/* News copy */
+.news-content {
+  width: 100%;
+  max-width: 225px;
+  padding: 0.3rem 0.5rem;
+}
+
+.news-content h3 {
+  margin: 0 0 0.32rem;
+  color: var(--event-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.news-content h3 a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.news-content h3 a:hover {
+  opacity: 0.78;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.news-content h3 a:focus-visible {
+  outline: 2px solid var(--event-color);
+  outline-offset: 0.2rem;
+  border-radius: 0.15rem;
+}
+
+.news-content p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.58rem;
+  line-height: 1.4;
+}
+
+/* Tablet layout */
+@media (max-width: 850px) {
+  .news-gradient-item {
+    grid-template-rows: 92px 32px 92px;
+  }
+
+  .news-year {
+    width: 2.7rem;
+    height: 2.7rem;
+    font-size: 0.76rem;
+  }
+
+  .news-top .news-stem {
+    top: 4.15rem;
+  }
+
+  .news-bottom .news-stem {
+    bottom: 4.15rem;
+  }
+
+  .news-content h3 {
+    font-size: 0.68rem;
+  }
+}
+
+/* Mobile: accessible vertical timeline */
+@media (max-width: 680px) {
+  .news-gradient-track {
+    display: block;
+    margin-left: 1.4rem;
+    padding-left: 2.1rem;
+    border-left: 3px solid transparent;
+    border-image: linear-gradient(
+      to bottom,
+      var(--amber),
+      var(--blue),
+      var(--purple)
+    ) 1;
+  }
+
+  .news-gradient-track::before,
+  .news-gradient-track::after,
+  .news-node,
+  .news-stem {
+    display: none;
+  }
+
+  .news-gradient-item,
+  .news-gradient-item.news-top,
+  .news-gradient-item.news-bottom {
+    display: block;
+    min-height: 0;
+    margin-bottom: 1.8rem;
+    text-align: left;
+  }
+
+  .news-year {
+    display: inline-grid;
+    width: auto;
+    height: auto;
+    margin: 0 0 0.6rem -3.1rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+  }
+
+  .news-year::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -1.78rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    transform: translateY(-50%);
+    border: 3px solid #1b1b1b;
+    border-radius: 50%;
+    background: var(--event-color);
+    box-shadow: 0 0 0 2px var(--event-color);
+  }
+
+  .news-content {
+    max-width: none;
+    padding: 0;
+  }
+
+  .news-content h3 {
+    font-size: 0.9rem;
+  }
+
+  .news-content p {
+    font-size: 0.78rem;
+  }
+}
+
+/* Prevent text from touching or overlapping the timeline */
+.news-gradient-item {
+  grid-template-rows: 105px 32px 105px;
+}
+
+/* Text above the timeline: keep it clear of the track */
+.news-bottom .news-content {
+  align-self: end;
+  margin-bottom: 1.25rem;
+}
+
+/* Text below the timeline: keep it clear of the track */
+.news-top .news-content {
+  align-self: start;
+  margin-top: 1.25rem;
+}
+
+/* Date circles: retain an even gap from the center track */
+.news-top .news-year {
+  margin-bottom: 0.35rem;
+}
+
+.news-bottom .news-year {
+  margin-top: 0.35rem;
+}
+
+/* Reposition the connector lines for the taller grid */
+.news-top .news-stem {
+  top: 5.45rem;
+  height: 2rem;
+}
+
+.news-bottom .news-stem {
+  bottom: 5.45rem;
+  height: 2rem;
+}
+
+/*-- end of NEWS scss:rules --*/
 
 // quarto-scss-analysis-annotation { "origin": null }

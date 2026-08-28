@@ -16,13 +16,13 @@ lightbox: auto
 ::: {.column-body}
 ::::: {layout="[ 30, 70 ]"}
 ::: {#first-column}
-![](img/profile_circle.png){.about-photo width=30% .lightbox}
+![](img/profile_circle.png) <!-- {.about-photo width=30% .lightbox} -->
 :::
 ::: {#second-column}
 ::: {.cv-section}
 [A little bit about me]{style="font-size: 1.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"}
 
-[I’m a plant biologist and forest genomicist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I work at the intersection of ecological and evolutionary genomics, climate science, and data science, using large genomic and environmental datasets to understand – and hopefully help guide – the future of forests.]{style="font-size: 1.3rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"}
+[I’m a plant biologist and forest genomicist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I work at the intersection of ecological and evolutionary genomics, climate science, and data science, using large genomic and environmental datasets to understand – and hopefully help guide – the future of forests.]{style="font-size: 0.9rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"}
 :::
 :::
 :::::

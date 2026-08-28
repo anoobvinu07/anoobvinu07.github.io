@@ -44,12 +44,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-4bd490e9cd57f2396cbd188312c0541c.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-b1b280090cee5c0cc73ae863f5e15cae.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-8fe62eed558682bd8a90ef791bbbc28a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-b1b280090cee5c0cc73ae863f5e15cae.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
-<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46553a6d91eacb3adf9630f9ab434dc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-c15f688b0022e8ee7110413c559e46a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-46553a6d91eacb3adf9630f9ab434dc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -264,20 +261,28 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./research/research.html"> 
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Research/Research.html"> 
 <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./photos/photos.html"> 
+    <a class="nav-link" href="./Notebook/Notebook.html"> 
+<span class="menu-text">Notebook</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Gallery/Gallery.html"> 
 <span class="menu-text">Gallery</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./cv/cv.html"> 
-<span class="menu-text">CV</span></a>
+    <a class="nav-link" href="./News/News.html"> 
+<span class="menu-text">News</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./notebook/notebook.html"> 
-<span class="menu-text">Notebook</span></a>
+    <a class="nav-link" href="./CV/CV.html"> 
+<span class="menu-text">CV</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -302,13 +307,13 @@ ul.task-list li input[type="checkbox"] {
 <div class="column-body">
 <div class="quarto-layout-panel" data-layout="[ 30, 70 ]">
 <div class="quarto-layout-row">
-<div id="first-column" class="quarto-layout-cell" style="flex-basis: 30.0%;justify-content: center;">
-<p><a href="img/profile_circle.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="img/profile_circle.png" class="about-photo img-fluid"></a></p>
+<div id="first-column" class="quarto-layout-cell" style="flex-basis: 30.0%;justify-content: flex-start;">
+<p><img src="img/profile_circle.png" class="img-fluid"> <!-- {.about-photo width=30% .lightbox} --></p>
 </div>
 <div id="second-column" class="quarto-layout-cell" style="flex-basis: 70.0%;justify-content: flex-start;">
 <div class="cv-section">
 <p><span style="font-size: 1.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;">A little bit about me</span></p>
-<p><span style="font-size: 1.3rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;">I’m a plant biologist and forest genomicist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I work at the intersection of ecological and evolutionary genomics, climate science, and data science, using large genomic and environmental datasets to understand – and hopefully help guide – the future of forests.</span></p>
+<p><span style="font-size: 0.9rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;">I’m a plant biologist and forest genomicist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I work at the intersection of ecological and evolutionary genomics, climate science, and data science, using large genomic and environmental datasets to understand – and hopefully help guide – the future of forests.</span></p>
 </div>
 </div>
 </div>
@@ -923,38 +928,6 @@ ul.task-list li input[type="checkbox"] {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
-(function() {
-  let previousOnload = window.onload;
-  window.onload = () => {
-    if (previousOnload) {
-      previousOnload();
-    }
-    lightboxQuarto.on('slide_before_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      const href = trigger.getAttribute('href');
-      if (href !== null) {
-        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-        if (imgEl !== null) {
-          const srcAttr = imgEl.getAttribute("src");
-          if (srcAttr && srcAttr.startsWith("data:")) {
-            slideConfig.href = srcAttr;
-          }
-        }
-      } 
-    });
-  
-    lightboxQuarto.on('slide_after_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(slideNode);
-      }
-    });
-  
-  };
-  
-})();
-          </script>
 
 
 

@@ -709,11 +709,12 @@ li.no-bullet {
 
 
 
-/*-- education:rules- stored in includes/_education.qmd --*/
+/*-- EDUCATION TIMELINE RULES --*/
 
 .education-zigzag {
-  --edu-ink: $ember;
-  --edu-muted: #5d6b65;
+  --edu-ink: #F2F5F4;
+  --edu-muted: #B8C3BE;
+  --edu-track: #E87687;
 
   max-width: 1150px;
   margin: 0.5rem auto;
@@ -721,64 +722,82 @@ li.no-bullet {
 }
 
 .education-zigzag-track {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
   align-items: center;
-  gap: 0.8rem;
+}
+
+/* One continuous fixed-color timeline behind every degree */
+.education-zigzag-track::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  right: 5%;
+  left: 5%;
+  height: 0.55rem;
+  transform: translateY(-50%);
+  border: 1px solid rgba(194, 250, 255, 0.45);
+  border-radius: 999px;
+  background: var(--edu-track);
+  box-shadow:
+    0 0 8px rgba(85, 214, 230, 0.55),
+    0 2px 5px rgba(0, 0, 0, 0.45);
 }
 
 .edu-zigzag-item {
-  /* Default palette; overridden by degree-specific classes */
+  /* Default values; overwritten by degree classes */
   --edu-color: #41B7C4;
   --edu-dark: #267b85;
   --edu-light: #e4f8fa;
 
   position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-rows: 135px 54px 135px;
+  grid-template-rows: 105px 32px 105px;
   justify-items: center;
   min-width: 0;
   text-align: center;
 }
 
-/* Degree-specific palettes */
+/* Fixed degree-specific palettes: optimized for black backgrounds */
 .edu-bsc {
-  --edu-color: #FFD166;  /* bright amber yellow */
-  --edu-dark: #FFF1C7;   /* pale gold text */
-  --edu-light: #5C4300;  /* optional dark-gold card fill */
+  --edu-color: #FFD166;  /* Bright amber-yellow: node, circle border, stem */
+  --edu-dark: #FFF1C7;   /* Pale gold: degree and affiliation text */
+  --edu-light: #5C4300;  /* Deep gold: optional card/background color */
 }
 
 .edu-msc {
-  --edu-color: #4DA3FF;  /* vivid sky blue */
-  --edu-dark: #D9ECFF;   /* pale blue text */
-  --edu-light: #083B73;  /* optional deep-blue card fill */
+  --edu-color: #4DA3FF;  /* Bright sky blue */
+  --edu-dark: #D9ECFF;   /* Pale blue text */
+  --edu-light: #083B73;  /* Deep blue: optional card/background color */
 }
 
 .edu-phd {
-  --edu-color: #B58CFF;  /* bright lavender purple */
-  --edu-dark: #EEE3FF;   /* pale lavender text */
-  --edu-light: #3E1D70;  /* optional deep-purple card fill */
+  --edu-color: #B58CFF;  /* Bright lavender-purple */
+  --edu-dark: #EEE3FF;   /* Pale lavender text */
+  --edu-light: #3E1D70;  /* Deep purple: optional card/background color */
 }
 
-/* Timeline bars */
-.edu-arrow {
+/* Circle marking the specific degree on the central timeline */
+.edu-node {
   position: relative;
-  z-index: 2;
+  z-index: 3;
+  grid-row: 2;
   align-self: center;
-  width: 100%;
-  height: 0.9rem;
-  border: 2px solid var(--edu-dark);
-  border-radius: 999px;
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 3px solid #141414;
+  border-radius: 50%;
   background: var(--edu-color);
-  box-shadow: 0 2px 5px rgba(38, 51, 45, 0.14);
+  box-shadow:
+    0 0 0 2px var(--edu-color),
+    0 0 8px color-mix(in srgb, var(--edu-color) 55%, transparent);
 }
 
-/* Keep disabled unless you decide to restore arrowheads */
-.edu-arrow::after {
-  display: none;
-}
-
-/* Year circles */
+/* Year circle */
 .edu-date {
   position: relative;
   z-index: 3;
@@ -788,61 +807,57 @@ li.no-bullet {
   height: 3rem;
   border: 3px solid var(--edu-color);
   border-radius: 50%;
-  background: transparent;
+  background: #141414;
   color: var(--edu-dark);
-  box-shadow: 0 3px 10px rgba(38, 51, 45, 0.12);
+  box-shadow: 0 0 10px rgba(38, 51, 45, 0.12);
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-/* Vertical connector */
+/* Connector between the date circle and the central node */
 .edu-stem {
   position: absolute;
-  z-index: 0;
+  z-index: 2;
   width: 3px;
-  height: 3.15rem;
+  height: 2rem;
   background: var(--edu-color);
 }
 
-/* Items with the date above the timeline */
+/* Date above, text below */
 .edu-top .edu-date {
   grid-row: 1;
   align-self: end;
+  margin-bottom: 0.35rem;
 }
 
 .edu-top .edu-stem {
-  top: 6.15rem;
-}
-
-.edu-top .edu-arrow {
-  grid-row: 2;
+  top: 5.45rem;
 }
 
 .edu-top .edu-details {
   grid-row: 3;
   align-self: start;
+  margin-top: 0.6rem;
 }
 
-/* Items with the date below the timeline */
+/* Text above, date below */
 .edu-bottom .edu-details {
   grid-row: 1;
   align-self: end;
-}
-
-.edu-bottom .edu-arrow {
-  grid-row: 2;
+  margin-bottom: 0.3rem;
 }
 
 .edu-bottom .edu-stem {
-  bottom: 6.15rem;
+  bottom: 5.45rem;
 }
 
 .edu-bottom .edu-date {
   grid-row: 3;
   align-self: start;
+  margin-top: 0.35rem;
 }
 
-/* Degree and affiliation text */
+/* Degree text: retain original education timeline typography */
 .edu-details {
   width: 100%;
   max-width: 200px;
@@ -853,6 +868,7 @@ li.no-bullet {
   margin: 0 0 0.45rem;
   color: var(--edu-dark);
   font-size: 0.6rem;
+  font-weight: 400;
   line-height: 1.1;
 }
 
@@ -872,42 +888,49 @@ li.no-bullet {
   line-height: 1.4;
 }
 
-/* Medium screens */
-@media (max-width: 900px) {
-  .education-zigzag-track {
-    gap: 0.3rem;
-  }
-
+/* Medium widths */
+@media (max-width: 850px) {
   .edu-zigzag-item {
-    grid-template-rows: 150px 48px 150px;
+    grid-template-rows: 115px 32px 115px;
   }
 
   .edu-date {
-    width: 5.3rem;
-    height: 5.3rem;
-    font-size: 0.88rem;
+    width: 2.7rem;
+    height: 2.7rem;
+    font-size: 0.82rem;
   }
 
   .edu-top .edu-stem {
-    top: 6.4rem;
+    top: 5.95rem;
   }
 
   .edu-bottom .edu-stem {
-    bottom: 6.4rem;
+    bottom: 5.95rem;
   }
 
   .edu-details h3 {
     font-size: 0.98rem;
   }
+
+  .edu-institution,
+  .edu-advisor {
+    font-size: 0.52rem;
+  }
 }
 
-/* Phones: vertical version */
+/* Phones: readable vertical timeline */
 @media (max-width: 680px) {
   .education-zigzag-track {
     display: block;
-    margin-left: 2.1rem;
-    padding-left: 3.4rem;
-    border-left: 3px solid #41B7C4;
+    margin-left: 1.4rem;
+    padding-left: 4.25rem;
+    border-left: 3px solid var(--edu-track);
+  }
+
+  .education-zigzag-track::before,
+  .edu-node,
+  .edu-stem {
+    display: none;
   }
 
   .edu-zigzag-item,
@@ -915,49 +938,53 @@ li.no-bullet {
   .edu-zigzag-item.edu-bottom {
     display: block;
     min-height: 0;
-    margin-bottom: 2rem;
-    padding: 0 0 0 0.5rem;
+    margin-bottom: 1.8rem;
     text-align: left;
   }
 
-  .edu-arrow,
-  .edu-stem {
-    display: none;
-  }
-
   .edu-date {
-    position: relative;
     display: inline-grid;
     width: auto;
     height: auto;
-    margin: 0 0 0.75rem -2.75rem;
-    padding: 0.35rem 0.7rem;
+    margin: 0 0 0.6rem -3.1rem;
+    padding: 0.3rem 0.65rem;
     border-radius: 999px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   .edu-date::before {
     content: "";
     position: absolute;
     top: 50%;
-    left: -1.72rem;
-    width: 0.85rem;
-    height: 0.85rem;
+    left: -1.78rem;
+    width: 0.8rem;
+    height: 0.8rem;
     transform: translateY(-50%);
-    border: 3px solid #ffffff;
+    border: 3px solid #141414;
     border-radius: 50%;
     background: var(--edu-color);
     box-shadow: 0 0 0 2px var(--edu-color);
   }
 
-  .edu-details {
+  .edu-details,
+  .edu-top .edu-details,
+  .edu-bottom .edu-details {
     max-width: none;
+    margin: 0;
     padding: 0;
+  }
+
+  .edu-details h3 {
+    font-size: 0.9rem;
+  }
+
+  .edu-institution,
+  .edu-advisor {
+    font-size: 0.78rem;
   }
 }
 
-
-/*-- end of education:rules- stored in includes/_education.qmd --*/
+/*-- END EDUCATION TIMELINE RULES --*/
 
 
 
@@ -1194,7 +1221,7 @@ li.no-bullet {
   .news-gradient-track {
     display: block;
     margin-left: 1.4rem;
-    padding-left: 2.1rem;
+    padding-left: 4.25rem;
     border-left: 3px solid transparent;
     border-image: linear-gradient(
       to bottom,

@@ -18,13 +18,16 @@ website:
       - text: "Home"
         href: index.qmd
       - text: "Research"
-        href: research/research.qmd
+        href: Research/Research.qmd
+      - text: "Notebook"
+        href: Notebook/Notebook.qmd 
       - text: "Gallery"
-        href: photos/photos.qmd
+        href: Gallery/Gallery.qmd
+      - text: "News"
+        href: News/News.qmd 
       - text: "CV"
-        href: cv/cv.qmd
-      - text: Notebook
-        href: notebook/notebook.qmd      
+        href: CV/CV.qmd
+           
       # - icon: linkedin
       #   href: https://www.linkedin.com/in/anoob-prakash/
       # - icon: google
