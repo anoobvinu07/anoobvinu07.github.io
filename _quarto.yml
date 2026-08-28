@@ -27,7 +27,14 @@ website:
         href: news/index.qmd
       - text: "CV"
         href: cv/index.qmd
-           
+  
+  # your social media handles
+    # left:
+    #   - text: "{{< ai google-scholar >}}"
+    #     href: https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ
+    #   - icon: envelope
+    #     aria-label: email
+    #     href: "mailto:mginzel@purdue.edu"
       # - icon: linkedin
       #   href: https://www.linkedin.com/in/anoob-prakash/
       # - icon: google
@@ -52,7 +59,7 @@ website:
     left:
         - icon: github
           href: https://github.com/anoobvinu07
-        - icon: mortarboard
+        - text: "{{< ai google-scholar >}}"
           href: https://scholar.google.com/citations?hl=en&user=jIOSRMkAAAAJ
         - icon: envelope
           href: mailto:anoobvinu@gmail.com
