@@ -1,24 +1,192 @@
 [
   {
-    "objectID": "notebook/notebook.html",
-    "href": "notebook/notebook.html",
-    "title": "Notebook",
-    "section": "",
-    "text": "No matching items"
-  },
-  {
-    "objectID": "news/news.html",
-    "href": "news/news.html",
-    "title": "Anoob Prakash",
-    "section": "",
-    "text": "News and updates\n\n\n  \n\n    \n    \n      \n        2023\n      \n\n      \n      \n\n      \n        \n          \n            GradCAMP Fellow\n          \n        \n        Selected as a USDA GradCAMP Fellow.\n      \n    \n\n    \n    \n      \n        \n          \n            Ph.D. Defense\n          \n        \n        Successfully defended my Ph.D. in Plant Biology.\n      \n\n      \n      \n\n      \n        2025\n      \n    \n\n    \n    \n      \n        2026\n      \n\n      \n      \n\n      \n        \n          \n            Postdoctoral Researcher at Purdue\n          \n        \n        Joined Purdue University as a postdoctoral researcher.\n      \n    \n\n  \n\n\n\n\n\n\n\nJan 20th, 2026\nJoined Purdue University as a Post doctoral research associate under Dr. Matthew Ginzel and Dr. Vikram Chhatre to investigate climate change adaptation and potential pre- or mal-adaptation of eastern hardwoods. The project objectives are in alignment with the goals of HTIRC.\n\n\n\n\n\n\n\n\n\nNov 14th, 2025\nSuccessfully defended my PhD titled “Range wide genotypic and phenotypic variation and climate change adaptation in red spruce”. Bringing one of the most wonderful chapters in my life to an end."
-  },
-  {
     "objectID": "notebook/index.html",
     "href": "notebook/index.html",
     "title": "Notebook",
     "section": "",
     "text": "Getting started with bash on HPC\n\n\n\nhpc\n\nworkflow\n\nbash\n\ngithub\n\n\n\nLearn the basics of using bash to work on a cluster\n\n\n\n\n\nAug 10, 2026\n\n\nAnoob Prakash\n\n\n\n\n\n\n\n\n\n\n\n\nCheat sheet for bash and SLURM\n\n\n\nhpc\n\nbash\n\nslurm\n\n\n\nQuick reference cheatsheet for frequently used bash commands and SLURM commands to submit or manage jobs on a HPC\n\n\n\n\n\nAug 9, 2026\n\n\nAnoob Prakash\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html",
+    "href": "notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html",
+    "title": "Cheat sheet for bash and SLURM",
+    "section": "",
+    "text": "Bash quick reference\n\n\n\n\n\n\n\n\nCommand\nPurpose\nExample\n\n\n\n\n~\nYour home directory\ncd ~\n\n\n/\nFilesystem root and path separator\ncd /scratch\n\n\npwd\nPrint working directory\npwd\n\n\nls\nList files and directories\nls -lh results\n\n\ncd\nChange directory\ncd data/raw\n\n\ncd ..\nMove up one directory\ncd ..\n\n\nmkdir -p\nCreate directory/directories\nmkdir -p logs results\n\n\nhead\nShow the beginning of a file\nhead -n 5 file.txt\n\n\nless\nView a file interactively; press q to exit\nless file.txt\n\n\ngrep\nSearch for text in a file\ngrep \"value\" file.txt\n\n\nwc -l\nCount lines\nwc -l file.txt\n\n\ncurl -L -o\nDownload URL into a named file\ncurl -L -o file.txt URL"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "",
+    "text": "This tutorial walks through a small, reproducible high-performance computing (HPC) workflow using a public red spruce fitness-trait dataset. Rather than receiving a copy of the data by email or flash drive, you will download the source file into your project directory, inspect it from the command line, analyze it in R, and submit that R analysis to Slurm.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the Genomic_assisted_selection repository. The repository supports the manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#overview",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#overview",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "",
+    "text": "This tutorial walks through a small, reproducible high-performance computing (HPC) workflow using a public red spruce fitness-trait dataset. Rather than receiving a copy of the data by email or flash drive, you will download the source file into your project directory, inspect it from the command line, analyze it in R, and submit that R analysis to Slurm.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the Genomic_assisted_selection repository. The repository supports the manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#learning-objectives",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#learning-objectives",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nBy the end, you should be able to:\n\nNavigate a cluster filesystem with bash.\nOrganize a project using reproducible relative paths.\nDownload a tab-delimited data file with curl.\nInspect a file with head, less, grep, and wc.\nRun an R script interactively and non-interactively.\nSubmit and monitor a simple Slurm job with sbatch and squeue.\nLocate output tables, figures, and job logs."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#project-setup",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#project-setup",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Project setup",
+    "text": "Project setup\nLog in to your cluster, then create a dedicated project directory:\ncd ~\npwd\n\nmkdir -p projects/red-spruce-cluster-exercise/{data/raw,results,logs,scripts}\ncd ~/projects/red-spruce-cluster-exercise\n\npwd\nls -R\nYour project should have this structure:\nred-spruce-cluster-exercise/\n├── data/\n│   └── raw/       # downloaded, unchanged source data\n├── logs/          # Slurm standard output and error logs\n├── results/       # analysis products created by R\n└── scripts/       # R and Slurm scripts\nUsing a consistent project structure makes your paths portable. For example, data/raw/red_spruce_traits.txt works for anyone who has the project folder, whereas /home/your_username/... works only on your account and only on one system.\n\nBash quick reference\n\n\n\n\n\n\n\n\nCommand\nPurpose\nExample\n\n\n\n\n~\nYour home directory\ncd ~\n\n\n/\nFilesystem root and path separator\ncd /scratch\n\n\npwd\nPrint working directory\npwd\n\n\nls\nList files and directories\nls -lh results\n\n\ncd\nChange directory\ncd data/raw\n\n\ncd ..\nMove up one directory\ncd ..\n\n\nmkdir -p\nCreate directory/directories\nmkdir -p logs results\n\n\nhead\nShow the beginning of a file\nhead -n 5 file.txt\n\n\nless\nView a file interactively; press q to exit\nless file.txt\n\n\ngrep\nSearch for text in a file\ngrep \"value\" file.txt\n\n\nwc -l\nCount lines\nwc -l file.txt\n\n\ncurl -L -o\nDownload URL into a named file\ncurl -L -o file.txt URL"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#download-the-data",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#download-the-data",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Download the data",
+    "text": "Download the data\nDownload the raw GitHub file directly into data/raw/:\ncurl -L \\\n  -o data/raw/red_spruce_fitness_traits.txt \\\n  https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt\nThe -L flag tells curl to follow redirects, and -o specifies the local output file. Verify the download before doing any analysis:\nls -lh data/raw/red_spruce_fitness_traits.txt\nhead -n 5 data/raw/red_spruce_fitness_traits.txt\nThis is a tab-delimited text file. Print the header with one field per line to inspect its variable names:\nhead -n 1 data/raw/red_spruce_fitness_traits.txt | tr '\\t' '\\n'\nOther useful checks are:\n# Count total lines, including the header\nwc -l data/raw/red_spruce_fitness_traits.txt\n\n# View the complete file interactively; press q to quit\nless data/raw/red_spruce_fitness_traits.txt\n\n# Search for a known trait, population, family, or other text value\n# Replace SEARCH_TERM with a value that occurs in the data.\ngrep \"SEARCH_TERM\" data/raw/red_spruce_fitness_traits.txt | head\n\n\n\n\n\n\nNoteCheckpoint\n\n\n\nBefore continuing, identify the data-file header, count the total lines, and write down two variables you expect to be numeric. Do not assume a column’s type from its name alone: check the data."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#create-an-r-script",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#create-an-r-script",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Create an R script",
+    "text": "Create an R script\nCreate a script using a terminal editor:\nnano scripts/analyze_red_spruce.R\nPaste the following code. It uses base R only, so it does not require installing packages. The script detects numeric variables, writes a descriptive-statistics table, creates a correlation matrix, and makes a histogram for the first numeric variable it finds.\n#!/usr/bin/env Rscript\n\ninput_file &lt;- \"data/raw/red_spruce_fitness_traits.txt\"\nresults_dir &lt;- \"results\"\n\nif (!file.exists(input_file)) {\n  stop(\n    \"Input file not found: \", input_file,\n    \"\\nDownload the data first, from the project root.\"\n  )\n}\n\nif (!dir.exists(results_dir)) {\n  dir.create(results_dir, recursive = TRUE)\n}\n\nred_spruce &lt;- read.table(\n  input_file,\n  header = TRUE,\n  sep = \"\\t\",\n  stringsAsFactors = FALSE,\n  check.names = FALSE\n)\n\ncat(\"Rows:\", nrow(red_spruce), \"\\n\")\ncat(\"Columns:\", ncol(red_spruce), \"\\n\\n\")\ncat(\"Column names:\\n\")\nprint(names(red_spruce))\ncat(\"\\nFirst six rows:\\n\")\nprint(head(red_spruce))\n\nnumeric_vars &lt;- names(red_spruce)[vapply(red_spruce, is.numeric, logical(1))]\ncat(\"\\nNumeric variables:\\n\")\nprint(numeric_vars)\n\nif (length(numeric_vars) == 0) {\n  stop(\"No numeric variables were detected. Inspect the file delimiter and header.\")\n}\n\ntrait_summary &lt;- data.frame(\n  variable = numeric_vars,\n  n_nonmissing = vapply(red_spruce[numeric_vars], function(x) sum(!is.na(x)), numeric(1)),\n  mean = vapply(red_spruce[numeric_vars], function(x) mean(x, na.rm = TRUE), numeric(1)),\n  sd = vapply(red_spruce[numeric_vars], function(x) sd(x, na.rm = TRUE), numeric(1)),\n  minimum = vapply(red_spruce[numeric_vars], function(x) min(x, na.rm = TRUE), numeric(1)),\n  maximum = vapply(red_spruce[numeric_vars], function(x) max(x, na.rm = TRUE), numeric(1))\n)\n\nwrite.csv(\n  trait_summary,\n  file.path(results_dir, \"red_spruce_numeric_summary.csv\"),\n  row.names = FALSE\n)\n\nif (length(numeric_vars) &gt;= 2) {\n  correlation_matrix &lt;- cor(\n    red_spruce[numeric_vars],\n    use = \"pairwise.complete.obs\"\n  )\n\n  write.csv(\n    correlation_matrix,\n    file.path(results_dir, \"red_spruce_numeric_correlations.csv\")\n  )\n}\n\nfirst_trait &lt;- numeric_vars[1]\npdf(file.path(results_dir, \"first_numeric_trait_histogram.pdf\"), width = 7, height = 5)\nhist(\n  red_spruce[[first_trait]],\n  main = paste(\"Distribution of\", first_trait),\n  xlab = first_trait,\n  col = \"grey80\",\n  border = \"white\"\n)\ndev.off()\n\ncat(\"\\nCreated files:\\n\")\nprint(list.files(results_dir, full.names = TRUE))\nSave in nano with Ctrl + O, press Enter, then exit with Ctrl + X."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#run-r-on-the-terminal",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#run-r-on-the-terminal",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Run R on the terminal",
+    "text": "Run R on the terminal\nFirst, determine which R modules are available on your cluster:\nmodule avail R\nLoad an available version; for example:\nmodule load R/4.3.0\nRun the script from the project root:\nRscript scripts/analyze_red_spruce.R\nls -lh results\nYou can also start an interactive R session for exploration:\nR\nThen run:\nred_spruce &lt;- read.table(\n  \"data/raw/red_spruce_fitness_traits.txt\",\n  header = TRUE,\n  sep = \"\\t\"\n)\n\nstr(red_spruce)\nsummary(red_spruce)\nExit R with:\nq()"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#submit-the-analysis-with-slurm",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#submit-the-analysis-with-slurm",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Submit the analysis with Slurm",
+    "text": "Submit the analysis with Slurm\nCreate a Slurm submission script:\nnano scripts/run_red_spruce.sbatch\nPaste this content. Change the R module and --partition to names supported by your cluster.\n#!/bin/bash\n#SBATCH --job-name=red_spruce\n#SBATCH --output=logs/red_spruce_%j.out\n#SBATCH --error=logs/red_spruce_%j.err\n#SBATCH --time=00:10:00\n#SBATCH --partition=standard\n#SBATCH --nodes=1\n#SBATCH --ntasks=1\n#SBATCH --cpus-per-task=1\n#SBATCH --mem=2G\n\nset -euo pipefail\n\nmodule load R/4.3.0\n\n# Run relative paths from the directory where sbatch was issued.\ncd \"$SLURM_SUBMIT_DIR\"\nmkdir -p results logs\n\necho \"Job ID: ${SLURM_JOB_ID}\"\necho \"Host: $(hostname)\"\necho \"Started: $(date)\"\necho \"Working directory: $(pwd)\"\n\nRscript scripts/analyze_red_spruce.R\n\necho \"Finished: $(date)\"\nSubmit and monitor your job:\nsbatch scripts/run_red_spruce.sbatch\nsqueue -u \"$USER\"\nAfter the job has completed, replace &lt;JOBID&gt; with the number returned by sbatch:\ncat logs/red_spruce_&lt;JOBID&gt;.out\ncat logs/red_spruce_&lt;JOBID&gt;.err\nls -lh results"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#exercises",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#exercises",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Exercises",
+    "text": "Exercises\n\nExplain why raw data are saved in data/raw/ and should not be altered by the analysis script.\nUse head, less, and grep to inspect the source data before opening R.\nIdentify what files the R script writes to results/.\nDeliberately run the R script from the wrong directory. Read the error, then explain why the project-relative input path fails.\nEdit the R script to make a histogram for a different numeric variable.\nAfter inspecting names(red_spruce), create a plot that is biologically meaningful for two variables in this dataset.\nAdd a README.md containing the GitHub source URL, date accessed, and exact curl command used to obtain the data."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/blog-post.html#take-home-message",
+    "href": "notebook/posts/bashing-the-cluster/blog-post.html#take-home-message",
+    "title": "Working on the Cluster with Red Spruce Fitness-Trait Data",
+    "section": "Take-home message",
+    "text": "Take-home message\nA reproducible cluster workflow separates source data, scripts, outputs, and logs. Downloading a documented raw-data copy into a project, using relative paths, and running the same script interactively and through Slurm are habits that scale from a small teaching exercise to genomic and quantitative-genetic analyses."
+  },
+  {
+    "objectID": "news/index.html",
+    "href": "news/index.html",
+    "title": "Anoob Prakash",
+    "section": "",
+    "text": "News and updates\n\n\n  \n\n    \n    \n      \n        2023\n      \n\n      \n      \n\n      \n        \n          \n            GradCAMP Fellow\n          \n        \n        Selected as a USDA GradCAMP Fellow.\n      \n    \n\n    \n    \n      \n        \n          \n            Ph.D. Defense\n          \n        \n        Successfully defended my Ph.D. in Plant Biology.\n      \n\n      \n      \n\n      \n        2025\n      \n    \n\n    \n    \n      \n        2026\n      \n\n      \n      \n\n      \n        \n          \n            Postdoctoral Researcher at Purdue\n          \n        \n        Joined Purdue University as a postdoctoral researcher.\n      \n    \n\n  \n\n\n\n\n\n\n\nJan 20th, 2026\nJoined Purdue University as a Post doctoral research associate under Dr. Matthew Ginzel and Dr. Vikram Chhatre to investigate climate change adaptation and potential pre- or mal-adaptation of eastern hardwoods. The project objectives are in alignment with the goals of HTIRC.\n\n\n\n\n\n\n\n\n\nNov 14th, 2025\nSuccessfully defended my PhD titled “Range wide genotypic and phenotypic variation and climate change adaptation in red spruce”. Bringing one of the most wonderful chapters in my life to an end."
+  },
+  {
+    "objectID": "about/index.html",
+    "href": "about/index.html",
+    "title": "Anoob Prakash",
+    "section": "",
+    "text": "A little bit about me\nI’m a plant biologist and forest genomicist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I work at the intersection of ecological and evolutionary genomics, climate science, and data science, using large genomic and environmental datasets to understand – and hopefully help guide – the future of forests."
+  },
+  {
+    "objectID": "about/index.html#what-i-work-on",
+    "href": "about/index.html#what-i-work-on",
+    "title": "Anoob Prakash",
+    "section": "What I work on",
+    "text": "What I work on\nMost of my research asks a simple but hard question: how will tree species respond to climate change, and what can we do about it?\n\n\n\n\n\n\nNotePhD life\n\n\n\n\n\nDuring my PhD at the University of Vermont with Dr. Stephen R. Keller, I focused on red spruce (Picea rubens Sarg.). I combined genomics, climate data, and trait measurements from common gardens to study genotypic and phenotypic variation, local adaptation, and the role of introgression with black spruce (Picea mariana). Along the way, I managed three common gardens, ran GWAS to identify adaptive loci, and spent a lot of time turning messy datasets into interpretable stories.\n\n\n\n\n\n\n\n\n\nNoteCollaboration with TNC and CASRI\n\n\n\n\n\nPhD research work led to collaborations with The Nature Conservancy (TNC) and the Central Appalachian Spruce Restoration Initiative (CASRI). Together, we used genomic information to select seed sources for restoration in the southern range edge of red spruce, which ultimately informed the planting of ~58,000 seedlings across West Virginia, Virginia, and Maryland. It was a satisfying example of science’s real world impact. Read more in the research section"
+  },
+  {
+    "objectID": "about/index.html#what-im-doing-now",
+    "href": "about/index.html#what-im-doing-now",
+    "title": "Anoob Prakash",
+    "section": "What I’m doing now",
+    "text": "What I’m doing now\nI’m currently a postdoctoral researcher at Purdue University, working with Dr. Matthew Ginzel and Dr. Vikram Chhatre. Here, I’m using population genetics to understand climate change adaptation in black walnut, white oak, and short leaf pine – species with high restoration potential and major ecological and economic importance.\n\n\n\n\n\n\nNoteMore\n\n\n\n\n\nI use machine‑learning approaches to detect climate pre‑adaptation and mal‑adaptation, and to identify seed sources that are likely to perform well in future climates. A big goal of this work is to provide actionable guidance to practitioners so restoration and reforestation projects can make informed, climate‑savvy seed sourcing decisions."
+  },
+  {
+    "objectID": "about/index.html#where-im-coming-from",
+    "href": "about/index.html#where-im-coming-from",
+    "title": "Anoob Prakash",
+    "section": "Where I’m coming from",
+    "text": "Where I’m coming from\nBefore moving into conifers and temperate forests, my master’s work in India focused on something more immediate and local: particulate pollution.\n\n\n\n\n\n\nNoteEarly days of research\n\n\n\n\n\nI studied how dust pollution affects growth, physiology, and wood anatomy of moist deciduous tree species, and which species might be more resilient near the Walayar Cement Factory, for my master’s research. That early work shaped my interest in how environmental stressors leave signatures in plant physiology."
+  },
+  {
+    "objectID": "about/index.html#what-im-trained-in",
+    "href": "about/index.html#what-im-trained-in",
+    "title": "Anoob Prakash",
+    "section": "What I’m trained in",
+    "text": "What I’m trained in\n\n\n\n\n\n\nNoteNSF Traineeship\n\n\n\n\n\nOver the years, I’ve also invested heavily in data skills and open, quantitative science. As an NSF Research Trainee in the Biological Data Science (BilDS) program (formerly QuEST), I collaborated across disciplines at UVM and learned to use quantitative tools to tackle environmental and global health questions. As part of this program, I interned with TNC on large‑scale reforestation planning, which closely aligned with my dissertation work and showed me how genomic data can support real‑world decisions.\n\n\n\n\n\n\n\n\n\nNoteUSDA Climate Scholar\n\n\n\n\n\nI was also a USDA GradCAMP Climate scholar, participating in a year‑long, cohort‑based experience focused on climate adaptation, mitigation, and climate justice. That year involved interdisciplinary research, networking with climate professionals, and science communication, including developing “forests of the future” factsheets. At UVM, I served two years as a graduate student senator for Plant Biology, working on issues related to graduate stipends, mental health, and governance."
+  },
+  {
+    "objectID": "about/index.html#what-i-care-about",
+    "href": "about/index.html#what-i-care-about",
+    "title": "Anoob Prakash",
+    "section": "What I care about",
+    "text": "What I care about\nScientifically, I’m drawn to climate change adaptation, population and landscape genomics, environmental data science, and transparent, reproducible workflows. I enjoy projects that sit at the interface of fundamental evolutionary questions and applied conservation or restoration decisions.\n\n\n\n\n\n\nNoteFun side of things\n\n\n\n\n\nOutside of research, you’ll usually find me on a basketball court, tinkering with data visualizations, learning new illustration tools, or playing games. I enjoy the creative side of science communication – turning complex models and genomic results into visuals and narratives that are intuitive for both scientists and non‑scientists."
+  },
+  {
+    "objectID": "publications/publications.html#section",
+    "href": "publications/publications.html#section",
+    "title": "Scientific output from my research",
+    "section": "2024",
+    "text": "2024\n\n\n\n\n\n\n\nPrakash, A., Capblancq, T., Shallows, K., Saville, D., Landau, D., Landress, C., Jacobs, T., and S.R. Keller. Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration. Applications in Plant Sciences 12(3), e11600. https://doi.org/10.1002/aps3.11600\nLachmuth, S., T. Capblancq, A. Prakash, S.R. Keller, and M.C. Fitzpatrick. 2024. Novel genomic offset metrics account for local adaptation in climate suitability forecasts and inform assisted migration. Ecological Monographs, 94 (1), e1593. https://doi.org.10.1002/ecm.1593"
+  },
+  {
+    "objectID": "publications/publications.html#section-1",
+    "href": "publications/publications.html#section-1",
+    "title": "Scientific output from my research",
+    "section": "2022",
+    "text": "2022\n\n\n\n\n\n\n\nPrakash, A., S. DeYoung, S. Lachmuth, J.L. Adams, K. Johnsen, J.R. Butnor, D.M. Nelson, M.C. Fitzpatrick and S.R. Keller. 2022. Genotypic variation and plasticity in climate-adaptive traits after range expansion and fragmentation of red spruce (Picea rubens Sarg.) Philosophical Transactions of the Royal Society B, 377(1848)."
+  },
+  {
+    "objectID": "publications/publications.html#and-prior",
+    "href": "publications/publications.html#and-prior",
+    "title": "Scientific output from my research",
+    "section": "2020 and prior",
+    "text": "2020 and prior"
+  },
+  {
+    "objectID": "archive/index3.html",
+    "href": "archive/index3.html",
+    "title": "Anoob Prakash",
+    "section": "",
+    "text": "Hi there! I’m Anoob Prakash\nWelcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how species respond to a changing climate. Learn more about me. On this site, you’ll find my research, projects in data visualization and analysis, and other interests."
+  },
+  {
+    "objectID": "archive/about_old.html",
+    "href": "archive/about_old.html",
+    "title": "A little bit about me",
+    "section": "",
+    "text": "Postdoctoral Research Associate, Forestry and Natural Resources\nPurdue University, USA\nGraduate Researcher, Plant Biology\nUniversity of Vermont, USA\nGraduate Research Intern\nThe Nature Conservancy, USA\nGraduate Teaching Assistant, Plant Biology\nUniversity of Vermont, USA\nGraduate Teaching Assistant, Tree Physiology and Breeding\nKerala Agricultural University, India\n\nAP is a highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change, and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings.\nHe worked on understanding species response to climate change. He utilized genomics, climate data and trait data to predict species response to climate change using machine learning approaches. His work on genotypic and phenotypic variation in red spruce at University of Vermont under Dr. Stephen R. Keller led to collaborations with The Nature Conservancy (TNC) and Central Appalachian Spruce Restoration initiative (CASRI). This collaboration resulted in the successful selection of seed sources based on their genomics and planting of approximately 58 thousand seedlings in West Virginia, Virginia and Maryland.\nCurrently,he is working as a Post doc at Purdue University with Dr. Matthew Ginzel and Dr. Vikram Chhatre investigating the climate change adaptation in black walnut, white oak and short-leaf pine. He is using machine-learning approach to investigate climate pre- or mal-adaptation for these species with high restoration potential (SHRP). He is working to identify seed sources for regeneration planting in the zones of mal-adaptation. The current research aims to deliver actionable insights to make informed decisions regarding seed sourcing for future healthy forests and assist in coordination of restoration efforts with forest practitioners.\n\n\n\n\n\n\nPh.D., Plant Biology\nUniversity of Vermont, USA\nM.Sc. Tree Physiology and Breeding\nKerala Agricultural University, India\nB.Sc. (Hons.) Forestry\nKerala Agricultural University, India\n\nAnoob Prakash holds a PhD in Plant Biology. He is a researcher interested in topics such as climate change adaptation, transparency and open data, environmental data science, and population genomics. During his Ph.D., he investigated climate change adaptation in red spruce (Picea rubens Sarg.). He investigated adaptive introgression of red spruce with its sister species black spruce (Picea mariana) and the role of introgression in red spruce. He managed three common gardens for phenotypic and phenological measurements and carried out genomic analysis to understand trait plasticity, local adaptation and adaptive loci with genome wide association studies (GWAS).\nDuring his Masters, he investigated the effect of particulate pollution on moist deciduous trees. He carried this research near Walayar Cement Factory to investigate the impact of particulate dust on nearby trees as well as to identify the resilient trees for future to mitigate the impact of particulate pollutions impact on plant and human health.\nHe was a National Science Foundation Research Trainee in the Biological Data Science (BilDS) program (formerly known as the Quantitative Evolutionary STEM Training (QuEST) program). As part of this traineeship he collaborated and networked with researchers from different science streams at UVM and learned to apply quantitative skills to solve environmental and global health problems. He also carried out an internship at TNC as part of this traineeship to apply himself in making informed decisions for a large scale reforestation program, which was closely aligned with with research interest.\nHe was also a USDA GradCAMP Climate scholar where he participated in a year-long, cohort-based professional development experience focused on climate adaptation, mitigation, and climate justice. He also engaged in interdisciplinary research, networking, and science communication with peers and climate professionals and developed factsheets discussing forests of the future. Finally, served as a graduate student senator for UVM for 2 years representing Plant Biology regarding issues of stipend for grad students, student mental health, and revision of constitution and bylaws.\n\n\n\n\n\n\nBasketball\n\nData analysis\n\nData visualization\n\nGaming\nIllustration"
+  },
+  {
+    "objectID": "archive/about_old.html#experience",
+    "href": "archive/about_old.html#experience",
+    "title": "A little bit about me",
+    "section": "",
+    "text": "Postdoctoral Research Associate, Forestry and Natural Resources\nPurdue University, USA\nGraduate Researcher, Plant Biology\nUniversity of Vermont, USA\nGraduate Research Intern\nThe Nature Conservancy, USA\nGraduate Teaching Assistant, Plant Biology\nUniversity of Vermont, USA\nGraduate Teaching Assistant, Tree Physiology and Breeding\nKerala Agricultural University, India\n\nAP is a highly skilled researcher with expertise in ecological and evolutionary genomics, plant biology, climate change, and bioinformatics. Experienced in analyzing large-scale genomic data, conducting climate change adaptation studies, and teaching advanced scientific concepts. Adept at both independent and collaborative research in academic and non-academic settings.\nHe worked on understanding species response to climate change. He utilized genomics, climate data and trait data to predict species response to climate change using machine learning approaches. His work on genotypic and phenotypic variation in red spruce at University of Vermont under Dr. Stephen R. Keller led to collaborations with The Nature Conservancy (TNC) and Central Appalachian Spruce Restoration initiative (CASRI). This collaboration resulted in the successful selection of seed sources based on their genomics and planting of approximately 58 thousand seedlings in West Virginia, Virginia and Maryland.\nCurrently,he is working as a Post doc at Purdue University with Dr. Matthew Ginzel and Dr. Vikram Chhatre investigating the climate change adaptation in black walnut, white oak and short-leaf pine. He is using machine-learning approach to investigate climate pre- or mal-adaptation for these species with high restoration potential (SHRP). He is working to identify seed sources for regeneration planting in the zones of mal-adaptation. The current research aims to deliver actionable insights to make informed decisions regarding seed sourcing for future healthy forests and assist in coordination of restoration efforts with forest practitioners."
+  },
+  {
+    "objectID": "archive/about_old.html#education",
+    "href": "archive/about_old.html#education",
+    "title": "A little bit about me",
+    "section": "",
+    "text": "Ph.D., Plant Biology\nUniversity of Vermont, USA\nM.Sc. Tree Physiology and Breeding\nKerala Agricultural University, India\nB.Sc. (Hons.) Forestry\nKerala Agricultural University, India\n\nAnoob Prakash holds a PhD in Plant Biology. He is a researcher interested in topics such as climate change adaptation, transparency and open data, environmental data science, and population genomics. During his Ph.D., he investigated climate change adaptation in red spruce (Picea rubens Sarg.). He investigated adaptive introgression of red spruce with its sister species black spruce (Picea mariana) and the role of introgression in red spruce. He managed three common gardens for phenotypic and phenological measurements and carried out genomic analysis to understand trait plasticity, local adaptation and adaptive loci with genome wide association studies (GWAS).\nDuring his Masters, he investigated the effect of particulate pollution on moist deciduous trees. He carried this research near Walayar Cement Factory to investigate the impact of particulate dust on nearby trees as well as to identify the resilient trees for future to mitigate the impact of particulate pollutions impact on plant and human health.\nHe was a National Science Foundation Research Trainee in the Biological Data Science (BilDS) program (formerly known as the Quantitative Evolutionary STEM Training (QuEST) program). As part of this traineeship he collaborated and networked with researchers from different science streams at UVM and learned to apply quantitative skills to solve environmental and global health problems. He also carried out an internship at TNC as part of this traineeship to apply himself in making informed decisions for a large scale reforestation program, which was closely aligned with with research interest.\nHe was also a USDA GradCAMP Climate scholar where he participated in a year-long, cohort-based professional development experience focused on climate adaptation, mitigation, and climate justice. He also engaged in interdisciplinary research, networking, and science communication with peers and climate professionals and developed factsheets discussing forests of the future. Finally, served as a graduate student senator for UVM for 2 years representing Plant Biology regarding issues of stipend for grad students, student mental health, and revision of constitution and bylaws."
+  },
+  {
+    "objectID": "archive/about_old.html#interests",
+    "href": "archive/about_old.html#interests",
+    "title": "A little bit about me",
+    "section": "",
+    "text": "Basketball\n\nData analysis\n\nData visualization\n\nGaming\nIllustration"
   },
   {
     "objectID": "research/index.html",
@@ -42,53 +210,11 @@
     "text": "Seed sources: No one for all\nCapblancq et al. (2021) has observed that early-life fitness of the red spruce had strong positive association with genetic diversity and negative association with genetic load, especially for the southern range edge of the red spruce distribution range. These seed source combinations were used as a recommendation list to Dave Seville (CASRI) to assess the seed production situation on the ground and raise them in the nursery for the restoration initiative. In 2021, TNC planted 58,000 red spruce seedlings at the restoration sites. Keller lab then carried out the restoration monitoring of these restoration sites in 2022, a whole year after the seedlings had been planted in the ground to assess the success of genomic assisted restoration of red spruce. Using this information, Prakash et al. (2024) found that there were no “Super Seed Source” that outperformed other seed sources and the combination of seed sources outperformed any single source for the restoration success."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
+    "objectID": "archive/about_testing.html",
+    "href": "archive/about_testing.html",
     "title": "Anoob Prakash",
     "section": "",
-    "text": "A little bit about me\nI’m a plant biologist and forest geneticist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I utilize large genomic and environmental datasets to understand – and hopefully help guide the future of forests.\nMore &gt;&gt;\n\n                 \n\n\n\n\n\n\n\n\n\n  \n    \n    \n    \n  \n\n  \n\n    \n      \n        Data Science\n        10+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        Bioinformatics\n        5+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        M. Learning\n        3+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        R\n        8+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        UNIX\n        7+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        Python\n        2+ yrs"
-  },
-  {
-    "objectID": "about/about.html",
-    "href": "about/about.html",
-    "title": "Anoob Prakash",
-    "section": "",
-    "text": "A little bit about me\nI’m a plant biologist and forest genomicist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I work at the intersection of ecological and evolutionary genomics, climate science, and data science, using large genomic and environmental datasets to understand – and hopefully help guide – the future of forests."
-  },
-  {
-    "objectID": "about/about.html#what-i-work-on",
-    "href": "about/about.html#what-i-work-on",
-    "title": "Anoob Prakash",
-    "section": "What I work on",
-    "text": "What I work on\nMost of my research asks a simple but hard question: how will tree species respond to climate change, and what can we do about it?\n\n\n\n\n\n\nNotePhD life\n\n\n\n\n\nDuring my PhD at the University of Vermont with Dr. Stephen R. Keller, I focused on red spruce (Picea rubens Sarg.). I combined genomics, climate data, and trait measurements from common gardens to study genotypic and phenotypic variation, local adaptation, and the role of introgression with black spruce (Picea mariana). Along the way, I managed three common gardens, ran GWAS to identify adaptive loci, and spent a lot of time turning messy datasets into interpretable stories.\n\n\n\n\n\n\n\n\n\nNoteCollaboration with TNC and CASRI\n\n\n\n\n\nPhD research work led to collaborations with The Nature Conservancy (TNC) and the Central Appalachian Spruce Restoration Initiative (CASRI). Together, we used genomic information to select seed sources for restoration in the southern range edge of red spruce, which ultimately informed the planting of ~58,000 seedlings across West Virginia, Virginia, and Maryland. It was a satisfying example of science’s real world impact. Read more in the research section"
-  },
-  {
-    "objectID": "about/about.html#what-im-doing-now",
-    "href": "about/about.html#what-im-doing-now",
-    "title": "Anoob Prakash",
-    "section": "What I’m doing now",
-    "text": "What I’m doing now\nI’m currently a postdoctoral researcher at Purdue University, working with Dr. Matthew Ginzel and Dr. Vikram Chhatre. Here, I’m using population genetics to understand climate change adaptation in black walnut, white oak, and short leaf pine – species with high restoration potential and major ecological and economic importance.\n\n\n\n\n\n\nNoteMore\n\n\n\n\n\nI use machine‑learning approaches to detect climate pre‑adaptation and mal‑adaptation, and to identify seed sources that are likely to perform well in future climates. A big goal of this work is to provide actionable guidance to practitioners so restoration and reforestation projects can make informed, climate‑savvy seed sourcing decisions."
-  },
-  {
-    "objectID": "about/about.html#where-im-coming-from",
-    "href": "about/about.html#where-im-coming-from",
-    "title": "Anoob Prakash",
-    "section": "Where I’m coming from",
-    "text": "Where I’m coming from\nBefore moving into conifers and temperate forests, my master’s work in India focused on something more immediate and local: particulate pollution.\n\n\n\n\n\n\nNoteEarly days of research\n\n\n\n\n\nI studied how dust pollution affects growth, physiology, and wood anatomy of moist deciduous tree species, and which species might be more resilient near the Walayar Cement Factory, for my master’s research. That early work shaped my interest in how environmental stressors leave signatures in plant physiology."
-  },
-  {
-    "objectID": "about/about.html#what-im-trained-in",
-    "href": "about/about.html#what-im-trained-in",
-    "title": "Anoob Prakash",
-    "section": "What I’m trained in",
-    "text": "What I’m trained in\n\n\n\n\n\n\nNoteNSF Traineeship\n\n\n\n\n\nOver the years, I’ve also invested heavily in data skills and open, quantitative science. As an NSF Research Trainee in the Biological Data Science (BilDS) program (formerly QuEST), I collaborated across disciplines at UVM and learned to use quantitative tools to tackle environmental and global health questions. As part of this program, I interned with TNC on large‑scale reforestation planning, which closely aligned with my dissertation work and showed me how genomic data can support real‑world decisions.\n\n\n\n\n\n\n\n\n\nNoteUSDA Climate Scholar\n\n\n\n\n\nI was also a USDA GradCAMP Climate scholar, participating in a year‑long, cohort‑based experience focused on climate adaptation, mitigation, and climate justice. That year involved interdisciplinary research, networking with climate professionals, and science communication, including developing “forests of the future” factsheets. At UVM, I served two years as a graduate student senator for Plant Biology, working on issues related to graduate stipends, mental health, and governance."
-  },
-  {
-    "objectID": "about/about.html#what-i-care-about",
-    "href": "about/about.html#what-i-care-about",
-    "title": "Anoob Prakash",
-    "section": "What I care about",
-    "text": "What I care about\nScientifically, I’m drawn to climate change adaptation, population and landscape genomics, environmental data science, and transparent, reproducible workflows. I enjoy projects that sit at the interface of fundamental evolutionary questions and applied conservation or restoration decisions.\n\n\n\n\n\n\nNoteFun side of things\n\n\n\n\n\nOutside of research, you’ll usually find me on a basketball court, tinkering with data visualizations, learning new illustration tools, or playing games. I enjoy the creative side of science communication – turning complex models and genomic results into visuals and narratives that are intuitive for both scientists and non‑scientists."
+    "text": "A little bit about me\nI’m a plant biologist and forest genomicist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I work at the intersection of ecological and evolutionary genomics, climate science, and data science, using large genomic and environmental datasets to understand – and hopefully help guide – the future of forests.\n\n\nWhat I work on\nMost of my research asks a simple but hard question: how will tree species respond to climate change, and what can we do about it?\nDuring my PhD at the University of Vermont with Dr. Stephen R. Keller, I focused on red spruce (Picea rubens Sarg.). I combined genomics, climate data, and trait measurements from common gardens to study genotypic and phenotypic variation, local adaptation, and the role of introgression with black spruce (Picea mariana). Along the way, I managed three common gardens, ran GWAS to identify adaptive loci, and spent a lot of time turning messy datasets into interpretable stories.\nThat work led to collaborations with The Nature Conservancy (TNC) and Central Appalachian Spruce Restoration initiative (CASRI). Together, we used genomic information to select seed sources for restoration in the southern range edge of red spruce, which ultimately informed the planting of ~58,000 seedlings across West Virginia, Virginia, and Maryland. It was a satisfying example of science’s real world impact.\n\n\nWhat I’m doing now\nI’m currently a postdoctoral researcher at Purdue University, working with Dr. Matthew Ginzel and Dr. Vikram Chhatre. Here, I’m extending the same ideas to black walnut, white oak, and shortleaf pine – species with high restoration potential and major ecological and economic importance. I use machine-learning approaches to detect climate pre‑adaptation and mal‑adaptation, and to identify seed sources that are likely to perform well in future climates. A big goal of this work is to provide actionable guidance to practitioners so restoration and reforestation projects can make informed, climate‑savvy seed sourcing decisions.\n\n\nWhere I’m coming from\nBefore moving into conifers and temperate forests, my master’s work in India focused on something more immediate and local: particulate pollution. Near the Walayar Cement Factory, I studied how dust pollution affects growth, physiology, and wood anatomy of moist deciduous tree species, and which species might be more resilient. That early work shaped my interest in how environmental stressors leave signatures in plant physiology.\nOver the years, I’ve also invested heavily in data skills and open, quantitative science. As an NSF Research Trainee in the Biological Data Science (BilDS) program (formerly QuEST), I collaborated across disciplines at UVM and learned to use quantitative tools to tackle environmental and global health questions. As part of this program, I interned with TNC on large‑scale reforestation planning, which closely aligned with my dissertation work and showed me how genomic data can support real‑world decisions.\nI was also a USDA GradCAMP Climate scholar, participating in a year-long, cohort-based experience focused on climate adaptation, mitigation, and climate justice. That year involved interdisciplinary research, networking with climate professionals, and science communication, including developing “forests of the future” factsheets. At UVM, I served two years as a graduate student senator for Plant Biology, working on issues related to graduate stipends, mental health, and governance.\n\n\nWhat I care about\nScientifically, I’m drawn to climate change adaptation, population and landscape genomics, environmental data science, and transparent, reproducible workflows. I enjoy projects that sit at the interface of fundamental evolutionary questions and applied conservation or restoration decisions.\nOutside of research, you’ll usually find me on a basketball court, tinkering with data visualizations, learning new illustration tools, or playing games. I enjoy the creative side of science communication – turning complex models and genomic results into visuals and narratives that are intuitive for both scientists and non‑scientists."
   },
   {
     "objectID": "gallery/index.html",
@@ -133,73 +259,150 @@
     "text": "Keller days"
   },
   {
-    "objectID": "cv/cv.html",
-    "href": "cv/cv.html",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Anoob Prakash",
+    "section": "",
+    "text": "A little bit about me\nI’m a plant biologist and forest geneticist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I utilize large genomic and environmental datasets to understand – and hopefully help guide the future of forests.\nMore &gt;&gt;\n\n                 \n\n\n\n\n\n\n\n\n\n  \n    \n    \n    \n  \n\n  \n\n    \n      \n        Data Science\n        10+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        Bioinformatics\n        5+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        M. Learning\n        3+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        R\n        8+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        UNIX\n        7+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        Python\n        2+ yrs"
+  },
+  {
+    "objectID": "cv/index.html",
+    "href": "cv/index.html",
     "title": "Curriculum Vitae",
     "section": "",
     "text": "Last updated on August 2026"
   },
   {
-    "objectID": "cv/cv.html#technical-skills-1",
-    "href": "cv/cv.html#technical-skills-1",
+    "objectID": "cv/index.html#technical-skills-1",
+    "href": "cv/index.html#technical-skills-1",
     "title": "Curriculum Vitae",
     "section": "Technical Skills",
     "text": "Technical Skills\nResearch computing, genomics, and reproducible workflows\n\n  \n    \n    \n    \n  \n\n  \n\n    \n      \n        Data Science\n        10+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        Bioinformatics\n        5+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        M. Learning\n        3+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        R\n        8+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        UNIX\n        7+ yrs\n      \n      \n        \n      \n    \n\n    \n      \n        Python\n        2+ yrs"
   },
   {
-    "objectID": "cv/cv.html#education",
-    "href": "cv/cv.html#education",
+    "objectID": "cv/index.html#education",
+    "href": "cv/index.html#education",
     "title": "Curriculum Vitae",
     "section": "Education",
     "text": "Education\n\n\n  \n\n    \n    \n      \n        2011\n      \n\n      \n      \n\n      \n        B.Sc. Forestry\n        Kerala Agricultural University, India\n        \n      \n    \n\n    \n    \n      \n        M.Sc. Tree Physiology and Breeding\n        Kerala Agricultural University, India\n        \n      \n\n      \n      \n\n      \n        2013\n      \n    \n\n    \n    \n      \n        2025\n      \n\n      \n      \n\n      \n        Ph.D. Plant Biology\n        University of Vermont, USA"
   },
   {
-    "objectID": "cv/cv.html#experience",
-    "href": "cv/cv.html#experience",
+    "objectID": "cv/index.html#experience",
+    "href": "cv/index.html#experience",
     "title": "Curriculum Vitae",
     "section": "Experience",
     "text": "Experience\n\n\n\n\nPostdoctoral Research Associate\nPurdue University, USA\n\n\n\n\n2026-Present\n\n\n\n\n\nApplication of machine-learning approaches to investigate climate pre- or mal-adaptation for species with high restoration potential (SHRP).\n\nIdentifying seed sources for regeneration planting in zones of mal-adaptation.\n\n\n\n\n\n\n\n\nGraduate Research Assistant\nUniversity of Vermont, USA\n\n\n\n\n2018–2025\n\n\n\n\nInvestigated genotypic and phenotypic variation and climate change adaptation in red spruce (Picea rubens).\n\n\n\n\n\n\nNoteProject 1: Genotypic variation and plasticity in climate-adaptive traits\n\n\n\n\n\n\nQuantified biomass and trait variance to identify patterns of genotypic and phenotypic responses to climate gradients using quantitative genetics and Bayesian approaches.\nCollaborated with interdisciplinary teams to collect and manage large, multi-year datasets from multiple field sources.\n\n\n\n\n\n\n\n\n\n\nNoteProject 2: Introgression and local adaptation\n\n\n\n\n\n\nIdentified patterns of local and climate adaptation to inform conservation strategies for fragmented red spruce populations.\nUtilized molecular approaches to investigate the role of introgression underlying local adaptation.\n\n\n\n\n\n\n\n\n\n\nNoteProject 3: Molecular basis of local adaptation and climate-response forecasting\n\n\n\n\n\n\nUsed genome-wide association studies (GWAS) to detect loci underlying polygenic traits.\nApplied advanced bioinformatic approaches to assess the genetic architecture of locally adaptive traits.\n\n\n\n\n\n\n\n\nGraduate Teaching Assistant\nUniversity of Vermont, USA\n\n\n\n\n2018–2025\n\n\n\n\nConducted grading, lab instruction, report writing guidance, peer-review facilitation, and lab setup for wet and dry labs.\n\n\n\n\n\n\nNoteCourse list\n\n\n\n\n\nPrinciples of Biology I and II (2018–2021)\n\nTrained students in the process of scientific inquiry and genetics concepts.\nTaught wet lab protocols, microscopy, and molecular modelling approaches.\n\nExploring Biology (2022–2023)\n\nTaught bench work for protein purification, enzyme purification, SDS–PAGE, and gel analysis.\n\nEcology and Evolution (2022–2025)\n\nTrained more than 100 students in data collection protocols and data analysis in R.\nMentored students in designing and carrying out independent research projects.\n\n\n\n\n\n\n\n\n\n\n\nGraduate Research Intern\nThe Nature Conservancy, USA\n\n\n\n\n2021 & 2022\n\n\n\n\nApplied genomics-assisted seed source selection to identify viable seed sources for restoration of red spruce in the fragmented southern range edge, resulting in more than 58,000 seedlings planted across three U.S. states.\n\n\n\n\n\n\nNoteObjectives achieved\n\n\n\n\n\n\nCollected data from experimental plots after restoration planting to monitor and assess genomic-assisted seed sourcing strategies in Virginia, West Virginia, and Maryland.\nCommunicated results in a peer-reviewed scientific journal and at national and international conferences.\n\n\n\n\n\n\n\n\n\n\n\nKerala Agricultural University\nCollege of Forestry, India\n\n\n\n\n2010–2016\n\n\n\n\n\n\n\n\n\n\nNoteTeaching Assistant (2014–2016)\n\n\n\n\n\n\nTaught undergraduate and graduate courses including biochemistry, biotechnology, tree improvement, tree physiology, world forest systems, and ecophysiology.\nManaged laboratory space and inventory; assisted students with bench work and scientific writing for coursework and research.\n\nCourses taught\n\nForest Ecophysiology, 2013, 2014, 2015\n\nPlant Biochemistry, 2013, 2014\n\nEthnobotany, 2015\n\nPlant Biotechnology, 2015\n\nWorld Forestry System, 2015\n\nPrinciples of Tree Improvement, 2015\n\nElementary Tree Physiology, 2014, 2015\n\nMedicinal and Aromatic Plants, 2015\n\nWeapon Training and First Aid Training, 2014, 2015\n\n\n\n\n\n\n\n\n\n\nNoteGraduate Research Assistant (2011–2014)\n\n\n\n\n\nInvestigated the impact of particulate pollution on growth, physiology, and anatomical properties of Tectona grandis and other moist deciduous tree species near industrial sites.\n\nAssessed chlorophyll content, ascorbic acid levels, relative water content, and leaf pH to evaluate air pollution tolerance across seasons.\nAnalyzed dust accumulation, leaf surface area, leaf area index, and leaf area duration to quantify pollution effects on tree health and productivity.\nCompared wood anatomical properties of pollution-exposed and control populations, identifying significant differences in wood quality and structure.\n\n\n\n\n\n\n\n\n\n\nNoteIndependent Undergraduate Researcher (2010–2011)\n\n\n\n\n\n\nCharacterized structural and functional attributes of home gardens and developed recommendations for integrated farming systems for medium and large-scale farmers.\nAssisted the Assistant Conservator of Forests in drafting a working plan for Konni Forest Division, ensuring continuity of forest management policies over a 10-year period.\nConducted site quality mapping, growing stock assessment, and regeneration surveys as part of forest management planning."
   },
   {
-    "objectID": "cv/cv.html#fellowships",
-    "href": "cv/cv.html#fellowships",
+    "objectID": "cv/index.html#fellowships",
+    "href": "cv/index.html#fellowships",
     "title": "Curriculum Vitae",
     "section": "Fellowships",
     "text": "Fellowships\n\n\n GradCAMP Climate Scholar USDA and West Virginia State University (2023–2024) \n\n\n National Science Foundation Research Traineeship (NRT), Quantitative and Evolutionary STEM Training (QuEST) University of Vermont (2018–2023)"
   },
   {
-    "objectID": "cv/cv.html#publications",
-    "href": "cv/cv.html#publications",
+    "objectID": "cv/index.html#publications",
+    "href": "cv/index.html#publications",
     "title": "Curriculum Vitae",
     "section": "Publications",
     "text": "Publications\nPeer-Reviewed Publications\n\n\n Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration Prakash, A., Capblancq, T., Shallows, K., Saville, D., Landau, D., Landress, C., Jacobs, T., & Keller, S. (2024). Applications in Plant Sciences, 12(3), e11600. \n\n\n Novel genomic offset metrics integrate local adaptation into habitat suitability forecasts and inform assisted migration Lachmuth, S., Capblancq, T., Prakash, A., Keller, S. R., & Fitzpatrick, M. C. (2023). Ecological Monographs. \n\n\n Genotypic variation and plasticity in climate-adaptive traits after range expansion and fragmentation of red spruce Prakash, A., DeYoung, S., Lachmuth, S., Adams, J. L., Johnsen, K., Butnor, J. R., Nelson, D. M., Fitzpatrick, M. C., & Keller, S. R. (2022). Philosophical Transactions of the Royal Society B, 377(1848), 20210008. \n\n\n Variation in climatic tolerance, but not stomatal traits, partially explains Pooideae grass species distributions Das, A., Prakash, A., Dedon, N., Doty, A., Siddiqui, M., & Preston, J. C. (2021). Annals of Botany, 128(1), 83–95. \n\n\n\n\n\n\n\nNotePublications before 2020\n\n\n\n\n\n\n Fodder yield and nutritive value of mulberry (Morus indica) under varying plant density and pruning frequency in coconut garden Raj, R. M., Raj, A. K., Kunhamu, T. K., & Prakash, A. (2019). Range Management and Agroforestry, 40(2), 255–261. \n\n\n Impact of particulate pollution on photosynthesis, transpiration and plant water potential of teak (Tectona grandis) Prakash, A., Santhoshkumar, A. V., & Roby, P. C. (2017). Current Science, 113(7), 1272–1276. \n\n\n Fodder yield and nutritive value of subabul (Leucaena leucocephala) under diverse management regimes in coconut garden Raj, R. M., Raj, A. K., & Prakash, A. (2016). Indian Journal of Agroforestry, 18(2), 79–85. \n\n\n Appropriateness of moist deciduous species against particulate pollution abatement and monitoring Prakash, A., Santhoshkumar, A. V., & Roby, P. C. (2016). International Journal of Science, Environment and Technology, 5, 537–546."
   },
   {
-    "objectID": "cv/cv.html#talks",
-    "href": "cv/cv.html#talks",
+    "objectID": "cv/index.html#talks",
+    "href": "cv/index.html#talks",
     "title": "Curriculum Vitae",
     "section": "Talks",
     "text": "Talks\n\nConference Talks\n\n\n\n2024\n\n\nUnraveling the genetic architecture of local adaptation in species with a history of introgression.\n3rd Joint Congress on Evolutionary Biology, Montreal, Canada\n\n\n\n\n\n\n2024\n\n\nUnraveling the effects of introgression on local adaptation in red spruce (Picea rubens): Genetic rescue and shaping of adaptive traits.\nXXVI World Congress of IUFRO, Stockholm, Sweden\n\n\n\n\n\n\n2024\n\n\nUnderstanding the role of introgression on local adaptation in red spruce (Picea rubens).\nUVM Student Research Conference, Burlington, Vermont, USA\n\n\n\n\n\n\n2023\n\n\nExploring the drivers of selection in a range-fragmented forest tree: A case study in red spruce (Picea rubens).\nEvolution 2023, Albuquerque, New Mexico, USA\n\n\n\n\n\n\n2022\n\n\nDetecting signals of polygenic adaptation in the face of demographic history and population structure in red spruce (Picea rubens).\nBotany 2022, Anchorage, Alaska, USA\n\n\n\n\n\n\n2021\n\n\nThe evolution of species’ ranges in the face of changing environments.\nForest Genetics Student and Postdoc Symposium, Virtual.\n\n\n\n\n\nOutreach\n\n\n\n2023\n\n\nUsing genomics to assist red spruce conservation and restoration under a changing climate.\nCASRI Annual Meeting, Davis, West Virginia, USA\n\n\n\n\n\n\n2023\n\n\nScience Sparks: Plant Biology.\nScience Olympiad outreach talk for grades 7–10, University of Vermont, USA\n\n\n\n\n\n\n2021\n\n\nDemographic history of red spruce and genotypic variation in climate-adaptive traits after range expansion and fragmentation.\nNSF-funded Red Spruce Climate Change Workshop, Burlington, Vermont, USA\n\n\n\n\n\nPoster Presentations\n\n Seeds of Hope: Sprucing up forest restoration with genomics \n\n\n\n\n2024\n\n\nInvited poster at UVM CALS and Food Systems Research Center Board of Trustees event (2024)\n\n\n\n\n\n\n2024\n\n\n3rd Joint Congress on Evolutionary Biology, Montreal, Canada\n\n\n\n\n\n\n\n\n\nNotePoster Presentations before 2020\n\n\n\n\n\nInvestigating population differentiation in red spruce (Picea rubens) due to climate change.\n\n\n\n2019\n\n\nEvolution, Providence, Rhode Island, USA\n\n\n\n\n\n\n2019\n\n\nUVM Student Research Conference, Burlington, Vermont, USA\n\n\n\nAnatomical changes in the wood properties of Tectona grandis due to particulate pollution.\n\n\n\n2019\n\n\nNational Biodiversity Congress, Thiruvananthapuram, Kerala, India\n\n\n\nVegetational composition and regeneration status of mangroves in Chetuwai backwaters, Kerala.\n\n\n\n2014\n\n\nIndian Biodiversity Congress, Chennai, Tamil Nadu, India"
   },
   {
-    "objectID": "cv/cv.html#trainings",
-    "href": "cv/cv.html#trainings",
+    "objectID": "cv/index.html#trainings",
+    "href": "cv/index.html#trainings",
     "title": "Curriculum Vitae",
     "section": "Trainings",
     "text": "Trainings\n\n\n\nJune 2025\n\n\nThe Festival of Genomics & Biodata, Boston, USA\nComputational Biology Upskilling Workshop\nInstructors: Dean Lee and Tommy Tang\nEnhancing Variant Analysis and Interpretation\nInstructors: Heidi Rehm and Suganthi Balasubramanian\nMastering Spatial Data Analysis: From Basics to Cutting-Edge Innovations\nInstructors: Abdul Hassan Samee and Ilya Korsunsky\nHow to Better Computationally Analyze Your SingleCell RNA Sequencing (scRNA-seq) Data\nInstructors: Gracie Gordon, Mary Piper, Meeta Mistry and Zhaleh Safikhani\n\n\n\n\n\n\nJan 2025\n\n\nData and Open Science Summit\nUVM and NASA, Vermont, USA\n\n\n\n\n\n\nMay 2024\n\n\nNext Generation Sequencing Webinar\nHelixOmics Analytics, Virtual\n\n\n\n\n\n\nMay 2024\n\n\nSchrödinger Educators Week\nSchrödinger, New York, USA\n\n\n\n\n\n\nJuly 2022\n\n\nDe novo genome assembly and annotation workshop\nBotany, Alaska, USA\n\n\n\n\n\n\n\n\n\nNoteTrainings and Workshops before 2020\n\n\n\n\n\n\n\n\nNov\n2017\n\n\nEchoes in Space: Introduction to RADAR Remote Sensing\nEO College and ESA, Virtual\n\n\n\n\n\n\nNov\n2017\n\n\nUAV Remote Sensing and Applications\nIndian Institute of Remote Sensing and ISRO, Virtual\n\n\n\n\n\n\n2017\n\n\nConservation Genetics\nSalim Ali Centre for Ornithology and Natural History, India\n\n\n\n\n\n\n2017\n\n\nStatistics and R (PH525.1X)\nHarvardX/edX\n\n\n\n\n\n\n2017\n\n\nIntroduction to Python for Data Science (DAT208X)\nMicrosoft/edX\n\n\n\n\n\n\n2014–16\n\n\nMultiple remote sensing and GIS trainings\nIIRS, ISRO, and Kerala Agricultural University"
   },
   {
-    "objectID": "cv/cv.html#grants-and-awards",
-    "href": "cv/cv.html#grants-and-awards",
+    "objectID": "cv/index.html#grants-and-awards",
+    "href": "cv/index.html#grants-and-awards",
     "title": "Curriculum Vitae",
     "section": "Grants and Awards",
     "text": "Grants and Awards\n\n\n\n2024\n\n\nCALS Graduate Student Enhancement Fund\nwith 100% departmental match\n\n\n\n\n\n\n2024\n\n\nGraduate College Conference Grant Program\nwith 100% departmental match\n\n\n\n\n\n\n2022\n\n\nUVM Graduate Student Senate Mini Grants\nwith 100% departmental match\n\n\n\n\n\n\n2019\n\n\nCALS Graduate Student Enhancement Fund\nwith 100% departmental match"
   },
   {
-    "objectID": "cv/cv.html#references",
-    "href": "cv/cv.html#references",
+    "objectID": "cv/index.html#references",
+    "href": "cv/index.html#references",
     "title": "Curriculum Vitae",
     "section": "References",
     "text": "References\nAvailable upon request."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/Bashing the cluster.html",
+    "href": "notebook/posts/bashing-the-cluster/Bashing the cluster.html",
+    "title": "Getting started with bash on HPC",
+    "section": "",
+    "text": "Cluster exercise: Download and analyze public red-spruce fitness-trait data\nIn this exercise you will create a reproducible project on the cluster, download a tab-delimited red-spruce dataset directly from a public GitHub repository and inspect it with bash.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the GitHub repository. The repository supports a published manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration.\n\n\nBy the end, you should be able to:\n\nNavigate a cluster filesystem with bash.\nOrganize a project using reproducible relative paths.\nDownload a tab-delimited data file with curl.\nInspect a file with head, less, grep, and wc."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#goal",
+    "href": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#goal",
+    "title": "Getting started with bash on HPC",
+    "section": "",
+    "text": "Cluster exercise: Download and analyze public red-spruce fitness-trait data\nIn this exercise you will create a reproducible project on the cluster, download a tab-delimited red-spruce dataset directly from a public GitHub repository and inspect it with bash.\nThe source file is FitnessTraits_GeneticParameters_RedSpruce.txt from the GitHub repository. The repository supports a published manuscript Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration.\n\n\nBy the end, you should be able to:\n\nNavigate a cluster filesystem with bash.\nOrganize a project using reproducible relative paths.\nDownload a tab-delimited data file with curl.\nInspect a file with head, less, grep, and wc."
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#project-setup",
+    "href": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#project-setup",
+    "title": "Getting started with bash on HPC",
+    "section": "Project setup",
+    "text": "Project setup\nStep 1: Log in to your cluster, then create a dedicated project directory:\n\ncd ~ # change directory [cd] to home [~]\npwd  # get the present working directory [pwd]\nmkdir projects \nThis makes a directory (mkdir) or folder at the current location titled “projects”\ncd projects # move inside the projects directory\nStep 2: Create sub folders under the project folder\nmkdir -p cluster-exercise/{data/raw,results,logs,src}\nIn order to create multiple directories at the same time you can use :\n\n-p : Create directory/directories\n{folder-1/subfolder,folder-2,folder-3} : Name of the multiple directory/directories [folders and sub-folders] at the same time\n\n\n\n\n\n\n\nWarning\n\n\n\nDo not add spaces between the names {folder-1/subfolder,folder-2,folder-3}\nThis would disrupt the naming convention\n\n\n\nStep 3: Move inside the working directory cluster-exercise and check the layout\n\n\n\n\n\n\nTipHow to?\n\n\n\nBefore we download the data, move inside working directory- which would be the cluster-exercise directory. How do you do that?\nHint: You need to change directory inside cluster-exercise directory\n\n\nIf you are in the right folder on your home (~) directory then run pwd in the terminal. The path would be something like this: /home/alias/projects/cluster-exercise where alias would be your username on the cluster.\nOnce inside the ‘cluster-exercise’ directory, check the directory layout with tree\ntree\nYour project should have this structure:\ncluster-exercise/\n├── data/\n│   └── raw/       # downloaded, unchanged source data\n├── logs/          # Slurm standard output and error logs\n├── results/       # analysis products created by R\n└── src/           # R and Slurm scripts\nUsing a consistent project structure makes your paths portable. For example, data/raw/red_spruce_traits.txt works for anyone who has the project folder, whereas /home/your_username/... works only on your account and only on one system.\n\nBash quick reference\n\n\n\n\n\n\n\n\nCommand\nPurpose\nExample\n\n\n\n\n~\nYour home directory\ncd ~\n\n\n/\nFilesystem root and path separator\ncd /scratch\n\n\npwd\nPrint working directory\npwd\n\n\nls\nList files and directories\nls -lh results\n\n\ncd\nChange directory\ncd data/raw\n\n\ncd ..\nMove up one directory\ncd ..\n\n\nmkdir -p\nCreate directory/directories\nmkdir -p logs results\n\n\nhead\nShow the beginning of a file\nhead -n 5 file.txt\n\n\nless\nView a file interactively; press q to exit\nless file.txt\n\n\ngrep\nSearch for text in a file\ngrep \"value\" file.txt\n\n\nwc -l\nCount lines\nwc -l file.txt\n\n\ncurl -L -o\nDownload URL into a named file\ncurl -L -o file.txt URL"
+  },
+  {
+    "objectID": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#download-the-data",
+    "href": "notebook/posts/bashing-the-cluster/Bashing the cluster.html#download-the-data",
+    "title": "Getting started with bash on HPC",
+    "section": "Download the data",
+    "text": "Download the data\n\nStep 1: Download the raw GitHub file directly into data/raw/\nCopy the code below and run it inside the cluster-exercise directory\ncurl -L \\\n  -o data/raw/red_spruce_fitness_traits.txt \\\n  https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt\nThe -L flag tells curl to follow redirects, and -o specifies the local output file. Verify the download before doing any analysis:\n\n\n\n\n\n\nNoteHow to use curl\n\n\n\ncurl -L -o location/path/for-download url-of-an-online-data.file\n\ncurl is a tool for transferring data from or to a server using URLs\n-L is the location of the file and allows redirects if the file is moved\n-o writes an output to a given file instead of a standardard output\n\nmore details…\n\n\nStep 2: Check if the files were downloaded correctly Check the file exists with ls - ls : list files inside a directory\n- lh : list them in a human readable form\nls -lh data/raw/red_spruce_fitness_traits.txt\nhead -n 5 data/raw/red_spruce_fitness_traits.txt\nThis is a tab-delimited text file. Print the header with one field per line to inspect its variable names:\nhead -n 1 data/raw/red_spruce_fitness_traits.txt | tr '\\t' '\\n'\n\n\n\n\n\n\nTipThings to understand\n\n\n\nWhat does tr do in the command above?\nThe | in the command is a called a pipe. What does it do?\n\n\nStep 3: Explore the data\nCount the total lines present in the file, including the header.\n\nwc -l data/raw/red_spruce_fitness_traits.txt\nView the file with cat.\ncat data/raw/red_spruce_fitness_traits.txt\nThat is too much data to look at. Lets just peek at the header for the file.\nhead data/raw/red_spruce_fitness_traits.txt\nView the complete file interactively; press q to quit.\nless data/raw/red_spruce_fitness_traits.txt\nSearch for a known trait, population, family, or other text value.\n\nReplace SEARCH_TERM with a value that occurs in the data.\n\nLets search for the population ALB in the data set.\n\ngrep \"SEARCH_TERM\" data/raw/red_spruce_fitness_traits.txt | head\n\n\n\n\n\n\nTipCan you find the how many families/individuals are from VT (Vermont) location?\n\n\n\nHint!\n1. Break it down into individual steps.\n2. Then combine them together with pipes.\n\n\n\n\n\n\n\n\nNoteWrap Up\n\n\n\nBefore continuing, identify the data-file header, count the total lines, and write down two variables you expect to be numeric. Do not assume a column’s type from its name alone: check the data."
+  },
+  {
+    "objectID": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#desired-setup",
+    "href": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#desired-setup",
+    "title": "Github actions",
+    "section": "Desired setup",
+    "text": "Desired setup\nanoobvinu07/anoobvinu07.github.io\n├── source .qmd files\n├── _quarto.yml\n└── docs/                   ← already-rendered site, committed locally\n    ├── index.html\n    ├── assets/\n    └── ...\n\n             push to main\n                   ↓\n            GitHub Action\n                   ↓\nanoobprakash/anoobprakash.github.io\n└── docs/                   ← identical copy of source docs/\n    ├── index.html\n    ├── assets/\n    └── ...\nYour existing source site continues at:\n\nhttps://anoobvinu07.github.io/\n\nThe mirrored Pages site is served at:\n\nhttps://anoobprakash.github.io/"
+  },
+  {
+    "objectID": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#target-repository-setup",
+    "href": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#target-repository-setup",
+    "title": "Github actions",
+    "section": "Target repository setup",
+    "text": "Target repository setup\nIn anoobprakash/anoobprakash.github.io:\n\nCreate the repository if it does not exist.\nEnsure its default branch is main.\nGo to Settings → Pages.\nSet:\n\nSource: Deploy from a branch\nBranch: main\nFolder: /docs\n\nSave.\n\nPages requires an entry file such as index.html at the top level of the selected publishing folder—here, docs/index.html.3"
+  },
+  {
+    "objectID": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#create-cross-account-token",
+    "href": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#create-cross-account-token",
+    "title": "Github actions",
+    "section": "Create cross-account token",
+    "text": "Create cross-account token\nBecause the action runs in anoobvinu07/anoobvinu07.github.io but needs to commit to a different repository/account, create a fine-grained personal access token from the anoobprakash GitHub account:\n\nRepository access: Only select anoobprakash/anoobprakash.github.io\nRepository permissions: Contents: Read and write\n\nThen, in the source repository (anoobvinu07/anoobvinu07.github.io):\n\nGo to Settings → Secrets and variables → Actions\nCreate a repository secret named ANOO_B_PAGES_TOKEN\nPaste the token.\n\nThe workflow’s built-in GITHUB_TOKEN is normally limited to the repository containing the workflow, so it is not suitable for pushing to the other repository.45"
+  },
+  {
+    "objectID": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#mirror-workflow",
+    "href": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#mirror-workflow",
+    "title": "Github actions",
+    "section": "Mirror workflow",
+    "text": "Mirror workflow\nCreate this file in the source repository:\n.github/workflows/mirror-anoobprakash-pages.yml\nname: Mirror rendered site to anoobprakash.github.io\n\non:\n  push:\n    branches:\n      - main\n    paths:\n      - \"docs/**\"\n  workflow_dispatch:\n\njobs:\n  mirror-site:\n    runs-on: ubuntu-latest\n\n    steps:\n      - name: Check out source repository\n        uses: actions/checkout@v4\n\n      - name: Check out destination repository\n        uses: actions/checkout@v4\n        with:\n          repository: anoobprakash/anoobprakash.github.io\n          token: ${{ secrets.ANOO_B_PAGES_TOKEN }}\n          path: destination\n\n      - name: Copy rendered docs site\n        run: |\n          mkdir -p destination/docs\n          rsync -av --delete \\\n            --exclude=\".git\" \\\n            docs/ destination/docs/\n\n      - name: Commit and push changes\n        working-directory: destination\n        run: |\n          git config user.name \"github-actions[bot]\"\n          git config user.email \"41898282+github-actions[bot]@users.noreply.github.com\"\n\n          git add docs/\n\n          if git diff --cached --quiet; then\n            echo \"No mirrored site changes to commit.\"\n          else\n            git commit -m \"Mirror website from anoobvinu07\"\n            git push origin main\n          fi"
+  },
+  {
+    "objectID": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#important-details",
+    "href": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#important-details",
+    "title": "Github actions",
+    "section": "Important details",
+    "text": "Important details\n\npaths: [\"docs/**\"] means the workflow runs only when your rendered website changes, not every time you edit source .qmd files without rendering.\nrsync --delete makes the target docs/ an exact mirror. For example, deleting a post or image from the source docs/ also deletes it from the target site.\nThe target repository may contain other files—such as a README.md or .github/ workflows—because the workflow modifies only destination/docs/.\nAdd a docs/.nojekyll file to the source repository if it does not already exist. This prevents GitHub Pages from applying Jekyll processing to your already-built Quarto static files. GitHub notes that this is useful for sites built with static site generators other than Jekyll.6\n\ntouch docs/.nojekyll\ngit add docs/.nojekyll\ngit commit -m \"Disable Jekyll processing for Pages\"\ngit push\nAfter you render locally and push the updated docs/ folder to main, the action will update anoobprakash/anoobprakash.github.io/docs/, and GitHub Pages will redeploy that mirrored version automatically. 78910111213141516\n\n⁂"
+  },
+  {
+    "objectID": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#footnotes",
+    "href": "notebook/posts/github-actions/the sites are already rendered before they are pus.html#footnotes",
+    "title": "Github actions",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nhttps://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site↩︎\nhttps://quarto.org/docs/publishing/github-pages.html↩︎\nhttps://docs.github.com/articles/creating-project-pages-manually↩︎\nhttps://docs.github.com/actions/reference/authentication-in-a-workflow↩︎\nhttps://github.com/orgs/community/discussions/168256↩︎\nhttps://docs.github.com/articles/creating-project-pages-manually↩︎\nhttps://github.com/orgs/community/discussions/23073↩︎\nhttps://github.com/orgs/community/discussions/160560↩︎\nhttps://www.youtube.com/watch?v=prkKFRiSZx0↩︎\nhttps://www.stepsecurity.io/blog/github-token-how-it-works-and-how-to-secure-automatic-github-action-tokens↩︎\nhttps://discourse.gohugo.io/t/simple-deployment-to-gh-pages/5003↩︎\nhttps://some-natalie.dev/blog/multi-repo-actions/↩︎\nhttps://stackoverflow.com/questions/77726552/how-to-deploy-a-website-with-github-pages-from-a-folder-other-than-docs↩︎\nhttps://github.blog/changelog/2021-04-20-github-actions-control-permissions-for-github_token/↩︎\nhttps://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository↩︎\nhttps://github.com/orgs/community/discussions/138818↩︎"
   }
 ]

@@ -1,9 +1,5 @@
 [
   {
-    "listing": "/notebook/notebook.html",
-    "items": []
-  },
-  {
     "listing": "/notebook/index.html",
     "items": [
       "/notebook/posts/bashing-the-cluster/Bashing the cluster.html",

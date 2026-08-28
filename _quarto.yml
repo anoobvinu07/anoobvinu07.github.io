@@ -24,9 +24,9 @@ website:
       - text: "Gallery"
         href: gallery/index.qmd
       - text: "News"
-        href: news/news.qmd
+        href: news/index.qmd
       - text: "CV"
-        href: cv/cv.qmd
+        href: cv/index.qmd
            
       # - icon: linkedin
       #   href: https://www.linkedin.com/in/anoob-prakash/
