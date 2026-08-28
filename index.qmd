@@ -70,7 +70,7 @@ title: ""
 
 [I’m a plant biologist and forest geneticist who spends a lot of time thinking about how trees will cope with a rapidly changing climate. I utilize large genomic and environmental datasets to understand – and hopefully help guide **the future of forests**.]{style="font-size: 1rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"} 
 
-[**More >>**](About.qmd)
+[**More >>**](about/about.qmd)
 
 
 <div class="footer-logos">

@@ -1,0 +1,19 @@
+---
+title: "Notebook"
+subtitle: "Jotting down notes for later" 
+format: 
+  html:
+    page-layout: article
+    toc: false
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  image-align: left
+  categories: true
+  exclude:
+    listed: false
+# lightbox: auto
+---
+
+

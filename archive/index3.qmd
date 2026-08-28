@@ -1,0 +1,49 @@
+---
+format: 
+  html:
+    page-layout: article
+    toc: false
+    sidebar: false
+    anchor-sections: false
+    theme:
+      light: style2.scss
+      dark: style2-dark.scss
+    css: [index.css]
+image: ""
+title: ""
+---
+
+<section class="hero">
+  <!-- <div class="hero-content"> -->
+  <!--   <h1 class="hero-title">Anoob Prakash</h1> -->
+  <!--   <p class="hero-subtitle"> -->
+  <!--     Ecological & evolutionary genomics · climate adaptation · bioinformatics -->
+  <!--   </p> -->
+  <!-- </div> -->
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+::: {.column-full}
+::: {#bio}
+[Hi there! I'm Anoob Prakash]{style="font-size: 2.6rem; font-weight: 600; display: block; margin-bottom: 0.25rem; color: #b82601;"}
+
+[Welcome to my personal website. I’m a researcher working at the intersection of ecological and evolutionary genomics, climate adaptation, and bioinformatics. I am interested in applying data science skills to analyze large-scale genomic datasets to understand how species respond to a changing climate. Learn more [about me](about.qmd). On this site, you’ll find my research, projects in data visualization and analysis, and other interests.]{style="font-size: 1.6rem; font-weight: 400; display: block; margin-bottom: 0.25rem; color: #6fb3b8;"}
+:::
+:::
+
+
