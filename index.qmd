@@ -38,7 +38,7 @@ title: ""
 
 [![](img/data_science2.png)](https://github.com/anoobvinu07)
 
-[![](img/open_science.png)](cv/cv.qmd#publications)
+[![](img/open_science.png)](cv/index.qmd#publications)
 
 :::
 <div class="section-separator"></div>
