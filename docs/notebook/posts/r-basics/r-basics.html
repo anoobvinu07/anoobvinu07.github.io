@@ -6,11 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Anoob Prakash">
-<meta name="dcterms.date" content="2026-08-09">
-<meta name="description" content="Quick reference cheatsheet for frequently used bash commands and SLURM commands to submit or manage jobs on a HPC">
 
-<title>Cheat sheet for bash and SLURM – Anoob Prakash</title>
+<title>r-basics – Anoob Prakash</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -50,9 +47,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-5a2779fdaa76c2336e47347f5b060a9d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-b58f7d4389a3de684393d011f34a6cac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-5a2779fdaa76c2336e47347f5b060a9d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-9b4163b2d5a4faf47f5c6c26d950b841.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-8a68b0757c042891bc850940a3111cbc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-9b4163b2d5a4faf47f5c6c26d950b841.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/academicons-1.9.4/all.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-contrib/academicons-1.9.4/size.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -85,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -303,145 +300,19 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#bash-quick-reference" id="toc-bash-quick-reference" class="nav-link active" data-scroll-target="#bash-quick-reference">Bash quick reference</a></li>
-  </ul>
-</nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Cheat sheet for bash and SLURM</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">hpc</div>
-    <div class="quarto-category">bash</div>
-    <div class="quarto-category">slurm</div>
-  </div>
-  </div>
-
-<div>
-  <div class="description">
-    Quick reference cheatsheet for frequently used bash commands and SLURM commands to submit or manage jobs on a HPC
-  </div>
-</div>
 
 
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Anoob Prakash </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 9, 2026</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
 
 
-</header>
 
-
-<section id="bash-quick-reference" class="level3">
-<h3 class="anchored" data-anchor-id="bash-quick-reference">Bash quick reference</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Command</th>
-<th>Purpose</th>
-<th>Example</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>~</code></td>
-<td>Your home directory</td>
-<td><code>cd ~</code></td>
-</tr>
-<tr class="even">
-<td><code>/</code></td>
-<td>Filesystem root and path separator</td>
-<td><code>cd /scratch</code></td>
-</tr>
-<tr class="odd">
-<td><code>pwd</code></td>
-<td>Print working directory</td>
-<td><code>pwd</code></td>
-</tr>
-<tr class="even">
-<td><code>ls</code></td>
-<td>List files and directories</td>
-<td><code>ls -lh results</code></td>
-</tr>
-<tr class="odd">
-<td><code>cd</code></td>
-<td>Change directory</td>
-<td><code>cd data/raw</code></td>
-</tr>
-<tr class="even">
-<td><code>cd ..</code></td>
-<td>Move up one directory</td>
-<td><code>cd ..</code></td>
-</tr>
-<tr class="odd">
-<td><code>mkdir -p</code></td>
-<td>Create directory/directories</td>
-<td><code>mkdir -p logs results</code></td>
-</tr>
-<tr class="even">
-<td><code>head</code></td>
-<td>Show the beginning of a file</td>
-<td><code>head -n 5 file.txt</code></td>
-</tr>
-<tr class="odd">
-<td><code>less</code></td>
-<td>View a file interactively; press <code>q</code> to exit</td>
-<td><code>less file.txt</code></td>
-</tr>
-<tr class="even">
-<td><code>grep</code></td>
-<td>Search for text in a file</td>
-<td><code>grep "value" file.txt</code></td>
-</tr>
-<tr class="odd">
-<td><code>wc -l</code></td>
-<td>Count lines</td>
-<td><code>wc -l file.txt</code></td>
-</tr>
-<tr class="even">
-<td><code>curl -L -o</code></td>
-<td>Download URL into a named file</td>
-<td><code>curl -L -o file.txt URL</code></td>
-</tr>
-</tbody>
-</table>
-
-
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

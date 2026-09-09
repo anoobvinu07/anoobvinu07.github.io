@@ -2,7 +2,8 @@
   {
     "listing": "/notebook/index.html",
     "items": [
-      "/notebook/posts/bashing-the-cluster/Bashing the cluster.html",
+      "/notebook/posts/r-basics/index.html",
+      "/notebook/posts/bashing-the-cluster/index.html",
       "/notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html"
     ]
   }
