@@ -31,14 +31,15 @@ Learn core R syntax and data-handling skills by analyzing the red-spruce fitness
 
 This module picks up exactly where the cluster exercise left off: `data/raw/` holds the raw file, `src/` will hold your R scripts, and `results/` will hold everything R produces.
 
-## Prerequisites
+#### Prerequisites
 
-- Completed the cluster exercise (or willing to work locally instead)
+- Completed the cluster exercise 
 - R (>= 4.2) installed; RStudio recommended but not required
 - The dataset available at `data/raw/red_spruce_fitness_traits.txt`
 
 If you're working locally instead of on the cluster, grab the same file directly from R:
 
+::: {.column-full}
 ```{r}
 #| 
 dir.create("data/raw", recursive = TRUE, showWarnings = FALSE)
@@ -47,6 +48,7 @@ download.file(
   destfile = "data/raw/red_spruce_fitness_traits.txt"
 )
 ```
+:::
 
 Recreate the rest of the project layout if you don't already have it:
 
@@ -65,12 +67,11 @@ By the end of this module you should be able to:
 - Describe R's core data types and structures: vectors, factors, data frames, lists
 - Import and inspect a tab-delimited file
 - Subset, filter, and summarize data with base R
-- Write functions, `if`/`else` logic, and `for` loops
 - Produce basic plots (histogram, boxplot, scatterplot)
 - Save tables and plots into `results/`
 - Turn interactive code into a script you can run non-interactively with `Rscript`
 
-## R quick reference
+#### R quick reference
 
 | Function/operator | Purpose | Example |
 |---|---|---|
@@ -136,7 +137,7 @@ result$mean_height
 
 **Key idea:** almost everything you do in this module is a data frame — one row per tree, one column per variable — with vectors as its columns.
 
-## Importing and inspecting the dataset
+### Importing and inspecting the dataset
 
 ```{r}
 traits <- read.delim("data/raw/red_spruce_fitness_traits.txt",
@@ -153,7 +154,7 @@ You should see 19 columns including identifiers (`Family`, `Population`, `Tree`,
 
 **Don't assume a column's type from its name** — Always check with `str()` before analyzing.
 
-## Indexing and subsetting
+### Indexing and subsetting
 
 ```{r}
 # A single column
@@ -170,7 +171,7 @@ healthy_edge <- traits[traits$Region == "E" & traits$Survival > 0.8, ]
 subset(traits, Region == "E" & Height > 35, select = c(Population, Height, Fitness))
 ```
 
-## Summarizing data
+### Summarizing data
 
 ```{r}
 # Counts
@@ -184,19 +185,22 @@ tapply(traits$Height, traits$Population, mean, na.rm = TRUE)
 aggregate(cbind(Height, Fitness) ~ Population, data = traits, FUN = mean) |> head()
 ```
 
-## Basic plotting
+### Basic plotting
 
 ```{r}
-hist(traits$SeedWeight, main = "Seed weight distribution", xlab = "Seed weight")
+hist(traits$SeedWeight, main = "Seed weight distribution", 
+        xlab = "Seed weight")
 
-boxplot(Height ~ Region, data = traits, main = "Height by region", ylab = "Height (cm)")
+boxplot(Height ~ Region, data = traits, 
+        main = "Height by region", 
+        ylab = "Height (cm)")
 
 plot(traits$Elevation, traits$Fitness,
      xlab = "Elevation (m)", ylab = "Fitness",
      main = "Fitness vs elevation")
 ```
 
-## Saving outputs and scripting
+### Saving outputs and scripting
 
 ```{r}
 pop_summary <- aggregate(cbind(Height, Fitness, SeedWeight) ~ Population, data = traits, FUN = mean)
@@ -220,7 +224,8 @@ Put everything into `src/01_explore_traits.R` and run it non-interactively — t
 Rscript src/01_explore_traits.R
 ```
 
-## Idea check
+## Wrap up  
+### Idea check
 
 Answer these in your own words before moving to the exercises — write your answers as comments at the top of `src/01_explore_traits.R`.
 
@@ -231,7 +236,7 @@ Answer these in your own words before moving to the exercises — write your ans
 5. If `mean(traits$Height)` returned `NA`, what would you check first, and how would you fix it?
 6. Why write outputs into `results/` instead of overwriting anything in `data/raw/`?
 
-## Practical exercises
+### Practical exercises
 
 Work through these in order inside an R session, then consolidate the working code into `src/01_explore_traits.R`.
 
@@ -245,7 +250,7 @@ Work through these in order inside an R session, then consolidate the working co
 8. Save your population-level summary table as `results/population_trait_summary.csv`.
 9. Move all working code into `src/01_explore_traits.R` and confirm it runs cleanly end-to-end with `Rscript src/01_explore_traits.R`, producing the expected files in `results/`.
 
-## Homework 
+### Homework 
 
 - Compute summary statistics (mean, sd, min, max) for at least **4 traits** (e.g., `Height`, `Fitness`, `SeedWeight`, `Germination`), broken down by both `Population` and `Region`.
 - Produce at least **3 plots**: one histogram, one boxplot grouped by `Region`, and one scatterplot relating two continuous variables (e.g., `Elevation` vs. `Fitness`). Save all three to `results/`.

@@ -343,20 +343,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#goal" id="toc-goal" class="nav-link active" data-scroll-target="#goal">Goal</a></li>
+  <li><a href="#goal" id="toc-goal" class="nav-link active" data-scroll-target="#goal">Goal</a>
+  <ul>
   <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  </ul></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a>
+  <ul>
   <li><a href="#r-quick-reference" id="toc-r-quick-reference" class="nav-link" data-scroll-target="#r-quick-reference">R quick reference</a></li>
+  </ul></li>
   <li><a href="#setting-up-your-r-project" id="toc-setting-up-your-r-project" class="nav-link" data-scroll-target="#setting-up-your-r-project">Setting up your R project</a></li>
-  <li><a href="#r-data-types-and-structures" id="toc-r-data-types-and-structures" class="nav-link" data-scroll-target="#r-data-types-and-structures">R data types and structures</a></li>
+  <li><a href="#r-data-types-and-structures" id="toc-r-data-types-and-structures" class="nav-link" data-scroll-target="#r-data-types-and-structures">R data types and structures</a>
+  <ul>
   <li><a href="#importing-and-inspecting-the-dataset" id="toc-importing-and-inspecting-the-dataset" class="nav-link" data-scroll-target="#importing-and-inspecting-the-dataset">Importing and inspecting the dataset</a></li>
   <li><a href="#indexing-and-subsetting" id="toc-indexing-and-subsetting" class="nav-link" data-scroll-target="#indexing-and-subsetting">Indexing and subsetting</a></li>
   <li><a href="#summarizing-data" id="toc-summarizing-data" class="nav-link" data-scroll-target="#summarizing-data">Summarizing data</a></li>
   <li><a href="#basic-plotting" id="toc-basic-plotting" class="nav-link" data-scroll-target="#basic-plotting">Basic plotting</a></li>
   <li><a href="#saving-outputs-and-scripting" id="toc-saving-outputs-and-scripting" class="nav-link" data-scroll-target="#saving-outputs-and-scripting">Saving outputs and scripting</a></li>
+  </ul></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up">Wrap up</a>
+  <ul>
   <li><a href="#idea-check" id="toc-idea-check" class="nav-link" data-scroll-target="#idea-check">Idea check</a></li>
   <li><a href="#practical-exercises" id="toc-practical-exercises" class="nav-link" data-scroll-target="#practical-exercises">Practical exercises</a></li>
   <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework">Homework</a></li>
+  </ul></li>
   </ul>
 </nav>
 </nav>
@@ -365,7 +374,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -408,19 +417,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="goal" class="level2">
+<section id="goal" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="goal">Goal</h2>
 <p>Learn core R syntax and data-handling skills by analyzing the red-spruce fitness-trait dataset you already downloaded in <a href="../../../notebook/posts/bashing-the-cluster/index.html"><em>Bashing the cluster</em></a>, and finish with a first reproducible R script whose outputs land in <code>results/</code>.</p>
 <p>This module picks up exactly where the cluster exercise left off: <code>data/raw/</code> holds the raw file, <code>src/</code> will hold your R scripts, and <code>results/</code> will hold everything R produces.</p>
-</section>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<section id="prerequisites" class="level4 page-columns page-full">
+<h4 class="anchored" data-anchor-id="prerequisites">Prerequisites</h4>
 <ul>
-<li>Completed the cluster exercise (or willing to work locally instead)</li>
+<li>Completed the cluster exercise</li>
 <li>R (&gt;= 4.2) installed; RStudio recommended but not required</li>
 <li>The dataset available at <code>data/raw/red_spruce_fitness_traits.txt</code></li>
 </ul>
 <p>If you’re working locally instead of on the cluster, grab the same file directly from R:</p>
+<div class="column-full">
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"data/raw"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(</span>
@@ -428,11 +437,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destfile =</span> <span class="st">"data/raw/red_spruce_fitness_traits.txt"</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</div>
 <p>Recreate the rest of the project layout if you don’t already have it:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"results"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"src"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
@@ -442,14 +453,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Describe R’s core data types and structures: vectors, factors, data frames, lists</li>
 <li>Import and inspect a tab-delimited file</li>
 <li>Subset, filter, and summarize data with base R</li>
-<li>Write functions, <code>if</code>/<code>else</code> logic, and <code>for</code> loops</li>
 <li>Produce basic plots (histogram, boxplot, scatterplot)</li>
 <li>Save tables and plots into <code>results/</code></li>
 <li>Turn interactive code into a script you can run non-interactively with <code>Rscript</code></li>
 </ul>
-</section>
-<section id="r-quick-reference" class="level2">
-<h2 class="anchored" data-anchor-id="r-quick-reference">R quick reference</h2>
+<section id="r-quick-reference" class="level4">
+<h4 class="anchored" data-anchor-id="r-quick-reference">R quick reference</h4>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -542,6 +551,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
+</section>
 <section id="setting-up-your-r-project" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-your-r-project">Setting up your R project</h2>
 <p>On the cluster, load R and start it from inside <code>cluster-exercise/</code>:</p>
@@ -591,9 +601,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p><strong>Key idea:</strong> almost everything you do in this module is a data frame — one row per tree, one column per variable — with vectors as its columns.</p>
-</section>
-<section id="importing-and-inspecting-the-dataset" class="level2">
-<h2 class="anchored" data-anchor-id="importing-and-inspecting-the-dataset">Importing and inspecting the dataset</h2>
+<section id="importing-and-inspecting-the-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="importing-and-inspecting-the-dataset">Importing and inspecting the dataset</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>,</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
@@ -668,8 +677,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>You should see 19 columns including identifiers (<code>Family</code>, <code>Population</code>, <code>Tree</code>, <code>Location</code>, <code>Region</code>), coordinates and environment (<code>Latitude</code>, <code>Longitude</code>, <code>Elevation</code>), fitness traits (<code>SeedWeight</code>, <code>Germination</code>, <code>Survival</code>, <code>Height</code>, <code>Fitness</code>), and genetic parameters (<code>PC1</code>, <code>PC2</code>, <code>Family_Homozygosity</code>, <code>Population_Homozygosity</code>, <code>Genetic_Diversity</code>, <code>Genetic_Load</code>) — we’ll use that last group in Module 2.</p>
 <p><strong>Don’t assume a column’s type from its name</strong> — Always check with <code>str()</code> before analyzing.</p>
 </section>
-<section id="indexing-and-subsetting" class="level2">
-<h2 class="anchored" data-anchor-id="indexing-and-subsetting">Indexing and subsetting</h2>
+<section id="indexing-and-subsetting" class="level3">
+<h3 class="anchored" data-anchor-id="indexing-and-subsetting">Indexing and subsetting</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A single column</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>traits<span class="sc">$</span>Fitness <span class="sc">|&gt;</span> <span class="fu">head</span>() <span class="co"># |&gt; head() : pipe (|&gt;) the additional commands (head()) at the end </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -696,8 +705,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="summarizing-data" class="level2">
-<h2 class="anchored" data-anchor-id="summarizing-data">Summarizing data</h2>
+<section id="summarizing-data" class="level3">
+<h3 class="anchored" data-anchor-id="summarizing-data">Summarizing data</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Counts</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(traits<span class="sc">$</span>Population) <span class="co"># number of inds per population</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -753,10 +762,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="basic-plotting" class="level2">
-<h2 class="anchored" data-anchor-id="basic-plotting">Basic plotting</h2>
+<section id="basic-plotting" class="level3">
+<h3 class="anchored" data-anchor-id="basic-plotting">Basic plotting</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, <span class="at">xlab =</span> <span class="st">"Seed weight"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Seed weight"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -764,7 +774,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits, <span class="at">main =</span> <span class="st">"Height by region"</span>, <span class="at">ylab =</span> <span class="st">"Height (cm)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits, </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Height by region"</span>, </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Height (cm)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -784,8 +796,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="saving-outputs-and-scripting" class="level2">
-<h2 class="anchored" data-anchor-id="saving-outputs-and-scripting">Saving outputs and scripting</h2>
+<section id="saving-outputs-and-scripting" class="level3">
+<h3 class="anchored" data-anchor-id="saving-outputs-and-scripting">Saving outputs and scripting</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>pop_summary <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="fu">cbind</span>(Height, Fitness, SeedWeight) <span class="sc">~</span> Population, <span class="at">data =</span> traits, <span class="at">FUN =</span> mean)</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(pop_summary, <span class="st">"results/population_trait_summary.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -801,8 +813,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> src/01_explore_traits.R</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="idea-check" class="level2">
-<h2 class="anchored" data-anchor-id="idea-check">Idea check</h2>
+</section>
+<section id="wrap-up" class="level2">
+<h2 class="anchored" data-anchor-id="wrap-up">Wrap up</h2>
+<section id="idea-check" class="level3">
+<h3 class="anchored" data-anchor-id="idea-check">Idea check</h3>
 <p>Answer these in your own words before moving to the exercises — write your answers as comments at the top of <code>src/01_explore_traits.R</code>.</p>
 <ol type="1">
 <li>What is the difference between a vector and a data frame in R?</li>
@@ -813,8 +828,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Why write outputs into <code>results/</code> instead of overwriting anything in <code>data/raw/</code>?</li>
 </ol>
 </section>
-<section id="practical-exercises" class="level2">
-<h2 class="anchored" data-anchor-id="practical-exercises">Practical exercises</h2>
+<section id="practical-exercises" class="level3">
+<h3 class="anchored" data-anchor-id="practical-exercises">Practical exercises</h3>
 <p>Work through these in order inside an R session, then consolidate the working code into <code>src/01_explore_traits.R</code>.</p>
 <ol type="1">
 <li>Load the dataset and confirm it has 326 rows and 19 columns.</li>
@@ -828,8 +843,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Move all working code into <code>src/01_explore_traits.R</code> and confirm it runs cleanly end-to-end with <code>Rscript src/01_explore_traits.R</code>, producing the expected files in <code>results/</code>.</li>
 </ol>
 </section>
-<section id="homework" class="level2">
-<h2 class="anchored" data-anchor-id="homework">Homework</h2>
+<section id="homework" class="level3">
+<h3 class="anchored" data-anchor-id="homework">Homework</h3>
 <ul>
 <li>Compute summary statistics (mean, sd, min, max) for at least <strong>4 traits</strong> (e.g., <code>Height</code>, <code>Fitness</code>, <code>SeedWeight</code>, <code>Germination</code>), broken down by both <code>Population</code> and <code>Region</code>.</li>
 <li>Produce at least <strong>3 plots</strong>: one histogram, one boxplot grouped by <code>Region</code>, and one scatterplot relating two continuous variables (e.g., <code>Elevation</code> vs.&nbsp;<code>Fitness</code>). Save all three to <code>results/</code>.</li>
@@ -842,6 +857,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
