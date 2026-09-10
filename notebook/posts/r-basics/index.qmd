@@ -1,6 +1,6 @@
 ---
 title: "R basics for reproducible data analysis"
-description: "Learn the basics of using R to for statistical data analysis"
+description: "Learn the basics of using R for statistical data analysis"
 author: "Anoob Prakash"
 author-email: "prakas89@purdue.edu"
 author-orcid: "0000-0000-0000-0000"   # optional
@@ -13,6 +13,7 @@ format:
   html:
     toc: true
     toc-location: left
+    lightbox: true
     code-fold: false
     code-overflow: wrap
     code-copy: true
@@ -20,7 +21,6 @@ format:
     code-block-border-left: "#583C88"
     code-block-border-left-size: 5px
     code-block-border-left-style: solid
-
 ---
 
 
@@ -187,14 +187,34 @@ aggregate(cbind(Height, Fitness) ~ Population, data = traits, FUN = mean) |> hea
 
 ### Basic plotting
 
+:::{.panel-tabset}
+#### Default Histogram
 ```{r}
 hist(traits$SeedWeight, main = "Seed weight distribution", 
         xlab = "Seed weight")
+```
 
+#### Breaks = 30
+```{r}
+hist(traits$SeedWeight, main = "Seed weight distribution", 
+        xlab = "Seed weight", breaks = 30)
+```
+
+
+#### Breaks = 50
+```{r}
+hist(traits$SeedWeight, main = "Seed weight distribution", 
+        xlab = "Seed weight", breaks = 50)
+```
+:::
+
+```{r}
 boxplot(Height ~ Region, data = traits, 
         main = "Height by region", 
         ylab = "Height (cm)")
+```
 
+```{r}
 plot(traits$Elevation, traits$Fitness,
      xlab = "Elevation (m)", ylab = "Fitness",
      main = "Fitness vs elevation")

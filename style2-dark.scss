@@ -1323,3 +1323,68 @@ li.no-bullet {
 }
 
 /*-- end of NEWS scss:rules --*/
+
+
+
+/*-- Dark theme specific rules for code output scss:rules --*/
+
+/* Cell output containers (results of executed R/Python/etc. chunks) */
+div.cell-output,
+div.cell-output-stdout,
+div.cell-output-stderr,
+div.cell-output-display {
+  background-color: $black;        // matches body-bg; change if you want a subtle panel color
+  border-radius: 4px;
+}
+
+/* The actual <pre><code> text inside cell output */
+div.cell-output pre,
+div.cell-output-stdout pre,
+div.cell-output-stderr pre,
+div.cell-output pre code,
+div.cell-output-stdout pre code,
+div.cell-output-stderr pre code {
+  background-color: transparent !important;
+  color: $white !important;        // force readable light text on the dark bg
+}
+
+/* stderr output (warnings/messages) - give it a distinct but readable color */
+div.cell-output-stderr pre,
+div.cell-output-stderr pre code {
+  color: $light-gray !important;
+}
+
+/* Safety net: any bare <pre> not caught by the classes above
+   (older Quarto versions sometimes emit output without cell-output wrapper) */
+.cell pre:not(.sourceCode) {
+  background-color: $black !important;
+  color: $white !important;
+}
+
+/* Inactive tab labels */
+.panel-tabset .nav-tabs .nav-link {
+  color: $white !important;
+  border-color: $cream $cream $cream;
+  background-color: $dark-gray;
+}
+
+.panel-tabset .nav-tabs .nav-link:hover {
+  color: $teal !important;
+  border-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* Active tab label — the one currently selected/open */
+.panel-tabset .nav-tabs .nav-link.active,
+.panel-tabset .nav-tabs .nav-item.show .nav-link {
+  color: $white !important;
+  background-color: $teal !important;
+  border-color: $cream $cream $dark-gray;
+  font-weight: 700;
+}
+
+/* Tab strip bottom border (separates tabs from content) */
+.panel-tabset .nav-tabs {
+  border-bottom-color: $cream;
+}
+
+/*-- end of Dark theme specific rules for code output scss:rules --*/

@@ -8,7 +8,7 @@
 
 <meta name="author" content="Anoob Prakash">
 <meta name="dcterms.date" content="2026-09-02">
-<meta name="description" content="Learn the basics of using R to for statistical data analysis">
+<meta name="description" content="Learn the basics of using R for statistical data analysis">
 
 <title>R basics for reproducible data analysis – Anoob Prakash</title>
 <style>
@@ -86,10 +86,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-b2584ef0ce0005415c03a638dbfcd630.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-0b99215d068018bf13def9d692760c35.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/academicons-1.9.4/all.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-contrib/academicons-1.9.4/size.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -388,7 +391,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div>
   <div class="description">
-    Learn the basics of using R to for statistical data analysis
+    Learn the basics of using R for statistical data analysis
   </div>
 </div>
 
@@ -764,33 +767,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="basic-plotting" class="level3">
 <h3 class="anchored" data-anchor-id="basic-plotting">Basic plotting</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Default Histogram</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Breaks = 30</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Breaks = 50</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, </span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Seed weight"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="index_files/figure-html/unnamed-chunk-9-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits, </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Height by region"</span>, </span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Height (cm)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Seed weight"</span>, <span class="at">breaks =</span> <span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="index_files/figure-html/unnamed-chunk-10-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(traits<span class="sc">$</span>Elevation, traits<span class="sc">$</span>Fitness,</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Elevation (m)"</span>, <span class="at">ylab =</span> <span class="st">"Fitness"</span>,</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Fitness vs elevation"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Seed weight"</span>, <span class="at">breaks =</span> <span class="dv">50</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-9-3.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="index_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits, </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Height by region"</span>, </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Height (cm)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-12-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(traits<span class="sc">$</span>Elevation, traits<span class="sc">$</span>Fitness,</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Elevation (m)"</span>, <span class="at">ylab =</span> <span class="st">"Fitness"</span>,</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Fitness vs elevation"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-13-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -799,18 +839,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="saving-outputs-and-scripting" class="level3">
 <h3 class="anchored" data-anchor-id="saving-outputs-and-scripting">Saving outputs and scripting</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>pop_summary <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="fu">cbind</span>(Height, Fitness, SeedWeight) <span class="sc">~</span> Population, <span class="at">data =</span> traits, <span class="at">FUN =</span> mean)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(pop_summary, <span class="st">"results/population_trait_summary.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>pop_summary <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="fu">cbind</span>(Height, Fitness, SeedWeight) <span class="sc">~</span> Population, <span class="at">data =</span> traits, <span class="at">FUN =</span> mean)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(pop_summary, <span class="st">"results/population_trait_summary.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># exporting plot as a .png</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"results/height_by_region.png"</span>, <span class="at">width =</span> <span class="dv">800</span>, <span class="at">height =</span> <span class="dv">600</span>)</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits)</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># exporting plot as a .png</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"results/height_by_region.png"</span>, <span class="at">width =</span> <span class="dv">800</span>, <span class="at">height =</span> <span class="dv">600</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Put everything into <code>src/01_explore_traits.R</code> and run it non-interactively — this is what makes it reproducible and Slurm-friendly:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> src/01_explore_traits.R</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> src/01_explore_traits.R</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -1326,6 +1366,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
