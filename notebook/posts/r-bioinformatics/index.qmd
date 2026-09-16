@@ -415,12 +415,13 @@ p_A_1 + q_a_1
 
 
 ## Excercises 
-**Repeat this for Population 1**
+- **Estimate allele frequencies for Population 2**
 
-**Combine the pooled population data with the Population 1 and Population 2 data** 
+- **Combine the pooled population data with the Population 1 and Population 2 data**  
+  - What changed for the pooled data? What could be the reason?   
 
-**Try changing the simulations**  
-- Change one value at a time: change population size, make populations genetically similar, make populations drastically different, change the seed (set.seed(?))  
+- **Try changing the simulations**  
+  - Change one value at a time: change population size, make populations genetically similar, make populations drastically different, change the seed (set.seed(?))  
 
 
 

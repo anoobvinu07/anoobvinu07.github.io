@@ -928,6 +928,6 @@
     "href": "notebook/posts/r-bioinformatics/index.html#excercises",
     "title": "R for Bioinformatics: Population Genetics Foundations",
     "section": "Excercises",
-    "text": "Excercises\nRepeat this for Population 1\nCombine the pooled population data with the Population 1 and Population 2 data\nTry changing the simulations\n- Change one value at a time: change population size, make populations genetically similar, make populations drastically different, change the seed (set.seed(?))"
+    "text": "Excercises\n\nEstimate allele frequencies for Population 2\nCombine the pooled population data with the Population 1 and Population 2 data\n\nWhat changed for the pooled data? What could be the reason?\n\nTry changing the simulations\n\nChange one value at a time: change population size, make populations genetically similar, make populations drastically different, change the seed (set.seed(?))"
   }
 ]
