@@ -421,7 +421,9 @@ p_A_1 + q_a_1
   - What changed for the pooled data? What could be the reason?   
 
 - **Try changing the simulations**  
-  - Change one value at a time: change population size, make populations genetically similar, make populations drastically different, change the seed (set.seed(?))  
+  - Change one value at a time: change population size, make populations genetically similar, make populations drastically different, change the seed (set.seed(?)) 
+
+  Testing repo update 
 
 
 
