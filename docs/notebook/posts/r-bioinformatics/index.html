@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Anoob Prakash">
+<meta name="dcterms.date" content="2026-09-11">
+<meta name="description" content="allele frequencies, heterozygosity, and a first genotype–environment association">
+
+<title>R for Bioinformatics: Population Genetics Foundations – Anoob Prakash</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../img/illustrated_AP.jpg" rel="icon" type="image/jpeg">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-7ccbb4ccca079e06e65b90b0593693ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/quarto-contrib/academicons-1.9.4/all.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/academicons-1.9.4/size.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo light-content">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Anoob Prakash</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../research/index.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../notebook/index.html"> 
+<span class="menu-text">Notebook</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../gallery/index.html"> 
+<span class="menu-text">Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../news/index.html"> 
+<span class="menu-text">News</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../cv/index.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#part-i" id="toc-part-i" class="nav-link active" data-scroll-target="#part-i">PART I</a>
+  <ul class="collapse">
+  <li><a href="#goal" id="toc-goal" class="nav-link" data-scroll-target="#goal">Goal</a>
+  <ul class="collapse">
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  </ul></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a>
+  <ul class="collapse">
+  <li><a href="#r-for-bioinformatics-quick-reference" id="toc-r-for-bioinformatics-quick-reference" class="nav-link" data-scroll-target="#r-for-bioinformatics-quick-reference">R for bioinformatics quick reference</a></li>
+  </ul></li>
+  <li><a href="#basics-of-population-genetics-via-simulation" id="toc-basics-of-population-genetics-via-simulation" class="nav-link" data-scroll-target="#basics-of-population-genetics-via-simulation">Basics of population genetics via simulation</a>
+  <ul class="collapse">
+  <li><a href="#a-minimal-snp-genotype-matrix-in-r" id="toc-a-minimal-snp-genotype-matrix-in-r" class="nav-link" data-scroll-target="#a-minimal-snp-genotype-matrix-in-r">A minimal SNP genotype matrix in R</a></li>
+  <li><a href="#allele-frequencies" id="toc-allele-frequencies" class="nav-link" data-scroll-target="#allele-frequencies">Allele frequencies</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#part-ii" id="toc-part-ii" class="nav-link" data-scroll-target="#part-ii">PART II</a>
+  <ul class="collapse">
+  <li><a href="#goals" id="toc-goals" class="nav-link" data-scroll-target="#goals">Goals</a>
+  <ul class="collapse">
+  <li><a href="#learning-objectives-1" id="toc-learning-objectives-1" class="nav-link" data-scroll-target="#learning-objectives-1">Learning objectives</a></li>
+  </ul></li>
+  <li><a href="#simulating-two-populations-at-one-locus" id="toc-simulating-two-populations-at-one-locus" class="nav-link" data-scroll-target="#simulating-two-populations-at-one-locus">Simulating two populations at one locus</a>
+  <ul class="collapse">
+  <li><a href="#calculate-genotype-frequencies" id="toc-calculate-genotype-frequencies" class="nav-link" data-scroll-target="#calculate-genotype-frequencies">Calculate genotype frequencies</a></li>
+  <li><a href="#calculate-allele-frequencies" id="toc-calculate-allele-frequencies" class="nav-link" data-scroll-target="#calculate-allele-frequencies">Calculate allele frequencies</a></li>
+  </ul></li>
+  <li><a href="#excercises" id="toc-excercises" class="nav-link" data-scroll-target="#excercises">Excercises</a></li>
+  </ul></li>
+  <li><a href="#part-iii" id="toc-part-iii" class="nav-link" data-scroll-target="#part-iii">PART III</a>
+  <ul class="collapse">
+  <li><a href="#observed-and-expected-heterozygosity" id="toc-observed-and-expected-heterozygosity" class="nav-link" data-scroll-target="#observed-and-expected-heterozygosity">Observed and expected heterozygosity</a></li>
+  <li><a href="#pca-for-population-structure" id="toc-pca-for-population-structure" class="nav-link" data-scroll-target="#pca-for-population-structure">PCA for population structure</a></li>
+  <li><a href="#roadmap-beyond-this-module" id="toc-roadmap-beyond-this-module" class="nav-link" data-scroll-target="#roadmap-beyond-this-module">Roadmap beyond this module</a></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up">Wrap Up</a>
+  <ul class="collapse">
+  <li><a href="#idea-check" id="toc-idea-check" class="nav-link" data-scroll-target="#idea-check">Idea check</a></li>
+  <li><a href="#practical-exercises" id="toc-practical-exercises" class="nav-link" data-scroll-target="#practical-exercises">Practical exercises</a></li>
+  <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework">Homework</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content page-columns page-full column-page-right" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">R for Bioinformatics: Population Genetics Foundations</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">hpc</div>
+    <div class="quarto-category">r</div>
+    <div class="quarto-category">bioinformatics</div>
+    <div class="quarto-category">github</div>
+    <div class="quarto-category">popgen</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    allele frequencies, heterozygosity, and a first genotype–environment association
+  </div>
+</div>
+
+
+<div class="quarto-title-meta column-page-right">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p><a href="https://www.linkedin.com/in/anoob-prakash/">Anoob Prakash</a> <a href="mailto:prakas89@purdue.edu" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-7207-934X" class="quarto-title-author-orcid" aria-label="ORCID profile for Anoob Prakash"> <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 11, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="part-i" class="level1 page-columns page-full">
+<h1>PART I</h1>
+<section id="goal" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="goal">Goal</h2>
+<p>Apply the R skills from Module 1 to population-genetics concepts: allele frequency, heterozygosity, genetic diversity, and a first genotype/phenotype–environment association (GEA), using the genetic-parameter columns already present in the red-spruce dataset (<code>PC1</code>, <code>PC2</code>, <code>Family_Homozygosity</code>, <code>Population_Homozygosity</code>, <code>Genetic_Diversity</code>, <code>Genetic_Load</code>).</p>
+<p>We don’t have a raw genotype (VCF) file for this dataset, so this module teaches the underlying math with a small <strong>simulated</strong> SNP matrix, then applies the same reasoning to the <strong>real, pre-computed</strong> genetic-parameter columns already in your data.</p>
+<section id="prerequisites" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="prerequisites">Prerequisites</h3>
+<div class="column-body">
+<p><em>1. Data required data from github</em></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Download data
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Download the raw GitHub file directly into</strong> <code>data/raw/</code></p>
+<p><strong>Copy the code below and run it inside the</strong> <code>cluster-exercise</code> <strong>directory</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"data/raw"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="st">"https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">destfile =</span> <span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>-L</code> flag tells <code>curl</code> to follow redirects, and <code>-o</code> specifies the local output file. Verify the download before doing any analysis:</p>
+<p>Recreate the rest of the project layout if you don’t already have it:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"results"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"src"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Project directory setup
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>This excercise assumes the project folder follows the following structure:</strong></p>
+<pre style="color: #F8F9FA; background-color: #22252A; padding: 1rem; border-radius: 6px;"><code>cluster-exercise/
+ ├── data/
+ │   └── raw/       # downloaded, unchanged source data
+ ├── logs/          # Slurm standard output and error logs
+ ├── results/       # analysis products created by R
+ └── src/           # R and Slurm scripts</code></pre>
+</div>
+</div>
+</div>
+<p><em>2. Install the packages used here:</em></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"vegan"</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Optional, for working with real genotype/VCF files beyond this module:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># install.packages("BiocManager")</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># BiocManager::install(c("vcfR", "adegenet"))</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+</section>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<p>By the end of this module you should be able to:</p>
+<ul>
+<li>Explain what allele frequency, observed heterozygosity, and expected heterozygosity mean</li>
+<li>Represent genotypes as a simple numeric matrix (0/1/2 coding) and compute allele frequencies from it</li>
+<li>Compute observed vs.&nbsp;expected (Hardy-Weinberg) heterozygosity per locus and interpret the difference</li>
+<li>Run a PCA on genetic markers with <code>prcomp()</code> and interpret PC1/PC2 in a population-genetics context</li>
+<li>Test a simple genotype/phenotype–environment association using correlation and linear models</li>
+<li>Recognize the step from a simple correlation to a multivariate method (RDA) used in real genotype-environment association work</li>
+<li>Know when to move from a plain R matrix to dedicated packages (<code>vcfR</code>, <code>adegenet</code>) for real VCF-scale data</li>
+</ul>
+<section id="r-for-bioinformatics-quick-reference" class="level3">
+<h3 class="anchored" data-anchor-id="r-for-bioinformatics-quick-reference">R for bioinformatics quick reference</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function/package</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>matrix()</code></td>
+<td>Build a genotype matrix</td>
+<td><code>matrix(..., nrow, ncol)</code></td>
+</tr>
+<tr class="even">
+<td><code>sample()</code></td>
+<td>Randomly draw values, optionally with replacement and specified probabilities</td>
+<td><code>sample(0:2, 300, replace = TRUE, prob = c(0.4, 0.4, 0.2))</code></td>
+</tr>
+<tr class="odd">
+<td><code>rownames</code>/ <code>colnames</code></td>
+<td>Get or assign labels for matrix rows and columns</td>
+<td><code>rownames(geno) &lt;- paste0("ind_", 1:n_ind)</code></td>
+</tr>
+<tr class="even">
+<td><code>paste0</code></td>
+<td>Convert inputs to text and concatenate them with no separator</td>
+<td><code>paste0("ind",1:30)</code></td>
+</tr>
+<tr class="odd">
+<td><code>colMeans()</code></td>
+<td>Column-wise means (used for allele freq.)</td>
+<td><code>colMeans(geno) / 2</code></td>
+</tr>
+<tr class="even">
+<td><code>prcomp()</code></td>
+<td>Principal component analysis</td>
+<td><code>prcomp(geno, scale. = TRUE)</code></td>
+</tr>
+<tr class="odd">
+<td><code>cor.test()</code></td>
+<td>Test correlation between two variables</td>
+<td><code>cor.test(x, y)</code></td>
+</tr>
+<tr class="even">
+<td><code>lm()</code></td>
+<td>Fit a linear model</td>
+<td><code>lm(y ~ x1 + x2, data = df)</code></td>
+</tr>
+<tr class="odd">
+<td><code>vegan::rda()</code></td>
+<td>Redundancy analysis (multivariate GEA)</td>
+<td><code>rda(Y ~ x1 + x2, data = df)</code></td>
+</tr>
+<tr class="even">
+<td><code>vcfR::read.vcfR()</code></td>
+<td>Read a real VCF file (beyond this module)</td>
+<td><code>read.vcfR("file.vcf")</code></td>
+</tr>
+<tr class="odd">
+<td><code>adegenet::genind</code></td>
+<td>Genotype container object (beyond this module)</td>
+<td><code>df2genind(...)</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="basics-of-population-genetics-via-simulation" class="level2">
+<h2 class="anchored" data-anchor-id="basics-of-population-genetics-via-simulation">Basics of population genetics via simulation</h2>
+<section id="a-minimal-snp-genotype-matrix-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="a-minimal-snp-genotype-matrix-in-r">A minimal SNP genotype matrix in R</h3>
+<p>Genotypes at a biallelic SNP are usually coded as the count of the alternate allele: <code>0</code> (homozygous reference), <code>1</code> (heterozygous), <code>2</code> (homozygous alternate). Let’s simulate a toy dataset — 30 individuals, 10 loci:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>n_ind  <span class="ot">&lt;-</span> <span class="dv">30</span> <span class="co"># number of individuals</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>n_loci <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># number of SNP loci</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This code creates a simulated genotype matrix where <code>rows are individuals</code>, <code>columns are SNP loci</code>, and each cell contains a <code>diploid genotype coded as 0, 1, or 2</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>geno <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>,                <span class="co"># sample values from 0, 1 or 2</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  n_ind <span class="sc">*</span> n_loci,            <span class="co"># no. of draws 30 x 10 or size of the matrix</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">replace =</span> <span class="cn">TRUE</span>,            <span class="co"># each genotype category can be drawn repeatedly</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.2</span>)),  <span class="co"># sampling probability for genotypes 0,1 and 2</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> n_ind,              <span class="co"># number of rows - filled with ind IDs</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> n_loci              <span class="co"># number of columns - filled with SNP IDs</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Logic check
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Genotype coding</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Genotype probability</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>For a biallelic SNP, the number represents the count of the alternate allele carried by an individual:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Value</th>
+<th>Genotypes</th>
+<th>Biological meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0/0</td>
+<td>Homozygous reference; zero alternate alleles</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0/1</td>
+<td>Heterozygous; one alternate allele</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>1/1</td>
+<td>Homozygous alternate; two alternate alleles</td>
+</tr>
+</tbody>
+</table>
+<p>So, for example, a <code>1</code> in row <code>ind_7</code> and column <code>locus_3</code> means <code>individual 7</code> is heterozygous at <code>SNP locus 3</code>.</p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Set the probabilty of each genotype for the simlutaion run with <code>prob</code> argument of <code>sample()</code> function.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Genotype value</th>
+<th>Sampling probability</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.40</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0.40</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>0.20</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(geno) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"ind_"</span>, <span class="dv">1</span><span class="sc">:</span>n_ind)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(geno) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"locus_"</span>, <span class="dv">1</span><span class="sc">:</span>n_loci)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>geno[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      locus_1 locus_2 locus_3 locus_4 locus_5
+ind_1       1       2       0       1       0
+ind_2       0       2       1       0       1
+ind_3       0       0       1       1       1
+ind_4       2       0       1       0       1
+ind_5       2       1       2       1       1</code></pre>
+</div>
+</div>
+</section>
+<section id="allele-frequencies" class="level3">
+<h3 class="anchored" data-anchor-id="allele-frequencies">Allele frequencies</h3>
+<p>Allele frequency is the <code>proportion of all gene copies at a locus that are a particular allele</code>. <span class="math display">\[p + q =1\]</span></p>
+<p>Each genotype value is the count of the alternate allele out of 2, so the mean genotype divided by 2 is the alternate allele frequency for that locus:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>alt_freq <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(geno) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>ref_freq <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> alt_freq</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">locus =</span> <span class="fu">names</span>(alt_freq),       <span class="co"># col 1 filled with locus names</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">alt_freq =</span> <span class="fu">round</span>(alt_freq, <span class="dv">3</span>), <span class="co"># col 2 filled with alt freq</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">ref_freq =</span> <span class="fu">round</span>(ref_freq, <span class="dv">3</span>)) <span class="co"># col 3 is filled with ref freq</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            locus alt_freq ref_freq
+locus_1   locus_1    0.400    0.600
+locus_2   locus_2    0.383    0.617
+locus_3   locus_3    0.383    0.617
+locus_4   locus_4    0.367    0.633
+locus_5   locus_5    0.400    0.600
+locus_6   locus_6    0.317    0.683
+locus_7   locus_7    0.417    0.583
+locus_8   locus_8    0.400    0.600
+locus_9   locus_9    0.367    0.633
+locus_10 locus_10    0.450    0.550</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="part-ii" class="level1">
+<h1>PART II</h1>
+<section id="goals" class="level2">
+<h2 class="anchored" data-anchor-id="goals">Goals</h2>
+<p>In this exercise, you will simulate genotypes for two populations at one biallelic locus, calculate observed allele and genotype frequencies, compare the populations, and combine them into a single dataset.</p>
+<section id="learning-objectives-1" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives-1">Learning objectives</h3>
+<p>By the end of this section of the module, you should be able to:</p>
+<ul>
+<li>Use <code>sample()</code> to simulate diploid genotypes (<code>AA</code>, <code>Aa</code>, and <code>aa</code>).<br>
+</li>
+<li>Calculate genotype frequencies from observed genotype counts.<br>
+</li>
+<li>Calculate allele frequencies (p) and (q) from genotype counts.<br>
+</li>
+<li>Compare populations with different allele frequencies and population sizes.<br>
+</li>
+<li>Combine population-level data with <code>rbind()</code>.<br>
+</li>
+<li>Explain why combining structured populations can change apparent genotype frequencies, even when each population was generated under Hardy–Weinberg expectations.</li>
+</ul>
+</section>
+</section>
+<section id="simulating-two-populations-at-one-locus" class="level2">
+<h2 class="anchored" data-anchor-id="simulating-two-populations-at-one-locus">Simulating two populations at one locus</h2>
+<p>Lets start off by creating two populations with of same size (n=20), but different allele A frequency. This exercise simulates genotypes at one biallelic locus in two populations. You will use sample() to assign genotypes, calculate genotype frequencies with table() and prop.table(), then combine populations with rbind().</p>
+<p>For this example, the two alleles are A and a, with three possible diploid genotypes:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Genotype</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>AA</em></td>
+<td>Two copies of allele <em>A</em></td>
+</tr>
+<tr class="even">
+<td><em>Aa</em></td>
+<td>One copy of <em>A</em> and one copy of <em>a</em></td>
+</tr>
+<tr class="odd">
+<td><em>aa</em></td>
+<td>Two copies of allele <em>a</em></td>
+</tr>
+</tbody>
+</table>
+<p>At a biallelic locus:</p>
+<p><span class="math display">\[p + q = 1 \]</span> where,<br>
+<em>p</em> is the frequency of allele <em>A</em> and;<br>
+<em>q</em> is the frequency of allele <em>a</em>.</p>
+<p>Under <em>Hardy–Weinberg</em> expectations, genotype probabilities are:</p>
+<p><span class="math display">\[AA = p^2\]</span> <span class="math display">\[Aa = 2pq\]</span></p>
+<p><span class="math display">\[aa = q^2\]</span></p>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Concept review : H-W equilibrium
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong><a href="https://bio.libretexts.org/Bookshelves/Introductory_and_General_Biology/General_Biology_(Boundless)/19%3A_The_Evolution_of_Populations/19.01%3A_Population_Evolution/19.1C%3A_Hardy-Weinberg_Principle_of_Equilibrium">What is Hardy-Weinberg equilibrium?</a></strong></p>
+<p>The key expectataion under Hardy-Weinberg equilibrium is <span class="math inline">\(p^2\)</span> for <em>AA</em>, <span class="math inline">\(2pq\)</span> for <em>Aa</em>, and <span class="math inline">\(q^2\)</span> for <em>aa</em>, where <span class="math inline">\(p + q = 1\)</span>. In finite populations, observed values vary around thse expectations because of random sampling, variation becomes more obvious at small sample sizes.</p>
+</div>
+</div>
+</div>
+<p>The code below uses those probabilities to generate individuals in each population. Because genotypes are randomly sampled, observed frequencies will usually be close to but not identical to the expected frequencies.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Population 1: 20 individuals; allele A frequency p = 0.80</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>p_1 <span class="ot">&lt;-</span> <span class="fl">0.80</span>  </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>q_1 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> p_1</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>pop_1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">population =</span> <span class="st">"Pop_1"</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># sample function for choosing genotypes</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">genotype =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>), <span class="co"># possible genotype values</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">size =</span> <span class="dv">20</span>,                           <span class="co"># no. of individuals to simulate</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">replace =</span> <span class="cn">TRUE</span>,                      <span class="co"># genotypes can  occur more than once</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># p2 + 2pq + q2</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">prob =</span> <span class="fu">c</span>(p_1<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span> <span class="sc">*</span> p_1 <span class="sc">*</span> q_1, q_1<span class="sc">^</span><span class="dv">2</span>)) <span class="co"># probability of each genotype</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                      )</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pop_1) <span class="co"># peek into the pop_1 dataframe</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  population genotype
+1      Pop_1       Aa
+2      Pop_1       Aa
+3      Pop_1       AA
+4      Pop_1       Aa
+5      Pop_1       Aa
+6      Pop_1       AA</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Population 2: 20 individuals; allele A frequency p = 0.30</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>p_2 <span class="ot">&lt;-</span> <span class="fl">0.30</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>q_2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> p_2</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>pop_2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">population =</span> <span class="st">"Pop_2"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">genotype =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">size =</span> <span class="dv">20</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">prob =</span> <span class="fu">c</span>(p_2<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span> <span class="sc">*</span> p_2 <span class="sc">*</span> q_2, q_2<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                      )</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pop_2) <span class="co"># peek into the pop_2 dataframe</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  population genotype
+1      Pop_2       Aa
+2      Pop_2       aa
+3      Pop_2       AA
+4      Pop_2       AA
+5      Pop_2       aa
+6      Pop_2       Aa</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Code breakdown
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>sample() randomly assigns each individual one of three possible genotypes: AA, Aa, or aa.<br>
+</li>
+<li>replace = TRUE allows genotype categories to occur repeatedly.<br>
+</li>
+<li>prob = c(<span class="math inline">\(p^2\)</span>, <span class="math inline">\(2.p.q\)</span>, <span class="math inline">\(q^2\)</span>) supplies the Hardy–Weinberg genotype probabilities.</li>
+</ul>
+</div>
+</div>
+</div>
+<p>For population 1, where <em>p</em> = 0.80 and <em>q</em> = 0.20, the expected genotype frequencies are: <span class="math display">\[AA = 0.80^2 = 0.64\]</span> <span class="math display">\[Aa = 2 \times 0.80 \times 0.20 = 0.32\]</span><br>
+<span class="math display">\[aa = 0.20^2 = 0.04\]</span> Therefore, Population 1 should countain mostly <em>AA</em> individuals.</p>
+<p>For Population 2, where <em>p</em> = 0.30 and <em>q</em> = 0.70, the expected genotype frequencies are: <span class="math display">\[AA = 0.30^2 = 0.09\]</span> <span class="math display">\[Aa = 2 \times 0.30 \times 0.70 = 0.42\]</span><br>
+<span class="math display">\[aa = 0.70^2 = 0.49\]</span> Therefore, population2 should contain mostly <em>aa</em> individuals.</p>
+<section id="calculate-genotype-frequencies" class="level3">
+<h3 class="anchored" data-anchor-id="calculate-genotype-frequencies">Calculate genotype frequencies</h3>
+<p>Use table() to count each genotype and prop.table() to convert those counts into frequencies.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count observed genotypes in each population</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>geno_count_pop1 <span class="ot">&lt;-</span> <span class="fu">table</span>(pop_1<span class="sc">$</span>genotype)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>geno_count_pop2 <span class="ot">&lt;-</span> <span class="fu">table</span>(pop_2<span class="sc">$</span>genotype)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert genotype counts to genotype frequencies  </span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>geno_prop_pop1 <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(pop_1<span class="sc">$</span>genotype))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>geno_prop_pop2 <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(pop_2<span class="sc">$</span>genotype))</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine individuals from the two populations</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>pooled_population <span class="ot">&lt;-</span> <span class="fu">rbind</span>(pop_1, pop_2)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>geno_count_pooled <span class="ot">&lt;-</span> <span class="fu">table</span>(pooled_population<span class="sc">$</span>genotype)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>geno_prop_pooled <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(pooled_population<span class="sc">$</span>genotype))</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Build one comparison table</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>geno_summary <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">genotype =</span> <span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>),</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">count_pop1 =</span> <span class="fu">as.integer</span>(geno_count_pop1[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">freq_pop1  =</span> <span class="fu">as.numeric</span>(geno_prop_pop1[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">count_pop2 =</span> <span class="fu">as.integer</span>(geno_count_pop2[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">freq_pop2  =</span> <span class="fu">as.numeric</span>(geno_prop_pop2[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">count_pooled =</span> <span class="fu">as.integer</span>(geno_count_pooled[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">freq_pooled  =</span> <span class="fu">as.numeric</span>(geno_prop_pooled[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)])</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>geno_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  genotype count_pop1 freq_pop1 count_pop2 freq_pop2 count_pooled freq_pooled
+1       AA          9      0.45          2       0.1           11       0.275
+2       Aa         10      0.50         10       0.5           20       0.500
+3       aa          1      0.05          8       0.4            9       0.225</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The genotype frequencies should sum up to 1. </span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(geno_prop_pop1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(geno_prop_pop2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(geno_prop_pooled)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Code breakdown
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>rbind() or “row” bind stacks the two population data frames row by row.<br>
+</li>
+<li>table() counts each observed genotype.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="calculate-allele-frequencies" class="level3">
+<h3 class="anchored" data-anchor-id="calculate-allele-frequencies">Calculate allele frequencies</h3>
+<p>Genotype frequencies describe the proportion of individuals in each genotype class. Allele frequencies instead count all gene copies. Each diploid individual carries two allele copies:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Genotype</th>
+<th>Number of <em>A</em> alleles</th>
+<th>Number of <em>a</em> alleles</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>AA</em></td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td><em>Aa</em></td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td><em>aa</em></td>
+<td>0</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[p_{A} = \frac{2n_{AA} + n_{Aa}}{2N} \]</span></p>
+<p><span class="math display">\[q_{a} = \frac{2n_{aa} + n_{Aa}}{2N} \]</span> Where each <em>AA</em> individuals contributes two <em>A</em> alleles, each <em>aa</em> individual contributes two <em>aa</em> alleles, and each heterozygote contributes one copy of each allele.</p>
+<p>To calculate the allele frequency for Population 1:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count each genotype in Population 1</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>counts_1 <span class="ot">&lt;-</span> geno_count_pop1</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of individuals</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>N_1 <span class="ot">&lt;-</span> <span class="fu">nrow</span>(pop_1)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Count A and a allele copies</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>n_A_1 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> counts_1[<span class="st">"AA"</span>] <span class="sc">+</span> counts_1[<span class="st">"Aa"</span>]</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>n_a_1 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> counts_1[<span class="st">"aa"</span>] <span class="sc">+</span> counts_1[<span class="st">"Aa"</span>]</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert allele counts to allele frequencies</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>p_A_1 <span class="ot">&lt;-</span> n_A_1 <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> N_1)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>q_a_1 <span class="ot">&lt;-</span> n_a_1 <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> N_1)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>p_A_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> AA 
+0.7 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>q_a_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> aa 
+0.3 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>p_A_1 <span class="sc">+</span> q_a_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AA 
+ 1 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="excercises" class="level2">
+<h2 class="anchored" data-anchor-id="excercises">Excercises</h2>
+<p><strong>Repeat this for Population 1</strong></p>
+<p><strong>Combine the pooled population data with the Population 1 and Population 2 data</strong></p>
+<p><strong>Try changing the simulations</strong><br>
+- Change one value at a time: change population size, make populations genetically similar, make populations drastically different, change the seed (set.seed(?))</p>
+</section>
+</section>
+<section id="part-iii" class="level1">
+<h1>PART III</h1>
+<section id="observed-and-expected-heterozygosity" class="level3">
+<h3 class="anchored" data-anchor-id="observed-and-expected-heterozygosity">Observed and expected heterozygosity</h3>
+<p><strong>Observed heterozygosity (<span class="math inline">\(H_{o}\)</span>):</strong> the proportion of individuals with genotype <code>1</code> (heterozygous) at a locus.</p>
+<p><strong>Expected heterozygosity (<span class="math inline">\(H_{e}\)</span>):</strong> what you’d expect under Hardy-Weinberg equilibrium, given the allele frequencies: <span class="math inline">\(H_{e} = 2pq\)</span>, where <em>p</em> and <em>q</em> are the reference and alternate allele frequencies.</p>
+<p><strong>Concept review: <a href="https://bio.libretexts.org/Bookshelves/Introductory_and_General_Biology/General_Biology_(Boundless)/19%3A_The_Evolution_of_Populations/19.01%3A_Population_Evolution/19.1C%3A_Hardy-Weinberg_Principle_of_Equilibrium">What is Hardy-Weinberg equilibrium?</a></strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>Ho <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(geno <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>He <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> ref_freq <span class="sc">*</span> alt_freq</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>het_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">locus =</span> <span class="fu">names</span>(Ho), </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">Ho =</span> <span class="fu">round</span>(Ho, <span class="dv">3</span>), </span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">He =</span> <span class="fu">round</span>(He, <span class="dv">3</span>),</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">diff =</span> <span class="fu">round</span>(Ho <span class="sc">-</span> He, <span class="dv">3</span>))</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>het_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            locus    Ho    He   diff
+locus_1   locus_1 0.267 0.480 -0.213
+locus_2   locus_2 0.500 0.473  0.027
+locus_3   locus_3 0.367 0.473 -0.106
+locus_4   locus_4 0.333 0.464 -0.131
+locus_5   locus_5 0.467 0.480 -0.013
+locus_6   locus_6 0.433 0.433  0.001
+locus_7   locus_7 0.367 0.486 -0.119
+locus_8   locus_8 0.400 0.480 -0.080
+locus_9   locus_9 0.333 0.464 -0.131
+locus_10 locus_10 0.567 0.495  0.072</code></pre>
+</div>
+</div>
+<p>If <code>Ho</code> is consistently lower than <code>He</code> across loci, that’s a signature of inbreeding or population substructure — the same underlying idea behind the <code>Family_Homozygosity</code> and <code>Population_Homozygosity</code> columns already computed in the <a href="https://github.com/anoobvinu07/Genomic_assisted_selection/blob/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt">real world dataset</a> used in the previous modules.</p>
+</section>
+<section id="pca-for-population-structure" class="level3">
+<h3 class="anchored" data-anchor-id="pca-for-population-structure">PCA for population structure</h3>
+<p>On the simulated matrix:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>pca_sim <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(geno, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pca_sim<span class="sc">$</span>x[, <span class="dv">1</span>], pca_sim<span class="sc">$</span>x[, <span class="dv">2</span>],</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"PC1"</span>, <span class="at">ylab =</span> <span class="st">"PC2"</span>, <span class="at">main =</span> <span class="st">"Simulated genotype PCA"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now look at the <strong>real</strong> PC1/PC2 already computed for the red-spruce trees (from actual genetic markers, not simulated):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>traits<span class="sc">$</span>Region <span class="ot">&lt;-</span> <span class="fu">factor</span>(traits<span class="sc">$</span>Region)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(traits<span class="sc">$</span>PC1, traits<span class="sc">$</span>PC2,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="fu">as.integer</span>(traits<span class="sc">$</span>Region), <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"PC1"</span>, <span class="at">ylab =</span> <span class="st">"PC2"</span>, <span class="at">main =</span> <span class="st">"Genetic PCA colored by region"</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">levels</span>(traits<span class="sc">$</span>Region),</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlevels</span>(traits<span class="sc">$</span>Region), <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-17-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In population genetics, PC1/PC2 from a genetic marker PCA usually capture the strongest axes of population structure — often correlated with geography (isolation by distance) or major environmental gradients.</p>
+</section>
+<section id="roadmap-beyond-this-module" class="level2">
+<h2 class="anchored" data-anchor-id="roadmap-beyond-this-module">Roadmap beyond this module</h2>
+<p>When you’re ready to work with real genotype data instead of pre-computed summaries:</p>
+<ul>
+<li><code>vcfR::read.vcfR()</code> reads a VCF file into R</li>
+<li><code>adegenet::df2genind()</code> / <code>vcfR::vcfR2genind()</code> convert genotypes into population-genetics-aware objects with built-in allele-frequency, heterozygosity, and Fst functions</li>
+<li><code>LEA</code> (Bioconductor) and <code>vegan::rda()</code> scale the GEA approach above to genome-wide SNP data</li>
+</ul>
+<p>None of this is required for this module’s exercises — it’s here so you know where basics you learn connects to your actual genomic analysis pipelines.</p>
+</section>
+<section id="wrap-up" class="level2">
+<h2 class="anchored" data-anchor-id="wrap-up">Wrap Up</h2>
+<section id="idea-check" class="level3">
+<h3 class="anchored" data-anchor-id="idea-check">Idea check</h3>
+<p>Answer these before the practical exercises.</p>
+<ol type="1">
+<li>What does an alternate allele frequency of 0.3 at a locus mean biologically?</li>
+<li>Why can observed heterozygosity (Ho) be lower than expected heterozygosity (He) in a real population?</li>
+<li>What do you think <code>Population_Homozygosity</code> is measuring, and how would you expect it to relate to <code>Genetic_Diversity</code> — positively or negatively?</li>
+<li>In a PCA built from genetic markers, what do PC1 and PC2 typically represent in a population-genetics context?</li>
+<li>Why test <code>cor.test(Genetic_Diversity, Elevation)</code> rather than just assuming a relationship exists because both vary by population?</li>
+<li>What is the conceptual difference between running a separate <code>lm()</code> for each genetic variable versus running one <code>rda()</code> with all of them as a response matrix?</li>
+</ol>
+</section>
+<section id="practical-exercises" class="level3">
+<h3 class="anchored" data-anchor-id="practical-exercises">Practical exercises</h3>
+<ol type="1">
+<li>Build the simulated genotype matrix (30 individuals × 10 loci) exactly as shown, and compute the alternate allele frequency for every locus.</li>
+<li>Compute observed and expected heterozygosity for each locus and identify which locus shows the largest Ho − He gap.</li>
+<li>Run <code>prcomp()</code> on the simulated genotype matrix and plot PC1 vs.&nbsp;PC2.</li>
+<li>Load the real red-spruce dataset and plot the real <code>PC1</code> vs.&nbsp;<code>PC2</code>, colored by <code>Region</code>. Does the pattern look like discrete clusters or a continuous gradient?</li>
+<li>Run <code>cor.test()</code> between <code>Population_Homozygosity</code> and <code>Elevation</code>, and separately between <code>Genetic_Diversity</code> and <code>Latitude</code>. Report the correlation coefficient, p-value, and a one-sentence interpretation for each.</li>
+<li>Fit <code>lm(Genetic_Load ~ Elevation + Latitude, data = traits)</code> and interpret the two coefficients — which predictor has a stronger association, and in which direction?</li>
+<li><strong>Stretch exercise:</strong> run the <code>vegan::rda()</code> example above using <code>Genetic_Diversity</code>, <code>Genetic_Load</code>, <code>PC1</code>, <code>PC2</code> as responses and <code>Elevation</code>, <code>Latitude</code> as predictors. Produce the ordination biplot and describe what you see in 2–3 sentences.</li>
+<li>Save every summary table (allele frequencies, heterozygosity table, correlation results) and every plot into <code>results/</code>.</li>
+</ol>
+</section>
+<section id="homework" class="level3">
+<h3 class="anchored" data-anchor-id="homework">Homework</h3>
+<p>Build <code>src/02_pop_genetics_intro.R</code>, combining the simulated-data fundamentals with a real-data GEA-style analysis.</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Part A (fundamentals): allele frequency and Ho/He table for the simulated genotype matrix, plus the PCA plot.</li>
+<li>Part B (applied): using the real dataset, test associations between <strong>at least two</strong> genetic-parameter columns (e.g., <code>Population_Homozygosity</code>, <code>Genetic_Diversity</code>, <code>Genetic_Load</code>) and <strong>at least two</strong> environmental predictors (<code>Elevation</code>, <code>Latitude</code>, <code>Longitude</code>), using correlation and/or <code>lm()</code>.</li>
+<li>A written interpretation (half a page, as comments or a <code>results/README.md</code>) answering: Do the genetic parameters show a spatial pattern with latitude or elevation? What ecological or demographic process might explain this (e.g., isolation by distance, local adaptation, drift in small/marginal populations)?</li>
+<li><strong>Bonus (optional):</strong> complete the <code>vegan::rda()</code> ordination and include the biplot with a short interpretation of which environmental axis drives more separation among genetic variables.</li>
+</ul>
+<p><strong>Submission format:</strong> <code>src/02_pop_genetics_intro.R</code>, all generated outputs in <code>results/</code>, and the written interpretation.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/anoobvinu07">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://scholar.google.com/citations?hl=en&amp;user=jIOSRMkAAAAJ">
+<p><i class="ai  ai-google-scholar" aria-label="google-scholar"></i></p>
+</a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:anoobvinu@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>   
+    <div class="nav-footer-center">
+© <span id="year"></span> · Anoob Prakash
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://ag.purdue.edu/directory/prakas89">
+      <i class="bi bi-building" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://www.purdue.edu">
+<p>Purdue</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://htirc.org/">
+<p>HTIRC</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

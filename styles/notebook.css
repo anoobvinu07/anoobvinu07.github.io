@@ -1,0 +1,127 @@
+/* ---- Notebook listing: minimal, text-first cards ---- */
+
+.quarto-listing-container-default {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Individual post listing */
+.quarto-listing-container-default .quarto-post {
+  position: relative;
+  margin: 0;
+  padding: 1.25rem 1.4rem;
+  border: 1px solid transparent;
+  border-bottom-color: rgba(88, 60, 136, 0.16);
+  border-radius: 0.5rem;
+  background: transparent;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+/* Narrow purple accent line, hidden until hover/focus */
+.quarto-listing-container-default .quarto-post::before {
+  position: absolute;
+  top: 1rem;
+  bottom: 1rem;
+  left: 0;
+  width: 3px;
+  border-radius: 999px;
+  background: #583c88;
+  content: "";
+  opacity: 0;
+  transform: scaleY(0.65);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+/* Highlight the entire post row */
+.quarto-listing-container-default .quarto-post:hover,
+.quarto-listing-container-default .quarto-post:focus-within {
+  border-color: rgba(88, 60, 136, 0.25);
+  background: rgba(88, 60, 136, 0.055);
+  box-shadow: 0 8px 24px rgba(34, 25, 54, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Reveal accent line */
+.quarto-listing-container-default .quarto-post:hover::before,
+.quarto-listing-container-default .quarto-post:focus-within::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+/* Title */
+.quarto-listing-container-default .listing-title,
+.quarto-listing-container-default .listing-title a {
+  color: inherit;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+}
+
+.quarto-listing-container-default .quarto-post:hover .listing-title a,
+.quarto-listing-container-default .quarto-post:focus-within .listing-title a {
+  color: #5acbbe;
+}
+
+/* Description */
+.quarto-listing-container-default .listing-description {
+  margin-top: 0.35rem;
+  color: var(--bs-secondary-color, #667085);
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+.quarto-listing-container-default .listing-description a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Date and categories */
+.quarto-listing-container-default .listing-date,
+.quarto-listing-container-default .listing-category {
+  color: var(--bs-secondary-color, #667085);
+  font-size: 0.8rem;
+}
+
+/* Category tags */
+.quarto-listing-container-default .listing-category {
+  margin-right: 0.3rem;
+  padding: 0.15rem 0.48rem;
+  border: 1px solid rgba(88, 60, 136, 0.16);
+  border-radius: 999px;
+  background: rgba(88, 60, 136, 0.05);
+  color: #583c88;
+  font-weight: 500;
+}
+
+/* Accessible keyboard navigation */
+.quarto-listing-container-default .quarto-post a:focus-visible {
+  outline: 2px solid #583c88;
+  outline-offset: 4px;
+  border-radius: 0.2rem;
+}
+
+/* Do not force hover movement for users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  .quarto-listing-container-default .quarto-post,
+  .quarto-listing-container-default .quarto-post::before {
+    transition: none;
+  }
+
+  .quarto-listing-container-default .quarto-post:hover,
+  .quarto-listing-container-default .quarto-post:focus-within {
+    transform: none;
+  }
+}
+
+/* Smaller spacing on narrow screens */
+@media (max-width: 576px) {
+  .quarto-listing-container-default .quarto-post {
+    padding: 1rem 1.1rem;
+  }
+}

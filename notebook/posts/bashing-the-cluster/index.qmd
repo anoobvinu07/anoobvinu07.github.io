@@ -1,9 +1,11 @@
 ---
 title: "Getting started with bash on HPC"
 description: "Learn the basics of using bash to work on a cluster"
-author: "Anoob Prakash"
-author-email: "prakas89@purdue.edu"
-author-orcid: "0000-0000-0000-0000"   # optional
+author:
+  - name: "Anoob Prakash"
+    email: "prakas89@purdue.edu"
+    orcid: "0000-0002-7207-934X"
+    url: "https://www.linkedin.com/in/anoob-prakash/"
 date: "8/10/2026"
 categories:
   - hpc
@@ -15,6 +17,10 @@ format:
   html:
     toc: true
     toc-location: left
+    toc-title: "On this page"
+    toc-depth: 3
+    page-layout: full
+    lightbox: true
     code-fold: false
     code-overflow: wrap
     code-copy: true

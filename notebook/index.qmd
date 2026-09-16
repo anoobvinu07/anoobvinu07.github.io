@@ -1,15 +1,26 @@
 ---
 title: "Notebook"
 subtitle: "Jotting down notes for later" 
+
+author:
+  - name: "Anoob Prakash"
+    email: "prakas89@purdue.edu"
+    orcid: "0000-0002-7207-934X"
+    url: "https://www.linkedin.com/in/anoob-prakash/"
+
+
 format: 
   html:
-    page-layout: article
+    page-layout: full
     toc: false
+    css: /styles/notebook.css
 listing:
   contents: posts
   sort: "date desc"
   type: default
-  image-align: left
+  image-align: right
+
+
   categories: true
   exclude:
     listed: false

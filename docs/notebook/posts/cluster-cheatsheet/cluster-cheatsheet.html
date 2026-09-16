@@ -8,9 +8,9 @@
 
 <meta name="author" content="Anoob Prakash">
 <meta name="dcterms.date" content="2026-08-09">
-<meta name="description" content="Quick reference cheatsheet for frequently used bash commands and SLURM commands to submit or manage jobs on a HPC">
+<meta name="description" content="Quick reference cheatsheet for frequently used commands for languages like bash, R, slurm etc.">
 
-<title>Cheat sheet for bash and SLURM – Anoob Prakash</title>
+<title>Cheat sheet for everyday computational analysis – Anoob Prakash</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -50,9 +50,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-5a2779fdaa76c2336e47347f5b060a9d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-cfafe0fd3f797f456e8ba552df8d5fa3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-5a2779fdaa76c2336e47347f5b060a9d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-7ccbb4ccca079e06e65b90b0593693ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/academicons-1.9.4/all.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-contrib/academicons-1.9.4/size.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -301,7 +301,7 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <nav id="TOC" role="doc-toc" class="toc-active">
@@ -309,6 +309,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#bash-quick-reference" id="toc-bash-quick-reference" class="nav-link active" data-scroll-target="#bash-quick-reference">Bash quick reference</a></li>
+  <li><a href="#r-quick-reference" id="toc-r-quick-reference" class="nav-link" data-scroll-target="#r-quick-reference">R quick reference</a></li>
   </ul>
 </nav>
 </nav>
@@ -317,12 +318,12 @@ ul.task-list li input[type="checkbox"] {
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Cheat sheet for bash and SLURM</h1>
+<h1 class="title">Cheat sheet for everyday computational analysis</h1>
   <div class="quarto-categories">
     <div class="quarto-category">hpc</div>
     <div class="quarto-category">bash</div>
@@ -332,17 +333,17 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    Quick reference cheatsheet for frequently used bash commands and SLURM commands to submit or manage jobs on a HPC
+    Quick reference cheatsheet for frequently used commands for languages like bash, R, slurm etc.
   </div>
 </div>
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page-right">
 
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Anoob Prakash </p>
+             <p><a href="https://www.linkedin.com/in/anoob-prakash/">Anoob Prakash</a> <a href="mailto:prakas89@purdue.edu" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-7207-934X" class="quarto-title-author-orcid" aria-label="ORCID profile for Anoob Prakash"> <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
           </div>
   </div>
     
@@ -439,8 +440,164 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
+</section>
+<section id="r-quick-reference" class="level3">
+<h3 class="anchored" data-anchor-id="r-quick-reference">R quick reference</h3>
+<section id="r-basics" class="level4">
+<h4 class="anchored" data-anchor-id="r-basics">R basics</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function/operator</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>c()</code></td>
+<td>Combine values into a vector</td>
+<td><code>c(1, 2, 3)</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;-</code></td>
+<td>Assignment</td>
+<td><code>x &lt;- 5</code></td>
+</tr>
+<tr class="odd">
+<td><code>read.delim()</code></td>
+<td>Read a tab-delimited file</td>
+<td><code>read.delim("data/raw/file.txt")</code></td>
+</tr>
+<tr class="even">
+<td><code>str()</code></td>
+<td>Show structure/types of an object</td>
+<td><code>str(df)</code></td>
+</tr>
+<tr class="odd">
+<td><code>dim()</code>, <code>nrow()</code>, <code>ncol()</code></td>
+<td>Dimensions of a data frame</td>
+<td><code>dim(df)</code></td>
+</tr>
+<tr class="even">
+<td><code>head()</code> / <code>tail()</code></td>
+<td>First/last rows</td>
+<td><code>head(df, 5)</code></td>
+</tr>
+<tr class="odd">
+<td><code>summary()</code></td>
+<td>Quick numeric/factor summary</td>
+<td><code>summary(df$Height)</code></td>
+</tr>
+<tr class="even">
+<td><code>df$col</code></td>
+<td>Access a column by name</td>
+<td><code>df$Fitness</code></td>
+</tr>
+<tr class="odd">
+<td><code>df[rows, cols]</code></td>
+<td>Subset by position/condition</td>
+<td><code>df[df$Region == "E", ]</code></td>
+</tr>
+<tr class="even">
+<td><code>table()</code></td>
+<td>Count occurrences</td>
+<td><code>table(df$Population)</code></td>
+</tr>
+<tr class="odd">
+<td><code>tapply()</code> / <code>aggregate()</code></td>
+<td>Grouped summaries</td>
+<td><code>tapply(df$Height, df$Population, mean)</code></td>
+</tr>
+<tr class="even">
+<td><code>function(...) {}</code></td>
+<td>Define a function</td>
+<td><code>f &lt;- function(x) mean(x, na.rm = TRUE)</code></td>
+</tr>
+<tr class="odd">
+<td><code>for (i in seq)</code></td>
+<td>Loop</td>
+<td><code>for (p in unique(df$Population)) {...}</code></td>
+</tr>
+<tr class="even">
+<td><code>hist()</code>, <code>boxplot()</code>, <code>plot()</code></td>
+<td>Base R plotting</td>
+<td><code>hist(df$Height)</code></td>
+</tr>
+<tr class="odd">
+<td><code>write.csv()</code></td>
+<td>Save a table</td>
+<td><code>write.csv(x, "results/out.csv")</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="r-for-bioinformatics-quick-reference" class="level4">
+<h4 class="anchored" data-anchor-id="r-for-bioinformatics-quick-reference">R for bioinformatics quick reference</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function/package</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>matrix()</code></td>
+<td>Build a genotype matrix</td>
+<td><code>matrix(..., nrow, ncol)</code></td>
+</tr>
+<tr class="even">
+<td><code>colMeans()</code></td>
+<td>Column-wise means (used for allele freq.)</td>
+<td><code>colMeans(geno) / 2</code></td>
+</tr>
+<tr class="odd">
+<td><code>prcomp()</code></td>
+<td>Principal component analysis</td>
+<td><code>prcomp(geno, scale. = TRUE)</code></td>
+</tr>
+<tr class="even">
+<td><code>cor.test()</code></td>
+<td>Test correlation between two variables</td>
+<td><code>cor.test(x, y)</code></td>
+</tr>
+<tr class="odd">
+<td><code>lm()</code></td>
+<td>Fit a linear model</td>
+<td><code>lm(y ~ x1 + x2, data = df)</code></td>
+</tr>
+<tr class="even">
+<td><code>vegan::rda()</code></td>
+<td>Redundancy analysis (multivariate GEA)</td>
+<td><code>rda(Y ~ x1 + x2, data = df)</code></td>
+</tr>
+<tr class="odd">
+<td><code>vcfR::read.vcfR()</code></td>
+<td>Read a real VCF file (beyond this module)</td>
+<td><code>read.vcfR("file.vcf")</code></td>
+</tr>
+<tr class="even">
+<td><code>adegenet::genind</code></td>
+<td>Genotype container object (beyond this module)</td>
+<td><code>df2genind(...)</code></td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

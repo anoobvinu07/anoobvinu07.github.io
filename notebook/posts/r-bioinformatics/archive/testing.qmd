@@ -1,0 +1,372 @@
+---
+title: "R for Bioinformatics: Population Genetics Foundations"
+description: "allele frequencies, heterozygosity, and a first genotype–environment association"
+author:
+  - name: "Anoob Prakash"
+    email: "prakas89@purdue.edu"
+    orcid: "0000-0002-7207-934X"
+    url: "https://www.linkedin.com/in/anoob-prakash/"
+date: "9/11/2026"
+listed: false
+categories:
+  - hpc
+  - r
+  - bioinformatics
+  - github
+  - popgen
+
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-title: "On this page"
+    toc-depth: 3
+    page-layout: full
+    lightbox: true
+    code-fold: false
+    code-overflow: wrap
+    code-copy: true
+    code-tools: false
+    code-block-border-left: "#583C88"
+    code-block-border-left-size: 5px
+    code-block-border-left-style: solid
+
+---
+
+
+## Goal
+
+Apply the R skills from Module 1 to population-genetics concepts: allele frequency, heterozygosity, genetic diversity, and a first genotype/phenotype–environment association (GEA), using the genetic-parameter columns already present in the red-spruce dataset (`PC1`, `PC2`, `Family_Homozygosity`, `Population_Homozygosity`, `Genetic_Diversity`, `Genetic_Load`).
+
+We don't have a raw genotype (VCF) file for this dataset, so this module teaches the underlying math with a small **simulated** SNP matrix, then applies the same reasoning to the **real, pre-computed** genetic-parameter columns already in your data.
+
+### Prerequisites
+::: {.column-body}
+_1. Data required data from github_ 
+
+
+::: {.callout-important collapse="true"}  
+## Download data
+**Download the raw GitHub file directly into** `data/raw/`
+
+**Copy the code below and run it inside the** `cluster-exercise` **directory**          
+
+
+```{r}
+#| eval: false
+dir.create("data/raw", recursive = TRUE, showWarnings = FALSE)
+download.file(
+"https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt",
+      destfile = "data/raw/red_spruce_fitness_traits.txt")
+```  
+
+The `-L` flag tells `curl` to follow redirects, and `-o` specifies the local output file. Verify the download before doing any analysis:
+
+Recreate the rest of the project layout if you don't already have it:
+
+```{r}
+#| eval: false
+dir.create("results", showWarnings = FALSE)
+dir.create("src", showWarnings = FALSE)
+```
+:::
+
+::: {.callout-important collapse="true"}
+## Project directory setup
+**This excercise assumes the project folder follows the following structure:** 
+
+<pre style="color: #F8F9FA; background-color: #22252A; padding: 1rem; border-radius: 6px;"><code>cluster-exercise/
+ ├── data/
+ │   └── raw/       # downloaded, unchanged source data
+ ├── logs/          # Slurm standard output and error logs
+ ├── results/       # analysis products created by R
+ └── src/           # R and Slurm scripts</code></pre>
+:::
+
+_2. Install the packages used here:_
+
+```{r}
+#| eval: false
+
+  install.packages(c("vegan"))
+  # Optional, for working with real genotype/VCF files beyond this module:
+  # install.packages("BiocManager")
+  # BiocManager::install(c("vcfR", "adegenet"))
+```
+
+```{r}
+#| echo: false
+#| eval: false
+setwd(dir = "/Users/anoobprakash/Documents/GitHub/anoobvinu07.github.io")
+```
+
+:::
+
+```{r}
+#| include: false
+
+library(here)
+```
+
+
+
+
+
+## Learning objectives
+
+By the end of this module you should be able to:
+
+- Explain what allele frequency, observed heterozygosity, and expected heterozygosity mean
+- Represent genotypes as a simple numeric matrix (0/1/2 coding) and compute allele frequencies from it
+- Compute observed vs. expected (Hardy-Weinberg) heterozygosity per locus and interpret the difference
+- Run a PCA on genetic markers with `prcomp()` and interpret PC1/PC2 in a population-genetics context
+- Test a simple genotype/phenotype–environment association using correlation and linear models
+- Recognize the step from a simple correlation to a multivariate method (RDA) used in real genotype-environment association work
+- Know when to move from a plain R matrix to dedicated packages (`vcfR`, `adegenet`) for real VCF-scale data
+
+### R for bioinformatics quick reference
+
+| Function/package | Purpose | Example |
+|---|---|---|
+| `matrix()` | Build a genotype matrix | `matrix(..., nrow, ncol)` |
+| `sample()` | Randomly draw values, optionally with replacement and specified probabilities | `sample(0:2, 300, replace = TRUE, prob = c(0.4, 0.4, 0.2))` |
+| `rownames`/ `colnames` | Get or assign labels for matrix rows and columns  | `rownames(geno) <- paste0("ind_", 1:n_ind)` |
+| `paste0` | Convert inputs to text and concatenate them with no separator  | `paste0("ind",1:30)` |
+| `colMeans()` | Column-wise means (used for allele freq.) | `colMeans(geno) / 2` |
+| `prcomp()` | Principal component analysis | `prcomp(geno, scale. = TRUE)` |
+| `cor.test()` | Test correlation between two variables | `cor.test(x, y)` |
+| `lm()` | Fit a linear model | `lm(y ~ x1 + x2, data = df)` |
+| `vegan::rda()` | Redundancy analysis (multivariate GEA) | `rda(Y ~ x1 + x2, data = df)` |
+| `vcfR::read.vcfR()` | Read a real VCF file (beyond this module) | `read.vcfR("file.vcf")` |
+| `adegenet::genind` | Genotype container object (beyond this module) | `df2genind(...)` |
+
+
+## Basics of bioinformatics 
+### A minimal SNP genotype matrix in R
+
+Genotypes at a biallelic SNP are usually coded as the count of the alternate allele: `0` (homozygous reference), `1` (heterozygous), `2` (homozygous alternate). Let's simulate a toy dataset — 30 individuals, 10 loci:
+
+```{r}
+set.seed(123)
+n_ind  <- 30 # number of individuals
+n_loci <- 10 # number of SNP loci
+```
+This code creates a simulated genotype matrix where `rows are individuals`, `columns are SNP loci`, and each cell contains a `diploid genotype coded as 0, 1, or 2`.
+
+```{r}
+geno <- matrix(
+  sample(0:2,                # sample values from 0, 1 or 2
+  n_ind * n_loci,            # no. of draws 30 x 10 or size of the matrix
+  replace = TRUE,            # each genotype category can be drawn repeatedly
+  prob = c(0.4, 0.4, 0.2)),  # sampling probability for genotypes 0,1 and 2
+  nrow = n_ind,              # number of rows - filled with ind IDs
+  ncol = n_loci              # number of columns - filled with SNP IDs
+)
+```
+
+::: {.callout-note icon="false" appearance="simple" collapse="true" }  
+
+# Logic check  
+::: {.panel-tabset}
+
+## Genotype coding  
+For a biallelic SNP, the number represents the count of the alternate allele carried by an individual:  
+
+| Value | Genotypes | Biological meaning | 
+|---|---|---| 
+| 0 | 0/0 | Homozygous reference; zero alternate alleles |
+| 1 | 0/1 | Heterozygous; one alternate allele |
+| 2 | 1/1 | Homozygous alternate; two alternate alleles |  
+
+So, for example, a `1` in row `ind_7` and column `locus_3` means `individual 7` is heterozygous at `SNP locus 3`. 
+
+## Genotype probability
+
+Set the probabilty of each genotype for the simlutaion run with `prob` argument of `sample()` function. 
+
+| Genotype value | Sampling probability | 
+|---|---|---| 
+| 0 | 0.40 |
+| 1 | 0.40 |
+| 2 | 0.20 |
+
+:::
+
+
+
+
+ 
+:::
+
+```{r}
+rownames(geno) <- paste0("ind_", 1:n_ind)
+colnames(geno) <- paste0("locus_", 1:n_loci)
+
+geno[1:5, 1:5]
+```
+
+### Allele frequencies
+
+Allele frequency is the `proportion of all gene copies at a locus that are a particular allele`. 
+$$p + q =1$$ 
+
+Each genotype value is the count of the alternate allele out of 2, so the mean genotype divided by 2 is the alternate allele frequency for that locus:
+
+```{r}
+alt_freq <- colMeans(geno) / 2
+ref_freq <- 1 - alt_freq
+
+data.frame(locus = names(alt_freq),       # col 1 filled with locus names
+           alt_freq = round(alt_freq, 3), # col 2 filled with alt freq
+           ref_freq = round(ref_freq, 3)) # col 3 is filled with ref freq
+```
+
+### Observed and expected heterozygosity
+
+**Observed heterozygosity ($H_{o}$):** the proportion of individuals with genotype `1` (heterozygous) at a locus.
+
+**Expected heterozygosity ($H_{e}$):** what you'd expect under Hardy-Weinberg equilibrium, given the allele frequencies: $H_{e} = 2pq$, where _p_ and _q_ are the reference and alternate allele frequencies.
+
+**Concept review: [What is Hardy-Weinberg equilibrium?](https://bio.libretexts.org/Bookshelves/Introductory_and_General_Biology/General_Biology_(Boundless)/19%3A_The_Evolution_of_Populations/19.01%3A_Population_Evolution/19.1C%3A_Hardy-Weinberg_Principle_of_Equilibrium)**
+
+```{r}
+Ho <- colMeans(geno == 1)
+He <- 2 * ref_freq * alt_freq
+
+het_table <- data.frame(locus = names(Ho), 
+                        Ho = round(Ho, 3), 
+                        He = round(He, 3),
+                        diff = round(Ho - He, 3))
+het_table
+```
+
+If `Ho` is consistently lower than `He` across loci, that's a signature of inbreeding or population substructure — the same underlying idea behind the `Family_Homozygosity` and `Population_Homozygosity` columns already computed in the [real world dataset](https://github.com/anoobvinu07/Genomic_assisted_selection/blob/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt) used in the previous modules.
+
+### PCA for population structure
+
+On the simulated matrix:
+
+```{r}
+pca_sim <- prcomp(geno, scale. = TRUE)
+plot(pca_sim$x[, 1], pca_sim$x[, 2],
+     xlab = "PC1", ylab = "PC2", main = "Simulated genotype PCA")
+```
+
+Now look at the **real** PC1/PC2 already computed for the red-spruce trees (from actual genetic markers, not simulated):
+
+```{r}
+#| eval: false
+traits <- read.table("data/raw/red_spruce_fitness_traits.txt", header = TRUE, sep = "\t")
+```
+
+```{r}
+#| echo: false
+traits_file <- here::here(
+  "data",
+  "raw",
+  "red_spruce_fitness_traits.txt"
+)
+
+stopifnot(file.exists(traits_file))
+
+traits <- read.delim(
+  traits_file,
+  header = TRUE,
+  stringsAsFactors = FALSE,
+  check.names = FALSE
+)
+```
+```{r}
+traits$Region <- factor(traits$Region)
+plot(traits$PC1, traits$PC2,
+     col = as.integer(traits$Region), pch = 19,
+     xlab = "PC1", ylab = "PC2", main = "Genetic PCA colored by region")
+legend("topright", legend = levels(traits$Region),
+       col = 1:nlevels(traits$Region), pch = 19)
+```
+
+In population genetics, PC1/PC2 from a genetic marker PCA usually capture the strongest axes of population structure — often correlated with geography (isolation by distance) or major environmental gradients.
+
+### A simple genotype/phenotype–environment association
+
+Real GEA work asks: does a genetic or fitness metric covary with an environmental gradient? Start simple, with one predictor at a time:
+
+```{r}
+cor.test(traits$Population_Homozygosity, traits$Elevation)
+cor.test(traits$Genetic_Diversity, traits$Latitude)
+```
+
+Then extend to multiple predictors with a linear model:
+
+```{r}
+fit <- lm(Genetic_Load ~ Elevation + Latitude, data = traits)
+summary(fit)
+```
+
+**Interpretation checklist:** look at the sign and significance of each coefficient, not just whether the model is "significant" overall — a common misread in GEA-style analyses.
+
+### From a single correlation to RDA
+
+A correlation or `lm()` only handles one response variable at a time. When you have several genetic/fitness variables you want to relate to several environmental variables together, redundancy analysis (RDA) is the standard multivariate approach in landscape genomics:
+
+```{r}
+library(vegan)
+
+response_vars <- traits[, c("Genetic_Diversity", "Genetic_Load", "PC1", "PC2")]
+env_vars <- traits[, c("Elevation", "Latitude")]
+
+rda_fit <- rda(response_vars ~ Elevation + Latitude, data = env_vars, na.action = na.omit)
+summary(rda_fit)
+plot(rda_fit)
+```
+
+This is a simplified stand-in for the genotype-environment association / genomic-offset workflows you'd run on real SNP data (e.g., with `LEA`, `gradientForest`, or full-genotype RDA) — the mechanics of centering the response, fitting the constrained ordination, and reading the biplot are the same.
+
+## Roadmap beyond this module
+
+When you're ready to work with real genotype data instead of pre-computed summaries:
+
+- `vcfR::read.vcfR()` reads a VCF file into R
+- `adegenet::df2genind()` / `vcfR::vcfR2genind()` convert genotypes into population-genetics-aware objects with built-in allele-frequency, heterozygosity, and Fst functions
+- `LEA` (Bioconductor) and `vegan::rda()` scale the GEA approach above to genome-wide SNP data
+
+None of this is required for this module's exercises — it's here so you know where basics you learn connects to your actual genomic analysis pipelines.
+
+## Wrap Up
+### Idea check
+
+Answer these before the practical exercises.
+
+1. What does an alternate allele frequency of 0.3 at a locus mean biologically?
+2. Why can observed heterozygosity (Ho) be lower than expected heterozygosity (He) in a real population?
+3. What do you think `Population_Homozygosity` is measuring, and how would you expect it to relate to `Genetic_Diversity` — positively or negatively?
+4. In a PCA built from genetic markers, what do PC1 and PC2 typically represent in a population-genetics context?
+5. Why test `cor.test(Genetic_Diversity, Elevation)` rather than just assuming a relationship exists because both vary by population?
+6. What is the conceptual difference between running a separate `lm()` for each genetic variable versus running one `rda()` with all of them as a response matrix?
+
+### Practical exercises
+
+1. Build the simulated genotype matrix (30 individuals × 10 loci) exactly as shown, and compute the alternate allele frequency for every locus.
+2. Compute observed and expected heterozygosity for each locus and identify which locus shows the largest Ho − He gap.
+3. Run `prcomp()` on the simulated genotype matrix and plot PC1 vs. PC2.
+4. Load the real red-spruce dataset and plot the real `PC1` vs. `PC2`, colored by `Region`. Does the pattern look like discrete clusters or a continuous gradient?
+5. Run `cor.test()` between `Population_Homozygosity` and `Elevation`, and separately between `Genetic_Diversity` and `Latitude`. Report the correlation coefficient, p-value, and a one-sentence interpretation for each.
+6. Fit `lm(Genetic_Load ~ Elevation + Latitude, data = traits)` and interpret the two coefficients — which predictor has a stronger association, and in which direction?
+7. **Stretch exercise:** run the `vegan::rda()` example above using `Genetic_Diversity`, `Genetic_Load`, `PC1`, `PC2` as responses and `Elevation`, `Latitude` as predictors. Produce the ordination biplot and describe what you see in 2–3 sentences.
+8. Save every summary table (allele frequencies, heterozygosity table, correlation results) and every plot into `results/`.
+
+### Homework 
+
+Build `src/02_pop_genetics_intro.R`, combining the simulated-data fundamentals with a real-data GEA-style analysis.
+
+**Requirements:**
+
+- Part A (fundamentals): allele frequency and Ho/He table for the simulated genotype matrix, plus the PCA plot.
+- Part B (applied): using the real dataset, test associations between **at least two** genetic-parameter columns (e.g., `Population_Homozygosity`, `Genetic_Diversity`, `Genetic_Load`) and **at least two** environmental predictors (`Elevation`, `Latitude`, `Longitude`), using correlation and/or `lm()`.
+- A written interpretation (half a page, as comments or a `results/README.md`) answering: Do the genetic parameters show a spatial pattern with latitude or elevation? What ecological or demographic process might explain this (e.g., isolation by distance, local adaptation, drift in small/marginal populations)?
+- **Bonus (optional):** complete the `vegan::rda()` ordination and include the biplot with a short interpretation of which environmental axis drives more separation among genetic variables.
+
+**Submission format:** `src/02_pop_genetics_intro.R`, all generated outputs in `results/`, and the written interpretation.
+
+
+
