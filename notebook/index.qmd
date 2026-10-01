@@ -22,7 +22,7 @@ listing:
 
   max-description-length: 5000
   feed: true
-  fields: [date,title, categories, reading-time]
+  fields: [title, categories, date, reading-time]
 
 
 
