@@ -91,9 +91,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-categories','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -363,10 +363,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(4)</span></div><div class="category" data-category="YmFzaA==">bash <span class="quarto-category-count">(2)</span></div><div class="category" data-category="YmlvaW5mb3JtYXRpY3M=">bioinformatics <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2l0aHVi">github <span class="quarto-category-count">(2)</span></div><div class="category" data-category="aHBj">hpc <span class="quarto-category-count">(4)</span></div><div class="category" data-category="cG9wZ2Vu">popgen <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cg==">r <span class="quarto-category-count">(2)</span></div><div class="category" data-category="c2x1cm0=">slurm <span class="quarto-category-count">(1)</span></div><div class="category" data-category="d29ya2Zsb3c=">workflow <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content column-page" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -377,7 +376,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta column-page-left">
+<div class="quarto-title-meta column-page">
 
     <div>
     <div class="quarto-title-meta-heading">Author</div>
@@ -402,11 +401,6 @@ window.Quarto = {
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
 <div class="quarto-post image-right" data-index="0" data-categories="aHBjJTJDciUyQ2Jpb2luZm9ybWF0aWNzJTJDZ2l0aHViJTJDcG9wZ2Vu" data-listing-date-sort="1789099200000" data-listing-file-modified-sort="1789584184158" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3247">
-<div class="thumbnail"><a href="../notebook/posts/r-bioinformatics/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="posts/r-bioinformatics/index_files/figure-html/unnamed-chunk-14-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="../notebook/posts/r-bioinformatics/index.html" class="no-external">R for Bioinformatics: Population Genetics Foundations</a>
@@ -424,27 +418,17 @@ window.Quarto = {
 <div class="listing-category" onclick="window.quartoListingCategory('cG9wZ2Vu'); return false;">popgen</div>
 
 </div>
-<div class="delink listing-description"><a href="../notebook/posts/r-bioinformatics/index.html" class="no-external">
-<p>allele frequencies, heterozygosity, and a first genotype–environment association</p>
-</a></div>
 </div>
 <div class="metadata">
 <a href="../notebook/posts/r-bioinformatics/index.html" class="no-external">
 <div class="listing-date">
 Sep 11, 2026
 </div>
-<div class="listing-author">
-Anoob Prakash
-</div>
+<div class="listing-reading-time">17 min</div>
 </a>
 </div>
 </div>
 <div class="quarto-post image-right" data-index="1" data-categories="aHBjJTJDcg==" data-listing-date-sort="1788321600000" data-listing-file-modified-sort="1789160436416" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1454">
-<div class="thumbnail"><a href="../notebook/posts/r-basics/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="posts/r-basics/index_files/figure-html/unnamed-chunk-9-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="../notebook/posts/r-basics/index.html" class="no-external">R basics for reproducible data analysis</a>
@@ -456,27 +440,17 @@ Anoob Prakash
 <div class="listing-category" onclick="window.quartoListingCategory('cg=='); return false;">r</div>
 
 </div>
-<div class="delink listing-description"><a href="../notebook/posts/r-basics/index.html" class="no-external">
-<p>Learn the basics of using R for statistical data analysis</p>
-</a></div>
 </div>
 <div class="metadata">
 <a href="../notebook/posts/r-basics/index.html" class="no-external">
 <div class="listing-date">
 Sep 2, 2026
 </div>
-<div class="listing-author">
-Anoob Prakash
-</div>
+<div class="listing-reading-time">8 min</div>
 </a>
 </div>
 </div>
 <div class="quarto-post image-right" data-index="2" data-categories="aHBjJTJDd29ya2Zsb3clMkNiYXNoJTJDZ2l0aHVi" data-listing-date-sort="1786334400000" data-listing-file-modified-sort="1789159706489" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="925">
-<div class="thumbnail"><a href="../notebook/posts/bashing-the-cluster/index.html" class="no-external">
-
-<img loading="lazy" src="../notebook/posts/bashing-the-cluster/spruce-computing.png" class="thumbnail-image">
-
-</a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="../notebook/posts/bashing-the-cluster/index.html" class="no-external">Getting started with bash on HPC</a>
@@ -492,27 +466,17 @@ Anoob Prakash
 <div class="listing-category" onclick="window.quartoListingCategory('Z2l0aHVi'); return false;">github</div>
 
 </div>
-<div class="delink listing-description"><a href="../notebook/posts/bashing-the-cluster/index.html" class="no-external">
-<p>Learn the basics of using bash to work on a cluster</p>
-</a></div>
 </div>
 <div class="metadata">
 <a href="../notebook/posts/bashing-the-cluster/index.html" class="no-external">
 <div class="listing-date">
 Aug 10, 2026
 </div>
-<div class="listing-author">
-Anoob Prakash
-</div>
+<div class="listing-reading-time">5 min</div>
 </a>
 </div>
 </div>
 <div class="quarto-post image-right" data-index="3" data-categories="aHBjJTJDYmFzaCUyQ3NsdXJt" data-listing-date-sort="1786248000000" data-listing-file-modified-sort="1789162254105" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="424">
-<div class="thumbnail"><a href="../notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">
-
-<img loading="lazy" src="../notebook/posts/cluster-cheatsheet/cheatsheet.png" class="thumbnail-image">
-
-</a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="../notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">Cheat sheet for everyday computational analysis</a>
@@ -526,18 +490,13 @@ Anoob Prakash
 <div class="listing-category" onclick="window.quartoListingCategory('c2x1cm0='); return false;">slurm</div>
 
 </div>
-<div class="delink listing-description"><a href="../notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">
-<p>Quick reference cheatsheet for frequently used commands for languages like bash, R, slurm etc.</p>
-</a></div>
 </div>
 <div class="metadata">
 <a href="../notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html" class="no-external">
 <div class="listing-date">
 Aug 9, 2026
 </div>
-<div class="listing-author">
-Anoob Prakash
-</div>
+<div class="listing-reading-time">3 min</div>
 </a>
 </div>
 </div>

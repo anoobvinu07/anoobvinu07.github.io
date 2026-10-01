@@ -20,8 +20,15 @@ listing:
   type: default
   image-align: right
 
+  max-description-length: 5000
+  feed: true
+  fields: [date,title, categories, reading-time]
 
-  categories: true
+
+
+
+
+  categories: false
   exclude:
     listed: false
 # lightbox: auto
