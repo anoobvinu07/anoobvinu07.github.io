@@ -7,8 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Anoob Prakash">
+<meta name="dcterms.date" content="2026-08-09">
+<meta name="description" content="Quick reference cheatsheet for frequently used commands for bash">
 
-<title>Notebook – Anoob Prakash</title>
+<title>bash: Cheat sheet for everyday computational analysis – Anoob Prakash</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -30,31 +32,29 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../img/illustrated_AP.jpg" rel="icon" type="image/jpeg">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9b4163b2d5a4faf47f5c6c26d950b841.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-d6cdf83d2c845cc70b2cc4af81e59243.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-9b4163b2d5a4faf47f5c6c26d950b841.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/quarto-contrib/academicons-1.9.4/all.css" rel="stylesheet">
-<link href="../site_libs/quarto-contrib/academicons-1.9.4/size.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../img/illustrated_AP.jpg" rel="icon" type="image/jpeg">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-7ccbb4ccca079e06e65b90b0593693ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/quarto-contrib/academicons-1.9.4/all.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/academicons-1.9.4/size.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -81,154 +81,11 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-posts .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-title','listing-categories','listing-date','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-image"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-posts'] = new List('listing-posts', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-workflows .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-categories','listing-date','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-workflows'] = new List('listing-workflows', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-learn-to-code .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-categories','listing-date','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-learn-to-code'] = new List('listing-learn-to-code', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-review .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-date','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-review'] = new List('listing-review', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="../styles/notebook.css">
 </head>
 
-<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -397,11 +254,11 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../img/AP_logo2.png" alt="" class="navbar-logo light-content">
-    <img src="../img/AP_logo2.png" alt="" class="navbar-logo dark-content">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo light-content">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo dark-content">
     </a>
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">Anoob Prakash</span>
     </a>
   </div>
@@ -412,27 +269,27 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../research/index.html"> 
+    <a class="nav-link" href="../../../research/index.html"> 
 <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../notebook/index.html" aria-current="page"> 
+    <a class="nav-link" href="../../../notebook/index.html"> 
 <span class="menu-text">Notebook</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../gallery/index.html"> 
+    <a class="nav-link" href="../../../gallery/index.html"> 
 <span class="menu-text">Gallery</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../news/index.html"> 
+    <a class="nav-link" href="../../../news/index.html"> 
 <span class="menu-text">News</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../cv/index.html"> 
+    <a class="nav-link" href="../../../cv/index.html"> 
 <span class="menu-text">CV</span></a>
   </li>  
 </ul>
@@ -446,21 +303,40 @@ window.Quarto = {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#bash-quick-reference" id="toc-bash-quick-reference" class="nav-link active" data-scroll-target="#bash-quick-reference">Bash quick reference</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Notebook</h1>
-<p class="subtitle lead">Useful notes for research and fun</p>
+<h1 class="title">bash: Cheat sheet for everyday computational analysis</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">cheatsheet</div>
+    <div class="quarto-category">bash</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Quick reference cheatsheet for frequently used commands for bash
+  </div>
 </div>
 
 
-
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta column-page-right">
 
     <div>
     <div class="quarto-title-meta-heading">Author</div>
@@ -469,6 +345,12 @@ window.Quarto = {
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 9, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -478,148 +360,89 @@ window.Quarto = {
 </header>
 
 
-<section id="workflows" class="level2">
-<h2 class="anchored" data-anchor-id="workflows">Workflows</h2>
-<div id="listing-workflows" class="quarto-listing quarto-listing-container-default">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="aHBjJTJDciUyQ2ZvdW5kYXRpb25zJTJDZ2l0aHViJTJDcG9wZ2Vu" data-listing-date-sort="1789099200000" data-listing-file-modified-sort="1791233594048" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3247">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../notebook/workflows/r-popgen/index.html" class="no-external"><em>R</em>: Population Genetics Foundations</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('aHBj'); return false;">hpc</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cg=='); return false;">r</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Zm91bmRhdGlvbnM='); return false;">foundations</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2l0aHVi'); return false;">github</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cG9wZ2Vu'); return false;">popgen</div>
-
-</div>
-</div>
-<div class="metadata">
-<a href="../notebook/workflows/r-popgen/index.html" class="no-external">
-<div class="listing-date">
-Sep 11, 2026
-</div>
-<div class="listing-reading-time">17 min</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-</section>
-<section id="learning-to-code" class="level2">
-<h2 class="anchored" data-anchor-id="learning-to-code">Learning to code</h2>
-<div id="listing-learn-to-code" class="quarto-listing quarto-listing-container-default">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="aHBjJTJDcg==" data-listing-date-sort="1788321600000" data-listing-file-modified-sort="1791231481259" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1704">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../notebook/learn-to-code/r-basics/index.html" class="no-external"><em>R</em>: Basics for reproducible data analysis</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('aHBj'); return false;">hpc</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cg=='); return false;">r</div>
-
-</div>
-</div>
-<div class="metadata">
-<a href="../notebook/learn-to-code/r-basics/index.html" class="no-external">
-<div class="listing-date">
-Sep 2, 2026
-</div>
-<div class="listing-reading-time">9 min</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="aHBjJTJDd29ya2Zsb3clMkNiYXNoJTJDZ2l0aHVi" data-listing-date-sort="1786334400000" data-listing-file-modified-sort="1791232474927" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2885">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../notebook/learn-to-code/bash-on-cluster/index.html" class="no-external"><em>bash</em>: Getting started on HPC Linux systems</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('aHBj'); return false;">hpc</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('d29ya2Zsb3c='); return false;">workflow</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YmFzaA=='); return false;">bash</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z2l0aHVi'); return false;">github</div>
-
-</div>
-</div>
-<div class="metadata">
-<a href="../notebook/learn-to-code/bash-on-cluster/index.html" class="no-external">
-<div class="listing-date">
-Aug 10, 2026
-</div>
-<div class="listing-reading-time">15 min</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-</section>
-<section id="review-materials" class="level2">
-<h2 class="anchored" data-anchor-id="review-materials">Review materials</h2>
-<div id="listing-review" class="quarto-listing quarto-listing-container-grid">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="Y2hlYXRzaGVldCUyQ1I=" data-listing-date-sort="1788926400000" data-listing-file-modified-sort="1791233672068" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="278">
-<a href="../notebook/review/R/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-<em>R</em>: Cheat sheet for everyday computational analysis
-</h5>
-<div class="listing-reading-time card-text text-muted">2 min</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Sep 9, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="Y2hlYXRzaGVldCUyQ2Jhc2g=" data-listing-date-sort="1786248000000" data-listing-file-modified-sort="1791233642108" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="144">
-<a href="../notebook/review/bash/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-<em>bash</em>: Cheat sheet for everyday computational analysis
-</h5>
-<div class="listing-reading-time card-text text-muted">1 min</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Aug 9, 2026
-</div>
-</div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-
+<section id="bash-quick-reference" class="level3">
+<h3 class="anchored" data-anchor-id="bash-quick-reference">Bash quick reference</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>~</code></td>
+<td>Your home directory</td>
+<td><code>cd ~</code></td>
+</tr>
+<tr class="even">
+<td><code>/</code></td>
+<td>Filesystem root and path separator</td>
+<td><code>cd /scratch</code></td>
+</tr>
+<tr class="odd">
+<td><code>pwd</code></td>
+<td>Print working directory</td>
+<td><code>pwd</code></td>
+</tr>
+<tr class="even">
+<td><code>ls</code></td>
+<td>List files and directories</td>
+<td><code>ls -lh results</code></td>
+</tr>
+<tr class="odd">
+<td><code>cd</code></td>
+<td>Change directory</td>
+<td><code>cd data/raw</code></td>
+</tr>
+<tr class="even">
+<td><code>cd ..</code></td>
+<td>Move up one directory</td>
+<td><code>cd ..</code></td>
+</tr>
+<tr class="odd">
+<td><code>mkdir -p</code></td>
+<td>Create directory/directories</td>
+<td><code>mkdir -p logs results</code></td>
+</tr>
+<tr class="even">
+<td><code>head</code></td>
+<td>Show the beginning of a file</td>
+<td><code>head -n 5 file.txt</code></td>
+</tr>
+<tr class="odd">
+<td><code>less</code></td>
+<td>View a file interactively; press <code>q</code> to exit</td>
+<td><code>less file.txt</code></td>
+</tr>
+<tr class="even">
+<td><code>grep</code></td>
+<td>Search for text in a file</td>
+<td><code>grep "value" file.txt</code></td>
+</tr>
+<tr class="odd">
+<td><code>wc -l</code></td>
+<td>Count lines</td>
+<td><code>wc -l file.txt</code></td>
+</tr>
+<tr class="even">
+<td><code>curl -L -o</code></td>
+<td>Download URL into a named file</td>
+<td><code>curl -L -o file.txt URL</code></td>
+</tr>
+</tbody>
+</table>
 
 
 </section>
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-posts">
-<div class="list quarto-listing-default">
-
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

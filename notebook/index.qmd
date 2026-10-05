@@ -1,6 +1,6 @@
 ---
 title: "Notebook"
-subtitle: "Jotting down notes for later" 
+subtitle: "Useful notes for research and fun" 
 
 author:
   - name: "Anoob Prakash"
@@ -14,24 +14,63 @@ format:
     page-layout: full
     toc: false
     css: /styles/notebook.css
+
 listing:
-  contents: posts
-  sort: "date desc"
-  type: default
-  image-align: right
+  - id: posts
+    contents: posts
+    sort: "date desc"
+    type: default
+    image-align: right
+    max-description-length: 5000
+    feed: true
+    fields: [title, categories, date, reading-time]
+    categories: false
+    exclude:
+      listed: false
 
-  max-description-length: 5000
-  feed: true
-  fields: [title, categories, date, reading-time]
+  - id: workflows
+    contents: "workflows/*/*.qmd"
+    sort: "date desc"
+    type: default
+    image-align: right
+    max-description-length: 5000
+    feed: true
+    fields: [title, categories, date, reading-time]
+    categories: false
+    exclude:
+      listed: false
+  
+  - id: learn-to-code
+    contents: "learn-to-code/*/*.qmd"
+    sort: "date desc"
+    type: default
+    image-align: right
+    max-description-length: 5000
+    feed: true
+    fields: [title, categories, date, reading-time]
+    categories: false
+    exclude:
+      listed: false
 
-
-
-
-
-  categories: false
-  exclude:
-    listed: false
-# lightbox: auto
+  - id: review
+    contents: "review/*/*.qmd"
+    type: grid 
+    sort: "date desc"
+    fields: [title, date, reading-time]
+    exclude:
+      listed: false
 ---
 
 
+## Workflows
+:::{#workflows}
+:::
+
+## Learning to code
+:::{#learn-to-code}
+:::
+
+## Review materials
+
+:::{#review}
+:::

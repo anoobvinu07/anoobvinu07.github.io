@@ -2,10 +2,11 @@
   {
     "listing": "/notebook/index.html",
     "items": [
-      "/notebook/posts/r-bioinformatics/index.html",
-      "/notebook/posts/r-basics/index.html",
-      "/notebook/posts/bashing-the-cluster/index.html",
-      "/notebook/posts/cluster-cheatsheet/cluster-cheatsheet.html"
+      "/notebook/workflows/r-popgen/index.html",
+      "/notebook/learn-to-code/r-basics/index.html",
+      "/notebook/learn-to-code/bash-on-cluster/index.html",
+      "/notebook/review/R/index.html",
+      "/notebook/review/bash/index.html"
     ]
   }
 ]

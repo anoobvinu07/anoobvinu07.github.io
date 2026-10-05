@@ -1,0 +1,52 @@
+---
+title: "_bash_: Cheat sheet for everyday computational analysis"
+description: "Quick reference cheatsheet for frequently used commands for bash"
+author:
+  - name: "Anoob Prakash"
+    email: "prakas89@purdue.edu"
+    orcid: "0000-0002-7207-934X"
+    url: "https://www.linkedin.com/in/anoob-prakash/"
+date: "2026-08-09"
+categories:
+  - cheatsheet
+  - bash
+image: "/review/cheatsheet.png"
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-title: "On this page"
+    toc-depth: 3
+    page-layout: full
+    lightbox: true
+    code-fold: false
+    code-overflow: wrap
+    code-copy: true
+    code-tools: false
+    code-block-border-left: "#583C88"
+    code-block-border-left-size: 5px
+    code-block-border-left-style: solid
+---
+
+
+
+
+
+### Bash quick reference
+
+| Command | Purpose | Example |
+|---|---|---|
+| `~` | Your home directory | `cd ~` |
+| `/` | Filesystem root and path separator | `cd /scratch` |
+| `pwd` | Print working directory | `pwd` |
+| `ls` | List files and directories | `ls -lh results` |
+| `cd` | Change directory | `cd data/raw` |
+| `cd ..` | Move up one directory | `cd ..` |
+| `mkdir -p` | Create directory/directories | `mkdir -p logs results` |
+| `head` | Show the beginning of a file | `head -n 5 file.txt` |
+| `less` | View a file interactively; press `q` to exit | `less file.txt` |
+| `grep` | Search for text in a file | `grep "value" file.txt` |
+| `wc -l` | Count lines | `wc -l file.txt` |
+| `curl -L -o` | Download URL into a named file | `curl -L -o file.txt URL` |
+
+

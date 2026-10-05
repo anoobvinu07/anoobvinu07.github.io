@@ -1,0 +1,344 @@
+---
+title: "_R_: Basics for reproducible data analysis"
+description: "Learn the basics of using R for statistical data analysis"
+author:
+  - name: "Anoob Prakash"
+    email: "prakas89@purdue.edu"
+    orcid: "0000-0002-7207-934X"
+    url: "https://www.linkedin.com/in/anoob-prakash/"
+date: "09/02/2026"
+categories:
+  - hpc
+  - r
+
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-title: "On this page"
+    toc-depth: 3
+    page-layout: full
+    lightbox: true
+    code-fold: false
+    code-overflow: wrap
+    code-copy: true
+    code-tools: false
+    code-block-border-left: "#583C88"
+    code-block-border-left-size: 5px
+    code-block-border-left-style: solid
+---
+
+
+
+## Goal
+
+Learn core R syntax and data-handling skills by analyzing the red-spruce fitness-trait dataset you already downloaded in [*Bashing the cluster*](/notebook/posts/bashing-the-cluster/index.qmd), and finish with a first reproducible R script whose outputs land in `results/`.
+
+This module picks up exactly where the cluster exercise left off: `data/raw/` holds the raw file, `src/` will hold your R scripts, and `results/` will hold everything R produces.
+
+#### Prerequisites
+::: {.column-body}
+- Completed the cluster exercise 
+- R (>= 4.2) installed; RStudio/Positron recommended but not required
+- The dataset available at `data/raw/red_spruce_fitness_traits.txt`
+
+If you're working locally instead of on the cluster, grab the same file directly from R:
+
+```{r}
+#| eval: false
+# Create directory
+dir.create("data/raw", 
+recursive = TRUE,      # create the last element of the path- here it will be "raw"
+showWarnings = FALSE)
+
+download.file(
+"https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt",
+      destfile = "data/raw/red_spruce_fitness_traits.txt")
+```  
+
+This is work on my system, probably not on yours. Lets use a package called `here` to make sure that code is reproducibile on your system as well.
+```{r}
+#| eval: false
+# Create directory
+dir.create(here::here("data/raw"), 
+recursive = TRUE,      # create the last element of the path- here it will be "raw"
+showWarnings = FALSE)
+
+download.file(
+"https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt",
+      destfile = here::here("data/raw/red_spruce_fitness_traits.txt"))
+``` 
+
+
+::: {.callout-tip}
+# Code reproducibility check
+
+I am using the `here` package to make this script reproducible. This makes sure that irrespective of of which system this code is run, it will work on that system. Read more about `here` [here](https://github.com/jennybc/here_here#readme).
+
+Instead of calling the package specifically at the top of the script with a `library(here)` or `require(here)`, I am calling them as a require it. That is done with the syntax `packageName::packageFunction`. This is useful when you have a lot of packages at the top, but you want to keep track of where a specific function is being called from. There are other reasons as well for following this syntax, for example when you need to call a function that is part of a package not part of the base R. Have you encounetered such situations while coding?
+:::
+
+Recreate the rest of the project layout if you don't already have it:
+```{r}
+dir.create(here::here("results"), showWarnings = FALSE)
+dir.create(here::here("src"), showWarnings = FALSE)
+```
+
+
+
+::: {.callout-note}
+
+What is the output when you type in the following commands in your system? What does it mean?
+
+```{r}
+getwd()
+
+here::here()
+```
+:::
+
+
+
+
+
+
+::: {.callout-important collapse="true"}
+## Project directory setup
+**This excercise assumes the project folder follows the following structure:** 
+
+<pre style="color: #F8F9FA; background-color: #22252A; padding: 1rem; border-radius: 6px;"><code>cluster-exercise/
+ ├── data/
+ │   └── raw/       # downloaded, unchanged source data
+ ├── logs/          # Slurm standard output and error logs
+ ├── results/       # analysis products created by R
+ └── src/           # R and Slurm scripts</code></pre>
+:::
+
+
+:::
+
+## Learning objectives
+
+By the end of this module you should be able to:
+
+- Start R/RStudio with a reproducible working directory (no hard-coded absolute paths)
+- Describe R's core data types and structures: vectors, factors, data frames, lists
+- Import and inspect a tab-delimited file
+- Subset, filter, and summarize data with base R
+- Produce basic plots (histogram, boxplot, scatterplot)
+- Save tables and plots into `results/`
+- Turn interactive code into a script you can run non-interactively with `Rscript`
+
+#### R quick reference
+
+| Function/operator | Purpose | Example |
+|---|---|---|
+| `c()` | Combine values into a vector | `c(1, 2, 3)` |
+| `<-` | Assignment | `x <- 5` |
+| `read.delim()` | Read a tab-delimited file | `read.delim("data/raw/file.txt")` |
+| `str()` | Show structure/types of an object | `str(df)` |
+| `dim()`, `nrow()`, `ncol()` | Dimensions of a data frame | `dim(df)` |
+| `head()` / `tail()` | First/last rows | `head(df, 5)` |
+| `summary()` | Quick numeric/factor summary | `summary(df$Height)` |
+| `df$col` | Access a column by name | `df$Fitness` |
+| `df[rows, cols]` | Subset by position/condition | `df[df$Region == "E", ]` |
+| `table()` | Count occurrences | `table(df$Population)` |
+| `tapply()` / `aggregate()` | Grouped summaries | `tapply(df$Height, df$Population, mean)` |
+| `function(...) {}` | Define a function | `f <- function(x) mean(x, na.rm = TRUE)` |
+| `for (i in seq)` | Loop | `for (p in unique(df$Population)) {...}` |
+| `hist()`, `boxplot()`, `plot()` | Base R plotting | `hist(df$Height)` |
+| `write.csv()` | Save a table | `write.csv(x, "results/out.csv")` |
+
+## Setting up your R project
+
+On the cluster, load R and start it from inside `cluster-exercise/`:
+
+```{bash}
+#| eval: false
+
+cd ~/projects/cluster-exercise
+
+module biocontainers/default
+module load r          # module name may differ on your cluster; check `module avail r`
+
+R                      # start the R session
+```
+
+
+Inside R, always confirm where you are before reading or writing anything:
+
+```{r}
+getwd()
+
+#or
+
+here::here() # when using the here package to set the paths
+```
+
+If you're using RStudio, create an RStudio Project (`File > New Project`) rooted at `cluster-exercise/` — this keeps every path relative and portable, exactly like the `data/raw/...` paths from the bash module.
+
+## R data types and structures
+
+```{r}
+# Vectors: one-dimensional, single type
+heights <- c(27.3, 31.1, 29.6, 32.0)
+pops    <- c("AB", "AB", "CC", "CC")
+
+# Factors: categorical vectors with fixed levels
+region <- factor(c("E", "E", "C", "C"))
+levels(region)
+
+# Data frames: a table — columns can be different types
+df_demo <- data.frame(pop = pops, height = heights)
+str(df_demo)
+
+# Lists: can hold mixed, differently-shaped objects
+result <- list(mean_height = mean(heights), populations = unique(pops))
+result$mean_height
+```
+
+**Key idea:** almost everything you do in this module is a data frame — one row per tree, one column per variable — with vectors as its columns.
+
+### Importing and inspecting the dataset
+
+```{r}
+traits <- read.delim(here::here("data/raw/red_spruce_fitness_traits.txt"),
+                      header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+dim(traits)          # rows x columns
+names(traits)        # column names
+str(traits)          # types per column
+head(traits, 5)      # first 5 rows
+summary(traits$Height)
+```
+
+You should see 19 columns including identifiers (`Family`, `Population`, `Tree`, `Location`, `Region`), coordinates and environment (`Latitude`, `Longitude`, `Elevation`), fitness traits (`SeedWeight`, `Germination`, `Survival`, `Height`, `Fitness`), and genetic parameters (`PC1`, `PC2`, `Family_Homozygosity`, `Population_Homozygosity`, `Genetic_Diversity`, `Genetic_Load`) — we'll use that last group in Module 2.
+
+**Don't assume a column's type from its name** — Always check with `str()` before analyzing.
+
+### Indexing and subsetting
+
+```{r}
+# A single column
+traits$Fitness |> head() # |> is called the pipe command, which lets you run the additional commands (head()) at the end 
+
+# Rows meeting a condition
+edge <- traits[traits$Region == "E", ]
+nrow(edge)
+
+# Multiple conditions
+healthy_edge <- traits[traits$Region == "E" & traits$Survival > 0.8, ]
+
+# subset() reads more like a sentence
+subset(traits, Region == "E" & Height > 35, select = c(Population, Height, Fitness))
+```
+
+### Summarizing data
+
+```{r}
+# Counts
+table(traits$Population) # number of inds per population
+table(traits$Region)     # number of inds per region
+
+# Grouped means with tapply()
+tapply(traits$Height, traits$Population, mean, na.rm = TRUE)
+
+# Grouped summary with aggregate()
+aggregate(cbind(Height, Fitness) ~ Population, data = traits, FUN = mean) |> head()
+```
+
+### Basic plotting
+
+:::{.panel-tabset}
+#### Default Histogram
+```{r}
+hist(traits$SeedWeight, main = "Seed weight distribution", 
+        xlab = "Seed weight")
+```
+
+#### Breaks = 30
+```{r}
+hist(traits$SeedWeight, main = "Seed weight distribution", 
+        xlab = "Seed weight", breaks = 30)
+```
+
+
+#### Breaks = 50
+```{r}
+hist(traits$SeedWeight, main = "Seed weight distribution", 
+        xlab = "Seed weight", breaks = 50)
+```
+:::
+
+```{r}
+boxplot(Height ~ Region, data = traits, 
+        main = "Height by region", 
+        ylab = "Height (cm)")
+```
+
+```{r}
+plot(traits$Elevation, traits$Fitness,
+     xlab = "Elevation (m)", ylab = "Fitness",
+     main = "Fitness vs elevation")
+```
+
+### Saving outputs and scripting
+
+```{r}
+pop_summary <- aggregate(cbind(Height, Fitness, SeedWeight) ~ Population, data = traits, FUN = mean)
+write.csv(pop_summary, here::here("results/population_trait_summary.csv"), row.names = FALSE)
+```
+
+```{r}
+#| eval: false
+
+# exporting plot as a .png
+png(here::here("results/height_by_region.png"), width = 800, height = 600)
+boxplot(Height ~ Region, data = traits)
+dev.off()
+```
+
+Put everything into `src/01_explore_traits.R` and run it non-interactively — this is what makes it reproducible and Slurm-friendly:
+
+```{bash}
+#| eval: false
+
+Rscript src/01_explore_traits.R
+```
+
+## Wrap up  
+### Idea check
+
+Answer these in your own words before moving to the exercises — write your answers as comments at the top of `src/01_explore_traits.R`.
+
+1. What is the difference between a vector and a data frame in R?
+2. Why prefer a relative path like `"data/raw/red_spruce_fitness_traits.txt"` over an absolute path like `/home/your_username/...`?
+3. What does `str(traits)` tell you that `head(traits)` does not?
+4. Why does treating `Region` as a `factor` (rather than plain character text) matter for `boxplot(Height ~ Region, data = traits)`?
+5. If `mean(traits$Height)` returned `NA`, what would you check first, and how would you fix it?
+6. Why write outputs into `results/` instead of overwriting anything in `data/raw/`?
+
+### Practical exercises
+
+Work through these in order inside an R session, then consolidate the working code into `src/01_explore_traits.R`.
+
+1. Load the dataset and confirm it has 326 rows and 19 columns.
+2. Run `str(traits)` and list every column name along with its type (`chr`, `int`, `num`).
+3. Compute overall summary statistics (mean, sd, min, max) for `Height` and `Fitness`.
+4. Use `table()` to count trees per `Population` and per `Region`. Which population has the most trees sampled?
+5. Subset the data to trees in `Region == "C"` with `Survival > 0.8`. How many trees meet this criterion?
+6. Use `aggregate()` or `tapply()` to get mean `Height` and mean `Fitness` per `Population`. Identify the top 3 populations by mean `Fitness`.
+7. Create a histogram of `SeedWeight` and a boxplot of `Height` by `Region`. Save both as PNG files in `results/`.
+8. Save your population-level summary table as `results/population_trait_summary.csv`.
+9. Move all working code into `src/01_explore_traits.R` and confirm it runs cleanly end-to-end with `Rscript src/01_explore_traits.R`, producing the expected files in `results/`.
+
+### Homework 
+
+- Compute summary statistics (mean, sd, min, max) for at least **4 traits** (e.g., `Height`, `Fitness`, `SeedWeight`, `Germination`), broken down by both `Population` and `Region`.
+- Produce at least **3 plots**: one histogram, one boxplot grouped by `Region`, and one scatterplot relating two continuous variables (e.g., `Elevation` vs. `Fitness`). Save all three to `results/`.
+- Write your interpretation as comments at the bottom of the script, answering:
+  - Which population has the highest and lowest mean fitness?
+  - Is there a visible relationship between elevation and fitness or seed weight? Describe it in one or two sentences.
+- **Bonus (optional):** recreate one plot with `ggplot2` instead of base R.
+
+

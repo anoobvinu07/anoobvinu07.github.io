@@ -1,0 +1,865 @@
+---
+title: "_bash_: Getting started on HPC Linux systems"
+description: "Learn Bash fundamentals for navigating a high-performance computing cluster, organizing a reproducible project, downloading public data, and inspecting text files."
+author:
+  - name: "Anoob Prakash"
+    email: "prakas89@purdue.edu"
+    orcid: "0000-0002-7207-934X"
+    url: "https://www.linkedin.com/in/anoob-prakash/"
+date: "2026-08-10"
+categories:
+  - hpc
+  - workflow
+  - bash
+  - github
+image: "/notebook/posts/bashing-the-cluster/spruce-computing.png"
+
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-title: "On this page"
+    toc-depth: 3
+    page-layout: full
+    lightbox: true
+    code-fold: false
+    code-overflow: wrap
+    code-copy: true
+    code-tools: false
+    code-block-border-left: "#583C88"
+    code-block-border-left-size: 5px
+    code-block-border-left-style: solid
+---
+
+## Goal
+
+**Cluster exercise: download and inspect public red-spruce fitness-trait data**
+
+In this exercise, you will create a small, reproducible project on a Linux high-performance computing (HPC) cluster. You will download a tab-delimited red-spruce dataset from a public GitHub repository, inspect the file from the command line, and practice the Bash commands used in nearly every bioinformatics and data-analysis workflow.
+
+The source file is [FitnessTraits_GeneticParameters_RedSpruce.txt](https://github.com/anoobvinu07/Genomic_assisted_selection/blob/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt), from the [Genomic_assisted_selection GitHub repository](https://github.com/anoobvinu07/Genomic_assisted_selection). The repository supports the published manuscript, [Bringing genomics to the field: An integrative approach to seed sourcing for forest restoration](https://doi.org/10.1002/aps3.11600).
+
+You do not need to understand every command immediately. The goal is to practice a small group of commands repeatedly until navigating, creating folders, downloading data, and checking files become routine.
+
+## Before you begin
+
+### What is Bash?
+
+**Bash** is a command-line shell: a program that reads commands you type and asks Linux to perform actions such as moving between folders, creating files, running programs, or submitting jobs to a cluster scheduler.
+
+When you log in to a cluster through a terminal or SSH, you usually see a prompt resembling:
+
+```text
+[username@login01 ~]$
+```
+
+The exact appearance varies by cluster, but the important pieces are:
+
+```text
+username          Your account name
+login01           The computer you are currently connected to
+~                 Your home directory
+$                 Bash is ready for a command
+```
+
+Do not type the prompt itself. Type only the command after `$`.
+
+For example:
+
+```bash
+pwd
+```
+
+then press <kbd>Enter</kbd>.
+
+### What is an HPC cluster?
+
+An HPC cluster is a collection of connected computers. In most cases, you log in first to a **login node**, where you organize files, edit scripts, transfer modest amounts of data, and submit jobs.
+
+Do not run long, memory-intensive, or many-core analyses directly on the login node. Later modules will introduce SLURM job scripts, which request computational resources and run analyses on **compute nodes**.
+
+For this introductory exercise, creating directories, downloading one small text file, and inspecting it are appropriate login-node tasks.
+
+### Command anatomy
+
+Most Bash commands follow this pattern:
+
+```text
+command option(s) argument(s)
+```
+
+For example:
+
+```bash
+head -n 5 data/raw/red_spruce_fitness_traits.txt
+```
+
+means:
+
+| Component | Meaning |
+|---|---|
+| `head` | The command to run |
+| `-n 5` | An option telling `head` to show five lines |
+| `data/raw/red_spruce_fitness_traits.txt` | The file on which to operate |
+
+Options often begin with `-` or `--`. Short options commonly use one dash, such as `-n`; longer, more descriptive options use two dashes, such as `--help`.
+
+Most commands provide built-in help:
+
+```bash
+head --help
+```
+
+On Linux systems, manual pages are also often available:
+
+```bash
+man head
+```
+
+Press `q` to exit a manual page.
+
+## Learning objectives
+
+By the end of this module, you should be able to:
+
+- Explain the difference between a terminal, Bash, Linux, and an HPC cluster.
+- Identify your current location with `pwd`.
+- Navigate directories with `cd`, including `~`, `.`, and `..`.
+- List files with `ls`, including hidden files with `ls -la`.
+- Create a consistent project layout with `mkdir -p`.
+- Use relative paths rather than hard-coded absolute paths.
+- Download a public text file with `curl`.
+- Inspect a tab-delimited file with `head`, `less`, `grep`, `tr`, and `wc`.
+- Use pipes (`|`) to connect commands.
+- Use basic output redirection (`>` and `>>`) without overwriting files accidentally.
+- Recognize which activities belong on a login node and which require a scheduled compute job.
+
+## Filesystem basics
+
+Linux organizes files in a tree-like filesystem. The top of the filesystem is called the **root directory** and is written as `/`.
+
+```text
+/
+├── home/
+│   └── your_username/
+│       └── projects/
+└── scratch/
+```
+
+Your cluster may use a slightly different layout, but the concepts are the same.
+
+### Important path symbols
+
+| Symbol or path | Meaning | Example |
+|---|---|---|
+| `/` | Filesystem root; also separates path components | `/home/your_username` |
+| `~` | Your home directory | `cd ~` |
+| `.` | The current directory | `ls .` |
+| `..` | The directory one level above the current directory | `cd ..` |
+| `-` | Your previously visited directory, with `cd` | `cd -` |
+| `*` | Wildcard matching zero or more characters | `ls *.txt` |
+
+An **absolute path** begins at `/`:
+
+```text
+/home/your_username/projects/cluster-exercise
+```
+
+A **relative path** begins from your current directory:
+
+```text
+data/raw/red_spruce_fitness_traits.txt
+```
+
+Relative paths make a project portable. If another researcher copies or clones the project, a relative path can still work, while an absolute path containing your username usually cannot.
+
+::: {.callout-tip}
+## Tab completion saves time
+
+Press <kbd>Tab</kbd> while typing a file or directory name. Bash will try to complete it automatically.
+
+For example, type:
+
+```bash
+cd proj
+```
+
+Then press <kbd>Tab</kbd>. If `projects/` is the only matching directory, Bash completes it:
+
+```bash
+cd projects/
+```
+
+Press <kbd>Tab</kbd> twice to display possible matches when more than one exists. Tab completion reduces typing and prevents many filename mistakes.
+:::
+
+## Project setup
+
+### Step 1: Confirm your starting location
+
+After logging into the cluster, run:
+
+```bash
+cd ~
+pwd
+```
+
+`cd ~` changes into your home directory. `pwd` means **print working directory**, and it reports the exact path of the directory where you are currently located.
+
+Your output might resemble:
+
+```text
+/home/your_username
+```
+
+Replace `your_username` with your own cluster username.
+
+### Step 2: Create a projects directory
+
+Create a place for your computational projects:
+
+```bash
+mkdir -p ~/projects
+```
+
+Breakdown:
+
+| Part | Meaning |
+|---|---|
+| `mkdir` | Make a directory |
+| `-p` | Create parent directories if needed; do not error if the directory already exists |
+| `~/projects` | A directory named `projects` inside your home directory |
+
+Now move into it:
+
+```bash
+cd ~/projects
+pwd
+```
+
+::: {.callout-note}
+## Why use `mkdir -p`?
+
+Without `-p`, `mkdir projects` returns an error if `projects` already exists. With `-p`, the command is safe to run repeatedly. This is useful in reproducible setup instructions and scripts.
+:::
+
+### Step 3: Create the project structure
+
+Create the main project directory and its subdirectories in one command:
+
+```bash
+mkdir -p cluster-exercise/{data/raw,results,logs,src}
+```
+
+This creates:
+
+```text
+cluster-exercise/
+├── data/
+│   └── raw/
+├── logs/
+├── results/
+└── src/
+```
+
+The command uses **brace expansion**. Bash expands:
+
+```bash
+cluster-exercise/{data/raw,results,logs,src}
+```
+
+into these paths before running `mkdir`:
+
+```text
+cluster-exercise/data/raw
+cluster-exercise/results
+cluster-exercise/logs
+cluster-exercise/src
+```
+
+Do not insert spaces inside the braces:
+
+```bash
+# Correct
+mkdir -p cluster-exercise/{data/raw,results,logs,src}
+
+# Incorrect: spaces become part of separate arguments
+mkdir -p cluster-exercise/{data/raw, results, logs, src}
+```
+
+### Step 4: Enter the project
+
+Move into the project directory:
+
+```bash
+cd cluster-exercise
+```
+
+Confirm your location:
+
+```bash
+pwd
+```
+
+Your path should resemble:
+
+```text
+/home/your_username/projects/cluster-exercise
+```
+
+At this point, paths such as the following are relative to `cluster-exercise/`:
+
+```text
+data/raw/
+results/
+logs/
+src/
+```
+
+### Step 5: Inspect the layout
+
+Use `tree` to display the directory hierarchy:
+
+```bash
+tree
+```
+
+Expected output:
+
+```text
+.
+├── data
+│   └── raw
+├── logs
+├── results
+└── src
+```
+
+Some clusters do not have `tree` installed. If you receive `command not found`, use this alternative:
+
+```bash
+find . -maxdepth 3 -type d | sort
+```
+
+You can also list directory contents with:
+
+```bash
+ls
+```
+
+For a long, human-readable listing:
+
+```bash
+ls -lh
+```
+
+To include hidden files, whose names begin with a period:
+
+```bash
+ls -la
+```
+
+Your project should now have this structure:
+
+```text
+cluster-exercise/
+├── data/
+│   └── raw/       # downloaded, unchanged source data
+├── logs/          # SLURM standard output and error logs
+├── results/       # analysis products created by scripts
+└── src/           # Bash, R, Python, and SLURM scripts
+```
+
+::: {.callout-important}
+## Project-organization rule
+
+Treat `data/raw/` as read-only source material. Do not manually modify, rename, or overwrite raw input data after downloading it.
+
+Write cleaned data to a separate directory such as `data/processed/`, and write tables, figures, model objects, and logs to `results/` or `logs/`. Keeping inputs separate from outputs makes your workflow easier to reproduce, audit, and debug.
+:::
+
+## Bash quick reference
+
+| Command or symbol | Purpose | Example |
+|---|---|---|
+| `pwd` | Print the current directory | `pwd` |
+| `ls` | List files and directories | `ls -lh results` |
+| `ls -la` | List all files, including hidden files | `ls -la` |
+| `cd directory` | Change into a directory | `cd data/raw` |
+| `cd ..` | Move up one directory | `cd ..` |
+| `cd ~` | Move to your home directory | `cd ~` |
+| `cd -` | Return to the previous directory | `cd -` |
+| `mkdir -p` | Create directories, including parents | `mkdir -p data/processed` |
+| `cp` | Copy files | `cp input.txt backup/input.txt` |
+| `mv` | Move or rename a file | `mv old_name.txt new_name.txt` |
+| `rm` | Remove a file | `rm unwanted_file.txt` |
+| `head -n N` | Show the first `N` lines | `head -n 5 file.txt` |
+| `tail -n N` | Show the last `N` lines | `tail -n 5 file.txt` |
+| `less` | View a file interactively; press `q` to quit | `less file.txt` |
+| `grep` | Search for text matching a pattern | `grep "ALB" file.txt` |
+| `wc -l` | Count lines | `wc -l file.txt` |
+| `sort` | Sort lines | `sort names.txt` |
+| `uniq -c` | Count consecutive duplicate lines | `sort values.txt \| uniq -c` |
+| `cut` | Extract specified delimiter-separated columns | `cut -f 1,2 file.txt` |
+| `tr` | Translate or replace characters | `tr '\t' '\n'` |
+| `curl -L -o` | Download a URL to a named output file | `curl -L -o file.txt URL` |
+| `\|` | Send output from one command to the next command | `grep "ALB" file.txt \| head` |
+| `>` | Write output to a file; overwrites an existing file | `command > output.txt` |
+| `>>` | Append output to a file | `command >> output.txt` |
+
+::: {.callout-warning}
+## Be careful with `rm`
+
+`rm` permanently removes files from the cluster filesystem. There is usually no recycle bin.
+
+Before deleting anything, inspect the target first:
+
+```bash
+ls unwanted_file.txt
+```
+
+Then remove it only if you are certain:
+
+```bash
+rm unwanted_file.txt
+```
+
+Avoid using `rm -rf` until you fully understand what each option and path means. A misplaced `rm -rf` command can delete many files rapidly.
+:::
+
+## Download the data
+
+### Step 1: Download the raw file
+
+Make sure you are inside the project root:
+
+```bash
+pwd
+```
+
+The final part of the printed path should be:
+
+```text
+cluster-exercise
+```
+
+Download the file into `data/raw/`:
+
+::: {.column-body}
+```bash
+curl -L \
+  -o data/raw/red_spruce_fitness_traits.txt \
+  [https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt](https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt)
+```
+:::
+
+This command has three important pieces:
+
+| Part | Meaning |
+|---|---|
+| `curl` | Transfers data from a URL |
+| `-L` | Follows HTTP redirects returned by a web server |
+| `-o data/raw/red_spruce_fitness_traits.txt` | Saves the downloaded content under this local filename |
+| URL | The remote location of the raw text file |
+
+The backslash (`\`) at the end of the first two lines means “continue this command on the next line.” You may also write the entire command on one line:
+
+::: {.column-body}
+```bash
+curl -L -o data/raw/red_spruce_fitness_traits.txt [https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt](https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt)
+```
+:::
+
+Use the `raw.githubusercontent.com` URL when downloading the actual file contents. A normal GitHub page URL often returns HTML—the web page—not the underlying dataset.
+
+::: {.callout-note}
+## `curl` general pattern
+
+```bash
+curl -L -o local_output_file URL
+```
+
+For example:
+
+```bash
+curl -L -o data/raw/example.txt [https://example.org/example.txt](https://example.org/example.txt)
+```
+
+`curl` writes downloaded content to the terminal by default. The `-o` option directs it into a file instead.
+:::
+
+### Step 2: Verify the download
+
+First, check whether the file exists and examine its size:
+
+```bash
+ls -lh data/raw/red_spruce_fitness_traits.txt
+```
+
+The output should include the file name and a non-zero size. A zero-byte file is a warning sign that the download did not succeed.
+
+Then display the first five lines:
+
+```bash
+head -n 5 data/raw/red_spruce_fitness_traits.txt
+```
+
+The first line should be the header, followed by data rows.
+
+For a more complete check, display the file type:
+
+```bash
+file data/raw/red_spruce_fitness_traits.txt
+```
+
+A downloaded tab-delimited data file should normally be recognized as text rather than HTML.
+
+::: {.callout-tip}
+## A quick failed-download check
+
+If a supposed data file begins with text such as:
+
+```text
+<!DOCTYPE html>
+<html>
+```
+
+you probably downloaded a web page instead of the raw data file. Check that you used a `raw.githubusercontent.com` link rather than a `github.com/.../blob/...` page URL.
+:::
+
+## Inspect the dataset
+
+The file is tab-delimited: each row represents an observation, and tabs separate the columns.
+
+### Count rows
+
+Count all lines, including the header:
+
+```bash
+wc -l data/raw/red_spruce_fitness_traits.txt
+```
+
+Because the first line is the header, the number of observations is usually:
+
+```text
+total lines - 1
+```
+
+To calculate that in Bash:
+
+```bash
+echo $(( $(wc -l < data/raw/red_spruce_fitness_traits.txt) - 1 ))
+```
+
+For now, it is enough to know that `wc -l` counts lines.
+
+### View the beginning of the file
+
+Show the first ten lines:
+
+```bash
+head data/raw/red_spruce_fitness_traits.txt
+```
+
+Show exactly five lines:
+
+```bash
+head -n 5 data/raw/red_spruce_fitness_traits.txt
+```
+
+The `head` command is a standard Linux utility for printing the first part of a file. 
+
+### View the file interactively
+
+Use `less` to explore the file without printing the entire dataset into the terminal:
+
+```bash
+less data/raw/red_spruce_fitness_traits.txt
+```
+
+Useful `less` keyboard controls:
+
+| Key | Action |
+|---|---|
+| <kbd>Space</kbd> | Move forward one page |
+| <kbd>b</kbd> | Move backward one page |
+| <kbd>g</kbd> | Go to the beginning |
+| <kbd>G</kbd> | Go to the end |
+| `/text` | Search forward for `text` |
+| <kbd>n</kbd> | Go to the next search match |
+| <kbd>N</kbd> | Go to the previous search match |
+| <kbd>q</kbd> | Quit and return to Bash |
+
+::: {.callout-tip}
+## Why not use `cat` for data files?
+
+`cat` prints the full contents of a file to the terminal:
+
+```bash
+cat data/raw/red_spruce_fitness_traits.txt
+```
+
+It is fine for very small files, but for real genomic, environmental, or phenotype datasets it can overwhelm your terminal and make it difficult to find the prompt again.
+
+Prefer:
+
+```bash
+head file.txt
+tail file.txt
+less file.txt
+```
+
+These commands are safer for inspecting large files.
+:::
+
+### Inspect the header one field per line
+
+The header is a single tab-delimited line. This command replaces tabs (`\t`) with newlines (`\n`):
+
+```bash
+head -n 1 data/raw/red_spruce_fitness_traits.txt | tr '\t' '\n'
+```
+
+Expected behavior:
+
+```text
+Family
+Population
+Tree
+Location
+Region
+Latitude
+Longitude
+...
+```
+
+Breakdown:
+
+| Part | Meaning |
+|---|---|
+| `head -n 1 file` | Print only the first line, which is the header |
+| `\|` | Send that header line to the next command |
+| `tr '\t' '\n'` | Translate tab characters into newline characters |
+
+A **pipe**, written `|`, connects commands. The output produced by the command on the left becomes input for the command on the right. Bash defines a pipeline as a sequence of commands separated by `|`, with the output of one command connected to the input of the next. [29][37]
+
+### Search for values with `grep`
+
+`grep` prints lines containing a search pattern.
+
+For example, to search for `ALB`:
+
+```bash
+grep "ALB" data/raw/red_spruce_fitness_traits.txt | head
+```
+
+This means:
+
+1. `grep "ALB" ...` finds data lines containing `ALB`.
+2. `| head` shows only the first ten matching lines.
+
+Use `-n` to include the original line number:
+
+```bash
+grep -n "ALB" data/raw/red_spruce_fitness_traits.txt | head
+```
+
+Use `-i` to ignore upper/lowercase differences:
+
+```bash
+grep -i "alb" data/raw/red_spruce_fitness_traits.txt | head
+```
+
+Use `-c` to count matching lines rather than printing them:
+
+```bash
+grep -c "ALB" data/raw/red_spruce_fitness_traits.txt
+```
+
+::: {.callout-warning}
+## Search carefully
+
+`grep "VT"` searches for the letters `VT` anywhere in a row. It may match text in an unintended column or part of a longer value.
+
+For a first exploration, this is acceptable. Later, you will learn more precise tabular-data tools such as `awk`, `cut`, R, and Python/pandas, which let you target a specific column.
+:::
+
+## Pipes and redirection
+
+### Pipes
+
+A pipe sends output from one command to the next:
+
+```bash
+command_1 | command_2
+```
+
+For example:
+
+```bash
+grep "ALB" data/raw/red_spruce_fitness_traits.txt | head -n 5
+```
+
+This avoids creating an intermediate file. Data flow is:
+
+```text
+dataset → grep finds ALB rows → head displays first 5 matches
+```
+
+Another useful example counts matching rows:
+
+```bash
+grep "ALB" data/raw/red_spruce_fitness_traits.txt | wc -l
+```
+
+### Redirecting output to files
+
+Use `>` to send command output into a file:
+
+```bash
+head -n 1 data/raw/red_spruce_fitness_traits.txt > results/header.txt
+```
+
+The file `results/header.txt` now contains the dataset header.
+
+Use `>>` to append rather than overwrite:
+
+```bash
+date >> results/analysis_log.txt
+```
+
+::: {.callout-warning}
+## `>` overwrites files
+
+This command replaces the existing contents of `results/header.txt`:
+
+```bash
+command > results/header.txt
+```
+
+Use `>>` when you want to add new content to the end of an existing file:
+
+```bash
+command >> results/header.txt
+```
+
+Before redirecting output, confirm the filename and directory carefully. Bash processes redirection before the command runs. [29][31]
+:::
+
+## Checkpoint exercises
+
+Work through these commands from inside `cluster-exercise/`.
+
+1. Confirm your current directory:
+
+   ```bash
+   pwd
+   ```
+
+2. List the contents of the raw-data directory:
+
+   ```bash
+   ls -lh data/raw
+   ```
+
+3. Print the dataset header:
+
+   ```bash
+   head -n 1 data/raw/red_spruce_fitness_traits.txt
+   ```
+
+4. Print each variable name on a separate line:
+
+   ```bash
+   head -n 1 data/raw/red_spruce_fitness_traits.txt | tr '\t' '\n'
+   ```
+
+5. Count all lines in the file:
+
+   ```bash
+   wc -l data/raw/red_spruce_fitness_traits.txt
+   ```
+
+6. Show the final three lines:
+
+   ```bash
+   tail -n 3 data/raw/red_spruce_fitness_traits.txt
+   ```
+
+7. Search for rows containing `ALB` and show only five matches:
+
+   ```bash
+   grep "ALB" data/raw/red_spruce_fitness_traits.txt | head -n 5
+   ```
+
+8. Save the header to a file inside `results/`:
+
+   ```bash
+   head -n 1 data/raw/red_spruce_fitness_traits.txt > results/header.txt
+   ```
+
+9. Confirm the saved header file exists:
+
+   ```bash
+   ls -lh results/header.txt
+   ```
+
+10. Read the saved file:
+
+    ```bash
+    cat results/header.txt
+    ```
+
+## Challenge: count Vermont observations
+
+How many rows correspond to the Vermont (`VT`) location?
+
+First, inspect the header and identify the column containing location:
+
+```bash
+head -n 1 data/raw/red_spruce_fitness_traits.txt | tr '\t' '\n'
+```
+
+Then begin with a broad search:
+
+```bash
+grep "VT" data/raw/red_spruce_fitness_traits.txt | head
+```
+
+Count all matching lines:
+
+```bash
+grep "VT" data/raw/red_spruce_fitness_traits.txt | wc -l
+```
+
+This provides an exploratory answer. In a later lesson, use R or column-aware Bash tools to verify the count specifically from the `Location` column rather than matching `VT` anywhere in the row.
+
+## Wrap up
+
+You have now created a small, reproducible HPC project and used Bash to download and inspect a real tab-delimited dataset.
+
+Your project should contain:
+
+```text
+cluster-exercise/
+├── data/
+│   └── raw/
+│       └── red_spruce_fitness_traits.txt
+├── logs/
+├── results/
+│   └── header.txt
+└── src/
+```
+
+Before moving to the R module, make sure you can answer these questions:
+
+1. What does `pwd` report?
+2. What is the difference between `~`, `.`, and `..`?
+3. Why is `data/raw/red_spruce_fitness_traits.txt` more portable than an absolute path containing your username?
+4. What do `-L` and `-o` do in the `curl` command?
+5. What does `|` do in a Bash command?
+6. Why is `less` generally safer than `cat` for inspecting a large file?
+7. What is the difference between `>` and `>>`?
+8. Why should scripts write results to `results/` rather than altering files in `data/raw/`?
+
+In the next module, you will import this same dataset into R, inspect column types, calculate summaries, make figures, and save reproducible outputs to `results/`.
