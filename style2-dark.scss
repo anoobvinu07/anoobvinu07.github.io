@@ -188,9 +188,12 @@ body {
 
 // listing card styling
 .card {
-  background-color: $cream;
-  //border-radius: 5.25em;
+  background-color: #181818;
+  color: $white;
+  border-color: rgba(255, 255, 255, 0.16);
 }
+
+
 
 // listing description text styling
 .description {
@@ -1388,3 +1391,5 @@ div.cell-output-stderr pre code {
 }
 
 /*-- end of Dark theme specific rules for code output scss:rules --*/
+
+

@@ -56,7 +56,9 @@
 
 /* Title */
 .quarto-listing-container-default .listing-title,
-.quarto-listing-container-default .listing-title a {
+.quarto-listing-container-default .listing-title a,
+.quarto-listing-container-grid .listing-title,
+.quarto-listing-container-grid .listing-title a {
   color: inherit;
   font-weight: 40;
   letter-spacing: -0.015em;
@@ -246,5 +248,131 @@
     padding: 0 !important;
     text-align: left !important;
     white-space: normal;
+  }
+}
+
+
+
+
+/* ---- Maroon hover: default listing rows and grid cards ---- */
+
+/* Smooth background and border changes for grid cards */
+.quarto-listing-container-grid .quarto-grid-item.card {
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+/* Maroon background */
+.quarto-listing-container-default .quarto-post:hover,
+.quarto-listing-container-default .quarto-post:focus-within,
+.quarto-listing-container-grid .quarto-grid-item.card:hover,
+.quarto-listing-container-grid .quarto-grid-item.card:focus-within {
+  background-color: #4b1424 !important;
+  border-color: #82364d !important;
+  color: #fff5f7 !important;
+  box-shadow: 0 8px 24px rgba(75, 20, 36, 0.25);
+}
+
+/* Allow the grid card's maroon background to show through */
+.quarto-listing-container-grid .quarto-grid-item.card:hover .card-body,
+.quarto-listing-container-grid .quarto-grid-item.card:focus-within .card-body {
+  background-color: transparent !important;
+}
+
+/* Readable text and links throughout the hovered card */
+.quarto-listing-container-default .quarto-post:is(:hover, :focus-within)
+  :is(.listing-title, .listing-description, .metadata, .metadata *, a),
+.quarto-listing-container-grid .quarto-grid-item.card:is(:hover, :focus-within)
+  :is(.card-body, .card-title, .listing-title, .listing-subtitle,
+      .listing-description, .listing-date, .listing-reading-time,
+      .card-attribution, .card-attribution *, a) {
+  color: #fff5f7 !important;
+}
+
+/* Category tags */
+.quarto-listing-container-default .quarto-post:is(:hover, :focus-within)
+  .listing-category,
+.quarto-listing-container-grid .quarto-grid-item.card:is(:hover, :focus-within)
+  .listing-category {
+  color: #fff5f7 !important;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Replace the purple accent with a rose accent */
+.quarto-listing-container-default .quarto-post:hover::before,
+.quarto-listing-container-default .quarto-post:focus-within::before {
+  background-color: #e5a0b4;
+}
+
+/* Visible keyboard focus on the maroon background */
+.quarto-listing-container-default .quarto-post a:focus-visible,
+.quarto-listing-container-grid .quarto-grid-item.card a:focus-visible {
+  outline: 2px solid #ffd0dc;
+  outline-offset: 4px;
+  border-radius: 0.2rem;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .quarto-listing-container-grid .quarto-grid-item.card {
+    transition: none;
+  }
+}
+
+
+
+
+
+
+/* ---- Maroon hover: Quarto listing tables ---- */
+
+/* Smooth color changes without changing font sizes */
+.quarto-listing-table tbody > tr > * {
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+/* Highlight every cell in the hovered or focused row */
+.quarto-listing-table tbody > tr:hover > *,
+.quarto-listing-table tbody > tr:focus-within > * {
+  background-color: #4b1424 !important;
+  color: #fff5f7 !important;
+  border-color: #82364d !important;
+
+  /* Override Bootstrap's striped/hover background layer */
+  box-shadow: inset 0 0 0 9999px #4b1424 !important;
+}
+
+/* Keep links, dates, and other nested text readable */
+.quarto-listing-table tbody > tr:is(:hover, :focus-within)
+  :is(a, span, small, time, .listing-title, .listing-date,
+      .listing-description, .listing-reading-time,
+      .listing-category) {
+  color: #fff5f7 !important;
+}
+
+/* Category tags, if present */
+.quarto-listing-table tbody > tr:is(:hover, :focus-within)
+  .listing-category {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Visible keyboard focus */
+.quarto-listing-table tbody a:focus-visible {
+  outline: 2px solid #ffd0dc;
+  outline-offset: 3px;
+  border-radius: 0.2rem;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .quarto-listing-table tbody > tr > * {
+    transition: none;
   }
 }
