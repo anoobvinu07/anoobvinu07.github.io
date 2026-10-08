@@ -1,0 +1,36 @@
+---
+title: "_bash_: Interactive"
+subtitle: "An interactive field guide to the HPC command line"
+description: "Navigation, head/wc/cat, input/output redirection, quoting rules, and fixes for common beginner errors, with copyable examples and two interactive simulators."
+date: 2026-10-01
+categories: [bash, hpc, linux, cheat-sheet]
+image: thumbnail.png
+resources:
+  - app/**              # copy the interactive app (plain HTML/CSS/JS) as-is
+format:
+  html:
+    page-layout: full
+    toc: false
+---
+
+The guide below is fully interactive: search with {{< kbd / >}}, copy any example, try the redirection visualizer and the quoting playground. This is the interactive version of the `bash: Advanced commands` module created with [![](/img/claude-ai.svg){.inline-tool-icon fig-alt=""} Claude AI](https://claude.ai/code). 
+
+For the best experience, [open it full screen](app/index.html){target="_blank"}.
+
+```{=html}
+<iframe src="app/index.html"
+        title="Bash on the Cluster: interactive HPC field guide"
+        class="bash-guide-frame"
+        loading="lazy"></iframe>
+<style>
+  .bash-guide-frame {
+    width: 100%;
+    height: 88vh;
+    min-height: 700px;
+    border: 1px solid #dfd9cc;
+    border-radius: 10px;
+    display: block;
+  }
+  @media (max-width: 640px) { .bash-guide-frame { height: 80vh; } }
+</style>
+```

@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Anoob Prakash">
+<meta name="dcterms.date" content="2026-10-08">
+<meta name="description" content="Search, edit, and summarize tabular and genomic text files from the command line: regular expressions, grep in depth, sed for stream editing, and awk for column-aware filtering, grouping, joining, and reporting.">
+
+<title>bash: Module 3 Text processing with grep, sed, and awk – Anoob Prakash</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../img/illustrated_AP.jpg" rel="icon" type="image/jpeg">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-583931eb06cc418a44787d1f96110f5c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-c9e8fb96d64d0c262bda14ff845e1f63.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-583931eb06cc418a44787d1f96110f5c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/quarto-contrib/academicons-1.9.4/all.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/academicons-1.9.4/size.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo light-content">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Anoob Prakash</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../research/index.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../notebook/index.html"> 
+<span class="menu-text">Notebook</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../gallery/index.html"> 
+<span class="menu-text">Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../news/index.html"> 
+<span class="menu-text">News</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../cv/index.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#goal" id="toc-goal" class="nav-link active" data-scroll-target="#goal">Goal</a></li>
+  <li><a href="#before-you-begin" id="toc-before-you-begin" class="nav-link" data-scroll-target="#before-you-begin">Before you begin</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#know-your-columns" id="toc-know-your-columns" class="nav-link" data-scroll-target="#know-your-columns">Know your columns</a></li>
+  <li><a href="#fast-summaries-with-cut-sort-and-uniq" id="toc-fast-summaries-with-cut-sort-and-uniq" class="nav-link" data-scroll-target="#fast-summaries-with-cut-sort-and-uniq">Fast summaries with <code>cut</code>, <code>sort</code>, and <code>uniq</code></a></li>
+  <li><a href="#regular-expressions-in-one-page" id="toc-regular-expressions-in-one-page" class="nav-link" data-scroll-target="#regular-expressions-in-one-page">Regular expressions in one page</a></li>
+  <li><a href="#grep-in-depth" id="toc-grep-in-depth" class="nav-link" data-scroll-target="#grep-in-depth"><code>grep</code> in depth</a>
+  <ul class="collapse">
+  <li><a href="#anchors-make-patterns-precise" id="toc-anchors-make-patterns-precise" class="nav-link" data-scroll-target="#anchors-make-patterns-precise">Anchors make patterns precise</a></li>
+  <li><a href="#whole-words-with--w" id="toc-whole-words-with--w" class="nav-link" data-scroll-target="#whole-words-with--w">Whole words with <code>-w</code></a></li>
+  <li><a href="#extract-only-the-matching-part-with--o" id="toc-extract-only-the-matching-part-with--o" class="nav-link" data-scroll-target="#extract-only-the-matching-part-with--o">Extract only the matching part with <code>-o</code></a></li>
+  <li><a href="#alternation-and-quantifiers-with--e" id="toc-alternation-and-quantifiers-with--e" class="nav-link" data-scroll-target="#alternation-and-quantifiers-with--e">Alternation and quantifiers with <code>-E</code></a></li>
+  <li><a href="#inverting-whole-lines-and-counting" id="toc-inverting-whole-lines-and-counting" class="nav-link" data-scroll-target="#inverting-whole-lines-and-counting">Inverting, whole lines, and counting</a></li>
+  <li><a href="#context-around-a-match" id="toc-context-around-a-match" class="nav-link" data-scroll-target="#context-around-a-match">Context around a match</a></li>
+  <li><a href="#many-patterns-from-a-file" id="toc-many-patterns-from-a-file" class="nav-link" data-scroll-target="#many-patterns-from-a-file">Many patterns from a file</a></li>
+  <li><a href="#searching-across-files" id="toc-searching-across-files" class="nav-link" data-scroll-target="#searching-across-files">Searching across files</a></li>
+  <li><a href="#matching-a-value-in-a-specific-column" id="toc-matching-a-value-in-a-specific-column" class="nav-link" data-scroll-target="#matching-a-value-in-a-specific-column">Matching a value in a specific column</a></li>
+  </ul></li>
+  <li><a href="#sed-the-stream-editor" id="toc-sed-the-stream-editor" class="nav-link" data-scroll-target="#sed-the-stream-editor"><code>sed</code>: the stream editor</a>
+  <ul class="collapse">
+  <li><a href="#printing-lines-and-ranges" id="toc-printing-lines-and-ranges" class="nav-link" data-scroll-target="#printing-lines-and-ranges">Printing lines and ranges</a></li>
+  <li><a href="#deleting-lines" id="toc-deleting-lines" class="nav-link" data-scroll-target="#deleting-lines">Deleting lines</a></li>
+  <li><a href="#substitution-soldnewflags" id="toc-substitution-soldnewflags" class="nav-link" data-scroll-target="#substitution-soldnewflags">Substitution: <code>s/old/new/flags</code></a></li>
+  <li><a href="#capture-groups" id="toc-capture-groups" class="nav-link" data-scroll-target="#capture-groups">Capture groups</a></li>
+  <li><a href="#several-edits-at-once" id="toc-several-edits-at-once" class="nav-link" data-scroll-target="#several-edits-at-once">Several edits at once</a></li>
+  <li><a href="#the-overlapping-match-trap" id="toc-the-overlapping-match-trap" class="nav-link" data-scroll-target="#the-overlapping-match-trap">The overlapping-match trap</a></li>
+  <li><a href="#editing-files-in-place-safely" id="toc-editing-files-in-place-safely" class="nav-link" data-scroll-target="#editing-files-in-place-safely">Editing files in place, safely</a></li>
+  <li><a href="#fixing-windows-line-endings" id="toc-fixing-windows-line-endings" class="nav-link" data-scroll-target="#fixing-windows-line-endings">Fixing Windows line endings</a></li>
+  </ul></li>
+  <li><a href="#awk-a-language-for-columns" id="toc-awk-a-language-for-columns" class="nav-link" data-scroll-target="#awk-a-language-for-columns"><code>awk</code>: a language for columns</a>
+  <ul class="collapse">
+  <li><a href="#the-mental-model" id="toc-the-mental-model" class="nav-link" data-scroll-target="#the-mental-model">The mental model</a></li>
+  <li><a href="#selecting-columns" id="toc-selecting-columns" class="nav-link" data-scroll-target="#selecting-columns">Selecting columns</a></li>
+  <li><a href="#counting-lines-and-fields" id="toc-counting-lines-and-fields" class="nav-link" data-scroll-target="#counting-lines-and-fields">Counting lines and fields</a></li>
+  <li><a href="#filtering-rows-by-value" id="toc-filtering-rows-by-value" class="nav-link" data-scroll-target="#filtering-rows-by-value">Filtering rows by value</a></li>
+  <li><a href="#selecting-columns-by-name-not-number" id="toc-selecting-columns-by-name-not-number" class="nav-link" data-scroll-target="#selecting-columns-by-name-not-number">Selecting columns by name, not number</a></li>
+  <li><a href="#passing-bash-variables-into-awk-with--v" id="toc-passing-bash-variables-into-awk-with--v" class="nav-link" data-scroll-target="#passing-bash-variables-into-awk-with--v">Passing Bash variables into <code>awk</code> with <code>-v</code></a></li>
+  <li><a href="#counting-by-group-with-arrays" id="toc-counting-by-group-with-arrays" class="nav-link" data-scroll-target="#counting-by-group-with-arrays">Counting by group with arrays</a></li>
+  <li><a href="#means-by-group-and-the-header-that-disappears" id="toc-means-by-group-and-the-header-that-disappears" class="nav-link" data-scroll-target="#means-by-group-and-the-header-that-disappears">Means by group, and the header that disappears</a></li>
+  <li><a href="#the-na-trap-strings-compared-with-numbers" id="toc-the-na-trap-strings-compared-with-numbers" class="nav-link" data-scroll-target="#the-na-trap-strings-compared-with-numbers">The <code>NA</code> trap: strings compared with numbers</a></li>
+  <li><a href="#the-precision-trap-modifying-a-field" id="toc-the-precision-trap-modifying-a-field" class="nav-link" data-scroll-target="#the-precision-trap-modifying-a-field">The precision trap: modifying a field</a></li>
+  <li><a href="#writing-to-several-files-at-once" id="toc-writing-to-several-files-at-once" class="nav-link" data-scroll-target="#writing-to-several-files-at-once">Writing to several files at once</a></li>
+  <li><a href="#joining-two-tables" id="toc-joining-two-tables" class="nav-link" data-scroll-target="#joining-two-tables">Joining two tables</a></li>
+  <li><a href="#summary-statistics" id="toc-summary-statistics" class="nav-link" data-scroll-target="#summary-statistics">Summary statistics</a></li>
+  <li><a href="#other-useful-awk-functions" id="toc-other-useful-awk-functions" class="nav-link" data-scroll-target="#other-useful-awk-functions">Other useful <code>awk</code> functions</a></li>
+  </ul></li>
+  <li><a href="#putting-it-together-a-reusable-summary-script" id="toc-putting-it-together-a-reusable-summary-script" class="nav-link" data-scroll-target="#putting-it-together-a-reusable-summary-script">Putting it together: a reusable summary script</a></li>
+  <li><a href="#bonus-the-same-tools-on-genomic-formats" id="toc-bonus-the-same-tools-on-genomic-formats" class="nav-link" data-scroll-target="#bonus-the-same-tools-on-genomic-formats">Bonus: the same tools on genomic formats</a>
+  <ul class="collapse">
+  <li><a href="#fasta" id="toc-fasta" class="nav-link" data-scroll-target="#fasta">FASTA</a></li>
+  <li><a href="#vcf" id="toc-vcf" class="nav-link" data-scroll-target="#vcf">VCF</a></li>
+  </ul></li>
+  <li><a href="#quick-reference" id="toc-quick-reference" class="nav-link" data-scroll-target="#quick-reference">Quick reference</a></li>
+  <li><a href="#checkpoint-exercises" id="toc-checkpoint-exercises" class="nav-link" data-scroll-target="#checkpoint-exercises">Checkpoint exercises</a></li>
+  <li><a href="#challenge-which-population-performs-best" id="toc-challenge-which-population-performs-best" class="nav-link" data-scroll-target="#challenge-which-population-performs-best">Challenge: which population performs best?</a></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up">Wrap up</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content column-page-right" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><em><code>bash</code></em>: Module <em><code>3</code></em> Text processing with grep, sed, and awk</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">hpc</div>
+    <div class="quarto-category">bash</div>
+    <div class="quarto-category">awk</div>
+    <div class="quarto-category">workflow</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Search, edit, and summarize tabular and genomic text files from the command line: regular expressions, grep in depth, sed for stream editing, and awk for column-aware filtering, grouping, joining, and reporting.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta column-page-right">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p><a href="https://www.linkedin.com/in/anoob-prakash/">Anoob Prakash</a> <a href="mailto:prakas89@purdue.edu" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-7207-934X" class="quarto-title-author-orcid" aria-label="ORCID profile for Anoob Prakash"> <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 8, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="goal" class="level2">
+<h2 class="anchored" data-anchor-id="goal">Goal</h2>
+<p><strong>Cluster exercise: answer real questions about the red-spruce dataset without leaving the terminal</strong></p>
+<p>In the introductory module, <code>grep "VT"</code> gave an <em>exploratory</em> count, because it matched <code>VT</code> anywhere in a row. In this module you will learn the three tools that make the command line genuinely column-aware:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tool</th>
+<th>Think of it as</th>
+<th>Best at</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>grep</code></td>
+<td>A filter</td>
+<td>Selecting <strong>lines</strong> that match a pattern</td>
+</tr>
+<tr class="even">
+<td><code>sed</code></td>
+<td>A find-and-replace editor for streams</td>
+<td><strong>Editing</strong> lines: substitute, delete, print ranges</td>
+</tr>
+<tr class="odd">
+<td><code>awk</code></td>
+<td>A tiny programming language for columns</td>
+<td><strong>Computing</strong> on fields: filter by value, group, summarize, join</td>
+</tr>
+</tbody>
+</table>
+<p>By the end you will produce a per-Location fitness summary, a reusable summary script, and a set of one-liners that work just as well on FASTA and VCF files.</p>
+</section>
+<section id="before-you-begin" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-begin">Before you begin</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Prerequisites
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This module builds on <a href="../../../notebook/learn-to-code/bash-on-cluster/index.html">Getting started on HPC Linux systems</a> and <a href="../../../notebook/learn-to-code/bash-advanced-scripting/index.html">Scripting and automation on HPC systems</a>. You should already have <code>cluster-exercise/</code> with <code>data/raw/red_spruce_fitness_traits.txt</code> in it. If not, run <code>bash src/get_data.sh</code> from the previous module.</p>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/projects/cluster-exercise</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> src/check_raw.sh        <span class="co"># optional: confirm the raw file is unchanged</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Every command below <strong>reads</strong> <code>data/raw/</code> and <strong>writes</strong> to <code>results/</code>. None of them modifies the raw file.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>A shorter name for the dataset
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To keep commands readable, store the path in a variable once per terminal session:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">F</span><span class="op">=</span>data/raw/red_spruce_fitness_traits.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Every example below uses <code>$F</code>. If you open a new terminal, set it again.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>GNU tools
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The examples assume GNU <code>grep</code>, <code>sed</code>, and <code>sort</code>, plus <code>gawk</code> or <code>mawk</code>, as found on Linux clusters. macOS ships BSD versions that differ in a few places (notably <code>sed -i</code> and <code>\t</code>). These differences are noted where they matter.</p>
+</div>
+</div>
+</section>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<p>By the end of this module, you should be able to:</p>
+<ul>
+<li>Number and inspect the columns of a delimited file.</li>
+<li>Summarize a column with <code>cut</code>, <code>sort</code>, and <code>uniq</code>, including numeric sorting by a specific column.</li>
+<li>Write regular expressions using anchors, character classes, quantifiers, alternation, and groups.</li>
+<li>Use <code>grep</code> options for whole words, whole lines, inverted matches, counts, context, fixed strings, and pattern files.</li>
+<li>Use <code>sed</code> to print line ranges, delete lines, substitute text, and capture groups, and to edit copies of files in place.</li>
+<li>Write <code>awk</code> programs that filter rows by column value, select columns by name, and count and average by group.</li>
+<li>Recognize and avoid the classic pitfalls: <code>NA</code> in numeric comparisons, overlapping <code>sed</code> matches, sorted-away headers, and loss of numeric precision.</li>
+<li>Join two tables with <code>awk</code>.</li>
+<li>Apply the same tools to FASTA and VCF files.</li>
+</ul>
+</section>
+<section id="know-your-columns" class="level2">
+<h2 class="anchored" data-anchor-id="know-your-columns">Know your columns</h2>
+<p>Number the header fields, so you can refer to columns by position:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 1 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">'\t'</span> <span class="st">'\n'</span> <span class="kw">|</span> <span class="fu">cat</span> <span class="at">-n</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>     1  Family
+     2  Population
+     3  Tree
+     4  Location
+     5  Region
+     6  Latitude
+     7  Longitude
+     8  SeedWeight
+     9  Germination
+    10  Survival
+    11  Height
+    12  Fitness
+    13  Elevation
+    14  PC1
+    15  PC2
+    16  Family_Homozygosity
+    17  Population_Homozygosity
+    18  Genetic_Diversity
+    19  Genetic_Load</code></pre>
+<p>Keep this list in view. In this module, <strong>column 4 is Location, column 5 is Region, column 12 is Fitness, and column 13 is Elevation.</strong></p>
+<p>To read rows with aligned columns, use <code>column</code> (from util-linux, available on most clusters):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 4 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1-6 <span class="kw">|</span> <span class="ex">column</span> <span class="at">-t</span> <span class="at">-s</span> <span class="st">$'</span><span class="dt">\t</span><span class="st">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Family  Population  Tree  Location  Region  Latitude
+AB_05   AB          5     TN        E       35.55297
+AB_08   AB          8     TN        E       35.55212
+AB_12   AB          12    TN        E       35.5389</code></pre>
+<p>For the whole file, pipe to <code>less -S</code>, which scrolls sideways instead of wrapping lines:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">column</span> <span class="at">-t</span> <span class="at">-s</span> <span class="st">$'</span><span class="dt">\t</span><span class="st">'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">less</span> <span class="at">-S</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="fast-summaries-with-cut-sort-and-uniq" class="level2">
+<h2 class="anchored" data-anchor-id="fast-summaries-with-cut-sort-and-uniq">Fast summaries with <code>cut</code>, <code>sort</code>, and <code>uniq</code></h2>
+<p>The most useful one-liner in data exploration is “count each distinct value in a column”:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 4 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-rn</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>     61 VT
+     53 NY
+     50 WV
+     47 PA
+     23 NH
+     22 NC
+     19 MA
+     16 ME
+     14 TN
+     10 MD
+      6 NB
+      5 VA</code></pre>
+<p>Read it left to right: take column 4, drop the header, sort so identical values are adjacent, count each run (<code>uniq -c</code>), then sort the counts numerically from largest to smallest (<code>-rn</code>). This is the exact answer to the Vermont question: <strong>61 rows</strong>.</p>
+<p>A few more <code>sort</code> options turn this into a real tool:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>sort -u</code></td>
+<td>Sort and keep unique lines (same as <code>sort \| uniq</code>)</td>
+</tr>
+<tr class="even">
+<td><code>sort -n</code></td>
+<td>Numeric sort for plain numbers</td>
+</tr>
+<tr class="odd">
+<td><code>sort -g</code></td>
+<td>General numeric sort; handles decimals and scientific notation like <code>1e-5</code></td>
+</tr>
+<tr class="even">
+<td><code>sort -r</code></td>
+<td>Reverse the order</td>
+</tr>
+<tr class="odd">
+<td><code>sort -t $'\t' -k 12,12g</code></td>
+<td>Sort by column 12 only, with tab as the separator</td>
+</tr>
+</tbody>
+</table>
+<p>How many distinct populations are there?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 2 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-u</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>63</code></pre>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Always give <code>-k</code> a start <strong>and</strong> an end
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>-k 12</code> means “from column 12 to the end of the line”. <code>-k 12,12</code> means “column 12 only”. Use the second form, or the ties will be broken by whatever columns happen to follow.</p>
+</div>
+</div>
+</section>
+<section id="regular-expressions-in-one-page" class="level2">
+<h2 class="anchored" data-anchor-id="regular-expressions-in-one-page">Regular expressions in one page</h2>
+<p>A <strong>regular expression</strong> (regex) is a pattern that describes text. <code>grep</code>, <code>sed</code>, and <code>awk</code> all use them.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pattern</th>
+<th>Matches</th>
+<th>Example</th>
+<th>Matches in this dataset</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>abc</code></td>
+<td>The literal text <code>abc</code></td>
+<td><code>ALB</code></td>
+<td><code>ALB_01</code>, …</td>
+</tr>
+<tr class="even">
+<td><code>.</code></td>
+<td>Any single character</td>
+<td><code>A.B</code></td>
+<td><code>ALB</code></td>
+</tr>
+<tr class="odd">
+<td><code>^</code></td>
+<td>Start of line</td>
+<td><code>^ALB_</code></td>
+<td>Lines <strong>beginning</strong> with <code>ALB_</code></td>
+</tr>
+<tr class="even">
+<td><code>$</code></td>
+<td>End of line</td>
+<td><code>\.5$</code></td>
+<td>Lines ending in <code>.5</code></td>
+</tr>
+<tr class="odd">
+<td><code>[abc]</code></td>
+<td>One character from the set</td>
+<td><code>[NV]</code></td>
+<td><code>N</code> or <code>V</code></td>
+</tr>
+<tr class="even">
+<td><code>[a-z]</code>, <code>[0-9]</code></td>
+<td>One character from a range</td>
+<td><code>G[0-9]</code></td>
+<td><code>G1</code>, <code>G5</code>, …</td>
+</tr>
+<tr class="odd">
+<td><code>[^abc]</code></td>
+<td>One character <strong>not</strong> in the set</td>
+<td><code>[^\t]</code></td>
+<td>Any non-tab character</td>
+</tr>
+<tr class="even">
+<td><code>*</code></td>
+<td>Zero or more of the previous item</td>
+<td><code>[A-Z]*</code></td>
+<td><code>""</code>, <code>A</code>, <code>ALB</code>, …</td>
+</tr>
+<tr class="odd">
+<td><code>+</code></td>
+<td>One or more (extended regex)</td>
+<td><code>[0-9]+</code></td>
+<td><code>5</code>, <code>05</code>, <code>543</code></td>
+</tr>
+<tr class="even">
+<td><code>?</code></td>
+<td>Zero or one (extended regex)</td>
+<td><code>colou?r</code></td>
+<td><code>color</code>, <code>colour</code></td>
+</tr>
+<tr class="odd">
+<td><code>{n}</code>, <code>{n,m}</code></td>
+<td>Exactly <code>n</code>, or <code>n</code> to <code>m</code> (extended regex)</td>
+<td><code>[A-Z]{3}</code></td>
+<td><code>ALB</code>, <code>APP</code></td>
+</tr>
+<tr class="even">
+<td><code>a\|b</code></td>
+<td>Either <code>a</code> or <code>b</code> (extended regex)</td>
+<td><code>ALB\|APP</code></td>
+<td>Either population</td>
+</tr>
+<tr class="odd">
+<td><code>( )</code></td>
+<td>Group (extended regex)</td>
+<td><code>^(ALB\|APP)_</code></td>
+<td>Rows from either population</td>
+</tr>
+<tr class="even">
+<td><code>\.</code></td>
+<td>A literal dot (escaped)</td>
+<td><code>\.txt$</code></td>
+<td>Filenames ending in <code>.txt</code></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Basic vs extended regex
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By default, <code>grep</code> and <code>sed</code> use <strong>basic</strong> regular expressions, in which <code>+ ? { } | ( )</code> are ordinary characters unless backslash-escaped. Add <code>-E</code> (<code>grep -E</code>, <code>sed -E</code>) to use <strong>extended</strong> regular expressions, where they work as in the table. <code>awk</code> always uses extended syntax. Using <code>-E</code> everywhere is the simplest habit.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Quote every pattern with single quotes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write <code>grep '^ALB_'</code>, not <code>grep ^ALB_</code>. Unquoted, Bash may treat <code>*</code>, <code>?</code>, <code>[ ]</code>, and <code>$</code> as globs or variables before <code>grep</code> ever sees them.</p>
+</div>
+</div>
+</section>
+<section id="grep-in-depth" class="level2">
+<h2 class="anchored" data-anchor-id="grep-in-depth"><code>grep</code> in depth</h2>
+<section id="anchors-make-patterns-precise" class="level3">
+<h3 class="anchored" data-anchor-id="anchors-make-patterns-precise">Anchors make patterns precise</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">'^ALB_'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>5</code></pre>
+<p><code>^ALB_</code> means “lines that <strong>start</strong> with <code>ALB_</code>”, which in this file means Family IDs of the ALB population.</p>
+</section>
+<section id="whole-words-with--w" class="level3">
+<h3 class="anchored" data-anchor-id="whole-words-with--w">Whole words with <code>-w</code></h3>
+<p><code>-w</code> matches only whole words. Word characters are letters, digits, and underscore, so <code>CR</code> will not match inside <code>CRA</code> or <code>CRR</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">'CR'</span> <span class="va">$F</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="at">-w</span> <span class="st">'CR'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>13
+5</code></pre>
+<p>The first count includes the <code>CRA</code> and <code>CRR</code> populations; the second counts only population <code>CR</code>.</p>
+</section>
+<section id="extract-only-the-matching-part-with--o" class="level3">
+<h3 class="anchored" data-anchor-id="extract-only-the-matching-part-with--o">Extract only the matching part with <code>-o</code></h3>
+<p><code>-o</code> prints just the matched text, one match per line. That turns <code>grep</code> into an extractor. Count Family prefixes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-o</span> <span class="st">'^[A-Z]*_'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-rn</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>      7 SAV_
+      7 MT_
+      7 MMF_</code></pre>
+<p>This looks plausible, but it is wrong: <code>[A-Z]*</code> cannot match digits, so populations such as <code>G57</code> are excluded. Widen the character class:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-o</span> <span class="st">'^[A-Z0-9]*_'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-rn</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>     11 G57_
+      7 SAV_
+      7 MT_</code></pre>
+<p>The lesson generalizes: whenever a pattern returns suspiciously tidy results, check what it <strong>cannot</strong> match.</p>
+</section>
+<section id="alternation-and-quantifiers-with--e" class="level3">
+<h3 class="anchored" data-anchor-id="alternation-and-quantifiers-with--e">Alternation and quantifiers with <code>-E</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-E</span> <span class="at">-c</span> <span class="st">'^(ALB|APP)_'</span> <span class="va">$F</span>                    <span class="co"># either of two populations</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-E</span> <span class="st">'^[A-Z]+[0-9]+_'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 2 <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-u</span>   <span class="co"># populations with digits in their code</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>11
+G13
+G18
+G57</code></pre>
+</section>
+<section id="inverting-whole-lines-and-counting" class="level3">
+<h3 class="anchored" data-anchor-id="inverting-whole-lines-and-counting">Inverting, whole lines, and counting</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Effect</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-v</code></td>
+<td>Print lines that do <strong>not</strong> match</td>
+<td><code>grep -v -w 'NA' $F</code> (rows without missing values)</td>
+</tr>
+<tr class="even">
+<td><code>-x</code></td>
+<td>The whole line must match</td>
+<td><code>cut -f 4 $F \| grep -c -x 'VT'</code></td>
+</tr>
+<tr class="odd">
+<td><code>-c</code></td>
+<td>Print the count of matching lines</td>
+<td><code>grep -c -w 'NA' $F</code></td>
+</tr>
+<tr class="even">
+<td><code>-n</code></td>
+<td>Prefix each line with its line number</td>
+<td><code>grep -n 'VT' $F</code></td>
+</tr>
+<tr class="odd">
+<td><code>-m N</code></td>
+<td>Stop after <code>N</code> matches</td>
+<td><code>grep -m 2 'VT' $F</code></td>
+</tr>
+<tr class="even">
+<td><code>-i</code></td>
+<td>Ignore case</td>
+<td><code>grep -i 'alb' $F</code></td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="at">-w</span> <span class="st">'NA'</span> <span class="va">$F</span>                      <span class="co"># rows with at least one missing value</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="at">-w</span> <span class="st">'NA'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span>              <span class="co"># header + complete rows</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 4 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-c</span> <span class="at">-x</span> <span class="st">'VT'</span>           <span class="co"># exact match on one column</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>17
+310
+61</code></pre>
+<p><code>cut -f 4 | grep -x</code> is a simple, reliable way to match an entire column value exactly.</p>
+</section>
+<section id="context-around-a-match" class="level3">
+<h3 class="anchored" data-anchor-id="context-around-a-match">Context around a match</h3>
+<p><code>-A N</code> (after), <code>-B N</code> (before), and <code>-C N</code> (both) print neighbouring lines, which is useful in log files:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-n</span> <span class="at">-A</span> 1 <span class="st">'^XWS_05'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1-4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>326:XWS_05  XWS 5   MD
+327-XWS_06  XWS 6   MD</code></pre>
+<p>Matching lines are marked with <code>:</code>, context lines with <code>-</code>. On a Slurm log, <code>grep -n -B 5 -i 'error' logs/*.out</code> shows what happened just before each failure.</p>
+</section>
+<section id="many-patterns-from-a-file" class="level3">
+<h3 class="anchored" data-anchor-id="many-patterns-from-a-file">Many patterns from a file</h3>
+<p>Put one pattern per line in a file, then use <code>-f</code>. Add <code>-F</code> (fixed strings) when the patterns are plain text rather than regexes. It is faster, and characters like <code>.</code> stay literal:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">'ALB\nAPP\n'</span> <span class="op">&gt;</span> results/pops_of_interest.txt</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 2 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-c</span> <span class="at">-w</span> <span class="at">-F</span> <span class="at">-f</span> results/pops_of_interest.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>11</code></pre>
+<p>This scales to thousands of sample IDs, for example keeping only the samples listed in a metadata file.</p>
+</section>
+<section id="searching-across-files" class="level3">
+<h3 class="anchored" data-anchor-id="searching-across-files">Searching across files</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-l</span> <span class="at">-w</span> <span class="st">'MRC'</span> results/by_location/<span class="pp">*</span>.tsv        <span class="co"># which files contain a match</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-r</span> <span class="at">-n</span> <span class="st">'set -euo pipefail'</span> src/               <span class="co"># recurse through a directory</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>results/by_location/VA.tsv</code></pre>
+</section>
+<section id="matching-a-value-in-a-specific-column" class="level3">
+<h3 class="anchored" data-anchor-id="matching-a-value-in-a-specific-column">Matching a value in a specific column</h3>
+<p>Tabs are written <code>\t</code> only in Perl-compatible mode (<code>grep -P</code>, GNU only). This matches <code>VT</code> in <strong>column 4 exactly</strong>: three fields of non-tabs followed by tabs, then <code>VT</code>, then a tab:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="at">-P</span> <span class="st">'^([^\t]*\t){3}VT\t'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>61</code></pre>
+<p>It works, but it is hard to read and easy to get wrong. When the question is about a specific column, use <code>awk</code> instead, covered below:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'$4 == "VT"'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>61</code></pre>
+</section>
+</section>
+<section id="sed-the-stream-editor" class="level2">
+<h2 class="anchored" data-anchor-id="sed-the-stream-editor"><code>sed</code>: the stream editor</h2>
+<p><code>sed</code> reads input line by line, applies editing commands, and writes the result to standard output. The input file is not changed unless you explicitly ask for that with <code>-i</code>.</p>
+<p>The general form is:</p>
+<pre class="text"><code>sed 'ADDRESS COMMAND' file</code></pre>
+<p>where ADDRESS selects lines (a number, a range, or a <code>/regex/</code>), and COMMAND says what to do with them (<code>p</code> print, <code>d</code> delete, <code>s</code> substitute).</p>
+<section id="printing-lines-and-ranges" class="level3">
+<h3 class="anchored" data-anchor-id="printing-lines-and-ranges">Printing lines and ranges</h3>
+<p><code>-n</code> turns off automatic printing, so only lines you <code>p</code>rint are shown:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-n</span> <span class="st">'1p'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1-5               <span class="co"># line 1 (the header)</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-n</span> <span class="st">'2,4p'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1               <span class="co"># lines 2 to 4</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-n</span> <span class="st">'$p'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1-4               <span class="co"># last line</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-n</span> <span class="st">'/^ALB_06/,/^APP_02/p'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1   <span class="co"># from one match to another</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Family  Population  Tree    Location    Region
+AB_05
+AB_08
+AB_12
+XWS_06  XWS 6   MD
+ALB_06
+APP_01
+APP_02</code></pre>
+<p><code>sed -n '1000000,1000004p' big.vcf</code> is a quick way to inspect any slice of a huge file.</p>
+</section>
+<section id="deleting-lines" class="level3">
+<h3 class="anchored" data-anchor-id="deleting-lines">Deleting lines</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">'1d'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 2 <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1-4      <span class="co"># delete the header</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>AB_05   AB  5   TN
+AB_08   AB  8   TN</code></pre>
+<p>Other common forms: <code>sed '/^#/d'</code> deletes comment lines, and <code>sed '/^$/d'</code> deletes empty lines.</p>
+</section>
+<section id="substitution-soldnewflags" class="level3">
+<h3 class="anchored" data-anchor-id="substitution-soldnewflags">Substitution: <code>s/old/new/flags</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 3 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1-5 <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/\t/,/'</span>     <span class="co"># first tab on each line only</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 3 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1-5 <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/\t/,/g'</span>    <span class="co"># g = every tab</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Family,Population   Tree    Location    Region
+AB_05,AB    5   TN  E
+AB_08,AB    8   TN  E
+Family,Population,Tree,Location,Region
+AB_05,AB,5,TN,E
+AB_08,AB,8,TN,E</code></pre>
+<p>Without <code>g</code>, only the <strong>first</strong> match on each line is replaced. Forgetting <code>g</code> is the most common <code>sed</code> mistake.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Tab to comma is only safe when fields contain no commas
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>sed 's/\t/,/g'</code> produces a broken CSV if any field contains a comma. For free-text columns, export the CSV from R or Python, which quote fields properly.</p>
+</div>
+</div>
+<p>When the pattern contains <code>/</code>, as paths do, choose another delimiter. Any character works:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"/home/ada/projects"</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s|/home/ada|$HOME|'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>$HOME/projects</code></pre>
+</section>
+<section id="capture-groups" class="level3">
+<h3 class="anchored" data-anchor-id="capture-groups">Capture groups</h3>
+<p>With <code>-E</code>, parentheses capture parts of a match, and <code>\1</code>, <code>\2</code> insert them into the replacement. Split <code>AB_05</code> into population and tree number:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 3 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1 <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">'s/^([A-Z0-9]+)_([0-9]+)$/\1\t\2/'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Family
+AB  05
+AB  08</code></pre>
+<p>The header <code>Family</code> did not match the pattern, so it passed through unchanged. That is the usual behaviour: lines that do not match are printed as they are.</p>
+</section>
+<section id="several-edits-at-once" class="level3">
+<h3 class="anchored" data-anchor-id="several-edits-at-once">Several edits at once</h3>
+<p>Use multiple <code>-e</code> options, or separate commands with <code>;</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 3 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1-5 <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">'1s/^/# /'</span> <span class="at">-e</span> <span class="st">'s/\tE$/\tEdge/'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code># Family    Population  Tree    Location    Region
+AB_05   AB  5   TN  Edge
+AB_08   AB  8   TN  Edge</code></pre>
+<p><code>1s/^/# /</code> applies a substitution to line 1 only, and <code>^</code> matches the empty start of the line, so it inserts text there.</p>
+</section>
+<section id="the-overlapping-match-trap" class="level3">
+<h3 class="anchored" data-anchor-id="the-overlapping-match-trap">The overlapping-match trap</h3>
+<p>Suppose you want to turn every <code>NA</code> into <code>.</code> (a common missing-value code in genomics tools). This looks reasonable:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'^BAL_10'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 8-13</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'^BAL_10'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 8-13 <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/\tNA\t/\t.\t/g'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>NA  NA  0   NA  NA  918
+NA  .   0   .   NA  918</code></pre>
+<p>Half of the <code>NA</code> values survived. Each match <strong>consumes</strong> the tab after it, so an adjacent <code>NA</code> loses its leading tab and cannot match. The first field has no leading tab at all. Use a field-aware tool instead:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'^BAL_10'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 8-13 <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> OFS=<span class="st">'\t'</span> <span class="st">'{for (i = 1; i &lt;= NF; i++) if ($i == "NA") $i = "."; print}'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>.   .   0   .   .   918</code></pre>
+<p>Rule of thumb: if the edit is about <strong>fields</strong>, use <code>awk</code>; if it is about <strong>text</strong>, use <code>sed</code>.</p>
+</section>
+<section id="editing-files-in-place-safely" class="level3">
+<h3 class="anchored" data-anchor-id="editing-files-in-place-safely">Editing files in place, safely</h3>
+<p><code>-i</code> writes the result back into the file. Give it a suffix (<code>-i.bak</code>) to keep a backup, and only ever use it on copies or on files you generated:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb51"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 1 <span class="va">$F</span> <span class="op">&gt;</span> results/header.txt</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i.bak</span> <span class="st">'s/\t/\n/g'</span> results/header.txt</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 3 results/header.txt</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> results/header.txt<span class="pp">*</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Family
+Population
+Tree
+results/header.txt
+results/header.txt.bak</code></pre>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Never run <code>sed -i</code> on <code>data/raw/</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An in-place edit of raw data is exactly what the checksum from the previous module exists to catch. Write edited versions to <code>data/processed/</code> or <code>results/</code> instead: <code>sed '...' data/raw/x.txt &gt; data/processed/x.txt</code>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>macOS differences
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>On macOS (BSD <code>sed</code>), <code>-i</code> needs an explicit argument (<code>sed -i '' 's/a/b/' file</code>), and <code>\t</code> is not understood in patterns. On the cluster, GNU <code>sed</code> behaves as shown here.</p>
+</div>
+</div>
+</section>
+<section id="fixing-windows-line-endings" class="level3">
+<h3 class="anchored" data-anchor-id="fixing-windows-line-endings">Fixing Windows line endings</h3>
+<p>Files edited on Windows end each line with <code>\r\n</code>. The invisible <code>\r</code> breaks scripts (<code>bad interpreter: /bin/bash^M</code>) and makes the last column fail comparisons. <code>cat -A</code> reveals it as <code>^M</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">'a\tb\r\nc\td\r\n'</span> <span class="op">&gt;</span> results/windows.tsv</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="at">-A</span> results/windows.tsv</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'s/\r$//'</span> results/windows.tsv</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="at">-A</span> results/windows.tsv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>a^Ib^M$
+c^Id^M$
+a^Ib$
+c^Id$</code></pre>
+<p>In <code>cat -A</code> output, <code>^I</code> is a tab and <code>$</code> marks the end of each line.</p>
+</section>
+</section>
+<section id="awk-a-language-for-columns" class="level2">
+<h2 class="anchored" data-anchor-id="awk-a-language-for-columns"><code>awk</code>: a language for columns</h2>
+<section id="the-mental-model" class="level3">
+<h3 class="anchored" data-anchor-id="the-mental-model">The mental model</h3>
+<p>An <code>awk</code> program is a list of <code>pattern { action }</code> rules. For <strong>each line</strong>, <code>awk</code> splits it into fields and runs every rule whose pattern is true:</p>
+<pre class="text"><code>awk -F'\t' 'PATTERN { ACTION }' file</code></pre>
+<ul>
+<li>Leave out the pattern, and the action runs on every line.</li>
+<li>Leave out the action, and matching lines are printed.</li>
+<li><code>BEGIN { }</code> runs before the first line, and <code>END { }</code> after the last.</li>
+</ul>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Built-in</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>$1</code>, <code>$2</code>, …</td>
+<td>Field 1, field 2, …</td>
+</tr>
+<tr class="even">
+<td><code>$0</code></td>
+<td>The whole line</td>
+</tr>
+<tr class="odd">
+<td><code>NF</code></td>
+<td>Number of fields on this line, so <code>$NF</code> is the last field</td>
+</tr>
+<tr class="even">
+<td><code>NR</code></td>
+<td>Line number across all input</td>
+</tr>
+<tr class="odd">
+<td><code>FNR</code></td>
+<td>Line number within the current file</td>
+</tr>
+<tr class="even">
+<td><code>-F'\t'</code></td>
+<td>Input field separator: tab</td>
+</tr>
+<tr class="odd">
+<td><code>OFS</code></td>
+<td>Output field separator, set with <code>-v OFS='\t'</code></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Always set <code>-F'\t'</code> for tab-delimited data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By default, <code>awk</code> splits on <strong>any run of spaces or tabs</strong>. If a field ever contains a space, or is empty, the columns shift without warning. <code>-F'\t'</code> splits only on tabs.</p>
+</div>
+</div>
+</section>
+<section id="selecting-columns" class="level3">
+<h3 class="anchored" data-anchor-id="selecting-columns">Selecting columns</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'{print $1, $4, $12}'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> OFS=<span class="st">'\t'</span> <span class="st">'{print $1, $4, $12}'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Family Location Fitness
+AB_05 TN 3.531285966
+AB_08 TN 0.862395307
+Family  Location    Fitness
+AB_05   TN  3.531285966
+AB_08   TN  0.862395307</code></pre>
+<p>The comma in <code>print $1, $4</code> inserts <code>OFS</code>, which is a space by default. Set <code>-v OFS='\t'</code> to keep the output tab-delimited. Unlike <code>cut</code>, <code>awk</code> can reorder columns: <code>print $12, $1</code>.</p>
+</section>
+<section id="counting-lines-and-fields" class="level3">
+<h3 class="anchored" data-anchor-id="counting-lines-and-fields">Counting lines and fields</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb58"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR == 1 {print NF " columns"} END {print NR " lines"}'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>19 columns
+327 lines</code></pre>
+<p>Check that every row has the same number of fields, a quick test for a corrupted file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb60"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'{print NF}'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>    327 19</code></pre>
+<p>All 327 lines have 19 fields.</p>
+</section>
+<section id="filtering-rows-by-value" class="level3">
+<h3 class="anchored" data-anchor-id="filtering-rows-by-value">Filtering rows by value</h3>
+<p>This is where <code>awk</code> replaces <code>grep</code>: the condition targets a specific column.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb62"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'$4 == "VT"'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span>                                <span class="co"># string equality</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; $4 == "VT" &amp;&amp; $13 &gt; 1000'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span>         <span class="co"># combine conditions</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>61
+11</code></pre>
+<p>So 11 Vermont trees come from above 1,000 m. Print selected columns for high-fitness trees:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb64"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; $12 != "NA" &amp;&amp; $12 &gt; 30 {print $1, $4, $12}'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>BLA_02 PA 35.8766131
+BRA_04 PA 31.91540368
+BRU_05 PA 41.42805129
+BRU_06 PA 34.73823671
+CRA_05 WV 31.31954998
+G18_01 PA 30.05461376
+OCT_03 MA 31.07948898</code></pre>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>==</code>, <code>!=</code></td>
+<td>Equal, not equal (strings must be in double quotes: <code>"VT"</code>)</td>
+</tr>
+<tr class="even">
+<td><code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code></td>
+<td>Comparisons</td>
+</tr>
+<tr class="odd">
+<td><code>&amp;&amp;</code>, <code>\|\|</code>, <code>!</code></td>
+<td>And, or, not</td>
+</tr>
+<tr class="even">
+<td><code>~</code>, <code>!~</code></td>
+<td>Matches / does not match a regex: <code>$1 ~ /^ALB_/</code></td>
+</tr>
+</tbody>
+</table>
+<p>Keep the header with the filtered rows by adding <code>NR == 1 ||</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb66"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR == 1 || $4 == "NB"'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1-5</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Family  Population  Tree    Location    Region
+NBTIC_543   NBTIC   543 NB  C
+NBTIC_552   NBTIC   552 NB  C
+NBTIC_565   NBTIC   565 NB  C
+NBTIC_623   NBTIC   623 NB  C
+NBTIC_624   NBTIC   624 NB  C
+NBTIC_627   NBTIC   627 NB  C</code></pre>
+</section>
+<section id="selecting-columns-by-name-not-number" class="level3">
+<h3 class="anchored" data-anchor-id="selecting-columns-by-name-not-number">Selecting columns by name, not number</h3>
+<p>Column numbers break when a file gains or loses a column. Read the header into an array, then refer to columns by name:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb68"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> OFS=<span class="st">'\t'</span> <span class="st">'</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="st">  NR == 1 { for (i = 1; i &lt;= NF; i++) col[$i] = i; next }</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="st">          { print $col["Family"], $col["Elevation"] }</span></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="st">'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>AB_05   1812
+AB_08   1785
+AB_12   1750</code></pre>
+<p><code>next</code> skips the remaining rules for the current line, so the header row is not printed as data. A multi-line program in single quotes, as here, is easier to read than a single long line.</p>
+</section>
+<section id="passing-bash-variables-into-awk-with--v" class="level3">
+<h3 class="anchored" data-anchor-id="passing-bash-variables-into-awk-with--v">Passing Bash variables into <code>awk</code> with <code>-v</code></h3>
+<p>Never paste Bash variables inside the single-quoted program. Pass them in with <code>-v</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb70"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="va">loc</span><span class="op">=</span>NC</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="va">min_elev</span><span class="op">=</span>1500</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> loc=<span class="st">"</span><span class="va">$loc</span><span class="st">"</span> <span class="at">-v</span> min_elev=<span class="st">"</span><span class="va">$min_elev</span><span class="st">"</span> <span class="st">'</span></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="st">  NR &gt; 1 &amp;&amp; $4 == loc &amp;&amp; $13 &gt;= min_elev { c++ }</span></span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="st">  END { print c + 0, "trees in", loc, "at &gt;=", min_elev, "m" }</span></span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a><span class="st">'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>15 trees in NC at &gt;= 1500 m</code></pre>
+<p><code>c + 0</code> prints <code>0</code> rather than an empty string when nothing matched.</p>
+</section>
+<section id="counting-by-group-with-arrays" class="level3">
+<h3 class="anchored" data-anchor-id="counting-by-group-with-arrays">Counting by group with arrays</h3>
+<p><code>awk</code> arrays are keyed by text, which makes group-by counts one line long:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb72"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 {n[$4]++} END {for (k in n) print k, n[k]}'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-k2,2nr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>VT 61
+NY 53
+WV 50
+PA 47</code></pre>
+<p>This is the <code>awk</code> version of the Bash associative-array loop from the previous module, and it is much faster on large files. <code>for (k in n)</code> visits keys in an unpredictable order, so always pipe to <code>sort</code> when order matters.</p>
+<p>Count something more subtle: how many <strong>distinct populations</strong> were sampled in each Location? <code>!seen[key]++</code> is true only the first time a key appears:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb74"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; !seen[$4 FS $2]++ {np[$4]++} END {for (l in np) print l, np[l]}'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-k2,2nr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>VT 11
+WV 11
+NY 9</code></pre>
+<p><code>$4 FS $2</code> joins Location and Population with a tab (the field separator) to make a combined key.</p>
+</section>
+<section id="means-by-group-and-the-header-that-disappears" class="level3">
+<h3 class="anchored" data-anchor-id="means-by-group-and-the-header-that-disappears">Means by group, and the header that disappears</h3>
+<p>Average Fitness per Location, skipping missing values:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb76"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> OFS=<span class="st">'\t'</span> <span class="st">'</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="st">  NR &gt; 1 &amp;&amp; $12 != "NA" { sum[$4] += $12; n[$4]++ }</span></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="st">  END {</span></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a><span class="st">    print "Location", "n", "mean_fitness"</span></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a><span class="st">    for (k in sum) printf "%s\t%d\t%.2f\n", k, n[k], sum[k] / n[k]</span></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a><span class="st">'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-t</span> <span class="st">$'</span><span class="dt">\t</span><span class="st">'</span> <span class="at">-k3,3gr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 5</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>PA  43  19.84
+NB  6   17.87
+MA  19  17.61
+ME  16  15.82
+VT  56  15.37</code></pre>
+<p>The header line was printed but <code>sort</code> moved it out of the top five, because a sort cannot tell a header from data. Print the header separately, outside the sort, by grouping the commands in <code>{ }</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb78"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">printf</span> <span class="st">'Location\tn\tmean_fitness\n'</span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; $12 != "NA" {sum[$4] += $12; n[$4]++}</span></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="st">              END {for (k in sum) printf "%s\t%d\t%.2f\n", k, n[k], sum[k] / n[k]}'</span> <span class="va">$F</span> <span class="kw">|</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sort</span> <span class="at">-t</span> <span class="st">$'</span><span class="dt">\t</span><span class="st">'</span> <span class="at">-k3,3gr</span></span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span> <span class="op">&gt;</span> results/fitness_by_location.tsv</span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 4 results/fitness_by_location.tsv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Location    n   mean_fitness
+PA  43  19.84
+NB  6   17.87
+MA  19  17.61</code></pre>
+<p>Note that <code>n</code> for VT is 56, not 61: five Vermont trees have <code>NA</code> for Fitness. Reporting <code>n</code> beside every mean is a good habit.</p>
+<p><code>printf</code> gives exact control over formatting:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Format</th>
+<th>Meaning</th>
+<th>Example output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>%s</code></td>
+<td>String</td>
+<td><code>VT</code></td>
+</tr>
+<tr class="even">
+<td><code>%d</code></td>
+<td>Integer</td>
+<td><code>56</code></td>
+</tr>
+<tr class="odd">
+<td><code>%.2f</code></td>
+<td>Decimal with 2 places</td>
+<td><code>15.37</code></td>
+</tr>
+<tr class="even">
+<td><code>%8.3f</code></td>
+<td>Width 8, 3 decimals, right-aligned</td>
+<td><code>4.150</code></td>
+</tr>
+<tr class="odd">
+<td><code>%-8s</code></td>
+<td>Width 8, left-aligned</td>
+<td><code>MRC_02</code></td>
+</tr>
+<tr class="even">
+<td><code>\t</code>, <code>\n</code></td>
+<td>Tab, newline</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb80"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; $4 == "VA" {printf "%-8s %6.1f m %8.3f\n", $1, $13, $12}'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>MRC_02   1600.0 m    4.150
+MRC_07   1569.0 m    7.718
+MRC_08   1554.0 m    7.180
+MRC_16   1616.0 m    9.785
+MRC_18   1645.0 m    9.121</code></pre>
+</section>
+<section id="the-na-trap-strings-compared-with-numbers" class="level3">
+<h3 class="anchored" data-anchor-id="the-na-trap-strings-compared-with-numbers">The <code>NA</code> trap: strings compared with numbers</h3>
+<p>Find the elevation range:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb82"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 {if (min == "" || $13 &lt; min) min = $13; if ($13 &gt; max) max = $13}</span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="st">            END {print "Elevation range:", min, "-", max, "m"}'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Elevation range: 310 - NA m</code></pre>
+<p>The maximum elevation is apparently “NA”. When a value is not a number, <code>awk</code> compares it as a <strong>string</strong>, and the letter <code>N</code> sorts after every digit. Exclude missing values and force numeric comparison with <code>+ 0</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb84"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; $13 != "NA" {</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="st">              v = $13 + 0</span></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="st">              if (min == "" || v &lt; min) min = v</span></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="st">              if (max == "" || v &gt; max) max = v</span></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a><span class="st">            }</span></span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a><span class="st">            END {print "Elevation range:", min, "-", max, "m"}'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Elevation range: 310 - 1955 m</code></pre>
+<p>Every numeric <code>awk</code> program on real data needs a missing-value rule. Find out which columns have missing values and how many:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb86"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'</span></span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="st">  NR == 1 { for (i = 1; i &lt;= NF; i++) name[i] = $i; next }</span></span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a><span class="st">          { for (i = 1; i &lt;= NF; i++) if ($i == "NA") na[i]++ }</span></span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a><span class="st">  END     { for (i = 1; i &lt;= NF; i++) if (na[i]) printf "%-12s %d\n", name[i], na[i] }</span></span>
+<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a><span class="st">'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>SeedWeight   12
+Germination  12
+Survival     1
+Height       13
+Fitness      12
+Elevation    3</code></pre>
+</section>
+<section id="the-precision-trap-modifying-a-field" class="level3">
+<h3 class="anchored" data-anchor-id="the-precision-trap-modifying-a-field">The precision trap: modifying a field</h3>
+<p>Longitudes in this file are stored as positive numbers. Suppose you want the conventional negative values for the western hemisphere:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb88"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> OFS=<span class="st">'\t'</span> <span class="st">'NR &gt; 1 {$7 = -$7} {print $1, $6, $7}'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Family  Latitude    Longitude
+AB_05   35.55297    -83.4944
+AB_08   35.55212    -83.4926</code></pre>
+<p>The coordinates lost a digit: <code>83.49438</code> became <code>-83.4944</code>. When <code>awk</code> does arithmetic and then prints the result, it formats it with six significant digits by default. Because this change is really about text (prepend a minus sign), treat it as text:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb90"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> OFS=<span class="st">'\t'</span> <span class="st">'NR &gt; 1 {$7 = "-" $7} {print $1, $6, $7}'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Family  Latitude    Longitude
+AB_05   35.55297    -83.49438
+AB_08   35.55212    -83.49259</code></pre>
+<p>When you do need arithmetic, print with an explicit format such as <code>printf "%.6f"</code> so the precision is your choice, not the default.</p>
+</section>
+<section id="writing-to-several-files-at-once" class="level3">
+<h3 class="anchored" data-anchor-id="writing-to-several-files-at-once">Writing to several files at once</h3>
+<p><code>print &gt; file</code> sends output to a file named by any expression. Split the dataset by Region, with a header in each file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb92"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/by_region</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'</span></span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a><span class="st">  NR == 1 { h = $0; next }</span></span>
+<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a><span class="st">  {</span></span>
+<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a><span class="st">    out = "results/by_region/" $5 ".tsv"</span></span>
+<span id="cb92-6"><a href="#cb92-6" aria-hidden="true" tabindex="-1"></a><span class="st">    if (!(out in seen)) { print h &gt; out; seen[out] = 1 }</span></span>
+<span id="cb92-7"><a href="#cb92-7" aria-hidden="true" tabindex="-1"></a><span class="st">    print &gt; out</span></span>
+<span id="cb92-8"><a href="#cb92-8" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb92-9"><a href="#cb92-9" aria-hidden="true" tabindex="-1"></a><span class="st">'</span> <span class="va">$F</span></span>
+<span id="cb92-10"><a href="#cb92-10" aria-hidden="true" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-l</span> results/by_region/<span class="pp">*</span>.tsv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>  179 results/by_region/C.tsv
+  102 results/by_region/E.tsv
+   48 results/by_region/M.tsv
+  329 total</code></pre>
+<p>This does the same job as the <code>split_by_location.sh</code> loop from the previous module, in one fast pass. Inside a single <code>awk</code> run, <code>&gt;</code> truncates a file only the first time it is opened; later prints to it append.</p>
+</section>
+<section id="joining-two-tables" class="level3">
+<h3 class="anchored" data-anchor-id="joining-two-tables">Joining two tables</h3>
+<p>The classic <code>awk</code> join reads a small lookup table first, stores it in an array, and then annotates the main file. Create a lookup of Location codes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb94"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> results/state_names.tsv <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="st">MA  Massachusetts</span></span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a><span class="st">MD  Maryland</span></span>
+<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a><span class="st">ME  Maine</span></span>
+<span id="cb94-5"><a href="#cb94-5" aria-hidden="true" tabindex="-1"></a><span class="st">NB  New Brunswick</span></span>
+<span id="cb94-6"><a href="#cb94-6" aria-hidden="true" tabindex="-1"></a><span class="st">NC  North Carolina</span></span>
+<span id="cb94-7"><a href="#cb94-7" aria-hidden="true" tabindex="-1"></a><span class="st">NH  New Hampshire</span></span>
+<span id="cb94-8"><a href="#cb94-8" aria-hidden="true" tabindex="-1"></a><span class="st">NY  New York</span></span>
+<span id="cb94-9"><a href="#cb94-9" aria-hidden="true" tabindex="-1"></a><span class="st">PA  Pennsylvania</span></span>
+<span id="cb94-10"><a href="#cb94-10" aria-hidden="true" tabindex="-1"></a><span class="st">TN  Tennessee</span></span>
+<span id="cb94-11"><a href="#cb94-11" aria-hidden="true" tabindex="-1"></a><span class="st">VA  Virginia</span></span>
+<span id="cb94-12"><a href="#cb94-12" aria-hidden="true" tabindex="-1"></a><span class="st">VT  Vermont</span></span>
+<span id="cb94-13"><a href="#cb94-13" aria-hidden="true" tabindex="-1"></a><span class="st">WV  West Virginia</span></span>
+<span id="cb94-14"><a href="#cb94-14" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then join it onto the summary:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb95"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> OFS=<span class="st">'\t'</span> <span class="st">'</span></span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="st">  FNR == NR { name[$1] = $2; next }              # first file: build the lookup</span></span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a><span class="st">  FNR == 1  { print $0, "State"; next }          # second file: extend the header</span></span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a><span class="st">            { print $0, name[$1] }               # second file: add the name</span></span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a><span class="st">'</span> results/state_names.tsv results/fitness_by_location.tsv <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Location    n   mean_fitness    State
+PA  43  19.84   Pennsylvania
+NB  6   17.87   New Brunswick
+MA  19  17.61   Massachusetts</code></pre>
+<p><code>FNR == NR</code> is true only while reading the first file, because there the per-file line number equals the overall line number. This idiom is worth memorizing. It is how you attach metadata to sample IDs, filter a VCF to a list of sites, or merge phenotypes with environmental variables.</p>
+</section>
+<section id="summary-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="summary-statistics">Summary statistics</h3>
+<p>Mean and sample standard deviation in a single pass:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb97"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; $12 != "NA" {n++; s += $12; ss += $12 * $12}</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="st">            END {m = s / n; printf "n=%d mean=%.3f sd=%.3f\n", n, m, sqrt((ss - n * m * m) / (n - 1))}'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>n=314 mean=14.008 sd=7.321</code></pre>
+<p>These are the same values you would get from <code>mean()</code> and <code>sd()</code> in R after removing missing values, which is a useful cross-check between your Bash and R pipelines. For medians, regressions, or anything more involved, move to R or Python.</p>
+</section>
+<section id="other-useful-awk-functions" class="level3">
+<h3 class="anchored" data-anchor-id="other-useful-awk-functions">Other useful <code>awk</code> functions</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>length(s)</code></td>
+<td>Length of a string</td>
+<td><code>length($1)</code></td>
+</tr>
+<tr class="even">
+<td><code>substr(s, i, n)</code></td>
+<td>Substring from position <code>i</code>, <code>n</code> characters</td>
+<td><code>substr($1, 1, 3)</code></td>
+</tr>
+<tr class="odd">
+<td><code>index(s, t)</code></td>
+<td>Position of <code>t</code> in <code>s</code> (0 if absent)</td>
+<td><code>index($1, "_")</code></td>
+</tr>
+<tr class="even">
+<td><code>split(s, a, sep)</code></td>
+<td>Split <code>s</code> into array <code>a</code>; returns the count</td>
+<td><code>split($8, kv, "=")</code></td>
+</tr>
+<tr class="odd">
+<td><code>sub(re, r, s)</code> / <code>gsub(re, r, s)</code></td>
+<td>Replace the first / all matches in <code>s</code></td>
+<td><code>gsub(/_/, "-", $1)</code></td>
+</tr>
+<tr class="even">
+<td><code>tolower(s)</code> / <code>toupper(s)</code></td>
+<td>Change case</td>
+<td><code>toupper($4)</code></td>
+</tr>
+<tr class="odd">
+<td><code>sqrt</code>, <code>log</code>, <code>exp</code>, <code>int</code></td>
+<td>Math</td>
+<td><code>int($13 / 100) * 100</code></td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb99"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 3 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> OFS=<span class="st">'\t'</span> <span class="st">'{gsub(/_/, "-", $1); print $1, $2}'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Family  Population
+AB-05   AB
+AB-08   AB</code></pre>
+</section>
+</section>
+<section id="putting-it-together-a-reusable-summary-script" class="level2">
+<h2 class="anchored" data-anchor-id="putting-it-together-a-reusable-summary-script">Putting it together: a reusable summary script</h2>
+<p>Combine everything into a script that summarizes <strong>any</strong> trait by Location, selected by column name:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/summarize_fitness.sh</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb101" data-filename="src/summarize_fitness.sh"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a><span class="co"># summarize_fitness.sh — per-Location fitness summary from the raw red-spruce table.</span></span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage: bash src/summarize_fitness.sh [TRAIT_NAME]     (default: Fitness)</span></span>
+<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-6"><a href="#cb101-6" aria-hidden="true" tabindex="-1"></a><span class="va">in</span><span class="op">=</span><span class="st">"data/raw/red_spruce_fitness_traits.txt"</span></span>
+<span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a><span class="va">trait</span><span class="op">=</span><span class="st">"</span><span class="va">${1</span><span class="op">:-</span>Fitness<span class="va">}</span><span class="st">"</span></span>
+<span id="cb101-8"><a href="#cb101-8" aria-hidden="true" tabindex="-1"></a><span class="va">out</span><span class="op">=</span><span class="st">"results/</span><span class="va">${trait</span><span class="op">,,</span><span class="va">}</span><span class="st">_by_location.tsv"</span>        <span class="co"># ${var,,} = lowercase</span></span>
+<span id="cb101-9"><a href="#cb101-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-10"><a href="#cb101-10" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">-f</span> <span class="va">$in</span> <span class="kw">]]</span> <span class="kw">||</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">"Missing </span><span class="va">$in</span><span class="st">. Run src/get_data.sh first."</span> <span class="op">&gt;&amp;</span><span class="dv">2</span><span class="kw">;</span> <span class="bu">exit</span> 1<span class="kw">;</span> <span class="kw">}</span></span>
+<span id="cb101-11"><a href="#cb101-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-12"><a href="#cb101-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Fail early if the trait name is not a column in the header</span></span>
+<span id="cb101-13"><a href="#cb101-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 1 <span class="st">"</span><span class="va">$in</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">'\t'</span> <span class="st">'\n'</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-qx</span> <span class="st">"</span><span class="va">$trait</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb101-14"><a href="#cb101-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">||</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">"No column named '</span><span class="va">$trait</span><span class="st">'. Available:"</span> <span class="op">&gt;&amp;</span><span class="dv">2</span><span class="kw">;</span> <span class="fu">head</span> <span class="at">-n</span> 1 <span class="st">"</span><span class="va">$in</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">'\t'</span> <span class="st">'\n'</span> <span class="op">&gt;&amp;</span><span class="dv">2</span><span class="kw">;</span> <span class="bu">exit</span> 1<span class="kw">;</span> <span class="kw">}</span></span>
+<span id="cb101-15"><a href="#cb101-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-16"><a href="#cb101-16" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb101-17"><a href="#cb101-17" aria-hidden="true" tabindex="-1"></a>  <span class="bu">printf</span> <span class="st">'Location\tn\tn_missing\tmean\tmin\tmax\n'</span></span>
+<span id="cb101-18"><a href="#cb101-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> trait=<span class="st">"</span><span class="va">$trait</span><span class="st">"</span> <span class="st">'</span></span>
+<span id="cb101-19"><a href="#cb101-19" aria-hidden="true" tabindex="-1"></a><span class="st">    NR == 1 { for (i = 1; i &lt;= NF; i++) if ($i == trait) c = i; next }</span></span>
+<span id="cb101-20"><a href="#cb101-20" aria-hidden="true" tabindex="-1"></a><span class="st">    $c == "NA" { miss[$4]++; seen[$4] = 1; next }</span></span>
+<span id="cb101-21"><a href="#cb101-21" aria-hidden="true" tabindex="-1"></a><span class="st">    {</span></span>
+<span id="cb101-22"><a href="#cb101-22" aria-hidden="true" tabindex="-1"></a><span class="st">      v = $c + 0; loc = $4; seen[loc] = 1</span></span>
+<span id="cb101-23"><a href="#cb101-23" aria-hidden="true" tabindex="-1"></a><span class="st">      n[loc]++; sum[loc] += v</span></span>
+<span id="cb101-24"><a href="#cb101-24" aria-hidden="true" tabindex="-1"></a><span class="st">      if (!(loc in min) || v &lt; min[loc]) min[loc] = v</span></span>
+<span id="cb101-25"><a href="#cb101-25" aria-hidden="true" tabindex="-1"></a><span class="st">      if (!(loc in max) || v &gt; max[loc]) max[loc] = v</span></span>
+<span id="cb101-26"><a href="#cb101-26" aria-hidden="true" tabindex="-1"></a><span class="st">    }</span></span>
+<span id="cb101-27"><a href="#cb101-27" aria-hidden="true" tabindex="-1"></a><span class="st">    END {</span></span>
+<span id="cb101-28"><a href="#cb101-28" aria-hidden="true" tabindex="-1"></a><span class="st">      for (loc in seen) {</span></span>
+<span id="cb101-29"><a href="#cb101-29" aria-hidden="true" tabindex="-1"></a><span class="st">        if (n[loc] &gt; 0)</span></span>
+<span id="cb101-30"><a href="#cb101-30" aria-hidden="true" tabindex="-1"></a><span class="st">          printf "%s\t%d\t%d\t%.3f\t%.3f\t%.3f\n", loc, n[loc], miss[loc], sum[loc] / n[loc], min[loc], max[loc]</span></span>
+<span id="cb101-31"><a href="#cb101-31" aria-hidden="true" tabindex="-1"></a><span class="st">        else                                   # every value missing: avoid dividing by zero</span></span>
+<span id="cb101-32"><a href="#cb101-32" aria-hidden="true" tabindex="-1"></a><span class="st">          printf "%s\t0\t%d\tNA\tNA\tNA\n", loc, miss[loc]</span></span>
+<span id="cb101-33"><a href="#cb101-33" aria-hidden="true" tabindex="-1"></a><span class="st">      }</span></span>
+<span id="cb101-34"><a href="#cb101-34" aria-hidden="true" tabindex="-1"></a><span class="st">    }'</span> <span class="st">"</span><span class="va">$in</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-t</span> <span class="st">$'</span><span class="dt">\t</span><span class="st">'</span> <span class="at">-k4,4gr</span></span>
+<span id="cb101-35"><a href="#cb101-35" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span> <span class="op">&gt;</span> <span class="st">"</span><span class="va">$out</span><span class="st">"</span></span>
+<span id="cb101-36"><a href="#cb101-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-37"><a href="#cb101-37" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Wrote </span><span class="va">$out</span><span class="st">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb102"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> src/summarize_fitness.sh</span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> results/fitness_by_location.tsv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Wrote results/fitness_by_location.tsv
+Location    n   n_missing   mean    min max
+PA  43  4   19.840  5.835   41.428
+NB  6   0   17.874  10.560  26.510
+MA  19  0   17.613  6.849   31.079
+ME  16  0   15.822  4.848   24.561
+VT  56  5   15.370  0.000   29.766
+NH  23  0   14.304  1.623   24.522
+WV  50  0   13.111  0.781   31.320
+NY  50  3   12.068  0.778   26.372
+NC  22  0   8.825   0.000   15.521
+TN  14  0   8.747   0.862   19.540
+VA  5   0   7.591   4.150   9.785
+MD  10  0   4.698   0.000   10.320</code></pre>
+<p>The same script works for any column, and fails clearly on a misspelled name:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb104"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> src/summarize_fitness.sh Elevation</span>
+<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 3 results/elevation_by_location.tsv</span>
+<span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> src/summarize_fitness.sh height</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Wrote results/elevation_by_location.tsv
+Location    n   n_missing   mean    min max
+NC  22  0   1639.545    1251.000    1955.000
+VA  5   0   1596.800    1554.000    1645.000
+No column named 'height'. Available:
+Family
+Population
+...</code></pre>
+<p>Column names are case-sensitive: the column is <code>Height</code>, not <code>height</code>.</p>
+</section>
+<section id="bonus-the-same-tools-on-genomic-formats" class="level2">
+<h2 class="anchored" data-anchor-id="bonus-the-same-tools-on-genomic-formats">Bonus: the same tools on genomic formats</h2>
+<p>FASTA and VCF are plain text, so everything in this module applies to them. Create two tiny practice files:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb106"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> data/toy</span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> data/toy/contigs.fa <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb106-4"><a href="#cb106-4" aria-hidden="true" tabindex="-1"></a><span class="st">&gt;contig_1 len=12</span></span>
+<span id="cb106-5"><a href="#cb106-5" aria-hidden="true" tabindex="-1"></a><span class="st">ACGTACGTACGT</span></span>
+<span id="cb106-6"><a href="#cb106-6" aria-hidden="true" tabindex="-1"></a><span class="st">&gt;contig_2 len=20</span></span>
+<span id="cb106-7"><a href="#cb106-7" aria-hidden="true" tabindex="-1"></a><span class="st">GGCCGGCCAA</span></span>
+<span id="cb106-8"><a href="#cb106-8" aria-hidden="true" tabindex="-1"></a><span class="st">TTAAGGCCAA</span></span>
+<span id="cb106-9"><a href="#cb106-9" aria-hidden="true" tabindex="-1"></a><span class="st">&gt;contig_3 len=8</span></span>
+<span id="cb106-10"><a href="#cb106-10" aria-hidden="true" tabindex="-1"></a><span class="st">NNNNACGT</span></span>
+<span id="cb106-11"><a href="#cb106-11" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb106-12"><a href="#cb106-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-13"><a href="#cb106-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> data/toy/calls.vcf <span class="op">&lt;&lt;'EOF'</span></span>
+<span id="cb106-14"><a href="#cb106-14" aria-hidden="true" tabindex="-1"></a><span class="st">##fileformat=VCFv4.2</span></span>
+<span id="cb106-15"><a href="#cb106-15" aria-hidden="true" tabindex="-1"></a><span class="st">##contig=&lt;ID=chr1&gt;</span></span>
+<span id="cb106-16"><a href="#cb106-16" aria-hidden="true" tabindex="-1"></a><span class="st">#CHROM  POS ID  REF ALT QUAL    FILTER  INFO    FORMAT  RS_01   RS_02   RS_03</span></span>
+<span id="cb106-17"><a href="#cb106-17" aria-hidden="true" tabindex="-1"></a><span class="st">chr1    101 .   A   G   50  PASS    DP=30   GT  0/1 0/0 1/1</span></span>
+<span id="cb106-18"><a href="#cb106-18" aria-hidden="true" tabindex="-1"></a><span class="st">chr1    245 .   C   T   12  LowQual DP=8    GT  0/0 ./. 0/1</span></span>
+<span id="cb106-19"><a href="#cb106-19" aria-hidden="true" tabindex="-1"></a><span class="st">chr1    390 .   G   A   99  PASS    DP=45   GT  1/1 0/1 0/1</span></span>
+<span id="cb106-20"><a href="#cb106-20" aria-hidden="true" tabindex="-1"></a><span class="st">chr2    77  .   T   C   60  PASS    DP=22   GT  0/1 0/1 0/0</span></span>
+<span id="cb106-21"><a href="#cb106-21" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>When you copy these, make sure the VCF columns are separated by real tabs. The <code>cat -A</code> command from the <code>sed</code> section will show them as <code>^I</code>.</p>
+<section id="fasta" class="level3">
+<h3 class="anchored" data-anchor-id="fasta">FASTA</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb107"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">'^&gt;'</span> data/toy/contigs.fa                                   <span class="co"># number of sequences</span></span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'^&gt;'</span> data/toy/contigs.fa <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/^&gt;//; s/ .*//'</span>              <span class="co"># sequence IDs only</span></span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'/^&gt;/ {if (id) print id, len; id = substr($1, 2); len = 0; next}</span></span>
+<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a><span class="st">     {len += length($0)}</span></span>
+<span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a><span class="st">     END {print id, len}'</span> data/toy/contigs.fa                      <span class="co"># length of each sequence</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>3
+contig_1
+contig_2
+contig_3
+contig_1 12
+contig_2 20
+contig_3 8</code></pre>
+<p>The length program handles sequences wrapped over several lines (<code>contig_2</code>), which a simple <code>grep</code>-based approach would miscount.</p>
+</section>
+<section id="vcf" class="level3">
+<h3 class="anchored" data-anchor-id="vcf">VCF</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb109"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-vc</span> <span class="st">'^#'</span> data/toy/calls.vcf                                    <span class="co"># number of variants</span></span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'^#CHROM'</span> data/toy/calls.vcf <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 10- <span class="kw">|</span> <span class="fu">tr</span> <span class="st">'\t'</span> <span class="st">'\n'</span>       <span class="co"># sample names</span></span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">'^#'</span> data/toy/calls.vcf <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span>         <span class="co"># variants per chromosome</span></span>
+<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'!/^#/ &amp;&amp; $7 == "PASS"'</span> data/toy/calls.vcf <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span>      <span class="co"># variants passing filters</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>4
+RS_01
+RS_02
+RS_03
+      3 chr1
+      1 chr2
+3</code></pre>
+<p>Extract a value from the INFO column, and compute the proportion of missing genotypes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb111"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'!/^#/ {split($8, a, "="); if (a[2] &gt;= 20) print $1, $2, a[2]}'</span> data/toy/calls.vcf</span>
+<span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-3"><a href="#cb111-3" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'!/^#/ {for (i = 10; i &lt;= NF; i++) if ($i ~ /^\.\/\./) m++; t += NF - 9}</span></span>
+<span id="cb111-4"><a href="#cb111-4" aria-hidden="true" tabindex="-1"></a><span class="st">            END {printf "%d of %d genotypes missing (%.1f%%)\n", m, t, 100 * m / t}'</span> data/toy/calls.vcf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>chr1 101 30
+chr1 390 45
+chr2 77 22
+1 of 12 genotypes missing (8.3%)</code></pre>
+<p>Here <code>split($8, a, "=")</code> works because INFO holds a single <code>DP=</code> entry. Real INFO fields contain many <code>key=value</code> pairs separated by <code>;</code>. For production VCF work, use <code>bcftools</code> (<code>bcftools query</code>, <code>bcftools view -i</code>), which parses the format properly and reads compressed, indexed files. The command-line skills in this module are what let you check its output quickly.</p>
+</section>
+</section>
+<section id="quick-reference" class="level2">
+<h2 class="anchored" data-anchor-id="quick-reference">Quick reference</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Task</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Number the columns</td>
+<td><code>head -n 1 $F \| tr '\t' '\n' \| cat -n</code></td>
+</tr>
+<tr class="even">
+<td>Count each value in column 4</td>
+<td><code>cut -f 4 $F \| tail -n +2 \| sort \| uniq -c \| sort -rn</code></td>
+</tr>
+<tr class="odd">
+<td>Sort by column 12, numerically, descending</td>
+<td><code>sort -t $'\t' -k12,12gr</code></td>
+</tr>
+<tr class="even">
+<td>Lines starting with a pattern</td>
+<td><code>grep '^ALB_' $F</code></td>
+</tr>
+<tr class="odd">
+<td>Whole word / whole line</td>
+<td><code>grep -w 'CR'</code> / <code>grep -x 'VT'</code></td>
+</tr>
+<tr class="even">
+<td>Lines <strong>not</strong> matching</td>
+<td><code>grep -v -w 'NA' $F</code></td>
+</tr>
+<tr class="odd">
+<td>Extended regex</td>
+<td><code>grep -E '^(ALB\|APP)_' $F</code></td>
+</tr>
+<tr class="even">
+<td>Patterns from a file, as fixed strings</td>
+<td><code>grep -F -w -f ids.txt $F</code></td>
+</tr>
+<tr class="odd">
+<td>Print lines 10 to 20</td>
+<td><code>sed -n '10,20p' $F</code></td>
+</tr>
+<tr class="even">
+<td>Delete the header</td>
+<td><code>sed '1d' $F</code></td>
+</tr>
+<tr class="odd">
+<td>Replace every match</td>
+<td><code>sed 's/old/new/g'</code></td>
+</tr>
+<tr class="even">
+<td>Capture groups</td>
+<td><code>sed -E 's/^([A-Z]+)_([0-9]+)/\1\t\2/'</code></td>
+</tr>
+<tr class="odd">
+<td>Remove Windows line endings</td>
+<td><code>sed 's/\r$//'</code></td>
+</tr>
+<tr class="even">
+<td>Edit a copy in place, with backup</td>
+<td><code>sed -i.bak 's/a/b/' copy.txt</code></td>
+</tr>
+<tr class="odd">
+<td>Rows where column 4 is VT</td>
+<td><code>awk -F'\t' '$4 == "VT"' $F</code></td>
+</tr>
+<tr class="even">
+<td>Keep header plus filtered rows</td>
+<td><code>awk -F'\t' 'NR == 1 \|\| $12 &gt; 30' $F</code></td>
+</tr>
+<tr class="odd">
+<td>Choose and reorder columns</td>
+<td><code>awk -F'\t' -v OFS='\t' '{print $12, $1}' $F</code></td>
+</tr>
+<tr class="even">
+<td>Count by group</td>
+<td><code>awk -F'\t' 'NR &gt; 1 {n[$4]++} END {for (k in n) print k, n[k]}'</code></td>
+</tr>
+<tr class="odd">
+<td>Mean by group, skipping NA</td>
+<td><code>awk -F'\t' 'NR &gt; 1 &amp;&amp; $12 != "NA" {s[$4] += $12; n[$4]++} END {for (k in s) print k, s[k] / n[k]}'</code></td>
+</tr>
+<tr class="even">
+<td>Pass a Bash variable</td>
+<td><code>awk -v loc="$loc" '$4 == loc'</code></td>
+</tr>
+<tr class="odd">
+<td>Check column counts</td>
+<td><code>awk -F'\t' '{print NF}' $F \| sort \| uniq -c</code></td>
+</tr>
+<tr class="even">
+<td>Join a lookup table</td>
+<td><code>awk 'FNR == NR {a[$1] = $2; next} {print $0, a[$1]}' lookup.tsv main.tsv</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="checkpoint-exercises" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-exercises">Checkpoint exercises</h2>
+<p>Work from inside <code>cluster-exercise/</code> with <code>F=data/raw/red_spruce_fitness_traits.txt</code>. Try each one first, then open the solution and compare.</p>
+<ol type="1">
+<li><p>How many trees have a Survival value (column 10) of exactly <code>1</code>?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb113"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; $10 == 1'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>124</code></pre>
+</div>
+</div>
+</div></li>
+<li><p>Print the Family and Height (column 11) of the five tallest trees, ignoring missing values.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb115"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> OFS=<span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; $11 != "NA" {print $1, $11}'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-t</span> <span class="st">$'</span><span class="dt">\t</span><span class="st">'</span> <span class="at">-k2,2gr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 5</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>BRU_04   47.56003491
+XBM_03   46.24942003
+BRU_06   45.38968212
+BAL_01   45.23426327
+BRU_05   42.27352172</code></pre>
+</div>
+</div>
+</div></li>
+<li><p>Use <code>sed</code> to print the Family IDs on lines 10 to 12.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb117"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-n</span> <span class="st">'10,12p'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>ALB_06
+APP_01
+APP_02</code></pre>
+</div>
+</div>
+</div></li>
+<li><p>Using only <code>grep</code>, count how many rows belong to population <code>CR</code> itself, excluding <code>CRA</code> and <code>CRR</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb119"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 2 <span class="va">$F</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-c</span> <span class="at">-x</span> <span class="st">'CR'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>5</code></pre>
+<p><code>grep -c -w 'CR' $F</code> gives the same answer here, but <code>cut | grep -x</code> cannot accidentally match another column.</p>
+</div>
+</div>
+</div></li>
+<li><p>Compute the mean Elevation per Region (column 5), to one decimal place.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb121"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; $13 != "NA" {s[$5] += $13; n[$5]++}</span></span>
+<span id="cb121-2"><a href="#cb121-2" aria-hidden="true" tabindex="-1"></a><span class="st">            END {for (r in s) printf "%s\t%.1f\n", r, s[r] / n[r]}'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">sort</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>C    783.5
+E    1332.4
+M    585.1</code></pre>
+</div>
+</div>
+</div></li>
+<li><p>Which tree was sampled furthest north (highest Latitude, column 6)?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb123"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; $6 &gt; max {max = $6; id = $1; loc = $4} END {print id, loc, max}'</span> <span class="va">$F</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>NBTIC_565 NB 46.66</code></pre>
+<p>Latitude has no missing values, so no <code>NA</code> rule is needed here. Confirm that first with the missing-value report above.</p>
+</div>
+</div>
+</div></li>
+<li><p>Replace every <code>NA</code> in columns 8 to 13 with <code>.</code> for the row <code>G18_03</code>, without the overlapping-match bug.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb125"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'^G18_03'</span> <span class="va">$F</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 8-13 <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> OFS=<span class="st">'\t'</span> <span class="st">'{for (i = 1; i &lt;= NF; i++) if ($i == "NA") $i = "."; print}'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div></li>
+</ol>
+</section>
+<section id="challenge-which-population-performs-best" class="level2">
+<h2 class="anchored" data-anchor-id="challenge-which-population-performs-best">Challenge: which population performs best?</h2>
+<p>Using one <code>awk</code> program and <code>sort</code>, find the three populations with the highest mean Fitness, <strong>counting only populations with at least 5 non-missing Fitness values</strong>. Report population, <code>n</code>, and mean.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb126"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'NR &gt; 1 &amp;&amp; $12 != "NA" {s[$2] += $12; n[$2]++}</span></span>
+<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a><span class="st">            END {for (p in s) if (n[p] &gt;= 5) printf "%s\t%d\t%.2f\n", p, n[p], s[p] / n[p]}'</span> <span class="va">$F</span> <span class="kw">|</span></span>
+<span id="cb126-3"><a href="#cb126-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span> <span class="at">-t</span> <span class="st">$'</span><span class="dt">\t</span><span class="st">'</span> <span class="at">-k3,3gr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>BRU 5   24.18
+BRA 5   22.91
+EQU 6   21.45</code></pre>
+<p>Two of the top three are Pennsylvania populations, which matches PA’s top position in the per-Location summary. The minimum-<code>n</code> filter matters: without it, a population with a single exceptional tree could top the list.</p>
+</div>
+</div>
+</div>
+<p><strong>Extension:</strong> write <code>src/top_populations.sh TRAIT MIN_N</code> that generalizes this to any trait column, selected by name as in <code>summarize_fitness.sh</code>.</p>
+</section>
+<section id="wrap-up" class="level2">
+<h2 class="anchored" data-anchor-id="wrap-up">Wrap up</h2>
+<p>You can now answer column-specific questions directly from the raw file, and you know where each tool fits:</p>
+<ul>
+<li><code>grep</code> to find lines.</li>
+<li><code>sed</code> to edit text in a stream.</li>
+<li><code>awk</code> to compute on fields.</li>
+</ul>
+<p>Your project has gained:</p>
+<pre class="text"><code>cluster-exercise/
+├── data/
+│   └── toy/
+│       ├── calls.vcf
+│       └── contigs.fa
+├── results/
+│   ├── by_region/                  # C.tsv, E.tsv, M.tsv
+│   ├── elevation_by_location.tsv
+│   ├── fitness_by_location.tsv
+│   ├── pops_of_interest.txt
+│   └── state_names.tsv
+└── src/
+    └── summarize_fitness.sh</code></pre>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ol type="1">
+<li>Why is <code>awk -F'\t' '$4 == "VT"'</code> more reliable than <code>grep "VT"</code>?</li>
+<li>What is the difference between <code>grep -w</code> and <code>grep -x</code>?</li>
+<li>When do you need <code>-E</code> with <code>grep</code> or <code>sed</code>?</li>
+<li>Why did <code>sed 's/\tNA\t/\t.\t/g'</code> miss some values?</li>
+<li>Why did the first elevation-range program report a maximum of <code>NA</code>?</li>
+<li>How does <code>FNR == NR</code> identify the first file in an <code>awk</code> join?</li>
+<li>Why should the header be printed outside a <code>sort</code>?</li>
+<li>When should you stop using <code>awk</code> and switch to R, Python, or <code>bcftools</code>?</li>
+</ol>
+<p>In the next module, you will import this same dataset into R and check that your R summaries reproduce <code>results/fitness_by_location.tsv</code> exactly.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/anoobvinu07">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://scholar.google.com/citations?hl=en&amp;user=jIOSRMkAAAAJ">
+<p><i class="ai  ai-google-scholar" aria-label="google-scholar"></i></p>
+</a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:anoobvinu@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>   
+    <div class="nav-footer-center">
+© <span id="year"></span> · Anoob Prakash
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://ag.purdue.edu/directory/prakas89">
+      <i class="bi bi-building" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://www.purdue.edu">
+<p>Purdue</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://htirc.org/">
+<p>HTIRC</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

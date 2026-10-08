@@ -1332,3 +1332,13 @@ li.no-bullet {
 }
 
 /*-- end of NEWS scss:rules --*/
+
+/* Small logo aligned with surrounding text */
+.inline-tool-icon {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  margin: 0 0.2em;
+  vertical-align: -0.15em;
+  object-fit: contain;
+}

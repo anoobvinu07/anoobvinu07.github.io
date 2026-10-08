@@ -1393,3 +1393,17 @@ div.cell-output-stderr pre code {
 /*-- end of Dark theme specific rules for code output scss:rules --*/
 
 
+/*-- Plain code blocks (```text, bare ```, and other non-highlighted fences) --*/
+pre:not(.sourceCode) {
+  background-color: #141414;                    // slightly lighter than the page so the block reads as a panel
+  color: $white;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+}
+
+pre:not(.sourceCode) > code {
+  color: inherit;                               // take the light color from the <pre>
+  background-color: transparent;                // don't pick up the cream inline-code background
+  padding: 0;
+}

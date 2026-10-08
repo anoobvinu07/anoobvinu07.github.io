@@ -1,12 +1,12 @@
 ---
-title: "_R_: Basics for reproducible data analysis"
+title: "_`R`_: Module _`1`_ Basics for reproducible data analysis"
 description: "Learn the basics of using R for statistical data analysis"
 author:
   - name: "Anoob Prakash"
     email: "prakas89@purdue.edu"
     orcid: "0000-0002-7207-934X"
     url: "https://www.linkedin.com/in/anoob-prakash/"
-date: "09/02/2026"
+date: "09/25/2026"
 date-modified: "10/08/2026"
 categories:
   - hpc

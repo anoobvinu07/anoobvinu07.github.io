@@ -1,5 +1,5 @@
 ---
-title: "_bash_: Getting started on HPC Linux systems"
+title: "_`bash`_: Module _`1`_ Getting started on HPC Linux systems"
 description: "Learn Bash fundamentals for navigating a high-performance computing cluster, organizing a reproducible project, downloading public data, and inspecting text files."
 author:
   - name: "Anoob Prakash"
@@ -138,13 +138,13 @@ By the end of this module, you should be able to:
 
 Linux organizes files in a tree-like filesystem. The top of the filesystem is called the **root directory** and is written as `/`.
 
-```text
-/
-├── home/
-│   └── your_username/
-│       └── projects/
-└── scratch/
-```
+
+<pre style="color: #F8F9FA; background-color: #22252A; padding: 1rem; border-radius: 6px;"><code> /                         # root
+ ├── home/
+ │   └── your_username/ 
+ │       └── projects/                 
+ └── scratch/            </code></pre>     
+
 
 Your cluster may use a slightly different layout, but the concepts are the same.
 
@@ -253,14 +253,12 @@ mkdir -p cluster-exercise/{data/raw,results,logs,src}
 
 This creates:
 
-```text
-cluster-exercise/
-├── data/
-│   └── raw/
-├── logs/
-├── results/
-└── src/
-```
+<pre style="color: #F8F9FA; background-color: #22252A; padding: 1rem; border-radius: 6px;"><code> .
+ ├── data/
+ │   └── raw/       # downloaded, unchanged source data
+ ├── logs/          # Slurm standard output and error logs
+ ├── results/       # analysis products created by R
+ └── src/           # R and Slurm scripts</code></pre>
 
 The command uses **brace expansion**. Bash expands:
 
@@ -270,7 +268,7 @@ cluster-exercise/{data/raw,results,logs,src}
 
 into these paths before running `mkdir`:
 
-```text
+```
 cluster-exercise/data/raw
 cluster-exercise/results
 cluster-exercise/logs
@@ -326,14 +324,12 @@ tree
 
 Expected output:
 
-```text
-.
-├── data
-│   └── raw
-├── logs
-├── results
-└── src
-```
+<pre style="color: #F8F9FA; background-color: #22252A; padding: 1rem; border-radius: 6px;"><code> .
+ ├── data/
+ │   └── raw/       # downloaded, unchanged source data
+ ├── logs/          # Slurm standard output and error logs
+ ├── results/       # analysis products created by R
+ └── src/           # R and Slurm scripts</code></pre>
 
 Some clusters do not have `tree` installed. If you receive `command not found`, use this alternative:
 
@@ -361,14 +357,12 @@ ls -la
 
 Your project should now have this structure:
 
-```text
-cluster-exercise/
-├── data/
-│   └── raw/       # downloaded, unchanged source data
-├── logs/          # SLURM standard output and error logs
-├── results/       # analysis products created by scripts
-└── src/           # Bash, R, Python, and SLURM scripts
-```
+<pre style="color: #F8F9FA; background-color: #22252A; padding: 1rem; border-radius: 6px;"><code>cluster-exercise/
+ ├── data/
+ │   └── raw/       # downloaded, unchanged source data
+ ├── logs/          # Slurm standard output and error logs
+ ├── results/       # analysis products created by R
+ └── src/           # R and Slurm scripts</code></pre>
 
 ::: {.callout-important}
 ## Project-organization rule

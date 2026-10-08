@@ -1,0 +1,1670 @@
+---
+title: "_`bash`_: Module _`3`_ Text processing with grep, sed, and awk"
+description: "Search, edit, and summarize tabular and genomic text files from the command line: regular expressions, grep in depth, sed for stream editing, and awk for column-aware filtering, grouping, joining, and reporting."
+author:
+  - name: "Anoob Prakash"
+    email: "prakas89@purdue.edu"
+    orcid: "0000-0002-7207-934X"
+    url: "https://www.linkedin.com/in/anoob-prakash/"
+date: "2026-10-08"
+categories:
+  - hpc
+  - bash
+  - awk
+  - workflow
+image: "/notebook/posts/bashing-the-cluster/spruce-computing.png"
+
+
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-title: "On this page"
+    toc-depth: 3
+    page-layout: full
+    lightbox: true
+    code-fold: false
+    code-overflow: wrap
+    code-copy: true
+    code-tools: false
+    code-block-border-left: "#583C88"
+    code-block-border-left-size: 5px
+    code-block-border-left-style: solid
+---
+
+
+## Goal
+
+
+**Cluster exercise: answer real questions about the red-spruce dataset without leaving the terminal**
+
+
+In the introductory module, `grep "VT"` gave an *exploratory* count, because it matched `VT` anywhere in a row. In this module you will learn the three tools that make the command line genuinely column-aware:
+
+
+| Tool | Think of it as | Best at |
+|---|---|---|
+| `grep` | A filter | Selecting **lines** that match a pattern |
+| `sed` | A find-and-replace editor for streams | **Editing** lines: substitute, delete, print ranges |
+| `awk` | A tiny programming language for columns | **Computing** on fields: filter by value, group, summarize, join |
+
+
+By the end you will produce a per-Location fitness summary, a reusable summary script, and a set of one-liners that work just as well on FASTA and VCF files.
+
+
+## Before you begin
+
+
+::: {.callout-note}
+## Prerequisites
+
+
+This module builds on [Getting started on HPC Linux systems](/notebook/learn-to-code/bash-on-cluster/index.qmd) and [Scripting and automation on HPC systems](/notebook/learn-to-code/bash-advanced-scripting/index.qmd). You should already have `cluster-exercise/` with `data/raw/red_spruce_fitness_traits.txt` in it. If not, run `bash src/get_data.sh` from the previous module.
+:::
+
+
+```bash
+cd ~/projects/cluster-exercise
+bash src/check_raw.sh        # optional: confirm the raw file is unchanged
+```
+
+
+Every command below **reads** `data/raw/` and **writes** to `results/`. None of them modifies the raw file.
+
+
+::: {.callout-tip}
+## A shorter name for the dataset
+
+
+To keep commands readable, store the path in a variable once per terminal session:
+
+
+```bash
+F=data/raw/red_spruce_fitness_traits.txt
+```
+
+
+Every example below uses `$F`. If you open a new terminal, set it again.
+:::
+
+
+::: {.callout-note}
+## GNU tools
+
+
+The examples assume GNU `grep`, `sed`, and `sort`, plus `gawk` or `mawk`, as found on Linux clusters. macOS ships BSD versions that differ in a few places (notably `sed -i` and `\t`). These differences are noted where they matter.
+:::
+
+
+## Learning objectives
+
+
+By the end of this module, you should be able to:
+
+
+- Number and inspect the columns of a delimited file.
+- Summarize a column with `cut`, `sort`, and `uniq`, including numeric sorting by a specific column.
+- Write regular expressions using anchors, character classes, quantifiers, alternation, and groups.
+- Use `grep` options for whole words, whole lines, inverted matches, counts, context, fixed strings, and pattern files.
+- Use `sed` to print line ranges, delete lines, substitute text, and capture groups, and to edit copies of files in place.
+- Write `awk` programs that filter rows by column value, select columns by name, and count and average by group.
+- Recognize and avoid the classic pitfalls: `NA` in numeric comparisons, overlapping `sed` matches, sorted-away headers, and loss of numeric precision.
+- Join two tables with `awk`.
+- Apply the same tools to FASTA and VCF files.
+
+
+## Know your columns
+
+
+Number the header fields, so you can refer to columns by position:
+
+
+```bash
+head -n 1 $F | tr '\t' '\n' | cat -n
+```
+
+
+```text
+     1	Family
+     2	Population
+     3	Tree
+     4	Location
+     5	Region
+     6	Latitude
+     7	Longitude
+     8	SeedWeight
+     9	Germination
+    10	Survival
+    11	Height
+    12	Fitness
+    13	Elevation
+    14	PC1
+    15	PC2
+    16	Family_Homozygosity
+    17	Population_Homozygosity
+    18	Genetic_Diversity
+    19	Genetic_Load
+```
+
+
+Keep this list in view. In this module, **column 4 is Location, column 5 is Region, column 12 is Fitness, and column 13 is Elevation.**
+
+
+To read rows with aligned columns, use `column` (from util-linux, available on most clusters):
+
+
+```bash
+head -n 4 $F | cut -f 1-6 | column -t -s $'\t'
+```
+
+
+```text
+Family  Population  Tree  Location  Region  Latitude
+AB_05   AB          5     TN        E       35.55297
+AB_08   AB          8     TN        E       35.55212
+AB_12   AB          12    TN        E       35.5389
+```
+
+
+For the whole file, pipe to `less -S`, which scrolls sideways instead of wrapping lines:
+
+
+```bash
+column -t -s $'\t' $F | less -S
+```
+
+
+## Fast summaries with `cut`, `sort`, and `uniq`
+
+
+The most useful one-liner in data exploration is "count each distinct value in a column":
+
+
+```bash
+cut -f 4 $F | tail -n +2 | sort | uniq -c | sort -rn
+```
+
+
+```text
+     61 VT
+     53 NY
+     50 WV
+     47 PA
+     23 NH
+     22 NC
+     19 MA
+     16 ME
+     14 TN
+     10 MD
+      6 NB
+      5 VA
+```
+
+
+Read it left to right: take column 4, drop the header, sort so identical values are adjacent, count each run (`uniq -c`), then sort the counts numerically from largest to smallest (`-rn`). This is the exact answer to the Vermont question: **61 rows**.
+
+
+A few more `sort` options turn this into a real tool:
+
+
+| Command | Meaning |
+|---|---|
+| `sort -u` | Sort and keep unique lines (same as `sort \| uniq`) |
+| `sort -n` | Numeric sort for plain numbers |
+| `sort -g` | General numeric sort; handles decimals and scientific notation like `1e-5` |
+| `sort -r` | Reverse the order |
+| `sort -t $'\t' -k 12,12g` | Sort by column 12 only, with tab as the separator |
+
+
+How many distinct populations are there?
+
+
+```bash
+cut -f 2 $F | tail -n +2 | sort -u | wc -l
+```
+
+
+```text
+63
+```
+
+
+::: {.callout-warning}
+## Always give `-k` a start **and** an end
+
+
+`-k 12` means "from column 12 to the end of the line". `-k 12,12` means "column 12 only". Use the second form, or the ties will be broken by whatever columns happen to follow.
+:::
+
+
+## Regular expressions in one page
+
+
+A **regular expression** (regex) is a pattern that describes text. `grep`, `sed`, and `awk` all use them.
+
+
+| Pattern | Matches | Example | Matches in this dataset |
+|---|---|---|---|
+| `abc` | The literal text `abc` | `ALB` | `ALB_01`, ... |
+| `.` | Any single character | `A.B` | `ALB` |
+| `^` | Start of line | `^ALB_` | Lines **beginning** with `ALB_` |
+| `$` | End of line | `\.5$` | Lines ending in `.5` |
+| `[abc]` | One character from the set | `[NV]` | `N` or `V` |
+| `[a-z]`, `[0-9]` | One character from a range | `G[0-9]` | `G1`, `G5`, ... |
+| `[^abc]` | One character **not** in the set | `[^\t]` | Any non-tab character |
+| `*` | Zero or more of the previous item | `[A-Z]*` | `""`, `A`, `ALB`, ... |
+| `+` | One or more (extended regex) | `[0-9]+` | `5`, `05`, `543` |
+| `?` | Zero or one (extended regex) | `colou?r` | `color`, `colour` |
+| `{n}`, `{n,m}` | Exactly `n`, or `n` to `m` (extended regex) | `[A-Z]{3}` | `ALB`, `APP` |
+| `a\|b` | Either `a` or `b` (extended regex) | `ALB\|APP` | Either population |
+| `( )` | Group (extended regex) | `^(ALB\|APP)_` | Rows from either population |
+| `\.` | A literal dot (escaped) | `\.txt$` | Filenames ending in `.txt` |
+
+
+::: {.callout-note}
+## Basic vs extended regex
+
+
+By default, `grep` and `sed` use **basic** regular expressions, in which `+ ? { } | ( )` are ordinary characters unless backslash-escaped. Add `-E` (`grep -E`, `sed -E`) to use **extended** regular expressions, where they work as in the table. `awk` always uses extended syntax. Using `-E` everywhere is the simplest habit.
+:::
+
+
+::: {.callout-tip}
+## Quote every pattern with single quotes
+
+
+Write `grep '^ALB_'`, not `grep ^ALB_`. Unquoted, Bash may treat `*`, `?`, `[ ]`, and `$` as globs or variables before `grep` ever sees them.
+:::
+
+
+## `grep` in depth
+
+
+### Anchors make patterns precise
+
+
+```bash
+grep -c '^ALB_' $F
+```
+
+
+```text
+5
+```
+
+
+`^ALB_` means "lines that **start** with `ALB_`", which in this file means Family IDs of the ALB population.
+
+
+### Whole words with `-w`
+
+
+`-w` matches only whole words. Word characters are letters, digits, and underscore, so `CR` will not match inside `CRA` or `CRR`:
+
+
+```bash
+grep -c 'CR' $F
+grep -c -w 'CR' $F
+```
+
+
+```text
+13
+5
+```
+
+
+The first count includes the `CRA` and `CRR` populations; the second counts only population `CR`.
+
+
+### Extract only the matching part with `-o`
+
+
+`-o` prints just the matched text, one match per line. That turns `grep` into an extractor. Count Family prefixes:
+
+
+```bash
+grep -o '^[A-Z]*_' $F | sort | uniq -c | sort -rn | head -n 3
+```
+
+
+```text
+      7 SAV_
+      7 MT_
+      7 MMF_
+```
+
+
+This looks plausible, but it is wrong: `[A-Z]*` cannot match digits, so populations such as `G57` are excluded. Widen the character class:
+
+
+```bash
+grep -o '^[A-Z0-9]*_' $F | sort | uniq -c | sort -rn | head -n 3
+```
+
+
+```text
+     11 G57_
+      7 SAV_
+      7 MT_
+```
+
+
+The lesson generalizes: whenever a pattern returns suspiciously tidy results, check what it **cannot** match.
+
+
+### Alternation and quantifiers with `-E`
+
+
+```bash
+grep -E -c '^(ALB|APP)_' $F                    # either of two populations
+grep -E '^[A-Z]+[0-9]+_' $F | cut -f 2 | sort -u   # populations with digits in their code
+```
+
+
+```text
+11
+G13
+G18
+G57
+```
+
+
+### Inverting, whole lines, and counting
+
+
+| Option | Effect | Example |
+|---|---|---|
+| `-v` | Print lines that do **not** match | `grep -v -w 'NA' $F` (rows without missing values) |
+| `-x` | The whole line must match | `cut -f 4 $F \| grep -c -x 'VT'` |
+| `-c` | Print the count of matching lines | `grep -c -w 'NA' $F` |
+| `-n` | Prefix each line with its line number | `grep -n 'VT' $F` |
+| `-m N` | Stop after `N` matches | `grep -m 2 'VT' $F` |
+| `-i` | Ignore case | `grep -i 'alb' $F` |
+
+
+```bash
+grep -c -w 'NA' $F                      # rows with at least one missing value
+grep -v -w 'NA' $F | wc -l              # header + complete rows
+cut -f 4 $F | grep -c -x 'VT'           # exact match on one column
+```
+
+
+```text
+17
+310
+61
+```
+
+
+`cut -f 4 | grep -x` is a simple, reliable way to match an entire column value exactly.
+
+
+### Context around a match
+
+
+`-A N` (after), `-B N` (before), and `-C N` (both) print neighbouring lines, which is useful in log files:
+
+
+```bash
+grep -n -A 1 '^XWS_05' $F | cut -f 1-4
+```
+
+
+```text
+326:XWS_05	XWS	5	MD
+327-XWS_06	XWS	6	MD
+```
+
+
+Matching lines are marked with `:`, context lines with `-`. On a Slurm log, `grep -n -B 5 -i 'error' logs/*.out` shows what happened just before each failure.
+
+
+### Many patterns from a file
+
+
+Put one pattern per line in a file, then use `-f`. Add `-F` (fixed strings) when the patterns are plain text rather than regexes. It is faster, and characters like `.` stay literal:
+
+
+```bash
+printf 'ALB\nAPP\n' > results/pops_of_interest.txt
+cut -f 2 $F | grep -c -w -F -f results/pops_of_interest.txt
+```
+
+
+```text
+11
+```
+
+
+This scales to thousands of sample IDs, for example keeping only the samples listed in a metadata file.
+
+
+### Searching across files
+
+
+```bash
+grep -l -w 'MRC' results/by_location/*.tsv        # which files contain a match
+grep -r -n 'set -euo pipefail' src/               # recurse through a directory
+```
+
+
+```text
+results/by_location/VA.tsv
+```
+
+
+### Matching a value in a specific column
+
+
+Tabs are written `\t` only in Perl-compatible mode (`grep -P`, GNU only). This matches `VT` in **column 4 exactly**: three fields of non-tabs followed by tabs, then `VT`, then a tab:
+
+
+```bash
+grep -c -P '^([^\t]*\t){3}VT\t' $F
+```
+
+
+```text
+61
+```
+
+
+It works, but it is hard to read and easy to get wrong. When the question is about a specific column, use `awk` instead, covered below:
+
+
+```bash
+awk -F'\t' '$4 == "VT"' $F | wc -l
+```
+
+
+```text
+61
+```
+
+
+## `sed`: the stream editor
+
+
+`sed` reads input line by line, applies editing commands, and writes the result to standard output. The input file is not changed unless you explicitly ask for that with `-i`.
+
+
+The general form is:
+
+
+```text
+sed 'ADDRESS COMMAND' file
+```
+
+
+where ADDRESS selects lines (a number, a range, or a `/regex/`), and COMMAND says what to do with them (`p` print, `d` delete, `s` substitute).
+
+
+### Printing lines and ranges
+
+
+`-n` turns off automatic printing, so only lines you `p`rint are shown:
+
+
+```bash
+sed -n '1p' $F | cut -f 1-5               # line 1 (the header)
+sed -n '2,4p' $F | cut -f 1               # lines 2 to 4
+sed -n '$p' $F | cut -f 1-4               # last line
+sed -n '/^ALB_06/,/^APP_02/p' $F | cut -f 1   # from one match to another
+```
+
+
+```text
+Family	Population	Tree	Location	Region
+AB_05
+AB_08
+AB_12
+XWS_06	XWS	6	MD
+ALB_06
+APP_01
+APP_02
+```
+
+
+`sed -n '1000000,1000004p' big.vcf` is a quick way to inspect any slice of a huge file.
+
+
+### Deleting lines
+
+
+```bash
+sed '1d' $F | head -n 2 | cut -f 1-4      # delete the header
+```
+
+
+```text
+AB_05	AB	5	TN
+AB_08	AB	8	TN
+```
+
+
+Other common forms: `sed '/^#/d'` deletes comment lines, and `sed '/^$/d'` deletes empty lines.
+
+
+### Substitution: `s/old/new/flags`
+
+
+```bash
+head -n 3 $F | cut -f 1-5 | sed 's/\t/,/'     # first tab on each line only
+head -n 3 $F | cut -f 1-5 | sed 's/\t/,/g'    # g = every tab
+```
+
+
+```text
+Family,Population	Tree	Location	Region
+AB_05,AB	5	TN	E
+AB_08,AB	8	TN	E
+Family,Population,Tree,Location,Region
+AB_05,AB,5,TN,E
+AB_08,AB,8,TN,E
+```
+
+
+Without `g`, only the **first** match on each line is replaced. Forgetting `g` is the most common `sed` mistake.
+
+
+::: {.callout-warning}
+## Tab to comma is only safe when fields contain no commas
+
+
+`sed 's/\t/,/g'` produces a broken CSV if any field contains a comma. For free-text columns, export the CSV from R or Python, which quote fields properly.
+:::
+
+
+When the pattern contains `/`, as paths do, choose another delimiter. Any character works:
+
+
+```bash
+echo "/home/ada/projects" | sed 's|/home/ada|$HOME|'
+```
+
+
+```text
+$HOME/projects
+```
+
+
+### Capture groups
+
+
+With `-E`, parentheses capture parts of a match, and `\1`, `\2` insert them into the replacement. Split `AB_05` into population and tree number:
+
+
+```bash
+head -n 3 $F | cut -f 1 | sed -E 's/^([A-Z0-9]+)_([0-9]+)$/\1\t\2/'
+```
+
+
+```text
+Family
+AB	05
+AB	08
+```
+
+
+The header `Family` did not match the pattern, so it passed through unchanged. That is the usual behaviour: lines that do not match are printed as they are.
+
+
+### Several edits at once
+
+
+Use multiple `-e` options, or separate commands with `;`:
+
+
+```bash
+head -n 3 $F | cut -f 1-5 | sed -e '1s/^/# /' -e 's/\tE$/\tEdge/'
+```
+
+
+```text
+# Family	Population	Tree	Location	Region
+AB_05	AB	5	TN	Edge
+AB_08	AB	8	TN	Edge
+```
+
+
+`1s/^/# /` applies a substitution to line 1 only, and `^` matches the empty start of the line, so it inserts text there.
+
+
+### The overlapping-match trap
+
+
+Suppose you want to turn every `NA` into `.` (a common missing-value code in genomics tools). This looks reasonable:
+
+
+```bash
+grep '^BAL_10' $F | cut -f 8-13
+grep '^BAL_10' $F | cut -f 8-13 | sed 's/\tNA\t/\t.\t/g'
+```
+
+
+```text
+NA	NA	0	NA	NA	918
+NA	.	0	.	NA	918
+```
+
+
+Half of the `NA` values survived. Each match **consumes** the tab after it, so an adjacent `NA` loses its leading tab and cannot match. The first field has no leading tab at all. Use a field-aware tool instead:
+
+
+```bash
+grep '^BAL_10' $F | cut -f 8-13 | awk -F'\t' -v OFS='\t' '{for (i = 1; i <= NF; i++) if ($i == "NA") $i = "."; print}'
+```
+
+
+```text
+.	.	0	.	.	918
+```
+
+
+Rule of thumb: if the edit is about **fields**, use `awk`; if it is about **text**, use `sed`.
+
+
+### Editing files in place, safely
+
+
+`-i` writes the result back into the file. Give it a suffix (`-i.bak`) to keep a backup, and only ever use it on copies or on files you generated:
+
+
+```bash
+head -n 1 $F > results/header.txt
+sed -i.bak 's/\t/\n/g' results/header.txt
+head -n 3 results/header.txt
+ls results/header.txt*
+```
+
+
+```text
+Family
+Population
+Tree
+results/header.txt
+results/header.txt.bak
+```
+
+
+::: {.callout-important}
+## Never run `sed -i` on `data/raw/`
+
+
+An in-place edit of raw data is exactly what the checksum from the previous module exists to catch. Write edited versions to `data/processed/` or `results/` instead: `sed '...' data/raw/x.txt > data/processed/x.txt`.
+:::
+
+
+::: {.callout-note}
+## macOS differences
+
+
+On macOS (BSD `sed`), `-i` needs an explicit argument (`sed -i '' 's/a/b/' file`), and `\t` is not understood in patterns. On the cluster, GNU `sed` behaves as shown here.
+:::
+
+
+### Fixing Windows line endings
+
+
+Files edited on Windows end each line with `\r\n`. The invisible `\r` breaks scripts (`bad interpreter: /bin/bash^M`) and makes the last column fail comparisons. `cat -A` reveals it as `^M`:
+
+
+```bash
+printf 'a\tb\r\nc\td\r\n' > results/windows.tsv
+cat -A results/windows.tsv
+sed -i 's/\r$//' results/windows.tsv
+cat -A results/windows.tsv
+```
+
+
+```text
+a^Ib^M$
+c^Id^M$
+a^Ib$
+c^Id$
+```
+
+
+In `cat -A` output, `^I` is a tab and `$` marks the end of each line.
+
+
+## `awk`: a language for columns
+
+
+### The mental model
+
+
+An `awk` program is a list of `pattern { action }` rules. For **each line**, `awk` splits it into fields and runs every rule whose pattern is true:
+
+
+```text
+awk -F'\t' 'PATTERN { ACTION }' file
+```
+
+
+- Leave out the pattern, and the action runs on every line.
+- Leave out the action, and matching lines are printed.
+- `BEGIN { }` runs before the first line, and `END { }` after the last.
+
+
+| Built-in | Meaning |
+|---|---|
+| `$1`, `$2`, ... | Field 1, field 2, ... |
+| `$0` | The whole line |
+| `NF` | Number of fields on this line, so `$NF` is the last field |
+| `NR` | Line number across all input |
+| `FNR` | Line number within the current file |
+| `-F'\t'` | Input field separator: tab |
+| `OFS` | Output field separator, set with `-v OFS='\t'` |
+
+
+::: {.callout-important}
+## Always set `-F'\t'` for tab-delimited data
+
+
+By default, `awk` splits on **any run of spaces or tabs**. If a field ever contains a space, or is empty, the columns shift without warning. `-F'\t'` splits only on tabs.
+:::
+
+
+### Selecting columns
+
+
+```bash
+awk -F'\t' '{print $1, $4, $12}' $F | head -n 3
+awk -F'\t' -v OFS='\t' '{print $1, $4, $12}' $F | head -n 3
+```
+
+
+```text
+Family Location Fitness
+AB_05 TN 3.531285966
+AB_08 TN 0.862395307
+Family	Location	Fitness
+AB_05	TN	3.531285966
+AB_08	TN	0.862395307
+```
+
+
+The comma in `print $1, $4` inserts `OFS`, which is a space by default. Set `-v OFS='\t'` to keep the output tab-delimited. Unlike `cut`, `awk` can reorder columns: `print $12, $1`.
+
+
+### Counting lines and fields
+
+
+```bash
+awk -F'\t' 'NR == 1 {print NF " columns"} END {print NR " lines"}' $F
+```
+
+
+```text
+19 columns
+327 lines
+```
+
+
+Check that every row has the same number of fields, a quick test for a corrupted file:
+
+
+```bash
+awk -F'\t' '{print NF}' $F | sort | uniq -c
+```
+
+
+```text
+    327 19
+```
+
+
+All 327 lines have 19 fields.
+
+
+### Filtering rows by value
+
+
+This is where `awk` replaces `grep`: the condition targets a specific column.
+
+
+```bash
+awk -F'\t' '$4 == "VT"' $F | wc -l                                # string equality
+awk -F'\t' 'NR > 1 && $4 == "VT" && $13 > 1000' $F | wc -l         # combine conditions
+```
+
+
+```text
+61
+11
+```
+
+
+So 11 Vermont trees come from above 1,000 m. Print selected columns for high-fitness trees:
+
+
+```bash
+awk -F'\t' 'NR > 1 && $12 != "NA" && $12 > 30 {print $1, $4, $12}' $F
+```
+
+
+```text
+BLA_02 PA 35.8766131
+BRA_04 PA 31.91540368
+BRU_05 PA 41.42805129
+BRU_06 PA 34.73823671
+CRA_05 WV 31.31954998
+G18_01 PA 30.05461376
+OCT_03 MA 31.07948898
+```
+
+
+| Operator | Meaning |
+|---|---|
+| `==`, `!=` | Equal, not equal (strings must be in double quotes: `"VT"`) |
+| `<`, `<=`, `>`, `>=` | Comparisons |
+| `&&`, `\|\|`, `!` | And, or, not |
+| `~`, `!~` | Matches / does not match a regex: `$1 ~ /^ALB_/` |
+
+
+Keep the header with the filtered rows by adding `NR == 1 ||`:
+
+
+```bash
+awk -F'\t' 'NR == 1 || $4 == "NB"' $F | cut -f 1-5
+```
+
+
+```text
+Family	Population	Tree	Location	Region
+NBTIC_543	NBTIC	543	NB	C
+NBTIC_552	NBTIC	552	NB	C
+NBTIC_565	NBTIC	565	NB	C
+NBTIC_623	NBTIC	623	NB	C
+NBTIC_624	NBTIC	624	NB	C
+NBTIC_627	NBTIC	627	NB	C
+```
+
+
+### Selecting columns by name, not number
+
+
+Column numbers break when a file gains or loses a column. Read the header into an array, then refer to columns by name:
+
+
+```bash
+awk -F'\t' -v OFS='\t' '
+  NR == 1 { for (i = 1; i <= NF; i++) col[$i] = i; next }
+          { print $col["Family"], $col["Elevation"] }
+' $F | head -n 3
+```
+
+
+```text
+AB_05	1812
+AB_08	1785
+AB_12	1750
+```
+
+
+`next` skips the remaining rules for the current line, so the header row is not printed as data. A multi-line program in single quotes, as here, is easier to read than a single long line.
+
+
+### Passing Bash variables into `awk` with `-v`
+
+
+Never paste Bash variables inside the single-quoted program. Pass them in with `-v`:
+
+
+```bash
+loc=NC
+min_elev=1500
+awk -F'\t' -v loc="$loc" -v min_elev="$min_elev" '
+  NR > 1 && $4 == loc && $13 >= min_elev { c++ }
+  END { print c + 0, "trees in", loc, "at >=", min_elev, "m" }
+' $F
+```
+
+
+```text
+15 trees in NC at >= 1500 m
+```
+
+
+`c + 0` prints `0` rather than an empty string when nothing matched.
+
+
+### Counting by group with arrays
+
+
+`awk` arrays are keyed by text, which makes group-by counts one line long:
+
+
+```bash
+awk -F'\t' 'NR > 1 {n[$4]++} END {for (k in n) print k, n[k]}' $F | sort -k2,2nr | head -n 4
+```
+
+
+```text
+VT 61
+NY 53
+WV 50
+PA 47
+```
+
+
+This is the `awk` version of the Bash associative-array loop from the previous module, and it is much faster on large files. `for (k in n)` visits keys in an unpredictable order, so always pipe to `sort` when order matters.
+
+
+Count something more subtle: how many **distinct populations** were sampled in each Location? `!seen[key]++` is true only the first time a key appears:
+
+
+```bash
+awk -F'\t' 'NR > 1 && !seen[$4 FS $2]++ {np[$4]++} END {for (l in np) print l, np[l]}' $F | sort -k2,2nr | head -n 3
+```
+
+
+```text
+VT 11
+WV 11
+NY 9
+```
+
+
+`$4 FS $2` joins Location and Population with a tab (the field separator) to make a combined key.
+
+
+### Means by group, and the header that disappears
+
+
+Average Fitness per Location, skipping missing values:
+
+
+```bash
+awk -F'\t' -v OFS='\t' '
+  NR > 1 && $12 != "NA" { sum[$4] += $12; n[$4]++ }
+  END {
+    print "Location", "n", "mean_fitness"
+    for (k in sum) printf "%s\t%d\t%.2f\n", k, n[k], sum[k] / n[k]
+  }
+' $F | sort -t $'\t' -k3,3gr | head -n 5
+```
+
+
+```text
+PA	43	19.84
+NB	6	17.87
+MA	19	17.61
+ME	16	15.82
+VT	56	15.37
+```
+
+
+The header line was printed but `sort` moved it out of the top five, because a sort cannot tell a header from data. Print the header separately, outside the sort, by grouping the commands in `{ }`:
+
+
+```bash
+{
+  printf 'Location\tn\tmean_fitness\n'
+  awk -F'\t' 'NR > 1 && $12 != "NA" {sum[$4] += $12; n[$4]++}
+              END {for (k in sum) printf "%s\t%d\t%.2f\n", k, n[k], sum[k] / n[k]}' $F |
+    sort -t $'\t' -k3,3gr
+} > results/fitness_by_location.tsv
+
+head -n 4 results/fitness_by_location.tsv
+```
+
+
+```text
+Location	n	mean_fitness
+PA	43	19.84
+NB	6	17.87
+MA	19	17.61
+```
+
+
+Note that `n` for VT is 56, not 61: five Vermont trees have `NA` for Fitness. Reporting `n` beside every mean is a good habit.
+
+
+`printf` gives exact control over formatting:
+
+
+| Format | Meaning | Example output |
+|---|---|---|
+| `%s` | String | `VT` |
+| `%d` | Integer | `56` |
+| `%.2f` | Decimal with 2 places | `15.37` |
+| `%8.3f` | Width 8, 3 decimals, right-aligned | `   4.150` |
+| `%-8s` | Width 8, left-aligned | `MRC_02  ` |
+| `\t`, `\n` | Tab, newline | |
+
+
+```bash
+awk -F'\t' 'NR > 1 && $4 == "VA" {printf "%-8s %6.1f m %8.3f\n", $1, $13, $12}' $F
+```
+
+
+```text
+MRC_02   1600.0 m    4.150
+MRC_07   1569.0 m    7.718
+MRC_08   1554.0 m    7.180
+MRC_16   1616.0 m    9.785
+MRC_18   1645.0 m    9.121
+```
+
+
+### The `NA` trap: strings compared with numbers
+
+
+Find the elevation range:
+
+
+```bash
+awk -F'\t' 'NR > 1 {if (min == "" || $13 < min) min = $13; if ($13 > max) max = $13}
+            END {print "Elevation range:", min, "-", max, "m"}' $F
+```
+
+
+```text
+Elevation range: 310 - NA m
+```
+
+
+The maximum elevation is apparently "NA". When a value is not a number, `awk` compares it as a **string**, and the letter `N` sorts after every digit. Exclude missing values and force numeric comparison with `+ 0`:
+
+
+```bash
+awk -F'\t' 'NR > 1 && $13 != "NA" {
+              v = $13 + 0
+              if (min == "" || v < min) min = v
+              if (max == "" || v > max) max = v
+            }
+            END {print "Elevation range:", min, "-", max, "m"}' $F
+```
+
+
+```text
+Elevation range: 310 - 1955 m
+```
+
+
+Every numeric `awk` program on real data needs a missing-value rule. Find out which columns have missing values and how many:
+
+
+```bash
+awk -F'\t' '
+  NR == 1 { for (i = 1; i <= NF; i++) name[i] = $i; next }
+          { for (i = 1; i <= NF; i++) if ($i == "NA") na[i]++ }
+  END     { for (i = 1; i <= NF; i++) if (na[i]) printf "%-12s %d\n", name[i], na[i] }
+' $F
+```
+
+
+```text
+SeedWeight   12
+Germination  12
+Survival     1
+Height       13
+Fitness      12
+Elevation    3
+```
+
+
+### The precision trap: modifying a field
+
+
+Longitudes in this file are stored as positive numbers. Suppose you want the conventional negative values for the western hemisphere:
+
+
+```bash
+awk -F'\t' -v OFS='\t' 'NR > 1 {$7 = -$7} {print $1, $6, $7}' $F | head -n 3
+```
+
+
+```text
+Family	Latitude	Longitude
+AB_05	35.55297	-83.4944
+AB_08	35.55212	-83.4926
+```
+
+
+The coordinates lost a digit: `83.49438` became `-83.4944`. When `awk` does arithmetic and then prints the result, it formats it with six significant digits by default. Because this change is really about text (prepend a minus sign), treat it as text:
+
+
+```bash
+awk -F'\t' -v OFS='\t' 'NR > 1 {$7 = "-" $7} {print $1, $6, $7}' $F | head -n 3
+```
+
+
+```text
+Family	Latitude	Longitude
+AB_05	35.55297	-83.49438
+AB_08	35.55212	-83.49259
+```
+
+
+When you do need arithmetic, print with an explicit format such as `printf "%.6f"` so the precision is your choice, not the default.
+
+
+### Writing to several files at once
+
+
+`print > file` sends output to a file named by any expression. Split the dataset by Region, with a header in each file:
+
+
+```bash
+mkdir -p results/by_region
+awk -F'\t' '
+  NR == 1 { h = $0; next }
+  {
+    out = "results/by_region/" $5 ".tsv"
+    if (!(out in seen)) { print h > out; seen[out] = 1 }
+    print > out
+  }
+' $F
+wc -l results/by_region/*.tsv
+```
+
+
+```text
+  179 results/by_region/C.tsv
+  102 results/by_region/E.tsv
+   48 results/by_region/M.tsv
+  329 total
+```
+
+
+This does the same job as the `split_by_location.sh` loop from the previous module, in one fast pass. Inside a single `awk` run, `>` truncates a file only the first time it is opened; later prints to it append.
+
+
+### Joining two tables
+
+
+The classic `awk` join reads a small lookup table first, stores it in an array, and then annotates the main file. Create a lookup of Location codes:
+
+
+```bash
+cat > results/state_names.tsv <<'EOF'
+MA	Massachusetts
+MD	Maryland
+ME	Maine
+NB	New Brunswick
+NC	North Carolina
+NH	New Hampshire
+NY	New York
+PA	Pennsylvania
+TN	Tennessee
+VA	Virginia
+VT	Vermont
+WV	West Virginia
+EOF
+```
+
+
+Then join it onto the summary:
+
+
+```bash
+awk -F'\t' -v OFS='\t' '
+  FNR == NR { name[$1] = $2; next }              # first file: build the lookup
+  FNR == 1  { print $0, "State"; next }          # second file: extend the header
+            { print $0, name[$1] }               # second file: add the name
+' results/state_names.tsv results/fitness_by_location.tsv | head -n 4
+```
+
+
+```text
+Location	n	mean_fitness	State
+PA	43	19.84	Pennsylvania
+NB	6	17.87	New Brunswick
+MA	19	17.61	Massachusetts
+```
+
+
+`FNR == NR` is true only while reading the first file, because there the per-file line number equals the overall line number. This idiom is worth memorizing. It is how you attach metadata to sample IDs, filter a VCF to a list of sites, or merge phenotypes with environmental variables.
+
+
+### Summary statistics
+
+
+Mean and sample standard deviation in a single pass:
+
+
+```bash
+awk -F'\t' 'NR > 1 && $12 != "NA" {n++; s += $12; ss += $12 * $12}
+            END {m = s / n; printf "n=%d mean=%.3f sd=%.3f\n", n, m, sqrt((ss - n * m * m) / (n - 1))}' $F
+```
+
+
+```text
+n=314 mean=14.008 sd=7.321
+```
+
+
+These are the same values you would get from `mean()` and `sd()` in R after removing missing values, which is a useful cross-check between your Bash and R pipelines. For medians, regressions, or anything more involved, move to R or Python.
+
+
+### Other useful `awk` functions
+
+
+| Function | Purpose | Example |
+|---|---|---|
+| `length(s)` | Length of a string | `length($1)` |
+| `substr(s, i, n)` | Substring from position `i`, `n` characters | `substr($1, 1, 3)` |
+| `index(s, t)` | Position of `t` in `s` (0 if absent) | `index($1, "_")` |
+| `split(s, a, sep)` | Split `s` into array `a`; returns the count | `split($8, kv, "=")` |
+| `sub(re, r, s)` / `gsub(re, r, s)` | Replace the first / all matches in `s` | `gsub(/_/, "-", $1)` |
+| `tolower(s)` / `toupper(s)` | Change case | `toupper($4)` |
+| `sqrt`, `log`, `exp`, `int` | Math | `int($13 / 100) * 100` |
+
+
+```bash
+head -n 3 $F | awk -F'\t' -v OFS='\t' '{gsub(/_/, "-", $1); print $1, $2}'
+```
+
+
+```text
+Family	Population
+AB-05	AB
+AB-08	AB
+```
+
+
+## Putting it together: a reusable summary script
+
+
+Combine everything into a script that summarizes **any** trait by Location, selected by column name:
+
+
+```{.bash filename="src/summarize_fitness.sh"}
+#!/usr/bin/env bash
+# summarize_fitness.sh — per-Location fitness summary from the raw red-spruce table.
+# Usage: bash src/summarize_fitness.sh [TRAIT_NAME]     (default: Fitness)
+set -euo pipefail
+
+in="data/raw/red_spruce_fitness_traits.txt"
+trait="${1:-Fitness}"
+out="results/${trait,,}_by_location.tsv"        # ${var,,} = lowercase
+
+[[ -f $in ]] || { echo "Missing $in. Run src/get_data.sh first." >&2; exit 1; }
+
+# Fail early if the trait name is not a column in the header
+head -n 1 "$in" | tr '\t' '\n' | grep -qx "$trait" \
+  || { echo "No column named '$trait'. Available:" >&2; head -n 1 "$in" | tr '\t' '\n' >&2; exit 1; }
+
+{
+  printf 'Location\tn\tn_missing\tmean\tmin\tmax\n'
+  awk -F'\t' -v trait="$trait" '
+    NR == 1 { for (i = 1; i <= NF; i++) if ($i == trait) c = i; next }
+    $c == "NA" { miss[$4]++; seen[$4] = 1; next }
+    {
+      v = $c + 0; loc = $4; seen[loc] = 1
+      n[loc]++; sum[loc] += v
+      if (!(loc in min) || v < min[loc]) min[loc] = v
+      if (!(loc in max) || v > max[loc]) max[loc] = v
+    }
+    END {
+      for (loc in seen) {
+        if (n[loc] > 0)
+          printf "%s\t%d\t%d\t%.3f\t%.3f\t%.3f\n", loc, n[loc], miss[loc], sum[loc] / n[loc], min[loc], max[loc]
+        else                                   # every value missing: avoid dividing by zero
+          printf "%s\t0\t%d\tNA\tNA\tNA\n", loc, miss[loc]
+      }
+    }' "$in" | sort -t $'\t' -k4,4gr
+} > "$out"
+
+echo "Wrote $out"
+```
+
+
+```bash
+bash src/summarize_fitness.sh
+cat results/fitness_by_location.tsv
+```
+
+
+```text
+Wrote results/fitness_by_location.tsv
+Location	n	n_missing	mean	min	max
+PA	43	4	19.840	5.835	41.428
+NB	6	0	17.874	10.560	26.510
+MA	19	0	17.613	6.849	31.079
+ME	16	0	15.822	4.848	24.561
+VT	56	5	15.370	0.000	29.766
+NH	23	0	14.304	1.623	24.522
+WV	50	0	13.111	0.781	31.320
+NY	50	3	12.068	0.778	26.372
+NC	22	0	8.825	0.000	15.521
+TN	14	0	8.747	0.862	19.540
+VA	5	0	7.591	4.150	9.785
+MD	10	0	4.698	0.000	10.320
+```
+
+
+The same script works for any column, and fails clearly on a misspelled name:
+
+
+```bash
+bash src/summarize_fitness.sh Elevation
+head -n 3 results/elevation_by_location.tsv
+bash src/summarize_fitness.sh height
+```
+
+
+```text
+Wrote results/elevation_by_location.tsv
+Location	n	n_missing	mean	min	max
+NC	22	0	1639.545	1251.000	1955.000
+VA	5	0	1596.800	1554.000	1645.000
+No column named 'height'. Available:
+Family
+Population
+...
+```
+
+
+Column names are case-sensitive: the column is `Height`, not `height`.
+
+
+## Bonus: the same tools on genomic formats
+
+
+FASTA and VCF are plain text, so everything in this module applies to them. Create two tiny practice files:
+
+
+```bash
+mkdir -p data/toy
+
+cat > data/toy/contigs.fa <<'EOF'
+>contig_1 len=12
+ACGTACGTACGT
+>contig_2 len=20
+GGCCGGCCAA
+TTAAGGCCAA
+>contig_3 len=8
+NNNNACGT
+EOF
+
+cat > data/toy/calls.vcf <<'EOF'
+##fileformat=VCFv4.2
+##contig=<ID=chr1>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	RS_01	RS_02	RS_03
+chr1	101	.	A	G	50	PASS	DP=30	GT	0/1	0/0	1/1
+chr1	245	.	C	T	12	LowQual	DP=8	GT	0/0	./.	0/1
+chr1	390	.	G	A	99	PASS	DP=45	GT	1/1	0/1	0/1
+chr2	77	.	T	C	60	PASS	DP=22	GT	0/1	0/1	0/0
+EOF
+```
+
+
+When you copy these, make sure the VCF columns are separated by real tabs. The `cat -A` command from the `sed` section will show them as `^I`.
+
+
+### FASTA
+
+
+```bash
+grep -c '^>' data/toy/contigs.fa                                   # number of sequences
+grep '^>' data/toy/contigs.fa | sed 's/^>//; s/ .*//'              # sequence IDs only
+awk '/^>/ {if (id) print id, len; id = substr($1, 2); len = 0; next}
+     {len += length($0)}
+     END {print id, len}' data/toy/contigs.fa                      # length of each sequence
+```
+
+
+```text
+3
+contig_1
+contig_2
+contig_3
+contig_1 12
+contig_2 20
+contig_3 8
+```
+
+
+The length program handles sequences wrapped over several lines (`contig_2`), which a simple `grep`-based approach would miscount.
+
+
+### VCF
+
+
+```bash
+grep -vc '^#' data/toy/calls.vcf                                    # number of variants
+grep '^#CHROM' data/toy/calls.vcf | cut -f 10- | tr '\t' '\n'       # sample names
+grep -v '^#' data/toy/calls.vcf | cut -f 1 | sort | uniq -c         # variants per chromosome
+awk -F'\t' '!/^#/ && $7 == "PASS"' data/toy/calls.vcf | wc -l      # variants passing filters
+```
+
+
+```text
+4
+RS_01
+RS_02
+RS_03
+      3 chr1
+      1 chr2
+3
+```
+
+
+Extract a value from the INFO column, and compute the proportion of missing genotypes:
+
+
+```bash
+awk -F'\t' '!/^#/ {split($8, a, "="); if (a[2] >= 20) print $1, $2, a[2]}' data/toy/calls.vcf
+
+awk -F'\t' '!/^#/ {for (i = 10; i <= NF; i++) if ($i ~ /^\.\/\./) m++; t += NF - 9}
+            END {printf "%d of %d genotypes missing (%.1f%%)\n", m, t, 100 * m / t}' data/toy/calls.vcf
+```
+
+
+```text
+chr1 101 30
+chr1 390 45
+chr2 77 22
+1 of 12 genotypes missing (8.3%)
+```
+
+
+Here `split($8, a, "=")` works because INFO holds a single `DP=` entry. Real INFO fields contain many `key=value` pairs separated by `;`. For production VCF work, use `bcftools` (`bcftools query`, `bcftools view -i`), which parses the format properly and reads compressed, indexed files. The command-line skills in this module are what let you check its output quickly.
+
+
+## Quick reference
+
+
+| Task | Command |
+|---|---|
+| Number the columns | `head -n 1 $F \| tr '\t' '\n' \| cat -n` |
+| Count each value in column 4 | `cut -f 4 $F \| tail -n +2 \| sort \| uniq -c \| sort -rn` |
+| Sort by column 12, numerically, descending | `sort -t $'\t' -k12,12gr` |
+| Lines starting with a pattern | `grep '^ALB_' $F` |
+| Whole word / whole line | `grep -w 'CR'` / `grep -x 'VT'` |
+| Lines **not** matching | `grep -v -w 'NA' $F` |
+| Extended regex | `grep -E '^(ALB\|APP)_' $F` |
+| Patterns from a file, as fixed strings | `grep -F -w -f ids.txt $F` |
+| Print lines 10 to 20 | `sed -n '10,20p' $F` |
+| Delete the header | `sed '1d' $F` |
+| Replace every match | `sed 's/old/new/g'` |
+| Capture groups | `sed -E 's/^([A-Z]+)_([0-9]+)/\1\t\2/'` |
+| Remove Windows line endings | `sed 's/\r$//'` |
+| Edit a copy in place, with backup | `sed -i.bak 's/a/b/' copy.txt` |
+| Rows where column 4 is VT | `awk -F'\t' '$4 == "VT"' $F` |
+| Keep header plus filtered rows | `awk -F'\t' 'NR == 1 \|\| $12 > 30' $F` |
+| Choose and reorder columns | `awk -F'\t' -v OFS='\t' '{print $12, $1}' $F` |
+| Count by group | `awk -F'\t' 'NR > 1 {n[$4]++} END {for (k in n) print k, n[k]}'` |
+| Mean by group, skipping NA | `awk -F'\t' 'NR > 1 && $12 != "NA" {s[$4] += $12; n[$4]++} END {for (k in s) print k, s[k] / n[k]}'` |
+| Pass a Bash variable | `awk -v loc="$loc" '$4 == loc'` |
+| Check column counts | `awk -F'\t' '{print NF}' $F \| sort \| uniq -c` |
+| Join a lookup table | `awk 'FNR == NR {a[$1] = $2; next} {print $0, a[$1]}' lookup.tsv main.tsv` |
+
+
+## Checkpoint exercises
+
+
+Work from inside `cluster-exercise/` with `F=data/raw/red_spruce_fitness_traits.txt`. Try each one first, then open the solution and compare.
+
+
+1. How many trees have a Survival value (column 10) of exactly `1`?
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   awk -F'\t' 'NR > 1 && $10 == 1' $F | wc -l
+   ```
+   ```text
+   124
+   ```
+   :::
+
+2. Print the Family and Height (column 11) of the five tallest trees, ignoring missing values.
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   awk -F'\t' -v OFS='\t' 'NR > 1 && $11 != "NA" {print $1, $11}' $F | sort -t $'\t' -k2,2gr | head -n 5
+   ```
+   ```text
+   BRU_04	47.56003491
+   XBM_03	46.24942003
+   BRU_06	45.38968212
+   BAL_01	45.23426327
+   BRU_05	42.27352172
+   ```
+   :::
+
+3. Use `sed` to print the Family IDs on lines 10 to 12.
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   sed -n '10,12p' $F | cut -f 1
+   ```
+   ```text
+   ALB_06
+   APP_01
+   APP_02
+   ```
+   :::
+
+4. Using only `grep`, count how many rows belong to population `CR` itself, excluding `CRA` and `CRR`.
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   cut -f 2 $F | grep -c -x 'CR'
+   ```
+   ```text
+   5
+   ```
+   `grep -c -w 'CR' $F` gives the same answer here, but `cut | grep -x` cannot accidentally match another column.
+   :::
+
+5. Compute the mean Elevation per Region (column 5), to one decimal place.
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   awk -F'\t' 'NR > 1 && $13 != "NA" {s[$5] += $13; n[$5]++}
+               END {for (r in s) printf "%s\t%.1f\n", r, s[r] / n[r]}' $F | sort
+   ```
+   ```text
+   C	783.5
+   E	1332.4
+   M	585.1
+   ```
+   :::
+
+6. Which tree was sampled furthest north (highest Latitude, column 6)?
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   awk -F'\t' 'NR > 1 && $6 > max {max = $6; id = $1; loc = $4} END {print id, loc, max}' $F
+   ```
+   ```text
+   NBTIC_565 NB 46.66
+   ```
+   Latitude has no missing values, so no `NA` rule is needed here. Confirm that first with the missing-value report above.
+   :::
+
+7. Replace every `NA` in columns 8 to 13 with `.` for the row `G18_03`, without the overlapping-match bug.
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   grep '^G18_03' $F | cut -f 8-13 | awk -F'\t' -v OFS='\t' '{for (i = 1; i <= NF; i++) if ($i == "NA") $i = "."; print}'
+   ```
+   :::
+
+
+## Challenge: which population performs best?
+
+
+Using one `awk` program and `sort`, find the three populations with the highest mean Fitness, **counting only populations with at least 5 non-missing Fitness values**. Report population, `n`, and mean.
+
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```bash
+awk -F'\t' 'NR > 1 && $12 != "NA" {s[$2] += $12; n[$2]++}
+            END {for (p in s) if (n[p] >= 5) printf "%s\t%d\t%.2f\n", p, n[p], s[p] / n[p]}' $F |
+  sort -t $'\t' -k3,3gr | head -n 3
+```
+
+```text
+BRU	5	24.18
+BRA	5	22.91
+EQU	6	21.45
+```
+
+Two of the top three are Pennsylvania populations, which matches PA's top position in the per-Location summary. The minimum-`n` filter matters: without it, a population with a single exceptional tree could top the list.
+:::
+
+
+**Extension:** write `src/top_populations.sh TRAIT MIN_N` that generalizes this to any trait column, selected by name as in `summarize_fitness.sh`.
+
+
+## Wrap up
+
+
+You can now answer column-specific questions directly from the raw file, and you know where each tool fits:
+
+
+- `grep` to find lines.
+- `sed` to edit text in a stream.
+- `awk` to compute on fields.
+
+
+Your project has gained:
+
+
+```text
+cluster-exercise/
+├── data/
+│   └── toy/
+│       ├── calls.vcf
+│       └── contigs.fa
+├── results/
+│   ├── by_region/                  # C.tsv, E.tsv, M.tsv
+│   ├── elevation_by_location.tsv
+│   ├── fitness_by_location.tsv
+│   ├── pops_of_interest.txt
+│   └── state_names.tsv
+└── src/
+    └── summarize_fitness.sh
+```
+
+
+Before moving on, make sure you can answer these questions:
+
+
+1. Why is `awk -F'\t' '$4 == "VT"'` more reliable than `grep "VT"`?
+2. What is the difference between `grep -w` and `grep -x`?
+3. When do you need `-E` with `grep` or `sed`?
+4. Why did `sed 's/\tNA\t/\t.\t/g'` miss some values?
+5. Why did the first elevation-range program report a maximum of `NA`?
+6. How does `FNR == NR` identify the first file in an `awk` join?
+7. Why should the header be printed outside a `sort`?
+8. When should you stop using `awk` and switch to R, Python, or `bcftools`?
+
+
+In the next module, you will import this same dataset into R and check that your R summaries reproduce `results/fitness_by_location.tsv` exactly.

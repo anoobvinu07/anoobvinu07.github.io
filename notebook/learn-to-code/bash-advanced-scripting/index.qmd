@@ -1,0 +1,1449 @@
+---
+title: "_`bash`_: Module _`2`_ Scripting and automation on HPC systems"
+description: "Turn one-off commands into safe, re-runnable Bash scripts: exit codes, tests, loops, functions, arguments, checksums, batch file handling, data transfer, permissions, and a first Slurm job array."
+author:
+  - name: "Anoob Prakash"
+    email: "prakas89@purdue.edu"
+    orcid: "0000-0002-7207-934X"
+    url: "https://www.linkedin.com/in/anoob-prakash/"
+date: "2026-10-02"
+categories:
+  - hpc
+  - workflow
+  - bash
+image: "/notebook/posts/bashing-the-cluster/spruce-computing.png"
+
+
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-title: "On this page"
+    toc-depth: 3
+    page-layout: full
+    lightbox: true
+    code-fold: false
+    code-overflow: wrap
+    code-copy: true
+    code-tools: false
+    code-block-border-left: "#583C88"
+    code-block-border-left-size: 5px
+    code-block-border-left-style: solid
+---
+
+
+## Goal
+
+
+**Cluster exercise: turn the red-spruce download into a re-runnable, self-checking workflow**
+
+
+In the introductory module you typed commands one at a time. That is how everyone learns, but it does not scale: you cannot remember exactly what you typed three weeks ago, a collaborator cannot rerun it, and a typo in step 4 silently ruins step 9.
+
+
+In this module you will put those same steps into **Bash scripts** that check their own work, stop on errors, record what they did, and can be run again safely. Along the way you will process many files at once, verify data with checksums, move files on and off the cluster, set permissions for a shared lab directory, and submit your first Slurm job array.
+
+
+You will keep working in the same `cluster-exercise/` project and the same [red-spruce fitness-trait dataset](https://github.com/anoobvinu07/Genomic_assisted_selection/blob/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt).
+
+
+## Before you begin
+
+
+::: {.callout-note}
+## Prerequisites
+
+
+This module assumes you have finished [Getting started on HPC Linux systems](/notebook/learn-to-code/bash-on-cluster/index.qmd) and are comfortable with `cd`, `ls`, `mkdir -p`, `curl`, `head`, `less`, `grep`, pipes, and `>` / `>>`.
+
+
+Redirecting errors (`2>`, `2>&1`), `tee`, `/dev/null`, here-documents, quoting, and globs are covered in the [Bash reference page](/notebook/review/bash/index.qmd). This module uses them without re-explaining them.
+:::
+
+
+Log in, then move to the project root:
+
+
+```bash
+cd ~/projects/cluster-exercise
+pwd
+```
+
+
+If you no longer have the project, recreate it in two lines:
+
+
+```bash
+mkdir -p ~/projects/cluster-exercise/{data/raw,results,logs,src}
+cd ~/projects/cluster-exercise
+```
+
+
+You do not need to download the data again by hand. The first script you write will do it.
+
+
+## Learning objectives
+
+
+By the end of this module, you should be able to:
+
+
+- Read and use exit status (`$?`) and chain commands with `&&` and `||`.
+- Write conditions with `[[ ... ]]` and `(( ... ))`, and branch with `if` and `case`.
+- Manipulate filenames and paths with parameter expansion, without calling extra programs.
+- Write `for` and `while read` loops, including loops that read tab-delimited rows.
+- Write a script with a shebang, `set -euo pipefail`, functions, arguments, and a usage message.
+- Make scripts **idempotent**: safe to run more than once.
+- Verify data integrity with `sha256sum`.
+- Operate on many files with `find`, `-exec`, and `xargs`.
+- Compress and archive results with `gzip` and `tar`.
+- Transfer data with `scp` and `rsync`.
+- Manage your environment with `PATH`, `module`, and `~/.bashrc`.
+- Set permissions for a shared lab directory.
+- Keep work alive across disconnections with `tmux`.
+- Submit a Slurm job array driven by a list file.
+
+
+## A surprise in the data: when line counts lie
+
+
+Start with a puzzle. Count the lines in the raw file two different ways:
+
+
+```bash
+wc -l data/raw/red_spruce_fitness_traits.txt
+awk 'END {print NR}' data/raw/red_spruce_fitness_traits.txt
+```
+
+
+```text
+326 data/raw/red_spruce_fitness_traits.txt
+327
+```
+
+
+The two counts differ by one. The reason is that `wc -l` does not count lines; it counts **newline characters**. Look at the last few bytes of the file:
+
+
+```bash
+tail -c 20 data/raw/red_spruce_fitness_traits.txt | od -c
+```
+
+
+```text
+0000000   0   7   5   6   5   5   3   6   6  \t   1   .   0   0   1   7
+0000020   1   3   0   9
+0000024
+```
+
+
+A normal text file ends with `\n`. This one ends with `9`: the final row has no trailing newline, so `wc -l` misses it. The file actually holds **1 header + 326 data rows = 327 lines**, so "`wc -l` minus 1" gives 325, not 326.
+
+
+Files exported from spreadsheets, R, or Python often look like this. It matters because `while read` loops also skip the last line of such files, which you will fix later in this module.
+
+
+::: {.callout-tip}
+## Reliable ways to count records
+
+
+```bash
+awk 'END {print NR}' file.txt     # counts lines, with or without a final newline
+grep -c '' file.txt                # same idea: counts every line, including the last
+```
+
+
+Use `wc -l` for quick checks, but check these alternatives whenever an exact count matters.
+:::
+
+
+## Exit status and chaining commands
+
+
+Every command returns an **exit status** when it finishes: `0` means success, and anything from `1` to `255` means some kind of failure. Bash stores the last exit status in `$?`.
+
+
+```bash
+ls data/raw/red_spruce_fitness_traits.txt > /dev/null
+echo $?
+
+ls missing.txt 2> /dev/null
+echo $?
+```
+
+
+```text
+0
+2
+```
+
+
+Scripts make decisions based on exit status, so learn these operators:
+
+
+| Operator | Meaning | Example |
+|---|---|---|
+| `a ; b` | Run `a`, then `b`, regardless of the result | `date ; hostname` |
+| `a && b` | Run `b` **only if** `a` succeeded | `mkdir -p results && cd results` |
+| `a \|\| b` | Run `b` **only if** `a` failed | `cd results \|\| exit 1` |
+| `! a` | Invert the exit status of `a` | `! grep -q NA file.txt` |
+
+
+`grep -q` ("quiet") prints nothing and only sets the exit status. That makes it ideal for asking yes-or-no questions:
+
+
+```bash
+grep -q "VT" data/raw/red_spruce_fitness_traits.txt && echo "found VT"
+grep -q "ZZ" data/raw/red_spruce_fitness_traits.txt || echo "no ZZ rows"
+```
+
+
+```text
+found VT
+no ZZ rows
+```
+
+
+::: {.callout-warning}
+## `a && b || c` is not a true if/else
+
+
+`a && b || c` also runs `c` if `a` succeeds but `b` fails. When you need real branching, use `if`, covered next.
+:::
+
+
+## Tests and conditionals
+
+
+### File, string, and number tests
+
+
+`[[ ... ]]` is Bash's test command. It returns exit status 0 (true) or 1 (false).
+
+
+| Test | True when | Example |
+|---|---|---|
+| `-e path` | Path exists (file or directory) | `[[ -e data/raw ]]` |
+| `-f path` | Path is a regular file | `[[ -f src/get_data.sh ]]` |
+| `-d path` | Path is a directory | `[[ -d results ]]` |
+| `-s path` | File exists and is **not empty** | `[[ -s data/raw/red_spruce_fitness_traits.txt ]]` |
+| `-r` / `-w` / `-x` | Readable / writable / executable | `[[ -x src/get_data.sh ]]` |
+| `a == b` | Strings are equal (right side may be a glob) | `[[ $file == *.txt ]]` |
+| `a != b` | Strings differ | `[[ $loc != VT ]]` |
+| `-z s` / `-n s` | String is empty / non-empty | `[[ -z $1 ]]` |
+| `s =~ regex` | String matches an extended regex | `[[ $col =~ ^[0-9]+$ ]]` |
+| `a && b`, `a \|\| b`, `! a` | Combine tests | `[[ -d logs && -d src ]]` |
+
+
+For numbers, use arithmetic evaluation `(( ... ))`, which reads like ordinary math:
+
+
+```bash
+n=326
+(( n > 300 )) && echo "large enough"
+(( n % 2 == 0 )) && echo "even"
+```
+
+
+::: {.callout-note}
+## Why `[[ ]]` and not `[ ]`?
+
+
+`[ ]` (also called `test`) is the older POSIX form. It splits unquoted variables into words, so an empty or space-containing variable breaks it. `[[ ]]` is Bash-specific, does not split variables, and supports `&&`, `||`, and `=~`. In Bash scripts, prefer `[[ ]]` for text and files, and `(( ))` for numbers.
+:::
+
+
+### `if`, `elif`, `else`
+
+
+```bash
+f=data/raw/red_spruce_fitness_traits.txt
+
+if [[ ! -e $f ]]; then
+  echo "Missing: download the data first"
+elif [[ ! -s $f ]]; then
+  echo "File exists but is empty: the download probably failed"
+else
+  echo "Ready: $f"
+fi
+```
+
+
+The structure is always `if CONDITION; then ... fi`. The condition can be any command at all, not just `[[ ]]`. Bash runs it and checks its exit status:
+
+
+```bash
+if grep -q '<!DOCTYPE html' "$f"; then
+  echo "This is a web page, not data"
+fi
+```
+
+
+### `case`: matching one value against many patterns
+
+
+`case` is cleaner than a long `elif` chain when you compare a single value against several patterns:
+
+
+```bash
+for loc in VT NC NB; do
+  case $loc in
+    VT|NH|ME|MA) echo "$loc: New England" ;;
+    NB)          echo "$loc: Canada" ;;
+    *)           echo "$loc: other" ;;
+  esac
+done
+```
+
+
+```text
+VT: New England
+NC: other
+NB: Canada
+```
+
+
+`|` separates alternatives, `*)` is the catch-all, and every branch ends with `;;`.
+
+
+## Parameter expansion: editing strings without extra programs
+
+
+You already know `$var` and `${var}`. Bash can also trim, replace, and supply defaults inside the braces. This is the standard way to build output filenames from input filenames.
+
+
+```bash
+f=data/raw/red_spruce_fitness_traits.txt
+name=${f##*/}
+
+echo "${f##*/}"            # strip everything up to the last /
+echo "${f%/*}"             # strip the last / and everything after it
+echo "${f%.txt}"           # strip a suffix
+echo "${name%.txt}.tsv"    # swap the extension
+echo "${name/fitness/height}"
+echo "${#name}"            # length in characters
+```
+
+
+```text
+red_spruce_fitness_traits.txt
+data/raw
+data/raw/red_spruce_fitness_traits
+red_spruce_fitness_traits.tsv
+red_spruce_height_traits.txt
+29
+```
+
+
+| Expansion | Result | Memory aid |
+|---|---|---|
+| `${var#pat}` / `${var##pat}` | Remove the shortest / longest match from the **start** | `#` is to the left of `$` on a keyboard |
+| `${var%pat}` / `${var%%pat}` | Remove the shortest / longest match from the **end** | `%` is to the right |
+| `${var/old/new}` | Replace the first match (`//` replaces all) | like `sed s/old/new/` |
+| `${#var}` | Length | "number of" |
+| `${var:-default}` | Use `default` if `var` is unset or empty | optional arguments |
+| `${var:?message}` | Stop with `message` if `var` is unset or empty | required settings |
+| `${var,,}` / `${var^^}` | Lowercase / uppercase | Bash 4+ |
+| `$(( expr ))` | Integer arithmetic | `$(( 326 / 4 ))` gives `81` |
+
+
+::: {.callout-tip}
+## Integer arithmetic only
+
+
+`$(( 326 / 63 ))` gives `5`. Bash has no decimals. For decimal math, use `awk`:
+
+
+```bash
+awk 'BEGIN {printf "%.3f\n", 326 / 63}'
+```
+
+
+```text
+5.175
+```
+:::
+
+
+## Loops
+
+
+### `for` loops
+
+
+A `for` loop runs its body once for each word in a list:
+
+
+```bash
+for i in {1..3}; do
+  echo "replicate_$i"
+done
+```
+
+
+```text
+replicate_1
+replicate_2
+replicate_3
+```
+
+
+The list can be a glob, which is the safe way to loop over files:
+
+
+```bash
+for f in results/*.txt; do
+  [[ -e $f ]] || continue          # skip if the glob matched nothing
+  echo "$f has $(wc -l < "$f") lines"
+done
+```
+
+
+`continue` skips to the next item, and `break` leaves the loop entirely.
+
+
+Zero-padded sample IDs are common in sequencing work:
+
+
+```bash
+for i in $(seq 1 12); do
+  printf 'S%02d\n' "$i"
+done | head -n 3
+```
+
+
+```text
+S01
+S02
+S03
+```
+
+
+::: {.callout-warning}
+## Do not loop over `$(ls)`
+
+
+`for f in $(ls)` splits filenames on spaces and breaks on unusual names. Use a glob (`for f in *.txt`) or `find` (shown later) instead.
+:::
+
+
+### `while read`: processing a file line by line
+
+
+To read a file one line at a time, use:
+
+
+```bash
+while IFS= read -r line; do
+  echo "$line"
+done < input.txt
+```
+
+
+| Piece | Why it is there |
+|---|---|
+| `IFS=` | Keeps leading and trailing whitespace |
+| `-r` | Treats backslashes literally |
+| `< input.txt` | Feeds the file to the whole loop |
+
+
+Now count the lines in the red-spruce file this way:
+
+
+```bash
+n=0
+while IFS= read -r line; do
+  n=$((n + 1))
+done < data/raw/red_spruce_fitness_traits.txt
+echo "$n"
+```
+
+
+```text
+326
+```
+
+
+The loop is one line short, for the same reason `wc -l` was: `read` returns failure on a final line that has no newline, and the loop ends before processing it. The standard fix is to also continue when `read` has filled the variable:
+
+
+```bash
+n=0
+while IFS= read -r line || [[ -n $line ]]; do
+  n=$((n + 1))
+done < data/raw/red_spruce_fitness_traits.txt
+echo "$n"
+```
+
+
+```text
+327
+```
+
+
+### Splitting tab-delimited rows into fields
+
+
+Set `IFS` to a tab and give `read` several variable names. Each field goes into one variable, and the last variable receives everything that remains:
+
+
+```bash
+tail -n +2 data/raw/red_spruce_fitness_traits.txt |
+  while IFS=$'\t' read -r family pop tree loc rest || [[ -n $family ]]; do
+    echo "$family is from $loc"
+  done | head -n 3
+```
+
+
+```text
+AB_05 is from TN
+AB_08 is from TN
+AB_12 is from TN
+```
+
+
+`tail -n +2` means "start from line 2", which skips the header. `$'\t'` is Bash's notation for a literal tab character.
+
+
+### Counting with an associative array
+
+
+Bash 4+ supports **associative arrays**, which store values under text keys. This loop counts trees per Location:
+
+
+```bash
+declare -A count
+
+{
+  read -r header                      # consume the header line
+  while IFS=$'\t' read -r family pop tree loc rest || [[ -n $family ]]; do
+    count[$loc]=$(( ${count[$loc]:-0} + 1 ))
+  done
+} < data/raw/red_spruce_fitness_traits.txt
+
+for k in "${!count[@]}"; do
+  printf '%s\t%s\n' "$k" "${count[$k]}"
+done | sort | head -n 4
+```
+
+
+```text
+MA	19
+MD	10
+ME	16
+NB	6
+```
+
+
+`"${!count[@]}"` expands to all keys, and `"${count[$k]}"` to one value. This works, but Bash loops are slow on large files. The next module does the same task with `awk` in one line, thousands of times faster on a VCF or a large phenotype table. Use Bash loops to **orchestrate** files and programs, and `awk` to **compute** over rows.
+
+
+## Writing scripts
+
+
+### Anatomy of a robust script
+
+
+A script is a text file of commands. A good one has five parts:
+
+
+```bash
+#!/usr/bin/env bash                 # 1. shebang: run this file with bash
+# name.sh — one-line purpose        # 2. header: what, and how to run it
+# Usage: bash src/name.sh ARG
+
+set -euo pipefail                   # 3. strict mode: stop on errors
+
+in="data/raw/..."                   # 4. settings at the top, in variables
+out="results/..."
+
+# 5. the work, ideally in small named steps
+```
+
+
+Strict mode is three settings:
+
+
+| Setting | Effect | Without it |
+|---|---|---|
+| `set -e` | Exit as soon as a command fails | The script carries on and builds results on a failed step |
+| `set -u` | Treat an unset variable as an error | A typo like `$ouput` silently becomes an empty string |
+| `set -o pipefail` | A pipeline fails if **any** command in it fails | `missing_cmd \| sort` "succeeds" because `sort` succeeded |
+
+
+::: {.callout-important}
+## `set -u` and `rm`
+
+
+Without `set -u`, `rm -rf "$outdir/"` with an unset `outdir` becomes `rm -rf "/"`. Strict mode turns that disaster into an error message. Always use it in scripts that delete or overwrite files.
+:::
+
+::: {.column-body}
+### Script 1: download and verify the data
+
+
+Create `src/get_data.sh` with a text editor (`nano src/get_data.sh`, `vim src/get_data.sh`, or your editor's remote mode):
+
+
+```{.bash filename="src/get_data.sh"}
+#!/usr/bin/env bash
+# get_data.sh — download the red-spruce fitness-trait table and verify it.
+# Usage: bash src/get_data.sh        (run from the project root)
+
+set -euo pipefail
+
+URL="https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt"
+OUT="data/raw/red_spruce_fitness_traits.txt"
+LOG="logs/get_data_$(date +%Y%m%d_%H%M%S).log"
+
+log() { printf '[%s] %s\n' "$(date '+%F %T')" "$*" | tee -a "$LOG"; }
+die() { log "ERROR: $*"; exit 1; }
+
+# 1. Refuse to run from the wrong directory
+[[ -d data/raw && -d logs ]] || { echo "Run this from the project root (cluster-exercise/)." >&2; exit 1; }
+
+# 2. Download only if the file is missing or empty (safe to re-run)
+if [[ -s "$OUT" ]]; then
+  log "Already present: $OUT (skipping download)"
+else
+  log "Downloading $URL"
+  curl -fsSL -o "$OUT" "$URL" || die "download failed"
+fi
+
+# 3. Sanity checks
+[[ -s "$OUT" ]] || die "$OUT is empty"
+if head -n 1 "$OUT" | grep -qi '<!doctype html'; then
+  die "$OUT is a web page, not data. Use the raw.githubusercontent.com URL."
+fi
+
+n_cols=$(head -n 1 "$OUT" | awk -F'\t' '{print NF}')
+n_bad=$(awk -F'\t' -v n="$n_cols" 'NF != n' "$OUT" | wc -l)
+(( n_bad == 0 )) || die "$n_bad rows do not have $n_cols columns"
+
+n_rows=$(awk 'END {print NR - 1}' "$OUT")
+log "OK: $n_rows data rows x $n_cols columns"
+
+# 4. Record a checksum so you can prove later that the raw file never changed
+sha256sum "$OUT" > "$OUT.sha256"
+log "Checksum written to $OUT.sha256"
+```
+
+::: 
+
+What is new here:
+
+
+| Line | What it does |
+|---|---|
+| `log() { ...; }` | Defines a **function**. `$*` is all the arguments joined into one string. |
+| `tee -a "$LOG"` | Shows each message on screen **and** appends it to a time-stamped log file |
+| `>&2` | Sends the error message to standard error, where error messages belong |
+| `curl -fsSL` | `-f` fails on HTTP errors such as 404 instead of saving the error page; `-s` hides the progress bar; `-S` still shows errors; `-L` follows redirects |
+| `if [[ -s ... ]]` | Makes the script **idempotent**: the second run skips the download |
+| `awk ... 'NF != n'` | Prints any row whose column count differs from the header's (a preview of the next module) |
+
+
+
+Run it twice:
+
+
+```bash
+bash src/get_data.sh
+bash src/get_data.sh
+```
+
+
+```text
+[2026-10-08 18:06:45] Downloading https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt
+[2026-10-08 18:06:45] OK: 326 data rows x 19 columns
+[2026-10-08 18:06:45] Checksum written to data/raw/red_spruce_fitness_traits.txt.sha256
+[2026-10-08 18:06:45] Already present: data/raw/red_spruce_fitness_traits.txt (skipping download)
+[2026-10-08 18:06:45] OK: 326 data rows x 19 columns
+[2026-10-08 18:06:45] Checksum written to data/raw/red_spruce_fitness_traits.txt.sha256
+```
+
+
+Now test the guard by running it from the wrong place:
+
+
+```bash
+cd /tmp
+bash ~/projects/cluster-exercise/src/get_data.sh
+echo "exit status: $?"
+cd -
+```
+
+
+```text
+Run this from the project root (cluster-exercise/).
+exit status: 1
+```
+
+
+Testing the failure paths is as important as testing the success path. A script that fails loudly is far better than one that "succeeds" on the wrong input.
+
+
+### Making a script executable
+
+
+So far you have run scripts with `bash script.sh`. To run one directly, give it execute permission:
+
+
+```bash
+chmod +x src/get_data.sh
+./src/get_data.sh
+```
+
+
+The shebang line tells Linux which interpreter to use. `#!/usr/bin/env bash` finds `bash` on your `PATH`, which is more portable than hard-coding `/bin/bash`. The `./` is required because the current directory is deliberately not on your `PATH`.
+
+
+### Script 2: arguments and a usage message
+
+
+Hard-coded filenames make a script single-use. **Positional arguments** make it reusable:
+
+
+| Variable | Meaning |
+|---|---|
+| `$0` | The script's own name |
+| `$1`, `$2`, ... | First, second, ... argument |
+| `$#` | Number of arguments |
+| `"$@"` | All arguments, each kept as a separate word (use this when passing them on) |
+
+
+```{.bash filename="src/count_column.sh"}
+#!/usr/bin/env bash
+# count_column.sh — count how many rows share each value in one column.
+# Usage: bash src/count_column.sh FILE COLUMN_NUMBER
+set -euo pipefail
+
+usage() {
+  echo "Usage: $(basename "$0") FILE COLUMN_NUMBER" >&2
+  echo "Example: $(basename "$0") data/raw/red_spruce_fitness_traits.txt 4" >&2
+  exit 1
+}
+
+(( $# == 2 )) || usage                 # exactly two arguments
+file=$1
+col=$2
+
+[[ -f $file ]]         || { echo "No such file: $file" >&2; exit 1; }
+[[ $col =~ ^[0-9]+$ ]] || { echo "COLUMN_NUMBER must be a positive integer, got: $col" >&2; exit 1; }
+
+header=$(head -n 1 "$file" | cut -f "$col")
+echo "# counts of '$header' (column $col) in $file"
+
+tail -n +2 "$file" | cut -f "$col" | sort | uniq -c | sort -rn
+```
+
+
+```bash
+chmod +x src/count_column.sh
+./src/count_column.sh data/raw/red_spruce_fitness_traits.txt 5
+```
+
+
+```text
+# counts of 'Region' (column 5) in data/raw/red_spruce_fitness_traits.txt
+    178 C
+    101 E
+     47 M
+```
+
+
+Calling it incorrectly prints help instead of a cryptic error:
+
+
+```bash
+./src/count_column.sh
+./src/count_column.sh data/raw/red_spruce_fitness_traits.txt abc
+```
+
+
+```text
+Usage: count_column.sh FILE COLUMN_NUMBER
+Example: count_column.sh data/raw/red_spruce_fitness_traits.txt 4
+COLUMN_NUMBER must be a positive integer, got: abc
+```
+
+
+### Functions and `local`
+
+
+Functions group steps under a name. Arguments work exactly as in scripts (`$1`, `$#`, `"$@"`). Use `local` so a function's variables do not overwrite variables elsewhere in the script:
+
+
+```bash
+n_data_rows() {
+  local file=$1
+  awk 'END {print NR - 1}' "$file"
+}
+
+echo "Rows: $(n_data_rows data/raw/red_spruce_fitness_traits.txt)"
+```
+
+
+```text
+Rows: 326
+```
+
+
+Define functions before you call them, usually near the top of the script.
+
+
+## Data integrity with checksums
+
+
+A **checksum** is a short fingerprint of a file's exact bytes. If even one byte changes, the checksum changes. Your `get_data.sh` already saved one:
+
+
+```bash
+cat data/raw/red_spruce_fitness_traits.txt.sha256
+```
+
+
+```text
+ef503c4d9354e6f44905c3508ed3d26ea34b38b391224a77689ff70a871b98c5  data/raw/red_spruce_fitness_traits.txt
+```
+
+
+At any later time, verify the file still matches:
+
+
+```bash
+sha256sum -c data/raw/red_spruce_fitness_traits.txt.sha256
+```
+
+
+```text
+data/raw/red_spruce_fitness_traits.txt: OK
+```
+
+
+If the file had been edited or truncated, you would see `FAILED`, and `sha256sum -c` would exit with a non-zero status, which a script can act on.
+
+
+Use checksums:
+
+
+- After every large transfer, especially FASTQ, BAM, and VCF files.
+- When a sequencing facility provides `md5` files. Check them with `md5sum -c file.md5`.
+- Before publishing, to document exactly which data your results came from.
+
+
+## Working with many files
+
+
+### `find`: select files by name, type, size, or age
+
+
+```bash
+find results -name '*.tsv'                  # by name (quote the pattern)
+find . -type d -name logs                   # directories only
+find data -type f -size +100M               # larger than 100 MB
+find logs -type f -mtime +30                # modified more than 30 days ago
+find . -maxdepth 2 -type f -name '*.sh'     # limit how deep to search
+```
+
+
+### Acting on what `find` finds
+
+
+`-exec ... {} +` runs a command on the files found. `{}` stands for the filenames, and `+` passes many of them per call:
+
+
+```bash
+find logs -type f -name '*.log' -exec ls -lh {} +
+```
+
+
+`xargs` does the same for any list arriving on standard input. Pair `find -print0` with `xargs -0` so that filenames containing spaces survive:
+
+
+```bash
+find results -name '*.tsv' -print0 | xargs -0 wc -l
+```
+
+
+`xargs -P N` runs up to `N` commands in parallel, for example compressing many files at once:
+
+
+```bash
+find data/fastq -name '*.fastq' -print0 | xargs -0 -n 1 -P 4 gzip
+```
+
+
+::: {.callout-warning}
+## Parallel work belongs on compute nodes
+
+
+`xargs -P`, GNU `parallel`, and similar tools can saturate a shared login node. Use them inside a Slurm job that has requested the same number of CPUs, for example `#SBATCH --cpus-per-task=4` with `-P 4`.
+:::
+
+
+### Script 3: split the dataset into one file per Location
+
+
+This script combines a loop, field splitting, the trailing-newline fix, and an idempotent "start clean" step:
+
+
+```{.bash filename="src/split_by_location.sh"}
+#!/usr/bin/env bash
+# split_by_location.sh — write one TSV per Location (column 4), each with the header.
+# Usage: bash src/split_by_location.sh
+set -euo pipefail
+
+in="data/raw/red_spruce_fitness_traits.txt"
+outdir="results/by_location"
+
+mkdir -p "$outdir"
+rm -f "$outdir"/*.tsv          # start clean: this script appends below
+
+header=$(head -n 1 "$in")
+
+# Read the data rows (skip header with tail). "|| [[ -n $family ]]" keeps the
+# final line even though the file has no trailing newline.
+tail -n +2 "$in" | while IFS=$'\t' read -r family pop tree loc rest || [[ -n $family ]]; do
+  out="$outdir/${loc}.tsv"
+  [[ -f $out ]] || printf '%s\n' "$header" > "$out"     # write header once per file
+  printf '%s\t%s\t%s\t%s\t%s\n' "$family" "$pop" "$tree" "$loc" "$rest" >> "$out"
+done
+
+# Report
+for f in "$outdir"/*.tsv; do
+  printf '%-6s %4d rows\n' "$(basename "$f" .tsv)" "$(( $(wc -l < "$f") - 1 ))"
+done
+```
+
+
+```bash
+bash src/split_by_location.sh
+```
+
+
+```text
+MA       19 rows
+MD       10 rows
+ME       16 rows
+NB        6 rows
+NC       22 rows
+NH       23 rows
+NY       53 rows
+PA       47 rows
+TN       14 rows
+VA        5 rows
+VT       61 rows
+WV       50 rows
+```
+
+
+The per-Location counts add up to 326, and this also answers the introductory module's Vermont challenge exactly: **61 rows have `VT` in the Location column.**
+
+
+Check that nothing was lost. This command totals every output file, headers included:
+
+
+```bash
+find results/by_location -name '*.tsv' -print0 | xargs -0 wc -l | tail -n 1
+```
+
+
+```text
+  338 total
+```
+
+
+That is 326 data rows plus 12 headers. The `rm -f` line is what makes the script safe to rerun: without it, a second run would append every row again and double the files.
+
+
+## Compression and archives
+
+
+| Task | Command |
+|---|---|
+| Compress, keeping the original | `gzip -k file.tsv` |
+| Decompress | `gunzip file.tsv.gz` |
+| Read without decompressing | `zcat file.tsv.gz \| head`, or `zless file.tsv.gz` |
+| Create an archive of a directory | `tar -czf archive.tar.gz dir/` |
+| List an archive's contents | `tar -tzf archive.tar.gz` |
+| Extract an archive | `tar -xzf archive.tar.gz` |
+| Extract into a specific directory | `tar -xzf archive.tar.gz -C target/` |
+
+
+Text data compresses well:
+
+
+```bash
+gzip -k results/by_location/VT.tsv
+ls -lh results/by_location/VT.tsv* | awk '{print $5, $9}'   # size and name only
+```
+
+
+```text
+9.3K results/by_location/VT.tsv
+3.5K results/by_location/VT.tsv.gz
+```
+
+
+Bundle the split files into a single archive to send to a collaborator. `-C results` means "change into `results/` first", so the archive does not contain the `results/` prefix:
+
+
+```bash
+tar -czf results/by_location.tar.gz -C results by_location
+tar -tzf results/by_location.tar.gz | head -n 4
+```
+
+
+```text
+by_location/
+by_location/VA.tsv
+by_location/NB.tsv
+by_location/PA.tsv
+```
+
+
+The `tar` flags read as words: **c**reate / **t**able of contents / e**x**tract, g**z**ip, **f**ile name follows. Always list (`-t`) an archive before extracting one you did not create, so it cannot scatter files over your working directory.
+
+
+## Moving data on and off the cluster
+
+
+Run these from **your own computer**, not from the cluster, unless your site documents otherwise. Replace `user@cluster.example.edu` with your login.
+
+
+```bash
+# copy one file up to the cluster
+scp results.tsv user@cluster.example.edu:~/projects/cluster-exercise/results/
+
+# copy one file down from the cluster
+scp user@cluster.example.edu:~/projects/cluster-exercise/results/fitness_by_location.tsv .
+```
+
+
+For directories and large data, use `rsync`. It copies only what has changed and can resume an interrupted transfer:
+
+
+```bash
+# preview first: -n (dry run) shows what would be copied
+rsync -avhn --progress results/ user@cluster.example.edu:~/projects/cluster-exercise/results/
+
+# then run it for real
+rsync -avh --progress results/ user@cluster.example.edu:~/projects/cluster-exercise/results/
+```
+
+
+| Flag | Meaning |
+|---|---|
+| `-a` | Archive mode: recurse into directories, keep timestamps and permissions |
+| `-v` | Verbose |
+| `-h` | Human-readable sizes |
+| `-n` | Dry run: show the plan, change nothing |
+| `--progress` | Per-file progress |
+| `--delete` | Also delete destination files that are missing from the source. Powerful; always use with `-n` first. |
+
+
+::: {.callout-warning}
+## The trailing slash matters
+
+
+`rsync -a results/ dest/` copies the **contents** of `results` into `dest/`.
+`rsync -a results dest/` copies the **directory itself**, creating `dest/results/`.
+A dry run (`-n`) shows the difference before anything is written.
+:::
+
+
+For very large transfers (hundreds of gigabytes or more), use your institution's data-transfer nodes or Globus, if available, rather than a login node.
+
+
+## Your shell environment
+
+
+### `PATH` and finding programs
+
+
+When you type a command, Bash searches the directories listed in `PATH`, in order:
+
+
+```bash
+echo "$PATH" | tr ':' '\n'      # one directory per line
+command -v Rscript              # where does this command come from?
+type -t cd                      # builtin, file, alias, or function?
+```
+
+
+If `command -v tree` prints nothing, the program is not on your `PATH`: either it is not installed, or it sits in a module you have not loaded.
+
+
+### Environment modules
+
+
+Most clusters provide software through **environment modules** (often Lmod). Loading a module edits your `PATH` and related variables:
+
+
+```bash
+module avail                # what is installed
+module spider samtools      # search all versions (Lmod)
+module load r               # load a module (names vary by cluster)
+module list                 # what is currently loaded
+module purge                # unload everything
+```
+
+
+In scripts and job files, load **explicit versions**, such as `module load r/4.4.1`, so results are reproducible after the default version changes.
+
+
+### `~/.bashrc`: aliases and personal functions
+
+
+`~/.bashrc` runs every time you open an interactive shell. It is the place for shortcuts:
+
+
+```{.bash filename="~/.bashrc (excerpt)"}
+# Safer defaults
+alias rm='rm -i'                      # ask before deleting
+alias ll='ls -lhF'
+
+# Jump to the project
+alias cdp='cd ~/projects/cluster-exercise'
+
+# Show my jobs in the Slurm queue
+alias myq='squeue -u $USER'
+
+# Count records correctly, even without a final newline
+nrec() { awk 'END {print NR}' "$@"; }
+```
+
+
+Apply your changes to the current session with:
+
+
+```bash
+source ~/.bashrc
+```
+
+
+::: {.callout-tip}
+## Keep `~/.bashrc` small
+
+
+Do not `module load` analysis software in `~/.bashrc`. It slows down every login, and it hides dependencies from your job scripts. Load modules inside each script that needs them.
+:::
+
+
+## Permissions and shared lab directories
+
+
+`ls -l` shows permissions as the first ten characters of each line:
+
+
+```text
+-rwxr-xr-x  1 you  labgroup  1.2K  get_data.sh
+```
+
+
+| Characters | Applies to | In this example | Meaning |
+|---|---|---|---|
+| 1 | File type | `-` | `-` file, `d` directory, `l` symbolic link |
+| 2 to 4 | **u**ser (owner) | `rwx` | read, write, execute |
+| 5 to 7 | **g**roup | `r-x` | read, execute |
+| 8 to 10 | **o**thers | `r-x` | read, execute |
+
+
+For a **directory**, `r` lets you list it, `w` lets you create and delete files in it, and `x` lets you enter it (`cd`).
+
+
+| Command | Effect |
+|---|---|
+| `chmod u+x script.sh` | Owner may execute |
+| `chmod g+rX -R shared/` | Group may read everything and enter directories (capital `X` = only where it makes sense) |
+| `chmod o-rwx private/` | Remove all access for others |
+| `chmod 755 dir` | `rwxr-xr-x`: common for scripts and shared directories |
+| `chmod 644 file` | `rw-r--r--`: common for data files |
+| `chmod 750 dir` | `rwxr-x---`: lab group only |
+| `chgrp -R labgroup shared/` | Give a directory tree to your lab's group |
+| `chmod g+s shared/` | New files inherit the directory's group (setgid) |
+| `umask` | Shows the default permissions mask, often `0022` |
+
+
+The digits are the sum of r = 4, w = 2, x = 1 for user, group, and others, so `7` is `rwx`, `5` is `r-x`, and `4` is `r--`.
+
+
+A typical recipe for sharing raw data with your lab, read-only:
+
+
+```bash
+chgrp -R labgroup /depot/labgroup/red_spruce
+chmod -R g+rX,g-w,o-rwx /depot/labgroup/red_spruce
+```
+
+
+::: {.callout-warning}
+## Never use `chmod 777`
+
+
+`777` lets every user on the cluster modify or delete your files. If something "only works with 777", the real problem is usually group ownership; fix it with `chgrp` and `g+` permissions.
+:::
+
+
+## Long-running sessions with `tmux`
+
+
+If your SSH connection drops, anything running in that terminal is killed. `tmux` keeps a session alive on the server, so you can disconnect and reattach later.
+
+
+| Action | Command or keys |
+|---|---|
+| Start a named session | `tmux new -s spruce` |
+| Detach, leaving it running | <kbd>Ctrl</kbd>+<kbd>b</kbd>, then <kbd>d</kbd> |
+| List sessions | `tmux ls` |
+| Reattach | `tmux attach -t spruce` |
+| New window inside tmux | <kbd>Ctrl</kbd>+<kbd>b</kbd>, then <kbd>c</kbd> |
+| Next / previous window | <kbd>Ctrl</kbd>+<kbd>b</kbd>, then <kbd>n</kbd> / <kbd>p</kbd> |
+| Split pane vertically / horizontally | <kbd>Ctrl</kbd>+<kbd>b</kbd>, then <kbd>%</kbd> / <kbd>"</kbd> |
+| Close a session | `exit` inside it, or `tmux kill-session -t spruce` |
+
+
+Many clusters have several login nodes. A tmux session lives on one of them, so note its hostname (`hostname`) and SSH to that same node to reattach. Use tmux for interactive work, editors, and monitoring. Heavy computation still belongs in Slurm jobs.
+
+
+## From script to scheduler: a first job array
+
+
+A **job array** runs the same script many times, with a different `SLURM_ARRAY_TASK_ID` (1, 2, 3, ...) in each task. The standard pattern is a list file with one item per line, where each task picks the line matching its ID.
+
+
+Create the list of Locations:
+
+
+```bash
+cut -f 4 data/raw/red_spruce_fitness_traits.txt | tail -n +2 | sort -u > results/locations.txt
+wc -l < results/locations.txt
+sed -n '3p' results/locations.txt
+```
+
+
+```text
+12
+ME
+```
+
+
+`sed -n '3p'` prints only line 3. The next module covers `sed` in depth.
+
+
+Now write the job script:
+
+
+```{.bash filename="src/per_location.slurm"}
+#!/bin/bash
+#SBATCH --job-name=per_location
+#SBATCH --array=1-12               # one task per line of results/locations.txt
+#SBATCH --time=00:05:00
+#SBATCH --mem=1G
+#SBATCH --cpus-per-task=1
+#SBATCH --output=logs/%x_%A_%a.out # %x job name, %A array job ID, %a task ID
+#SBATCH --account=your_account     # site-specific: ask your cluster's support team
+##SBATCH --partition=standard      # site-specific; remove one # to enable
+
+set -euo pipefail
+cd "$SLURM_SUBMIT_DIR"             # the directory you ran sbatch from
+
+loc=$(sed -n "${SLURM_ARRAY_TASK_ID}p" results/locations.txt)
+in="results/by_location/${loc}.tsv"
+
+echo "Task ${SLURM_ARRAY_TASK_ID} on $(hostname): ${loc}"
+[[ -s $in ]] || { echo "Missing $in; run src/split_by_location.sh first" >&2; exit 1; }
+
+echo "Rows: $(( $(wc -l < "$in") - 1 ))"
+```
+
+
+Submit and monitor it from the project root:
+
+
+```bash
+sbatch src/per_location.slurm
+squeue -u "$USER"
+ls logs/
+cat logs/per_location_*_3.out
+```
+
+
+You can test the selection logic on the login node, without Slurm, by setting the variable yourself:
+
+
+```bash
+for SLURM_ARRAY_TASK_ID in 1 12; do
+  loc=$(sed -n "${SLURM_ARRAY_TASK_ID}p" results/locations.txt)
+  echo "task $SLURM_ARRAY_TASK_ID -> $loc: $(( $(wc -l < results/by_location/${loc}.tsv) - 1 )) rows"
+done
+```
+
+
+```text
+task 1 -> MA: 19 rows
+task 12 -> WV: 50 rows
+```
+
+
+The same pattern scales from 12 Locations to 1,000 samples: put one sample ID or FASTQ path per line in a list file and set `--array=1-1000`. Add `%20` (as in `--array=1-1000%20`) to cap how many tasks run at once.
+
+
+## Checkpoint exercises
+
+
+Work from inside `cluster-exercise/`. Try each exercise before opening its solution.
+
+
+1. Print `ready` only if `results/locations.txt` exists **and** is not empty.
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   [[ -s results/locations.txt ]] && echo ready
+   ```
+   :::
+
+2. Given `f=results/by_location/VT.tsv`, use parameter expansion alone to print `VT`.
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   f=results/by_location/VT.tsv
+   name=${f##*/}       # VT.tsv
+   echo "${name%.tsv}" # VT
+   ```
+   :::
+
+3. Write a `for` loop that prints each file in `results/by_location/` together with its number of data rows (lines minus the header).
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   for f in results/by_location/*.tsv; do
+     echo "$f $(( $(wc -l < "$f") - 1 ))"
+   done
+   ```
+   These files were written by `printf '...\n'`, so they do end in a newline and `wc -l` is accurate here.
+   :::
+
+4. Edit one byte of a **copy** of the raw file, then show that its checksum no longer matches the original's.
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   cp data/raw/red_spruce_fitness_traits.txt /tmp/copy.txt
+   sed -i 's/AB_05/AB_06/' /tmp/copy.txt
+   sha256sum data/raw/red_spruce_fitness_traits.txt /tmp/copy.txt
+   ```
+   The two fingerprints are completely different, even though only one character changed.
+   :::
+
+5. Use `find` to list every `.sh` file in the project with its size.
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   find . -type f -name '*.sh' -exec ls -lh {} +
+   ```
+   :::
+
+6. Create `results/by_location.tar.gz` and list its contents without extracting it.
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   tar -czf results/by_location.tar.gz -C results by_location
+   tar -tzf results/by_location.tar.gz
+   ```
+   :::
+
+7. Run `./src/count_column.sh` with no arguments. What is printed, and what is the exit status?
+
+   ::: {.callout-note collapse="true"}
+   ## Solution
+   ```bash
+   ./src/count_column.sh; echo "exit: $?"
+   ```
+   It prints the two usage lines on standard error and exits with status `1`.
+   :::
+
+
+## Challenge: a raw-data guard
+
+
+Write `src/check_raw.sh` that:
+
+
+1. Exits with an error if `data/raw/red_spruce_fitness_traits.txt.sha256` does not exist.
+2. Runs `sha256sum -c` quietly, and prints `raw data unchanged` on success, or `RAW DATA CHANGED` on standard error with exit status 1 on failure.
+3. Is called as the first step of every other script you write.
+
+
+::: {.callout-note collapse="true"}
+## One possible solution
+
+```{.bash filename="src/check_raw.sh"}
+#!/usr/bin/env bash
+# check_raw.sh — stop if the raw data no longer matches its recorded checksum.
+set -euo pipefail
+
+sum="data/raw/red_spruce_fitness_traits.txt.sha256"
+
+[[ -f $sum ]] || { echo "No checksum file: $sum (run src/get_data.sh)" >&2; exit 1; }
+
+if sha256sum --quiet -c "$sum"; then
+  echo "raw data unchanged"
+else
+  echo "RAW DATA CHANGED: do not trust downstream results" >&2
+  exit 1
+fi
+```
+
+Call it from other scripts with `bash src/check_raw.sh`. Because those scripts use `set -e`, a failed check stops them immediately.
+:::
+
+
+## Wrap up
+
+
+Your project now looks like this:
+
+
+```text
+cluster-exercise/
+├── data/
+│   └── raw/
+│       ├── red_spruce_fitness_traits.txt
+│       └── red_spruce_fitness_traits.txt.sha256
+├── logs/
+│   └── get_data_YYYYMMDD_HHMMSS.log
+├── results/
+│   ├── by_location/          # 12 TSV files, one per Location
+│   ├── by_location.tar.gz
+│   └── locations.txt
+└── src/
+    ├── check_raw.sh
+    ├── count_column.sh
+    ├── get_data.sh
+    ├── per_location.slurm
+    └── split_by_location.sh
+```
+
+
+Before moving on, make sure you can answer these questions:
+
+
+1. Why does `wc -l` report 326 lines for a file that contains 327?
+2. What is the difference between `a && b` and `a || b`?
+3. What do each of `-e`, `-u`, and `-o pipefail` protect you from?
+4. What does `${f%.txt}` return when `f=data/raw/x.txt`?
+5. Why does `while read` need `|| [[ -n $line ]]` for this dataset?
+6. What makes a script idempotent, and which line makes `split_by_location.sh` idempotent?
+7. When would you use `rsync -n`?
+8. What does `chmod 750` allow, and for whom?
+9. How does a Slurm array task know which Location to process?
+
+
+In the next module, [text processing with grep, sed, and awk](../bash-advanced-text-processing/index.qmd), you will replace the slow Bash loop from this page with one-line `awk` programs, and compute per-Location summaries directly from the raw file.

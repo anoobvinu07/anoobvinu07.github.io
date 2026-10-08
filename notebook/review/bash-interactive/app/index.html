@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bash on the Cluster — HPC command-line field guide</title>
+<meta name="description" content="Interactive Bash cheat sheet for HPC users: navigation, head, wc, cat, redirection, quoting, and fixes for common beginner errors.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231e5a43'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%23f3efe6' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 22h7' stroke='%23e3a857' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="#top" aria-label="Bash on the Cluster, home">
+    <svg class="logo" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <rect x="1.5" y="1.5" width="29" height="29" rx="7" stroke="currentColor" stroke-width="2"/>
+      <path d="M9 11l6 5-6 5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="logo-cursor" d="M17 22h7" stroke-width="2.4" stroke-linecap="round"/>
+    </svg>
+    <span>Bash on the Cluster</span>
+  </a>
+  <div class="search">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <input id="q" type="search" placeholder="Search commands, flags, errors…" autocomplete="off" aria-label="Search the guide">
+    <kbd>/</kbd>
+  </div>
+  <div class="actions">
+    <button class="icon-btn" id="printBtn" title="Print the quick-reference sheet" aria-label="Print quick reference">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <svg class="sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="layout" id="top">
+  <nav class="sidebar" aria-label="Sections">
+    <p class="side-label">Contents</p>
+    <ol id="toc"></ol>
+    <div class="side-foot">
+      <p>Assumes <strong>bash</strong> with GNU coreutils, as on most Linux clusters. Slurm is used for scheduler examples.</p>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="hero">
+      <p class="eyebrow">HPC field guide · interactive</p>
+      <h1>Bash on the cluster, <span>without the guesswork.</span></h1>
+      <p class="lede">A working reference for the commands you type every day on a login node: moving around, peeking into files, sending output where it belongs, and quoting things so the shell does what you meant. Every example has a copy button. Every common error has a fix.</p>
+      <div class="term" aria-label="Example terminal session">
+        <div class="term-bar"><i></i><i></i><i></i><span>ada@login01:/scratch/ada/project</span></div>
+<pre><span class="ps">[ada@login01 project]$</span> zcat S01_R1.fq.gz | head -n 4
+<span class="o">@A00123:8:H7KXL:1:1101:1000:1000 1:N:0:ACGT
+GATTACAGATTACAGATTACAGATTACA
++
+FFFFFFFFFFFFFFFFFFFFFFFFFFFF</span>
+<span class="ps">[ada@login01 project]$</span> wc -l &lt; samples.txt
+<span class="o">96</span>
+<span class="ps">[ada@login01 project]$</span> ./align.sh "$SAMPLE" &gt; aln.sam 2&gt; align.log<span class="cursor"></span></pre>
+      </div>
+      <ul class="hero-meta" id="heroMeta"></ul>
+    </section>
+
+    <p class="no-results" id="noResults" hidden>Nothing matches <strong id="noResultsQ"></strong>. Try a command name like <code>tail</code>, an operator like <code>2&gt;&amp;1</code>, or part of an error message.</p>
+
+    <div id="sections"></div>
+
+    <section class="section" id="errors" data-sec="errors">
+      <header class="sec-head">
+        <span class="sec-num">06</span>
+        <div>
+          <h2>Beginner errors, decoded</h2>
+          <p>Paste or type part of an error message into search. Each entry explains what the shell actually means and how to fix it.</p>
+        </div>
+      </header>
+      <div class="err-list" id="errList"></div>
+    </section>
+
+    <section class="section" id="quick" data-sec="quick">
+      <header class="sec-head">
+        <span class="sec-num">07</span>
+        <div>
+          <h2>One-page quick reference</h2>
+          <p>The condensed version. Click any command to copy it, or print this page for a sheet to keep beside the keyboard.</p>
+        </div>
+      </header>
+      <div class="quick" id="quickGrid"></div>
+    </section>
+
+    <footer class="foot">
+      <p>Behaviour described is for GNU bash 4+ and GNU coreutils. macOS ships BSD tools, where a few flags (such as <code>head -n -1</code>) differ. Check your cluster's documentation for site-specific paths like <code>$SCRATCH</code> and quota commands.</p>
+    </footer>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<template id="tpl-redir">
+  <div class="widget" id="redirWidget">
+    <div class="widget-head">
+      <h3>Redirection visualizer</h3>
+      <p>Pick an operator to see where each stream goes. The demo runs <code>ls real.txt missing.txt</code>: one line of stdout, one line of stderr.</p>
+    </div>
+    <div class="chips" id="redirChips" role="tablist" aria-label="Redirection operators"></div>
+    <div class="redir-cmd"><span class="ps">$</span> <code id="redirCode"></code><button class="copy mini" data-copy-from="redirCode">Copy</button></div>
+    <div class="flow" id="redirFlow"></div>
+    <p class="redir-note" id="redirNote"></p>
+    <div class="demo">
+      <div class="demo-pane"><p class="demo-label">Your terminal shows</p><pre id="demoTerm"></pre></div>
+      <div class="demo-pane"><p class="demo-label" id="demoFileLabel">File contents</p><pre id="demoFile"></pre></div>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-quote">
+  <div class="widget" id="quoteWidget">
+    <div class="widget-head">
+      <h3>Quoting playground</h3>
+      <p>Type a command line. This simulates how bash tokenizes it, expands variables, and splits words, then shows the exact arguments the program receives. Nothing is executed.</p>
+    </div>
+    <div class="vars" id="qVars"></div>
+    <label class="q-label" for="qInput">Command line</label>
+    <div class="q-input-wrap"><span class="ps">$</span><input id="qInput" spellcheck="false" autocomplete="off" value='wc -l $FILE'></div>
+    <div class="chips small" id="qPresets" aria-label="Examples"></div>
+    <div class="argv-wrap">
+      <p class="demo-label">Arguments passed to the program</p>
+      <ol class="argv" id="qArgv"></ol>
+      <ul class="q-notes" id="qNotes"></ul>
+    </div>
+  </div>
+</template>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

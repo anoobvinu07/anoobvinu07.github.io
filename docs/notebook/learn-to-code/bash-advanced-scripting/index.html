@@ -1,0 +1,2357 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Anoob Prakash">
+<meta name="dcterms.date" content="2026-10-02">
+<meta name="description" content="Turn one-off commands into safe, re-runnable Bash scripts: exit codes, tests, loops, functions, arguments, checksums, batch file handling, data transfer, permissions, and a first Slurm job array.">
+
+<title>bash: Module 2 Scripting and automation on HPC systems – Anoob Prakash</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../img/illustrated_AP.jpg" rel="icon" type="image/jpeg">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-12757e4b7af482b2d9c5bd8860d2b707.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-583931eb06cc418a44787d1f96110f5c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-c9e8fb96d64d0c262bda14ff845e1f63.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-583931eb06cc418a44787d1f96110f5c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/quarto-contrib/academicons-1.9.4/all.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/academicons-1.9.4/size.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo light-content">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Anoob Prakash</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../research/index.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../notebook/index.html"> 
+<span class="menu-text">Notebook</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../gallery/index.html"> 
+<span class="menu-text">Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../news/index.html"> 
+<span class="menu-text">News</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../cv/index.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#goal" id="toc-goal" class="nav-link active" data-scroll-target="#goal">Goal</a></li>
+  <li><a href="#before-you-begin" id="toc-before-you-begin" class="nav-link" data-scroll-target="#before-you-begin">Before you begin</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#a-surprise-in-the-data-when-line-counts-lie" id="toc-a-surprise-in-the-data-when-line-counts-lie" class="nav-link" data-scroll-target="#a-surprise-in-the-data-when-line-counts-lie">A surprise in the data: when line counts lie</a></li>
+  <li><a href="#exit-status-and-chaining-commands" id="toc-exit-status-and-chaining-commands" class="nav-link" data-scroll-target="#exit-status-and-chaining-commands">Exit status and chaining commands</a></li>
+  <li><a href="#tests-and-conditionals" id="toc-tests-and-conditionals" class="nav-link" data-scroll-target="#tests-and-conditionals">Tests and conditionals</a>
+  <ul class="collapse">
+  <li><a href="#file-string-and-number-tests" id="toc-file-string-and-number-tests" class="nav-link" data-scroll-target="#file-string-and-number-tests">File, string, and number tests</a></li>
+  <li><a href="#if-elif-else" id="toc-if-elif-else" class="nav-link" data-scroll-target="#if-elif-else"><code>if</code>, <code>elif</code>, <code>else</code></a></li>
+  <li><a href="#case-matching-one-value-against-many-patterns" id="toc-case-matching-one-value-against-many-patterns" class="nav-link" data-scroll-target="#case-matching-one-value-against-many-patterns"><code>case</code>: matching one value against many patterns</a></li>
+  </ul></li>
+  <li><a href="#parameter-expansion-editing-strings-without-extra-programs" id="toc-parameter-expansion-editing-strings-without-extra-programs" class="nav-link" data-scroll-target="#parameter-expansion-editing-strings-without-extra-programs">Parameter expansion: editing strings without extra programs</a></li>
+  <li><a href="#loops" id="toc-loops" class="nav-link" data-scroll-target="#loops">Loops</a>
+  <ul class="collapse">
+  <li><a href="#for-loops" id="toc-for-loops" class="nav-link" data-scroll-target="#for-loops"><code>for</code> loops</a></li>
+  <li><a href="#while-read-processing-a-file-line-by-line" id="toc-while-read-processing-a-file-line-by-line" class="nav-link" data-scroll-target="#while-read-processing-a-file-line-by-line"><code>while read</code>: processing a file line by line</a></li>
+  <li><a href="#splitting-tab-delimited-rows-into-fields" id="toc-splitting-tab-delimited-rows-into-fields" class="nav-link" data-scroll-target="#splitting-tab-delimited-rows-into-fields">Splitting tab-delimited rows into fields</a></li>
+  <li><a href="#counting-with-an-associative-array" id="toc-counting-with-an-associative-array" class="nav-link" data-scroll-target="#counting-with-an-associative-array">Counting with an associative array</a></li>
+  </ul></li>
+  <li><a href="#writing-scripts" id="toc-writing-scripts" class="nav-link" data-scroll-target="#writing-scripts">Writing scripts</a>
+  <ul class="collapse">
+  <li><a href="#anatomy-of-a-robust-script" id="toc-anatomy-of-a-robust-script" class="nav-link" data-scroll-target="#anatomy-of-a-robust-script">Anatomy of a robust script</a></li>
+  <li><a href="#script-1-download-and-verify-the-data" id="toc-script-1-download-and-verify-the-data" class="nav-link" data-scroll-target="#script-1-download-and-verify-the-data">Script 1: download and verify the data</a></li>
+  <li><a href="#making-a-script-executable" id="toc-making-a-script-executable" class="nav-link" data-scroll-target="#making-a-script-executable">Making a script executable</a></li>
+  <li><a href="#script-2-arguments-and-a-usage-message" id="toc-script-2-arguments-and-a-usage-message" class="nav-link" data-scroll-target="#script-2-arguments-and-a-usage-message">Script 2: arguments and a usage message</a></li>
+  <li><a href="#functions-and-local" id="toc-functions-and-local" class="nav-link" data-scroll-target="#functions-and-local">Functions and <code>local</code></a></li>
+  </ul></li>
+  <li><a href="#data-integrity-with-checksums" id="toc-data-integrity-with-checksums" class="nav-link" data-scroll-target="#data-integrity-with-checksums">Data integrity with checksums</a></li>
+  <li><a href="#working-with-many-files" id="toc-working-with-many-files" class="nav-link" data-scroll-target="#working-with-many-files">Working with many files</a>
+  <ul class="collapse">
+  <li><a href="#find-select-files-by-name-type-size-or-age" id="toc-find-select-files-by-name-type-size-or-age" class="nav-link" data-scroll-target="#find-select-files-by-name-type-size-or-age"><code>find</code>: select files by name, type, size, or age</a></li>
+  <li><a href="#acting-on-what-find-finds" id="toc-acting-on-what-find-finds" class="nav-link" data-scroll-target="#acting-on-what-find-finds">Acting on what <code>find</code> finds</a></li>
+  <li><a href="#script-3-split-the-dataset-into-one-file-per-location" id="toc-script-3-split-the-dataset-into-one-file-per-location" class="nav-link" data-scroll-target="#script-3-split-the-dataset-into-one-file-per-location">Script 3: split the dataset into one file per Location</a></li>
+  </ul></li>
+  <li><a href="#compression-and-archives" id="toc-compression-and-archives" class="nav-link" data-scroll-target="#compression-and-archives">Compression and archives</a></li>
+  <li><a href="#moving-data-on-and-off-the-cluster" id="toc-moving-data-on-and-off-the-cluster" class="nav-link" data-scroll-target="#moving-data-on-and-off-the-cluster">Moving data on and off the cluster</a></li>
+  <li><a href="#your-shell-environment" id="toc-your-shell-environment" class="nav-link" data-scroll-target="#your-shell-environment">Your shell environment</a>
+  <ul class="collapse">
+  <li><a href="#path-and-finding-programs" id="toc-path-and-finding-programs" class="nav-link" data-scroll-target="#path-and-finding-programs"><code>PATH</code> and finding programs</a></li>
+  <li><a href="#environment-modules" id="toc-environment-modules" class="nav-link" data-scroll-target="#environment-modules">Environment modules</a></li>
+  <li><a href="#bashrc-aliases-and-personal-functions" id="toc-bashrc-aliases-and-personal-functions" class="nav-link" data-scroll-target="#bashrc-aliases-and-personal-functions"><code>~/.bashrc</code>: aliases and personal functions</a></li>
+  </ul></li>
+  <li><a href="#permissions-and-shared-lab-directories" id="toc-permissions-and-shared-lab-directories" class="nav-link" data-scroll-target="#permissions-and-shared-lab-directories">Permissions and shared lab directories</a></li>
+  <li><a href="#long-running-sessions-with-tmux" id="toc-long-running-sessions-with-tmux" class="nav-link" data-scroll-target="#long-running-sessions-with-tmux">Long-running sessions with <code>tmux</code></a></li>
+  <li><a href="#from-script-to-scheduler-a-first-job-array" id="toc-from-script-to-scheduler-a-first-job-array" class="nav-link" data-scroll-target="#from-script-to-scheduler-a-first-job-array">From script to scheduler: a first job array</a></li>
+  <li><a href="#checkpoint-exercises" id="toc-checkpoint-exercises" class="nav-link" data-scroll-target="#checkpoint-exercises">Checkpoint exercises</a></li>
+  <li><a href="#challenge-a-raw-data-guard" id="toc-challenge-a-raw-data-guard" class="nav-link" data-scroll-target="#challenge-a-raw-data-guard">Challenge: a raw-data guard</a></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up">Wrap up</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content page-columns page-full column-page-right" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><em><code>bash</code></em>: Module <em><code>2</code></em> Scripting and automation on HPC systems</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">hpc</div>
+    <div class="quarto-category">workflow</div>
+    <div class="quarto-category">bash</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Turn one-off commands into safe, re-runnable Bash scripts: exit codes, tests, loops, functions, arguments, checksums, batch file handling, data transfer, permissions, and a first Slurm job array.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta column-page-right">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p><a href="https://www.linkedin.com/in/anoob-prakash/">Anoob Prakash</a> <a href="mailto:prakas89@purdue.edu" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-7207-934X" class="quarto-title-author-orcid" aria-label="ORCID profile for Anoob Prakash"> <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 2, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="goal" class="level2">
+<h2 class="anchored" data-anchor-id="goal">Goal</h2>
+<p><strong>Cluster exercise: turn the red-spruce download into a re-runnable, self-checking workflow</strong></p>
+<p>In the introductory module you typed commands one at a time. That is how everyone learns, but it does not scale: you cannot remember exactly what you typed three weeks ago, a collaborator cannot rerun it, and a typo in step 4 silently ruins step 9.</p>
+<p>In this module you will put those same steps into <strong>Bash scripts</strong> that check their own work, stop on errors, record what they did, and can be run again safely. Along the way you will process many files at once, verify data with checksums, move files on and off the cluster, set permissions for a shared lab directory, and submit your first Slurm job array.</p>
+<p>You will keep working in the same <code>cluster-exercise/</code> project and the same <a href="https://github.com/anoobvinu07/Genomic_assisted_selection/blob/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt">red-spruce fitness-trait dataset</a>.</p>
+</section>
+<section id="before-you-begin" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-begin">Before you begin</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Prerequisites
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This module assumes you have finished <a href="../../../notebook/learn-to-code/bash-on-cluster/index.html">Getting started on HPC Linux systems</a> and are comfortable with <code>cd</code>, <code>ls</code>, <code>mkdir -p</code>, <code>curl</code>, <code>head</code>, <code>less</code>, <code>grep</code>, pipes, and <code>&gt;</code> / <code>&gt;&gt;</code>.</p>
+<p>Redirecting errors (<code>2&gt;</code>, <code>2&gt;&amp;1</code>), <code>tee</code>, <code>/dev/null</code>, here-documents, quoting, and globs are covered in the <a href="../../../notebook/review/bash/index.html">Bash reference page</a>. This module uses them without re-explaining them.</p>
+</div>
+</div>
+<p>Log in, then move to the project root:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/projects/cluster-exercise</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If you no longer have the project, recreate it in two lines:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/projects/cluster-exercise/<span class="dt">{data/raw</span><span class="op">,</span><span class="dt">results</span><span class="op">,</span><span class="dt">logs</span><span class="op">,</span><span class="dt">src}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/projects/cluster-exercise</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You do not need to download the data again by hand. The first script you write will do it.</p>
+</section>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<p>By the end of this module, you should be able to:</p>
+<ul>
+<li>Read and use exit status (<code>$?</code>) and chain commands with <code>&amp;&amp;</code> and <code>||</code>.</li>
+<li>Write conditions with <code>[[ ... ]]</code> and <code>(( ... ))</code>, and branch with <code>if</code> and <code>case</code>.</li>
+<li>Manipulate filenames and paths with parameter expansion, without calling extra programs.</li>
+<li>Write <code>for</code> and <code>while read</code> loops, including loops that read tab-delimited rows.</li>
+<li>Write a script with a shebang, <code>set -euo pipefail</code>, functions, arguments, and a usage message.</li>
+<li>Make scripts <strong>idempotent</strong>: safe to run more than once.</li>
+<li>Verify data integrity with <code>sha256sum</code>.</li>
+<li>Operate on many files with <code>find</code>, <code>-exec</code>, and <code>xargs</code>.</li>
+<li>Compress and archive results with <code>gzip</code> and <code>tar</code>.</li>
+<li>Transfer data with <code>scp</code> and <code>rsync</code>.</li>
+<li>Manage your environment with <code>PATH</code>, <code>module</code>, and <code>~/.bashrc</code>.</li>
+<li>Set permissions for a shared lab directory.</li>
+<li>Keep work alive across disconnections with <code>tmux</code>.</li>
+<li>Submit a Slurm job array driven by a list file.</li>
+</ul>
+</section>
+<section id="a-surprise-in-the-data-when-line-counts-lie" class="level2">
+<h2 class="anchored" data-anchor-id="a-surprise-in-the-data-when-line-counts-lie">A surprise in the data: when line counts lie</h2>
+<p>Start with a puzzle. Count the lines in the raw file two different ways:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-l</span> data/raw/red_spruce_fitness_traits.txt</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'END {print NR}'</span> data/raw/red_spruce_fitness_traits.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>326 data/raw/red_spruce_fitness_traits.txt
+327</code></pre>
+<p>The two counts differ by one. The reason is that <code>wc -l</code> does not count lines; it counts <strong>newline characters</strong>. Look at the last few bytes of the file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-c</span> 20 data/raw/red_spruce_fitness_traits.txt <span class="kw">|</span> <span class="fu">od</span> <span class="at">-c</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>0000000   0   7   5   6   5   5   3   6   6  \t   1   .   0   0   1   7
+0000020   1   3   0   9
+0000024</code></pre>
+<p>A normal text file ends with <code>\n</code>. This one ends with <code>9</code>: the final row has no trailing newline, so <code>wc -l</code> misses it. The file actually holds <strong>1 header + 326 data rows = 327 lines</strong>, so “<code>wc -l</code> minus 1” gives 325, not 326.</p>
+<p>Files exported from spreadsheets, R, or Python often look like this. It matters because <code>while read</code> loops also skip the last line of such files, which you will fix later in this module.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Reliable ways to count records
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'END {print NR}'</span> file.txt     <span class="co"># counts lines, with or without a final newline</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">''</span> file.txt                <span class="co"># same idea: counts every line, including the last</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Use <code>wc -l</code> for quick checks, but check these alternatives whenever an exact count matters.</p>
+</div>
+</div>
+</section>
+<section id="exit-status-and-chaining-commands" class="level2">
+<h2 class="anchored" data-anchor-id="exit-status-and-chaining-commands">Exit status and chaining commands</h2>
+<p>Every command returns an <strong>exit status</strong> when it finishes: <code>0</code> means success, and anything from <code>1</code> to <code>255</code> means some kind of failure. Bash stores the last exit status in <code>$?</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> data/raw/red_spruce_fitness_traits.txt <span class="op">&gt;</span> /dev/null</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$?</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> missing.txt <span class="dv">2</span><span class="op">&gt;</span> /dev/null</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>0
+2</code></pre>
+<p>Scripts make decisions based on exit status, so learn these operators:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>a ; b</code></td>
+<td>Run <code>a</code>, then <code>b</code>, regardless of the result</td>
+<td><code>date ; hostname</code></td>
+</tr>
+<tr class="even">
+<td><code>a &amp;&amp; b</code></td>
+<td>Run <code>b</code> <strong>only if</strong> <code>a</code> succeeded</td>
+<td><code>mkdir -p results &amp;&amp; cd results</code></td>
+</tr>
+<tr class="odd">
+<td><code>a \|\| b</code></td>
+<td>Run <code>b</code> <strong>only if</strong> <code>a</code> failed</td>
+<td><code>cd results \|\| exit 1</code></td>
+</tr>
+<tr class="even">
+<td><code>! a</code></td>
+<td>Invert the exit status of <code>a</code></td>
+<td><code>! grep -q NA file.txt</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>grep -q</code> (“quiet”) prints nothing and only sets the exit status. That makes it ideal for asking yes-or-no questions:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-q</span> <span class="st">"VT"</span> data/raw/red_spruce_fitness_traits.txt <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">"found VT"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-q</span> <span class="st">"ZZ"</span> data/raw/red_spruce_fitness_traits.txt <span class="kw">||</span> <span class="bu">echo</span> <span class="st">"no ZZ rows"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>found VT
+no ZZ rows</code></pre>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><code>a &amp;&amp; b || c</code> is not a true if/else
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>a &amp;&amp; b || c</code> also runs <code>c</code> if <code>a</code> succeeds but <code>b</code> fails. When you need real branching, use <code>if</code>, covered next.</p>
+</div>
+</div>
+</section>
+<section id="tests-and-conditionals" class="level2">
+<h2 class="anchored" data-anchor-id="tests-and-conditionals">Tests and conditionals</h2>
+<section id="file-string-and-number-tests" class="level3">
+<h3 class="anchored" data-anchor-id="file-string-and-number-tests">File, string, and number tests</h3>
+<p><code>[[ ... ]]</code> is Bash’s test command. It returns exit status 0 (true) or 1 (false).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Test</th>
+<th>True when</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-e path</code></td>
+<td>Path exists (file or directory)</td>
+<td><code>[[ -e data/raw ]]</code></td>
+</tr>
+<tr class="even">
+<td><code>-f path</code></td>
+<td>Path is a regular file</td>
+<td><code>[[ -f src/get_data.sh ]]</code></td>
+</tr>
+<tr class="odd">
+<td><code>-d path</code></td>
+<td>Path is a directory</td>
+<td><code>[[ -d results ]]</code></td>
+</tr>
+<tr class="even">
+<td><code>-s path</code></td>
+<td>File exists and is <strong>not empty</strong></td>
+<td><code>[[ -s data/raw/red_spruce_fitness_traits.txt ]]</code></td>
+</tr>
+<tr class="odd">
+<td><code>-r</code> / <code>-w</code> / <code>-x</code></td>
+<td>Readable / writable / executable</td>
+<td><code>[[ -x src/get_data.sh ]]</code></td>
+</tr>
+<tr class="even">
+<td><code>a == b</code></td>
+<td>Strings are equal (right side may be a glob)</td>
+<td><code>[[ $file == *.txt ]]</code></td>
+</tr>
+<tr class="odd">
+<td><code>a != b</code></td>
+<td>Strings differ</td>
+<td><code>[[ $loc != VT ]]</code></td>
+</tr>
+<tr class="even">
+<td><code>-z s</code> / <code>-n s</code></td>
+<td>String is empty / non-empty</td>
+<td><code>[[ -z $1 ]]</code></td>
+</tr>
+<tr class="odd">
+<td><code>s =~ regex</code></td>
+<td>String matches an extended regex</td>
+<td><code>[[ $col =~ ^[0-9]+$ ]]</code></td>
+</tr>
+<tr class="even">
+<td><code>a &amp;&amp; b</code>, <code>a \|\| b</code>, <code>! a</code></td>
+<td>Combine tests</td>
+<td><code>[[ -d logs &amp;&amp; -d src ]]</code></td>
+</tr>
+</tbody>
+</table>
+<p>For numbers, use arithmetic evaluation <code>(( ... ))</code>, which reads like ordinary math:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="va">n</span><span class="op">=</span>326</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">((</span> <span class="va">n</span> <span class="op">&gt;</span> <span class="dv">300</span> <span class="kw">))</span> <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">"large enough"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">((</span> <span class="va">n</span> <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span> <span class="kw">))</span> <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">"even"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why <code>[[ ]]</code> and not <code>[ ]</code>?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>[ ]</code> (also called <code>test</code>) is the older POSIX form. It splits unquoted variables into words, so an empty or space-containing variable breaks it. <code>[[ ]]</code> is Bash-specific, does not split variables, and supports <code>&amp;&amp;</code>, <code>||</code>, and <code>=~</code>. In Bash scripts, prefer <code>[[ ]]</code> for text and files, and <code>(( ))</code> for numbers.</p>
+</div>
+</div>
+</section>
+<section id="if-elif-else" class="level3">
+<h3 class="anchored" data-anchor-id="if-elif-else"><code>if</code>, <code>elif</code>, <code>else</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="va">f</span><span class="op">=</span>data/raw/red_spruce_fitness_traits.txt</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="ot">!</span> <span class="ot">-e</span> <span class="va">$f</span> <span class="kw">]];</span> <span class="cf">then</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"Missing: download the data first"</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> <span class="kw">[[</span> <span class="ot">!</span> <span class="ot">-s</span> <span class="va">$f</span> <span class="kw">]];</span> <span class="cf">then</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"File exists but is empty: the download probably failed"</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"Ready: </span><span class="va">$f</span><span class="st">"</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The structure is always <code>if CONDITION; then ... fi</code>. The condition can be any command at all, not just <code>[[ ]]</code>. Bash runs it and checks its exit status:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="fu">grep</span> <span class="at">-q</span> <span class="st">'&lt;!DOCTYPE html'</span> <span class="st">"</span><span class="va">$f</span><span class="st">"</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"This is a web page, not data"</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="case-matching-one-value-against-many-patterns" class="level3">
+<h3 class="anchored" data-anchor-id="case-matching-one-value-against-many-patterns"><code>case</code>: matching one value against many patterns</h3>
+<p><code>case</code> is cleaner than a long <code>elif</code> chain when you compare a single value against several patterns:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> loc <span class="kw">in</span> VT NC NB<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">case</span> <span class="va">$loc</span> <span class="kw">in</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="ss">VT</span><span class="kw">|</span><span class="ss">NH</span><span class="kw">|</span><span class="ss">ME</span><span class="kw">|</span><span class="ss">MA</span><span class="kw">)</span> <span class="bu">echo</span> <span class="st">"</span><span class="va">$loc</span><span class="st">: New England"</span> <span class="cf">;;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="ss">NB</span><span class="kw">)</span>          <span class="bu">echo</span> <span class="st">"</span><span class="va">$loc</span><span class="st">: Canada"</span> <span class="cf">;;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="pp">*</span><span class="kw">)</span>           <span class="bu">echo</span> <span class="st">"</span><span class="va">$loc</span><span class="st">: other"</span> <span class="cf">;;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">esac</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>VT: New England
+NC: other
+NB: Canada</code></pre>
+<p><code>|</code> separates alternatives, <code>*)</code> is the catch-all, and every branch ends with <code>;;</code>.</p>
+</section>
+</section>
+<section id="parameter-expansion-editing-strings-without-extra-programs" class="level2">
+<h2 class="anchored" data-anchor-id="parameter-expansion-editing-strings-without-extra-programs">Parameter expansion: editing strings without extra programs</h2>
+<p>You already know <code>$var</code> and <code>${var}</code>. Bash can also trim, replace, and supply defaults inside the braces. This is the standard way to build output filenames from input filenames.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="va">f</span><span class="op">=</span>data/raw/red_spruce_fitness_traits.txt</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="va">name</span><span class="op">=</span><span class="va">${f</span><span class="op">##</span><span class="pp">*</span>/<span class="va">}</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">${f</span><span class="op">##</span><span class="pp">*</span>/<span class="va">}</span><span class="st">"</span>            <span class="co"># strip everything up to the last /</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">${f</span><span class="op">%</span>/<span class="pp">*</span><span class="va">}</span><span class="st">"</span>             <span class="co"># strip the last / and everything after it</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">${f</span><span class="op">%</span>.txt<span class="va">}</span><span class="st">"</span>           <span class="co"># strip a suffix</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">${name</span><span class="op">%</span>.txt<span class="va">}</span><span class="st">.tsv"</span>    <span class="co"># swap the extension</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">${name</span><span class="op">/</span><span class="ss">fitness</span><span class="op">/</span>height<span class="va">}</span><span class="st">"</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">${</span><span class="op">#</span><span class="va">name}</span><span class="st">"</span>            <span class="co"># length in characters</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>red_spruce_fitness_traits.txt
+data/raw
+data/raw/red_spruce_fitness_traits
+red_spruce_fitness_traits.tsv
+red_spruce_height_traits.txt
+29</code></pre>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Expansion</th>
+<th>Result</th>
+<th>Memory aid</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>${var#pat}</code> / <code>${var##pat}</code></td>
+<td>Remove the shortest / longest match from the <strong>start</strong></td>
+<td><code>#</code> is to the left of <code>$</code> on a keyboard</td>
+</tr>
+<tr class="even">
+<td><code>${var%pat}</code> / <code>${var%%pat}</code></td>
+<td>Remove the shortest / longest match from the <strong>end</strong></td>
+<td><code>%</code> is to the right</td>
+</tr>
+<tr class="odd">
+<td><code>${var/old/new}</code></td>
+<td>Replace the first match (<code>//</code> replaces all)</td>
+<td>like <code>sed s/old/new/</code></td>
+</tr>
+<tr class="even">
+<td><code>${#var}</code></td>
+<td>Length</td>
+<td>“number of”</td>
+</tr>
+<tr class="odd">
+<td><code>${var:-default}</code></td>
+<td>Use <code>default</code> if <code>var</code> is unset or empty</td>
+<td>optional arguments</td>
+</tr>
+<tr class="even">
+<td><code>${var:?message}</code></td>
+<td>Stop with <code>message</code> if <code>var</code> is unset or empty</td>
+<td>required settings</td>
+</tr>
+<tr class="odd">
+<td><code>${var,,}</code> / <code>${var^^}</code></td>
+<td>Lowercase / uppercase</td>
+<td>Bash 4+</td>
+</tr>
+<tr class="even">
+<td><code>$(( expr ))</code></td>
+<td>Integer arithmetic</td>
+<td><code>$(( 326 / 4 ))</code> gives <code>81</code></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Integer arithmetic only
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>$(( 326 / 63 ))</code> gives <code>5</code>. Bash has no decimals. For decimal math, use <code>awk</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'BEGIN {printf "%.3f\n", 326 / 63}'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>5.175</code></pre>
+</div>
+</div>
+</section>
+<section id="loops" class="level2">
+<h2 class="anchored" data-anchor-id="loops">Loops</h2>
+<section id="for-loops" class="level3">
+<h3 class="anchored" data-anchor-id="for-loops"><code>for</code> loops</h3>
+<p>A <code>for</code> loop runs its body once for each word in a list:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="dt">{</span><span class="dv">1</span><span class="dt">..</span><span class="dv">3</span><span class="dt">}</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"replicate_</span><span class="va">$i</span><span class="st">"</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>replicate_1
+replicate_2
+replicate_3</code></pre>
+<p>The list can be a glob, which is the safe way to loop over files:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> results/<span class="pp">*</span>.txt<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">[[</span> <span class="ot">-e</span> <span class="va">$f</span> <span class="kw">]]</span> <span class="kw">||</span> <span class="cf">continue</span>          <span class="co"># skip if the glob matched nothing</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"</span><span class="va">$f</span><span class="st"> has </span><span class="va">$(</span><span class="fu">wc</span> <span class="at">-l</span> <span class="op">&lt;</span> <span class="st">"</span><span class="va">$f</span><span class="st">"</span><span class="va">)</span><span class="st"> lines"</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>continue</code> skips to the next item, and <code>break</code> leaves the loop entirely.</p>
+<p>Zero-padded sample IDs are common in sequencing work:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> 1 12<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">printf</span> <span class="st">'S%02d\n'</span> <span class="st">"</span><span class="va">$i</span><span class="st">"</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>S01
+S02
+S03</code></pre>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Do not loop over <code>$(ls)</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>for f in $(ls)</code> splits filenames on spaces and breaks on unusual names. Use a glob (<code>for f in *.txt</code>) or <code>find</code> (shown later) instead.</p>
+</div>
+</div>
+</section>
+<section id="while-read-processing-a-file-line-by-line" class="level3">
+<h3 class="anchored" data-anchor-id="while-read-processing-a-file-line-by-line"><code>while read</code>: processing a file line by line</h3>
+<p>To read a file one line at a time, use:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="va">IFS</span><span class="op">=</span> <span class="bu">read</span> <span class="at">-r</span> <span class="va">line</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"</span><span class="va">$line</span><span class="st">"</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span> <span class="op">&lt;</span> input.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Piece</th>
+<th>Why it is there</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>IFS=</code></td>
+<td>Keeps leading and trailing whitespace</td>
+</tr>
+<tr class="even">
+<td><code>-r</code></td>
+<td>Treats backslashes literally</td>
+</tr>
+<tr class="odd">
+<td><code>&lt; input.txt</code></td>
+<td>Feeds the file to the whole loop</td>
+</tr>
+</tbody>
+</table>
+<p>Now count the lines in the red-spruce file this way:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="va">n</span><span class="op">=</span>0</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="va">IFS</span><span class="op">=</span> <span class="bu">read</span> <span class="at">-r</span> <span class="va">line</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">n</span><span class="op">=</span><span class="va">$((n</span> <span class="op">+</span> <span class="dv">1</span><span class="va">))</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span> <span class="op">&lt;</span> data/raw/red_spruce_fitness_traits.txt</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$n</span><span class="st">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>326</code></pre>
+<p>The loop is one line short, for the same reason <code>wc -l</code> was: <code>read</code> returns failure on a final line that has no newline, and the loop ends before processing it. The standard fix is to also continue when <code>read</code> has filled the variable:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="va">n</span><span class="op">=</span>0</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="va">IFS</span><span class="op">=</span> <span class="bu">read</span> <span class="at">-r</span> <span class="va">line</span> <span class="kw">||</span> <span class="kw">[[</span> <span class="ot">-n</span> <span class="va">$line</span> <span class="kw">]];</span> <span class="cf">do</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">n</span><span class="op">=</span><span class="va">$((n</span> <span class="op">+</span> <span class="dv">1</span><span class="va">))</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span> <span class="op">&lt;</span> data/raw/red_spruce_fitness_traits.txt</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$n</span><span class="st">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>327</code></pre>
+</section>
+<section id="splitting-tab-delimited-rows-into-fields" class="level3">
+<h3 class="anchored" data-anchor-id="splitting-tab-delimited-rows-into-fields">Splitting tab-delimited rows into fields</h3>
+<p>Set <code>IFS</code> to a tab and give <code>read</code> several variable names. Each field goes into one variable, and the last variable receives everything that remains:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> +2 data/raw/red_spruce_fitness_traits.txt <span class="kw">|</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> <span class="va">IFS</span><span class="op">=</span><span class="st">$'</span><span class="dt">\t</span><span class="st">'</span> <span class="bu">read</span> <span class="at">-r</span> <span class="va">family</span> <span class="va">pop</span> <span class="va">tree</span> <span class="va">loc</span> <span class="va">rest</span> <span class="kw">||</span> <span class="kw">[[</span> <span class="ot">-n</span> <span class="va">$family</span> <span class="kw">]];</span> <span class="cf">do</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"</span><span class="va">$family</span><span class="st"> is from </span><span class="va">$loc</span><span class="st">"</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">done</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>AB_05 is from TN
+AB_08 is from TN
+AB_12 is from TN</code></pre>
+<p><code>tail -n +2</code> means “start from line 2”, which skips the header. <code>$'\t'</code> is Bash’s notation for a literal tab character.</p>
+</section>
+<section id="counting-with-an-associative-array" class="level3">
+<h3 class="anchored" data-anchor-id="counting-with-an-associative-array">Counting with an associative array</h3>
+<p>Bash 4+ supports <strong>associative arrays</strong>, which store values under text keys. This loop counts trees per Location:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">declare</span> <span class="at">-A</span> <span class="va">count</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">read</span> <span class="at">-r</span> <span class="va">header</span>                      <span class="co"># consume the header line</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> <span class="va">IFS</span><span class="op">=</span><span class="st">$'</span><span class="dt">\t</span><span class="st">'</span> <span class="bu">read</span> <span class="at">-r</span> <span class="va">family</span> <span class="va">pop</span> <span class="va">tree</span> <span class="va">loc</span> <span class="va">rest</span> <span class="kw">||</span> <span class="kw">[[</span> <span class="ot">-n</span> <span class="va">$family</span> <span class="kw">]];</span> <span class="cf">do</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">count</span><span class="op">[</span><span class="va">$loc</span><span class="op">]=</span><span class="va">$((</span> <span class="va">${count</span><span class="op">[</span><span class="va">$loc</span><span class="op">]:-</span>0<span class="va">}</span> <span class="op">+</span> <span class="dv">1</span> <span class="va">))</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">done</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span> <span class="op">&lt;</span> data/raw/red_spruce_fitness_traits.txt</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="st">"</span><span class="va">${</span><span class="op">!</span><span class="va">count</span><span class="op">[@]</span><span class="va">}</span><span class="st">"</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">printf</span> <span class="st">'%s\t%s\n'</span> <span class="st">"</span><span class="va">$k</span><span class="st">"</span> <span class="st">"</span><span class="va">${count</span><span class="op">[</span><span class="va">$k</span><span class="op">]</span><span class="va">}</span><span class="st">"</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>MA  19
+MD  10
+ME  16
+NB  6</code></pre>
+<p><code>"${!count[@]}"</code> expands to all keys, and <code>"${count[$k]}"</code> to one value. This works, but Bash loops are slow on large files. The next module does the same task with <code>awk</code> in one line, thousands of times faster on a VCF or a large phenotype table. Use Bash loops to <strong>orchestrate</strong> files and programs, and <code>awk</code> to <strong>compute</strong> over rows.</p>
+</section>
+</section>
+<section id="writing-scripts" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="writing-scripts">Writing scripts</h2>
+<section id="anatomy-of-a-robust-script" class="level3">
+<h3 class="anchored" data-anchor-id="anatomy-of-a-robust-script">Anatomy of a robust script</h3>
+<p>A script is a text file of commands. A good one has five parts:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash                 # 1. shebang: run this file with bash</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co"># name.sh — one-line purpose        # 2. header: what, and how to run it</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage: bash src/name.sh ARG</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail                   <span class="co"># 3. strict mode: stop on errors</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="va">in</span><span class="op">=</span><span class="st">"data/raw/..."</span>                   <span class="co"># 4. settings at the top, in variables</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="va">out</span><span class="op">=</span><span class="st">"results/..."</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. the work, ideally in small named steps</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Strict mode is three settings:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Setting</th>
+<th>Effect</th>
+<th>Without it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>set -e</code></td>
+<td>Exit as soon as a command fails</td>
+<td>The script carries on and builds results on a failed step</td>
+</tr>
+<tr class="even">
+<td><code>set -u</code></td>
+<td>Treat an unset variable as an error</td>
+<td>A typo like <code>$ouput</code> silently becomes an empty string</td>
+</tr>
+<tr class="odd">
+<td><code>set -o pipefail</code></td>
+<td>A pipeline fails if <strong>any</strong> command in it fails</td>
+<td><code>missing_cmd \| sort</code> “succeeds” because <code>sort</code> succeeded</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span><code>set -u</code> and <code>rm</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Without <code>set -u</code>, <code>rm -rf "$outdir/"</code> with an unset <code>outdir</code> becomes <code>rm -rf "/"</code>. Strict mode turns that disaster into an error message. Always use it in scripts that delete or overwrite files.</p>
+</div>
+</div>
+</section>
+<section id="script-1-download-and-verify-the-data" class="level3 column-body">
+<h3 class="anchored" data-anchor-id="script-1-download-and-verify-the-data">Script 1: download and verify the data</h3>
+<p>Create <code>src/get_data.sh</code> with a text editor (<code>nano src/get_data.sh</code>, <code>vim src/get_data.sh</code>, or your editor’s remote mode):</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/get_data.sh</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-filename="src/get_data.sh"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># get_data.sh — download the red-spruce fitness-trait table and verify it.</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage: bash src/get_data.sh        (run from the project root)</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="va">URL</span><span class="op">=</span><span class="st">"https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt"</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="va">OUT</span><span class="op">=</span><span class="st">"data/raw/red_spruce_fitness_traits.txt"</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="va">LOG</span><span class="op">=</span><span class="st">"logs/get_data_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d_%H%M%S<span class="va">)</span><span class="st">.log"</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="fu">log()</span> <span class="kw">{</span> <span class="bu">printf</span> <span class="st">'[%s] %s\n'</span> <span class="st">"</span><span class="va">$(</span><span class="fu">date</span> <span class="st">'+%F %T'</span><span class="va">)</span><span class="st">"</span> <span class="st">"</span><span class="va">$*</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tee</span> <span class="at">-a</span> <span class="st">"</span><span class="va">$LOG</span><span class="st">"</span><span class="kw">;</span> <span class="kw">}</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="fu">die()</span> <span class="kw">{</span> <span class="ex">log</span> <span class="st">"ERROR: </span><span class="va">$*</span><span class="st">"</span><span class="kw">;</span> <span class="bu">exit</span> 1<span class="kw">;</span> <span class="kw">}</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Refuse to run from the wrong directory</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">-d</span> data/raw <span class="kw">&amp;&amp;</span> <span class="ot">-d</span> logs <span class="kw">]]</span> <span class="kw">||</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">"Run this from the project root (cluster-exercise/)."</span> <span class="op">&gt;&amp;</span><span class="dv">2</span><span class="kw">;</span> <span class="bu">exit</span> 1<span class="kw">;</span> <span class="kw">}</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Download only if the file is missing or empty (safe to re-run)</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="ot">-s</span> <span class="st">"</span><span class="va">$OUT</span><span class="st">"</span> <span class="kw">]];</span> <span class="cf">then</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>  <span class="ex">log</span> <span class="st">"Already present: </span><span class="va">$OUT</span><span class="st"> (skipping download)"</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>  <span class="ex">log</span> <span class="st">"Downloading </span><span class="va">$URL</span><span class="st">"</span></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>  <span class="ex">curl</span> <span class="at">-fsSL</span> <span class="at">-o</span> <span class="st">"</span><span class="va">$OUT</span><span class="st">"</span> <span class="st">"</span><span class="va">$URL</span><span class="st">"</span> <span class="kw">||</span> <span class="ex">die</span> <span class="st">"download failed"</span></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Sanity checks</span></span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">-s</span> <span class="st">"</span><span class="va">$OUT</span><span class="st">"</span> <span class="kw">]]</span> <span class="kw">||</span> <span class="ex">die</span> <span class="st">"</span><span class="va">$OUT</span><span class="st"> is empty"</span></span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="fu">head</span> <span class="at">-n</span> 1 <span class="st">"</span><span class="va">$OUT</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-qi</span> <span class="st">'&lt;!doctype html'</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>  <span class="ex">die</span> <span class="st">"</span><span class="va">$OUT</span><span class="st"> is a web page, not data. Use the raw.githubusercontent.com URL."</span></span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a><span class="va">n_cols</span><span class="op">=</span><span class="va">$(</span><span class="fu">head</span> <span class="at">-n</span> 1 <span class="st">"</span><span class="va">$OUT</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'{print NF}'</span><span class="va">)</span></span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a><span class="va">n_bad</span><span class="op">=</span><span class="va">$(</span><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="at">-v</span> n=<span class="st">"</span><span class="va">$n_cols</span><span class="st">"</span> <span class="st">'NF != n'</span> <span class="st">"</span><span class="va">$OUT</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a><span class="kw">((</span> <span class="va">n_bad</span> <span class="op">==</span> <span class="dv">0</span> <span class="kw">))</span> <span class="kw">||</span> <span class="ex">die</span> <span class="st">"</span><span class="va">$n_bad</span><span class="st"> rows do not have </span><span class="va">$n_cols</span><span class="st"> columns"</span></span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a><span class="va">n_rows</span><span class="op">=</span><span class="va">$(</span><span class="fu">awk</span> <span class="st">'END {print NR - 1}'</span> <span class="st">"</span><span class="va">$OUT</span><span class="st">"</span><span class="va">)</span></span>
+<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a><span class="ex">log</span> <span class="st">"OK: </span><span class="va">$n_rows</span><span class="st"> data rows x </span><span class="va">$n_cols</span><span class="st"> columns"</span></span>
+<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Record a checksum so you can prove later that the raw file never changed</span></span>
+<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a><span class="fu">sha256sum</span> <span class="st">"</span><span class="va">$OUT</span><span class="st">"</span> <span class="op">&gt;</span> <span class="st">"</span><span class="va">$OUT</span><span class="st">.sha256"</span></span>
+<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a><span class="ex">log</span> <span class="st">"Checksum written to </span><span class="va">$OUT</span><span class="st">.sha256"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<p>What is new here:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Line</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>log() { ...; }</code></td>
+<td>Defines a <strong>function</strong>. <code>$*</code> is all the arguments joined into one string.</td>
+</tr>
+<tr class="even">
+<td><code>tee -a "$LOG"</code></td>
+<td>Shows each message on screen <strong>and</strong> appends it to a time-stamped log file</td>
+</tr>
+<tr class="odd">
+<td><code>&gt;&amp;2</code></td>
+<td>Sends the error message to standard error, where error messages belong</td>
+</tr>
+<tr class="even">
+<td><code>curl -fsSL</code></td>
+<td><code>-f</code> fails on HTTP errors such as 404 instead of saving the error page; <code>-s</code> hides the progress bar; <code>-S</code> still shows errors; <code>-L</code> follows redirects</td>
+</tr>
+<tr class="odd">
+<td><code>if [[ -s ... ]]</code></td>
+<td>Makes the script <strong>idempotent</strong>: the second run skips the download</td>
+</tr>
+<tr class="even">
+<td><code>awk ... 'NF != n'</code></td>
+<td>Prints any row whose column count differs from the header’s (a preview of the next module)</td>
+</tr>
+</tbody>
+</table>
+<p>Run it twice:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> src/get_data.sh</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> src/get_data.sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>[2026-10-08 18:06:45] Downloading https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt
+[2026-10-08 18:06:45] OK: 326 data rows x 19 columns
+[2026-10-08 18:06:45] Checksum written to data/raw/red_spruce_fitness_traits.txt.sha256
+[2026-10-08 18:06:45] Already present: data/raw/red_spruce_fitness_traits.txt (skipping download)
+[2026-10-08 18:06:45] OK: 326 data rows x 19 columns
+[2026-10-08 18:06:45] Checksum written to data/raw/red_spruce_fitness_traits.txt.sha256</code></pre>
+<p>Now test the guard by running it from the wrong place:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> ~/projects/cluster-exercise/src/get_data.sh</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"exit status: </span><span class="va">$?</span><span class="st">"</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Run this from the project root (cluster-exercise/).
+exit status: 1</code></pre>
+<p>Testing the failure paths is as important as testing the success path. A script that fails loudly is far better than one that “succeeds” on the wrong input.</p>
+<section id="making-a-script-executable" class="level3">
+<h3 class="anchored" data-anchor-id="making-a-script-executable">Making a script executable</h3>
+<p>So far you have run scripts with <code>bash script.sh</code>. To run one directly, give it execute permission:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x src/get_data.sh</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./src/get_data.sh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The shebang line tells Linux which interpreter to use. <code>#!/usr/bin/env bash</code> finds <code>bash</code> on your <code>PATH</code>, which is more portable than hard-coding <code>/bin/bash</code>. The <code>./</code> is required because the current directory is deliberately not on your <code>PATH</code>.</p>
+</section>
+<section id="script-2-arguments-and-a-usage-message" class="level3">
+<h3 class="anchored" data-anchor-id="script-2-arguments-and-a-usage-message">Script 2: arguments and a usage message</h3>
+<p>Hard-coded filenames make a script single-use. <strong>Positional arguments</strong> make it reusable:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>$0</code></td>
+<td>The script’s own name</td>
+</tr>
+<tr class="even">
+<td><code>$1</code>, <code>$2</code>, …</td>
+<td>First, second, … argument</td>
+</tr>
+<tr class="odd">
+<td><code>$#</code></td>
+<td>Number of arguments</td>
+</tr>
+<tr class="even">
+<td><code>"$@"</code></td>
+<td>All arguments, each kept as a separate word (use this when passing them on)</td>
+</tr>
+</tbody>
+</table>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/count_column.sh</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42" data-filename="src/count_column.sh"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co"># count_column.sh — count how many rows share each value in one column.</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage: bash src/count_column.sh FILE COLUMN_NUMBER</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="fu">usage()</span> <span class="kw">{</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"Usage: </span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$0</span><span class="st">"</span><span class="va">)</span><span class="st"> FILE COLUMN_NUMBER"</span> <span class="op">&gt;&amp;</span><span class="dv">2</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"Example: </span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$0</span><span class="st">"</span><span class="va">)</span><span class="st"> data/raw/red_spruce_fitness_traits.txt 4"</span> <span class="op">&gt;&amp;</span><span class="dv">2</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  <span class="bu">exit</span> 1</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="kw">((</span> <span class="va">$#</span> <span class="op">==</span> <span class="dv">2</span> <span class="kw">))</span> <span class="kw">||</span> <span class="ex">usage</span>                 <span class="co"># exactly two arguments</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="va">file</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a><span class="va">col</span><span class="op">=</span><span class="va">$2</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">-f</span> <span class="va">$file</span> <span class="kw">]]</span>         <span class="kw">||</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">"No such file: </span><span class="va">$file</span><span class="st">"</span> <span class="op">&gt;&amp;</span><span class="dv">2</span><span class="kw">;</span> <span class="bu">exit</span> 1<span class="kw">;</span> <span class="kw">}</span></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="va">$col</span> <span class="ot">=~</span> <span class="pp">^</span><span class="op">[</span><span class="ss">0</span><span class="op">-</span><span class="ss">9</span><span class="op">]</span><span class="pp">+</span><span class="op">$</span> <span class="kw">]]</span> <span class="kw">||</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">"COLUMN_NUMBER must be a positive integer, got: </span><span class="va">$col</span><span class="st">"</span> <span class="op">&gt;&amp;</span><span class="dv">2</span><span class="kw">;</span> <span class="bu">exit</span> 1<span class="kw">;</span> <span class="kw">}</span></span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a><span class="va">header</span><span class="op">=</span><span class="va">$(</span><span class="fu">head</span> <span class="at">-n</span> 1 <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> <span class="st">"</span><span class="va">$col</span><span class="st">"</span><span class="va">)</span></span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"# counts of '</span><span class="va">$header</span><span class="st">' (column </span><span class="va">$col</span><span class="st">) in </span><span class="va">$file</span><span class="st">"</span></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> +2 <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> <span class="st">"</span><span class="va">$col</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-rn</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x src/count_column.sh</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./src/count_column.sh</span> data/raw/red_spruce_fitness_traits.txt 5</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code># counts of 'Region' (column 5) in data/raw/red_spruce_fitness_traits.txt
+    178 C
+    101 E
+     47 M</code></pre>
+<p>Calling it incorrectly prints help instead of a cryptic error:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./src/count_column.sh</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./src/count_column.sh</span> data/raw/red_spruce_fitness_traits.txt abc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Usage: count_column.sh FILE COLUMN_NUMBER
+Example: count_column.sh data/raw/red_spruce_fitness_traits.txt 4
+COLUMN_NUMBER must be a positive integer, got: abc</code></pre>
+</section>
+<section id="functions-and-local" class="level3">
+<h3 class="anchored" data-anchor-id="functions-and-local">Functions and <code>local</code></h3>
+<p>Functions group steps under a name. Arguments work exactly as in scripts (<code>$1</code>, <code>$#</code>, <code>"$@"</code>). Use <code>local</code> so a function’s variables do not overwrite variables elsewhere in the script:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n_data_rows()</span> <span class="kw">{</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">local</span> <span class="va">file</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">awk</span> <span class="st">'END {print NR - 1}'</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Rows: </span><span class="va">$(</span><span class="ex">n_data_rows</span> data/raw/red_spruce_fitness_traits.txt<span class="va">)</span><span class="st">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>Rows: 326</code></pre>
+<p>Define functions before you call them, usually near the top of the script.</p>
+</section>
+</section>
+<section id="data-integrity-with-checksums" class="level2">
+<h2 class="anchored" data-anchor-id="data-integrity-with-checksums">Data integrity with checksums</h2>
+<p>A <strong>checksum</strong> is a short fingerprint of a file’s exact bytes. If even one byte changes, the checksum changes. Your <code>get_data.sh</code> already saved one:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> data/raw/red_spruce_fitness_traits.txt.sha256</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>ef503c4d9354e6f44905c3508ed3d26ea34b38b391224a77689ff70a871b98c5  data/raw/red_spruce_fitness_traits.txt</code></pre>
+<p>At any later time, verify the file still matches:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb51"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sha256sum</span> <span class="at">-c</span> data/raw/red_spruce_fitness_traits.txt.sha256</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>data/raw/red_spruce_fitness_traits.txt: OK</code></pre>
+<p>If the file had been edited or truncated, you would see <code>FAILED</code>, and <code>sha256sum -c</code> would exit with a non-zero status, which a script can act on.</p>
+<p>Use checksums:</p>
+<ul>
+<li>After every large transfer, especially FASTQ, BAM, and VCF files.</li>
+<li>When a sequencing facility provides <code>md5</code> files. Check them with <code>md5sum -c file.md5</code>.</li>
+<li>Before publishing, to document exactly which data your results came from.</li>
+</ul>
+</section>
+<section id="working-with-many-files" class="level2">
+<h2 class="anchored" data-anchor-id="working-with-many-files">Working with many files</h2>
+<section id="find-select-files-by-name-type-size-or-age" class="level3">
+<h3 class="anchored" data-anchor-id="find-select-files-by-name-type-size-or-age"><code>find</code>: select files by name, type, size, or age</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> results <span class="at">-name</span> <span class="st">'*.tsv'</span>                  <span class="co"># by name (quote the pattern)</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-type</span> d <span class="at">-name</span> logs                   <span class="co"># directories only</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> data <span class="at">-type</span> f <span class="at">-size</span> +100M               <span class="co"># larger than 100 MB</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> logs <span class="at">-type</span> f <span class="at">-mtime</span> +30                <span class="co"># modified more than 30 days ago</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-maxdepth</span> 2 <span class="at">-type</span> f <span class="at">-name</span> <span class="st">'*.sh'</span>     <span class="co"># limit how deep to search</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="acting-on-what-find-finds" class="level3">
+<h3 class="anchored" data-anchor-id="acting-on-what-find-finds">Acting on what <code>find</code> finds</h3>
+<p><code>-exec ... {} +</code> runs a command on the files found. <code>{}</code> stands for the filenames, and <code>+</code> passes many of them per call:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb54"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> logs <span class="at">-type</span> f <span class="at">-name</span> <span class="st">'*.log'</span> <span class="at">-exec</span> ls <span class="at">-lh</span> {} +</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>xargs</code> does the same for any list arriving on standard input. Pair <code>find -print0</code> with <code>xargs -0</code> so that filenames containing spaces survive:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb55"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> results <span class="at">-name</span> <span class="st">'*.tsv'</span> <span class="at">-print0</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-0</span> wc <span class="at">-l</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>xargs -P N</code> runs up to <code>N</code> commands in parallel, for example compressing many files at once:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> data/fastq <span class="at">-name</span> <span class="st">'*.fastq'</span> <span class="at">-print0</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-0</span> <span class="at">-n</span> 1 <span class="at">-P</span> 4 gzip</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Parallel work belongs on compute nodes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>xargs -P</code>, GNU <code>parallel</code>, and similar tools can saturate a shared login node. Use them inside a Slurm job that has requested the same number of CPUs, for example <code>#SBATCH --cpus-per-task=4</code> with <code>-P 4</code>.</p>
+</div>
+</div>
+</section>
+<section id="script-3-split-the-dataset-into-one-file-per-location" class="level3">
+<h3 class="anchored" data-anchor-id="script-3-split-the-dataset-into-one-file-per-location">Script 3: split the dataset into one file per Location</h3>
+<p>This script combines a loop, field splitting, the trailing-newline fix, and an idempotent “start clean” step:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/split_by_location.sh</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb57" data-filename="src/split_by_location.sh"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="co"># split_by_location.sh — write one TSV per Location (column 4), each with the header.</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage: bash src/split_by_location.sh</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="va">in</span><span class="op">=</span><span class="st">"data/raw/red_spruce_fitness_traits.txt"</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="va">outdir</span><span class="op">=</span><span class="st">"results/by_location"</span></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span></span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-f</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="pp">*</span>.tsv          <span class="co"># start clean: this script appends below</span></span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a><span class="va">header</span><span class="op">=</span><span class="va">$(</span><span class="fu">head</span> <span class="at">-n</span> 1 <span class="st">"</span><span class="va">$in</span><span class="st">"</span><span class="va">)</span></span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the data rows (skip header with tail). "|| [[ -n $family ]]" keeps the</span></span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a><span class="co"># final line even though the file has no trailing newline.</span></span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> +2 <span class="st">"</span><span class="va">$in</span><span class="st">"</span> <span class="kw">|</span> <span class="cf">while</span> <span class="va">IFS</span><span class="op">=</span><span class="st">$'</span><span class="dt">\t</span><span class="st">'</span> <span class="bu">read</span> <span class="at">-r</span> <span class="va">family</span> <span class="va">pop</span> <span class="va">tree</span> <span class="va">loc</span> <span class="va">rest</span> <span class="kw">||</span> <span class="kw">[[</span> <span class="ot">-n</span> <span class="va">$family</span> <span class="kw">]];</span> <span class="cf">do</span></span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>  <span class="va">out</span><span class="op">=</span><span class="st">"</span><span class="va">$outdir</span><span class="st">/</span><span class="va">${loc}</span><span class="st">.tsv"</span></span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">[[</span> <span class="ot">-f</span> <span class="va">$out</span> <span class="kw">]]</span> <span class="kw">||</span> <span class="bu">printf</span> <span class="st">'%s\n'</span> <span class="st">"</span><span class="va">$header</span><span class="st">"</span> <span class="op">&gt;</span> <span class="st">"</span><span class="va">$out</span><span class="st">"</span>     <span class="co"># write header once per file</span></span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a>  <span class="bu">printf</span> <span class="st">'%s\t%s\t%s\t%s\t%s\n'</span> <span class="st">"</span><span class="va">$family</span><span class="st">"</span> <span class="st">"</span><span class="va">$pop</span><span class="st">"</span> <span class="st">"</span><span class="va">$tree</span><span class="st">"</span> <span class="st">"</span><span class="va">$loc</span><span class="st">"</span> <span class="st">"</span><span class="va">$rest</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="st">"</span><span class="va">$out</span><span class="st">"</span></span>
+<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Report</span></span>
+<span id="cb57-23"><a href="#cb57-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="pp">*</span>.tsv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb57-24"><a href="#cb57-24" aria-hidden="true" tabindex="-1"></a>  <span class="bu">printf</span> <span class="st">'%-6s %4d rows\n'</span> <span class="st">"</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$f</span><span class="st">"</span> .tsv<span class="va">)</span><span class="st">"</span> <span class="st">"</span><span class="va">$((</span> <span class="va">$(</span><span class="fu">wc</span> <span class="at">-l</span> <span class="op">&lt;</span> <span class="st">"</span><span class="va">$f</span><span class="st">"</span><span class="va">)</span> <span class="op">-</span> <span class="dv">1</span> <span class="va">))</span><span class="st">"</span></span>
+<span id="cb57-25"><a href="#cb57-25" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb58"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> src/split_by_location.sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>MA       19 rows
+MD       10 rows
+ME       16 rows
+NB        6 rows
+NC       22 rows
+NH       23 rows
+NY       53 rows
+PA       47 rows
+TN       14 rows
+VA        5 rows
+VT       61 rows
+WV       50 rows</code></pre>
+<p>The per-Location counts add up to 326, and this also answers the introductory module’s Vermont challenge exactly: <strong>61 rows have <code>VT</code> in the Location column.</strong></p>
+<p>Check that nothing was lost. This command totals every output file, headers included:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb60"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> results/by_location <span class="at">-name</span> <span class="st">'*.tsv'</span> <span class="at">-print0</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-0</span> wc <span class="at">-l</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>  338 total</code></pre>
+<p>That is 326 data rows plus 12 headers. The <code>rm -f</code> line is what makes the script safe to rerun: without it, a second run would append every row again and double the files.</p>
+</section>
+</section>
+<section id="compression-and-archives" class="level2">
+<h2 class="anchored" data-anchor-id="compression-and-archives">Compression and archives</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Task</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Compress, keeping the original</td>
+<td><code>gzip -k file.tsv</code></td>
+</tr>
+<tr class="even">
+<td>Decompress</td>
+<td><code>gunzip file.tsv.gz</code></td>
+</tr>
+<tr class="odd">
+<td>Read without decompressing</td>
+<td><code>zcat file.tsv.gz \| head</code>, or <code>zless file.tsv.gz</code></td>
+</tr>
+<tr class="even">
+<td>Create an archive of a directory</td>
+<td><code>tar -czf archive.tar.gz dir/</code></td>
+</tr>
+<tr class="odd">
+<td>List an archive’s contents</td>
+<td><code>tar -tzf archive.tar.gz</code></td>
+</tr>
+<tr class="even">
+<td>Extract an archive</td>
+<td><code>tar -xzf archive.tar.gz</code></td>
+</tr>
+<tr class="odd">
+<td>Extract into a specific directory</td>
+<td><code>tar -xzf archive.tar.gz -C target/</code></td>
+</tr>
+</tbody>
+</table>
+<p>Text data compresses well:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb62"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gzip</span> <span class="at">-k</span> results/by_location/VT.tsv</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> results/by_location/VT.tsv<span class="pp">*</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $5, $9}'</span>   <span class="co"># size and name only</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>9.3K results/by_location/VT.tsv
+3.5K results/by_location/VT.tsv.gz</code></pre>
+<p>Bundle the split files into a single archive to send to a collaborator. <code>-C results</code> means “change into <code>results/</code> first”, so the archive does not contain the <code>results/</code> prefix:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb64"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-czf</span> results/by_location.tar.gz <span class="at">-C</span> results by_location</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-tzf</span> results/by_location.tar.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>by_location/
+by_location/VA.tsv
+by_location/NB.tsv
+by_location/PA.tsv</code></pre>
+<p>The <code>tar</code> flags read as words: <strong>c</strong>reate / <strong>t</strong>able of contents / e<strong>x</strong>tract, g<strong>z</strong>ip, <strong>f</strong>ile name follows. Always list (<code>-t</code>) an archive before extracting one you did not create, so it cannot scatter files over your working directory.</p>
+</section>
+<section id="moving-data-on-and-off-the-cluster" class="level2">
+<h2 class="anchored" data-anchor-id="moving-data-on-and-off-the-cluster">Moving data on and off the cluster</h2>
+<p>Run these from <strong>your own computer</strong>, not from the cluster, unless your site documents otherwise. Replace <code>user@cluster.example.edu</code> with your login.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb66"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># copy one file up to the cluster</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> results.tsv user@cluster.example.edu:~/projects/cluster-exercise/results/</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="co"># copy one file down from the cluster</span></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> user@cluster.example.edu:~/projects/cluster-exercise/results/fitness_by_location.tsv .</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For directories and large data, use <code>rsync</code>. It copies only what has changed and can resume an interrupted transfer:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb67"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preview first: -n (dry run) shows what would be copied</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avhn</span> <span class="at">--progress</span> results/ user@cluster.example.edu:~/projects/cluster-exercise/results/</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="co"># then run it for real</span></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avh</span> <span class="at">--progress</span> results/ user@cluster.example.edu:~/projects/cluster-exercise/results/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Flag</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-a</code></td>
+<td>Archive mode: recurse into directories, keep timestamps and permissions</td>
+</tr>
+<tr class="even">
+<td><code>-v</code></td>
+<td>Verbose</td>
+</tr>
+<tr class="odd">
+<td><code>-h</code></td>
+<td>Human-readable sizes</td>
+</tr>
+<tr class="even">
+<td><code>-n</code></td>
+<td>Dry run: show the plan, change nothing</td>
+</tr>
+<tr class="odd">
+<td><code>--progress</code></td>
+<td>Per-file progress</td>
+</tr>
+<tr class="even">
+<td><code>--delete</code></td>
+<td>Also delete destination files that are missing from the source. Powerful; always use with <code>-n</code> first.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>The trailing slash matters
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>rsync -a results/ dest/</code> copies the <strong>contents</strong> of <code>results</code> into <code>dest/</code>. <code>rsync -a results dest/</code> copies the <strong>directory itself</strong>, creating <code>dest/results/</code>. A dry run (<code>-n</code>) shows the difference before anything is written.</p>
+</div>
+</div>
+<p>For very large transfers (hundreds of gigabytes or more), use your institution’s data-transfer nodes or Globus, if available, rather than a login node.</p>
+</section>
+<section id="your-shell-environment" class="level2">
+<h2 class="anchored" data-anchor-id="your-shell-environment">Your shell environment</h2>
+<section id="path-and-finding-programs" class="level3">
+<h3 class="anchored" data-anchor-id="path-and-finding-programs"><code>PATH</code> and finding programs</h3>
+<p>When you type a command, Bash searches the directories listed in <code>PATH</code>, in order:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb68"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$PATH</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">':'</span> <span class="st">'\n'</span>      <span class="co"># one directory per line</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="bu">command</span> <span class="at">-v</span> Rscript              <span class="co"># where does this command come from?</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span> <span class="at">-t</span> cd                      <span class="co"># builtin, file, alias, or function?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If <code>command -v tree</code> prints nothing, the program is not on your <code>PATH</code>: either it is not installed, or it sits in a module you have not loaded.</p>
+</section>
+<section id="environment-modules" class="level3">
+<h3 class="anchored" data-anchor-id="environment-modules">Environment modules</h3>
+<p>Most clusters provide software through <strong>environment modules</strong> (often Lmod). Loading a module edits your <code>PATH</code> and related variables:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb69"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> avail                <span class="co"># what is installed</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> spider samtools      <span class="co"># search all versions (Lmod)</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load r               <span class="co"># load a module (names vary by cluster)</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> list                 <span class="co"># what is currently loaded</span></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> purge                <span class="co"># unload everything</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In scripts and job files, load <strong>explicit versions</strong>, such as <code>module load r/4.4.1</code>, so results are reproducible after the default version changes.</p>
+</section>
+<section id="bashrc-aliases-and-personal-functions" class="level3">
+<h3 class="anchored" data-anchor-id="bashrc-aliases-and-personal-functions"><code>~/.bashrc</code>: aliases and personal functions</h3>
+<p><code>~/.bashrc</code> runs every time you open an interactive shell. It is the place for shortcuts:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>~/.bashrc (excerpt)</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb70" data-filename="~/.bashrc (excerpt)"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Safer defaults</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> rm=<span class="st">'rm -i'</span>                      <span class="co"># ask before deleting</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ll=<span class="st">'ls -lhF'</span></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Jump to the project</span></span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> cdp=<span class="st">'cd ~/projects/cluster-exercise'</span></span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Show my jobs in the Slurm queue</span></span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> myq=<span class="st">'squeue -u $USER'</span></span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Count records correctly, even without a final newline</span></span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true" tabindex="-1"></a><span class="fu">nrec()</span> <span class="kw">{</span> <span class="fu">awk</span> <span class="st">'END {print NR}'</span> <span class="st">"</span><span class="va">$@</span><span class="st">"</span><span class="kw">;</span> <span class="kw">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Apply your changes to the current session with:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb71"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Keep <code>~/.bashrc</code> small
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Do not <code>module load</code> analysis software in <code>~/.bashrc</code>. It slows down every login, and it hides dependencies from your job scripts. Load modules inside each script that needs them.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="permissions-and-shared-lab-directories" class="level2">
+<h2 class="anchored" data-anchor-id="permissions-and-shared-lab-directories">Permissions and shared lab directories</h2>
+<p><code>ls -l</code> shows permissions as the first ten characters of each line:</p>
+<pre class="text"><code>-rwxr-xr-x  1 you  labgroup  1.2K  get_data.sh</code></pre>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Characters</th>
+<th>Applies to</th>
+<th>In this example</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>File type</td>
+<td><code>-</code></td>
+<td><code>-</code> file, <code>d</code> directory, <code>l</code> symbolic link</td>
+</tr>
+<tr class="even">
+<td>2 to 4</td>
+<td><strong>u</strong>ser (owner)</td>
+<td><code>rwx</code></td>
+<td>read, write, execute</td>
+</tr>
+<tr class="odd">
+<td>5 to 7</td>
+<td><strong>g</strong>roup</td>
+<td><code>r-x</code></td>
+<td>read, execute</td>
+</tr>
+<tr class="even">
+<td>8 to 10</td>
+<td><strong>o</strong>thers</td>
+<td><code>r-x</code></td>
+<td>read, execute</td>
+</tr>
+</tbody>
+</table>
+<p>For a <strong>directory</strong>, <code>r</code> lets you list it, <code>w</code> lets you create and delete files in it, and <code>x</code> lets you enter it (<code>cd</code>).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>chmod u+x script.sh</code></td>
+<td>Owner may execute</td>
+</tr>
+<tr class="even">
+<td><code>chmod g+rX -R shared/</code></td>
+<td>Group may read everything and enter directories (capital <code>X</code> = only where it makes sense)</td>
+</tr>
+<tr class="odd">
+<td><code>chmod o-rwx private/</code></td>
+<td>Remove all access for others</td>
+</tr>
+<tr class="even">
+<td><code>chmod 755 dir</code></td>
+<td><code>rwxr-xr-x</code>: common for scripts and shared directories</td>
+</tr>
+<tr class="odd">
+<td><code>chmod 644 file</code></td>
+<td><code>rw-r--r--</code>: common for data files</td>
+</tr>
+<tr class="even">
+<td><code>chmod 750 dir</code></td>
+<td><code>rwxr-x---</code>: lab group only</td>
+</tr>
+<tr class="odd">
+<td><code>chgrp -R labgroup shared/</code></td>
+<td>Give a directory tree to your lab’s group</td>
+</tr>
+<tr class="even">
+<td><code>chmod g+s shared/</code></td>
+<td>New files inherit the directory’s group (setgid)</td>
+</tr>
+<tr class="odd">
+<td><code>umask</code></td>
+<td>Shows the default permissions mask, often <code>0022</code></td>
+</tr>
+</tbody>
+</table>
+<p>The digits are the sum of r = 4, w = 2, x = 1 for user, group, and others, so <code>7</code> is <code>rwx</code>, <code>5</code> is <code>r-x</code>, and <code>4</code> is <code>r--</code>.</p>
+<p>A typical recipe for sharing raw data with your lab, read-only:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb73"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chgrp</span> <span class="at">-R</span> labgroup /depot/labgroup/red_spruce</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> <span class="at">-R</span> g+rX,g-w,o-rwx /depot/labgroup/red_spruce</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Never use <code>chmod 777</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>777</code> lets every user on the cluster modify or delete your files. If something “only works with 777”, the real problem is usually group ownership; fix it with <code>chgrp</code> and <code>g+</code> permissions.</p>
+</div>
+</div>
+</section>
+<section id="long-running-sessions-with-tmux" class="level2">
+<h2 class="anchored" data-anchor-id="long-running-sessions-with-tmux">Long-running sessions with <code>tmux</code></h2>
+<p>If your SSH connection drops, anything running in that terminal is killed. <code>tmux</code> keeps a session alive on the server, so you can disconnect and reattach later.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Action</th>
+<th>Command or keys</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Start a named session</td>
+<td><code>tmux new -s spruce</code></td>
+</tr>
+<tr class="even">
+<td>Detach, leaving it running</td>
+<td><kbd>Ctrl</kbd>+<kbd>b</kbd>, then <kbd>d</kbd></td>
+</tr>
+<tr class="odd">
+<td>List sessions</td>
+<td><code>tmux ls</code></td>
+</tr>
+<tr class="even">
+<td>Reattach</td>
+<td><code>tmux attach -t spruce</code></td>
+</tr>
+<tr class="odd">
+<td>New window inside tmux</td>
+<td><kbd>Ctrl</kbd>+<kbd>b</kbd>, then <kbd>c</kbd></td>
+</tr>
+<tr class="even">
+<td>Next / previous window</td>
+<td><kbd>Ctrl</kbd>+<kbd>b</kbd>, then <kbd>n</kbd> / <kbd>p</kbd></td>
+</tr>
+<tr class="odd">
+<td>Split pane vertically / horizontally</td>
+<td><kbd>Ctrl</kbd>+<kbd>b</kbd>, then <kbd>%</kbd> / <kbd>“</kbd></td>
+</tr>
+<tr class="even">
+<td>Close a session</td>
+<td><code>exit</code> inside it, or <code>tmux kill-session -t spruce</code></td>
+</tr>
+</tbody>
+</table>
+<p>Many clusters have several login nodes. A tmux session lives on one of them, so note its hostname (<code>hostname</code>) and SSH to that same node to reattach. Use tmux for interactive work, editors, and monitoring. Heavy computation still belongs in Slurm jobs.</p>
+</section>
+<section id="from-script-to-scheduler-a-first-job-array" class="level2">
+<h2 class="anchored" data-anchor-id="from-script-to-scheduler-a-first-job-array">From script to scheduler: a first job array</h2>
+<p>A <strong>job array</strong> runs the same script many times, with a different <code>SLURM_ARRAY_TASK_ID</code> (1, 2, 3, …) in each task. The standard pattern is a list file with one item per line, where each task picks the line matching its ID.</p>
+<p>Create the list of Locations:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb74"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 4 data/raw/red_spruce_fitness_traits.txt <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-u</span> <span class="op">&gt;</span> results/locations.txt</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-l</span> <span class="op">&lt;</span> results/locations.txt</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-n</span> <span class="st">'3p'</span> results/locations.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>12
+ME</code></pre>
+<p><code>sed -n '3p'</code> prints only line 3. The next module covers <code>sed</code> in depth.</p>
+<p>Now write the job script:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/per_location.slurm</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb76" data-filename="src/per_location.slurm"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=per_location</span></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --array=1-12               # one task per line of results/locations.txt</span></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00:05:00</span></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=1G</span></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=1</span></span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=logs/%x_%A_%a.out # %x job name, %A array job ID, %a task ID</span></span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=your_account     # site-specific: ask your cluster's support team</span></span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a><span class="co">##SBATCH --partition=standard      # site-specific; remove one # to enable</span></span>
+<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb76-12"><a href="#cb76-12" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"</span><span class="va">$SLURM_SUBMIT_DIR</span><span class="st">"</span>             <span class="co"># the directory you ran sbatch from</span></span>
+<span id="cb76-13"><a href="#cb76-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-14"><a href="#cb76-14" aria-hidden="true" tabindex="-1"></a><span class="va">loc</span><span class="op">=</span><span class="va">$(</span><span class="fu">sed</span> <span class="at">-n</span> <span class="st">"</span><span class="va">${SLURM_ARRAY_TASK_ID}</span><span class="st">p"</span> results/locations.txt<span class="va">)</span></span>
+<span id="cb76-15"><a href="#cb76-15" aria-hidden="true" tabindex="-1"></a><span class="va">in</span><span class="op">=</span><span class="st">"results/by_location/</span><span class="va">${loc}</span><span class="st">.tsv"</span></span>
+<span id="cb76-16"><a href="#cb76-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-17"><a href="#cb76-17" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Task </span><span class="va">${SLURM_ARRAY_TASK_ID}</span><span class="st"> on </span><span class="va">$(</span><span class="fu">hostname</span><span class="va">)</span><span class="st">: </span><span class="va">${loc}</span><span class="st">"</span></span>
+<span id="cb76-18"><a href="#cb76-18" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">-s</span> <span class="va">$in</span> <span class="kw">]]</span> <span class="kw">||</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">"Missing </span><span class="va">$in</span><span class="st">; run src/split_by_location.sh first"</span> <span class="op">&gt;&amp;</span><span class="dv">2</span><span class="kw">;</span> <span class="bu">exit</span> 1<span class="kw">;</span> <span class="kw">}</span></span>
+<span id="cb76-19"><a href="#cb76-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-20"><a href="#cb76-20" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Rows: </span><span class="va">$((</span> <span class="va">$(</span><span class="fu">wc</span> <span class="at">-l</span> <span class="op">&lt;</span> <span class="st">"</span><span class="va">$in</span><span class="st">"</span><span class="va">)</span> <span class="op">-</span> <span class="dv">1</span> <span class="va">))</span><span class="st">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Submit and monitor it from the project root:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb77"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> src/per_location.slurm</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="st">"</span><span class="va">$USER</span><span class="st">"</span></span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> logs/</span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> logs/per_location_<span class="pp">*</span>_3.out</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You can test the selection logic on the login node, without Slurm, by setting the variable yourself:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb78"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> SLURM_ARRAY_TASK_ID <span class="kw">in</span> 1 12<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">loc</span><span class="op">=</span><span class="va">$(</span><span class="fu">sed</span> <span class="at">-n</span> <span class="st">"</span><span class="va">${SLURM_ARRAY_TASK_ID}</span><span class="st">p"</span> results/locations.txt<span class="va">)</span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"task </span><span class="va">$SLURM_ARRAY_TASK_ID</span><span class="st"> -&gt; </span><span class="va">$loc</span><span class="st">: </span><span class="va">$((</span> <span class="va">$(</span><span class="fu">wc</span> <span class="at">-l</span> <span class="op">&lt;</span> results/by_location/<span class="va">${loc}</span>.tsv<span class="va">)</span> <span class="op">-</span> <span class="dv">1</span> <span class="va">))</span><span class="st"> rows"</span></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text"><code>task 1 -&gt; MA: 19 rows
+task 12 -&gt; WV: 50 rows</code></pre>
+<p>The same pattern scales from 12 Locations to 1,000 samples: put one sample ID or FASTQ path per line in a list file and set <code>--array=1-1000</code>. Add <code>%20</code> (as in <code>--array=1-1000%20</code>) to cap how many tasks run at once.</p>
+</section>
+<section id="checkpoint-exercises" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-exercises">Checkpoint exercises</h2>
+<p>Work from inside <code>cluster-exercise/</code>. Try each exercise before opening its solution.</p>
+<ol type="1">
+<li><p>Print <code>ready</code> only if <code>results/locations.txt</code> exists <strong>and</strong> is not empty.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb80"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">-s</span> results/locations.txt <span class="kw">]]</span> <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> ready</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div></li>
+<li><p>Given <code>f=results/by_location/VT.tsv</code>, use parameter expansion alone to print <code>VT</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb81"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="va">f</span><span class="op">=</span>results/by_location/VT.tsv</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="va">name</span><span class="op">=</span><span class="va">${f</span><span class="op">##</span><span class="pp">*</span>/<span class="va">}</span>       <span class="co"># VT.tsv</span></span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">${name</span><span class="op">%</span>.tsv<span class="va">}</span><span class="st">"</span> <span class="co"># VT</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div></li>
+<li><p>Write a <code>for</code> loop that prints each file in <code>results/by_location/</code> together with its number of data rows (lines minus the header).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb82"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> results/by_location/<span class="pp">*</span>.tsv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"</span><span class="va">$f</span><span class="st"> </span><span class="va">$((</span> <span class="va">$(</span><span class="fu">wc</span> <span class="at">-l</span> <span class="op">&lt;</span> <span class="st">"</span><span class="va">$f</span><span class="st">"</span><span class="va">)</span> <span class="op">-</span> <span class="dv">1</span> <span class="va">))</span><span class="st">"</span></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>These files were written by <code>printf '...\n'</code>, so they do end in a newline and <code>wc -l</code> is accurate here.</p>
+</div>
+</div>
+</div></li>
+<li><p>Edit one byte of a <strong>copy</strong> of the raw file, then show that its checksum no longer matches the original’s.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb83"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> data/raw/red_spruce_fitness_traits.txt /tmp/copy.txt</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'s/AB_05/AB_06/'</span> /tmp/copy.txt</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sha256sum</span> data/raw/red_spruce_fitness_traits.txt /tmp/copy.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The two fingerprints are completely different, even though only one character changed.</p>
+</div>
+</div>
+</div></li>
+<li><p>Use <code>find</code> to list every <code>.sh</code> file in the project with its size.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb84"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="at">-name</span> <span class="st">'*.sh'</span> <span class="at">-exec</span> ls <span class="at">-lh</span> {} +</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div></li>
+<li><p>Create <code>results/by_location.tar.gz</code> and list its contents without extracting it.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb85"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-czf</span> results/by_location.tar.gz <span class="at">-C</span> results by_location</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-tzf</span> results/by_location.tar.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div></li>
+<li><p>Run <code>./src/count_column.sh</code> with no arguments. What is printed, and what is the exit status?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb86"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./src/count_column.sh</span><span class="kw">;</span> <span class="bu">echo</span> <span class="st">"exit: </span><span class="va">$?</span><span class="st">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It prints the two usage lines on standard error and exits with status <code>1</code>.</p>
+</div>
+</div>
+</div></li>
+</ol>
+</section>
+<section id="challenge-a-raw-data-guard" class="level2">
+<h2 class="anchored" data-anchor-id="challenge-a-raw-data-guard">Challenge: a raw-data guard</h2>
+<p>Write <code>src/check_raw.sh</code> that:</p>
+<ol type="1">
+<li>Exits with an error if <code>data/raw/red_spruce_fitness_traits.txt.sha256</code> does not exist.</li>
+<li>Runs <code>sha256sum -c</code> quietly, and prints <code>raw data unchanged</code> on success, or <code>RAW DATA CHANGED</code> on standard error with exit status 1 on failure.</li>
+<li>Is called as the first step of every other script you write.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>One possible solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/check_raw.sh</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb87" data-filename="src/check_raw.sh"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="co"># check_raw.sh — stop if the raw data no longer matches its recorded checksum.</span></span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a><span class="va">sum</span><span class="op">=</span><span class="st">"data/raw/red_spruce_fitness_traits.txt.sha256"</span></span>
+<span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-7"><a href="#cb87-7" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">-f</span> <span class="va">$sum</span> <span class="kw">]]</span> <span class="kw">||</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">"No checksum file: </span><span class="va">$sum</span><span class="st"> (run src/get_data.sh)"</span> <span class="op">&gt;&amp;</span><span class="dv">2</span><span class="kw">;</span> <span class="bu">exit</span> 1<span class="kw">;</span> <span class="kw">}</span></span>
+<span id="cb87-8"><a href="#cb87-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-9"><a href="#cb87-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="fu">sha256sum</span> <span class="at">--quiet</span> <span class="at">-c</span> <span class="st">"</span><span class="va">$sum</span><span class="st">"</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb87-10"><a href="#cb87-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"raw data unchanged"</span></span>
+<span id="cb87-11"><a href="#cb87-11" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb87-12"><a href="#cb87-12" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"RAW DATA CHANGED: do not trust downstream results"</span> <span class="op">&gt;&amp;</span><span class="dv">2</span></span>
+<span id="cb87-13"><a href="#cb87-13" aria-hidden="true" tabindex="-1"></a>  <span class="bu">exit</span> 1</span>
+<span id="cb87-14"><a href="#cb87-14" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Call it from other scripts with <code>bash src/check_raw.sh</code>. Because those scripts use <code>set -e</code>, a failed check stops them immediately.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="wrap-up" class="level2">
+<h2 class="anchored" data-anchor-id="wrap-up">Wrap up</h2>
+<p>Your project now looks like this:</p>
+<pre class="text"><code>cluster-exercise/
+├── data/
+│   └── raw/
+│       ├── red_spruce_fitness_traits.txt
+│       └── red_spruce_fitness_traits.txt.sha256
+├── logs/
+│   └── get_data_YYYYMMDD_HHMMSS.log
+├── results/
+│   ├── by_location/          # 12 TSV files, one per Location
+│   ├── by_location.tar.gz
+│   └── locations.txt
+└── src/
+    ├── check_raw.sh
+    ├── count_column.sh
+    ├── get_data.sh
+    ├── per_location.slurm
+    └── split_by_location.sh</code></pre>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ol type="1">
+<li>Why does <code>wc -l</code> report 326 lines for a file that contains 327?</li>
+<li>What is the difference between <code>a &amp;&amp; b</code> and <code>a || b</code>?</li>
+<li>What do each of <code>-e</code>, <code>-u</code>, and <code>-o pipefail</code> protect you from?</li>
+<li>What does <code>${f%.txt}</code> return when <code>f=data/raw/x.txt</code>?</li>
+<li>Why does <code>while read</code> need <code>|| [[ -n $line ]]</code> for this dataset?</li>
+<li>What makes a script idempotent, and which line makes <code>split_by_location.sh</code> idempotent?</li>
+<li>When would you use <code>rsync -n</code>?</li>
+<li>What does <code>chmod 750</code> allow, and for whom?</li>
+<li>How does a Slurm array task know which Location to process?</li>
+</ol>
+<p>In the next module, <a href="../../../notebook/learn-to-code/bash-advanced-text-processing/index.html">text processing with grep, sed, and awk</a>, you will replace the slow Bash loop from this page with one-line <code>awk</code> programs, and compute per-Location summaries directly from the raw file.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/anoobvinu07">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://scholar.google.com/citations?hl=en&amp;user=jIOSRMkAAAAJ">
+<p><i class="ai  ai-google-scholar" aria-label="google-scholar"></i></p>
+</a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:anoobvinu@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>   
+    <div class="nav-footer-center">
+© <span id="year"></span> · Anoob Prakash
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://ag.purdue.edu/directory/prakas89">
+      <i class="bi bi-building" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://www.purdue.edu">
+<p>Purdue</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://htirc.org/">
+<p>HTIRC</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
