@@ -86,7 +86,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-7ccbb4ccca079e06e65b90b0593693ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-2fa0301950720c9e2ce57d5336047d17.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/academicons-1.9.4/all.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-contrib/academicons-1.9.4/size.css" rel="stylesheet">
@@ -351,6 +351,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#setting-up-your-r-project" id="toc-setting-up-your-r-project" class="nav-link" data-scroll-target="#setting-up-your-r-project">Setting up your R project</a></li>
   <li><a href="#r-data-types-and-structures" id="toc-r-data-types-and-structures" class="nav-link" data-scroll-target="#r-data-types-and-structures">R data types and structures</a>
   <ul class="collapse">
+  <li><a href="#the-four-structures-one-at-a-time" id="toc-the-four-structures-one-at-a-time" class="nav-link" data-scroll-target="#the-four-structures-one-at-a-time">The four structures, one at a time</a></li>
+  <li><a href="#missing-values-na-the-silent-saboteur" id="toc-missing-values-na-the-silent-saboteur" class="nav-link" data-scroll-target="#missing-values-na-the-silent-saboteur">Missing values: <code>NA</code>, the silent saboteur</a></li>
   <li><a href="#importing-and-inspecting-the-dataset" id="toc-importing-and-inspecting-the-dataset" class="nav-link" data-scroll-target="#importing-and-inspecting-the-dataset">Importing and inspecting the dataset</a></li>
   <li><a href="#indexing-and-subsetting" id="toc-indexing-and-subsetting" class="nav-link" data-scroll-target="#indexing-and-subsetting">Indexing and subsetting</a></li>
   <li><a href="#summarizing-data" id="toc-summarizing-data" class="nav-link" data-scroll-target="#summarizing-data">Summarizing data</a></li>
@@ -361,6 +363,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#idea-check" id="toc-idea-check" class="nav-link" data-scroll-target="#idea-check">Idea check</a></li>
   <li><a href="#practical-exercises" id="toc-practical-exercises" class="nav-link" data-scroll-target="#practical-exercises">Practical exercises</a></li>
+  <li><a href="#exercise-1-load-and-confirm-the-shape" id="toc-exercise-1-load-and-confirm-the-shape" class="nav-link" data-scroll-target="#exercise-1-load-and-confirm-the-shape">Exercise 1 — Load and confirm the shape</a></li>
+  <li><a href="#exercise-2-map-every-column-to-its-type" id="toc-exercise-2-map-every-column-to-its-type" class="nav-link" data-scroll-target="#exercise-2-map-every-column-to-its-type">Exercise 2 — Map every column to its type</a></li>
+  <li><a href="#exercise-3-summary-statistics-and-the-na-trap" id="toc-exercise-3-summary-statistics-and-the-na-trap" class="nav-link" data-scroll-target="#exercise-3-summary-statistics-and-the-na-trap">Exercise 3 — Summary statistics, and the NA trap</a></li>
+  <li><a href="#exercise-4-count-trees-per-group" id="toc-exercise-4-count-trees-per-group" class="nav-link" data-scroll-target="#exercise-4-count-trees-per-group">Exercise 4 — Count trees per group</a></li>
+  <li><a href="#exercise-5-subsetting-with-two-conditions" id="toc-exercise-5-subsetting-with-two-conditions" class="nav-link" data-scroll-target="#exercise-5-subsetting-with-two-conditions">Exercise 5 — Subsetting with two conditions</a></li>
+  <li><a href="#exercise-6-grouped-means" id="toc-exercise-6-grouped-means" class="nav-link" data-scroll-target="#exercise-6-grouped-means">Exercise 6 — Grouped means</a></li>
+  <li><a href="#exercise-7-plots-saved-to-files" id="toc-exercise-7-plots-saved-to-files" class="nav-link" data-scroll-target="#exercise-7-plots-saved-to-files">Exercise 7 — Plots, saved to files</a></li>
+  <li><a href="#exercise-8-save-the-summary-table" id="toc-exercise-8-save-the-summary-table" class="nav-link" data-scroll-target="#exercise-8-save-the-summary-table">Exercise 8 — Save the summary table</a></li>
+  <li><a href="#exercise-9-the-reproducibility-test" id="toc-exercise-9-the-reproducibility-test" class="nav-link" data-scroll-target="#exercise-9-the-reproducibility-test">Exercise 9 — The reproducibility test</a></li>
   <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework">Homework</a></li>
   </ul></li>
   </ul>
@@ -406,6 +417,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </div>
   </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">October 8, 2026</p>
+    </div>
+  </div>
     
   </div>
   
@@ -433,9 +450,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">recursive =</span> <span class="cn">TRUE</span>,      <span class="co"># create the last element of the path- here it will be "raw"</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">"https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt"</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">destfile =</span> <span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="st">"https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">destfile =</span> <span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This is work on my system, probably not on yours. Lets use a package called <code>here</code> to make sure that code is reproducibile on your system as well.</p>
 <div class="cell">
@@ -444,9 +462,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">recursive =</span> <span class="cn">TRUE</span>,      <span class="co"># create the last element of the path- here it will be "raw"</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">"https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt"</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">destfile =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">"https://raw.githubusercontent.com/anoobvinu07/Genomic_assisted_selection/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">destfile =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -460,6 +479,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container callout-body">
 <p>I am using the <code>here</code> package to make this script reproducible. This makes sure that irrespective of of which system this code is run, it will work on that system. Read more about <code>here</code> <a href="https://github.com/jennybc/here_here#readme">here</a>.</p>
 <p>Instead of calling the package specifically at the top of the script with a <code>library(here)</code> or <code>require(here)</code>, I am calling them as a require it. That is done with the syntax <code>packageName::packageFunction</code>. This is useful when you have a lot of packages at the top, but you want to keep track of where a specific function is being called from. There are other reasons as well for following this syntax, for example when you need to call a function that is part of a package not part of the base R. Have you encounetered such situations while coding?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Logic check: what does <code>here::here()</code> actually do?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>here::here()</code> answers two questions at once:</p>
+<ol type="1">
+<li><strong>Where is the project root?</strong> It walks up the directory tree from your working directory until it finds a marker file — a <code>.Rproj</code> file, a <code>.git</code> folder, or a few others. That marker’s directory <em>is</em> the project root.</li>
+<li><strong>How do I build a path inside it?</strong> Any arguments you pass become folders in order: <code>here::here("data", "raw")</code> returns <code>&lt;project-root&gt;/data/raw</code> with the right separator for your operating system (<code>/</code> on macOS/Linux, <code>\</code> on Windows).</li>
+</ol>
+<p>Two consequences worth remembering:</p>
+<ul>
+<li>The same line, <code>here::here("data/raw/file.txt")</code>, produces the <em>absolute</em> path on your laptop, on the cluster, and on a collaborator’s Windows machine — you never type an absolute path again.</li>
+<li>If you open R in the <em>wrong</em> directory (above or beside the project root), <code>here::here()</code> finds no marker and silently falls back to your current working directory — which is why the <code>getwd()</code> / <code>here::here()</code> check below is worth running at the start of every session.</li>
+</ul>
+</div>
 </div>
 </div>
 <p>Recreate the rest of the project layout if you don’t already have it:</p>
@@ -479,19 +523,34 @@ Note
 <div class="callout-body-container callout-body">
 <p>What is the output when you type in the following commands in your system? What does it mean?</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "/Users/anoobprakash/Documents/GitHub/anoobvinu07.github.io/notebook/learn-to-code/r-basics"</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">here</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">here</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "/Users/anoobprakash/Documents/GitHub/anoobvinu07.github.io"</code></pre>
 </div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>getwd()</code> prints your <strong>current working directory</strong> — the folder R treats as the origin for every relative path you type. If you <code>read.delim("x.txt")</code>, R looks for <code>x.txt</code> there. On the cluster it might be <code>/home/youruser/projects/cluster-exercise</code>; on a laptop, <code>/Users/you/Documents/cluster-exercise</code>.</li>
+<li><code>here::here()</code> called with no arguments prints the <strong>project root</strong> it detected. On a healthy setup, <code>getwd()</code> and <code>here::here()</code> usually print the same folder — and if they don’t, you’ve opened R somewhere inside the project (say, in <code>src/</code>), and <code>here</code> will still resolve paths correctly while bare relative paths would break. That difference is exactly the bug <code>here</code> prevents.</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -500,7 +559,7 @@ Note
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>This excercise assumes the project folder follows the following structure:</strong></p>
 <pre style="color: #F8F9FA; background-color: #22252A; padding: 1rem; border-radius: 6px;"><code>cluster-exercise/
@@ -554,66 +613,81 @@ Note
 <td><code>x &lt;- 5</code></td>
 </tr>
 <tr class="odd">
+<td><code>class()</code></td>
+<td>Report the type of an object</td>
+<td><code>class(traits$Height)</code></td>
+</tr>
+<tr class="even">
+<td><code>is.na()</code></td>
+<td>Flag missing values</td>
+<td><code>sum(is.na(traits$Height))</code></td>
+</tr>
+<tr class="odd">
+<td><code>na.rm = TRUE</code></td>
+<td>Skip NAs inside a computation</td>
+<td><code>mean(x, na.rm = TRUE)</code></td>
+</tr>
+<tr class="even">
 <td><code>read.delim()</code></td>
 <td>Read a tab-delimited file</td>
 <td><code>read.delim("data/raw/file.txt")</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>str()</code></td>
 <td>Show structure/types of an object</td>
 <td><code>str(df)</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>dim()</code>, <code>nrow()</code>, <code>ncol()</code></td>
 <td>Dimensions of a data frame</td>
 <td><code>dim(df)</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>head()</code> / <code>tail()</code></td>
 <td>First/last rows</td>
 <td><code>head(df, 5)</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>summary()</code></td>
 <td>Quick numeric/factor summary</td>
 <td><code>summary(df$Height)</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>df$col</code></td>
 <td>Access a column by name</td>
 <td><code>df$Fitness</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>df[rows, cols]</code></td>
 <td>Subset by position/condition</td>
 <td><code>df[df$Region == "E", ]</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>table()</code></td>
 <td>Count occurrences</td>
 <td><code>table(df$Population)</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>tapply()</code> / <code>aggregate()</code></td>
 <td>Grouped summaries</td>
 <td><code>tapply(df$Height, df$Population, mean)</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>function(...) {}</code></td>
 <td>Define a function</td>
 <td><code>f &lt;- function(x) mean(x, na.rm = TRUE)</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>for (i in seq)</code></td>
 <td>Loop</td>
 <td><code>for (p in unique(df$Population)) {...}</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>hist()</code>, <code>boxplot()</code>, <code>plot()</code></td>
 <td>Base R plotting</td>
 <td><code>hist(df$Height)</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>write.csv()</code></td>
 <td>Save a table</td>
 <td><code>write.csv(x, "results/out.csv")</code></td>
@@ -626,68 +700,301 @@ Note
 <h2 class="anchored" data-anchor-id="setting-up-your-r-project">Setting up your R project</h2>
 <p>On the cluster, load R and start it from inside <code>cluster-exercise/</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/projects/cluster-exercise</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> biocontainers/default</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load r          <span class="co"># module name may differ on your cluster; check `module avail r`</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span>                      <span class="co"># start the R session</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/projects/cluster-exercise</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> biocontainers/default</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load r          <span class="co"># module name may differ on your cluster; check `module avail r`</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span>                      <span class="co"># start the R session</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Inside R, always confirm where you are before reading or writing anything:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "/Users/anoobprakash/Documents/GitHub/anoobvinu07.github.io/notebook/learn-to-code/r-basics"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">here</span>() <span class="co"># when using the here package to set the paths</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">here</span>() <span class="co"># when using the here package to set the paths</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "/Users/anoobprakash/Documents/GitHub/anoobvinu07.github.io"</code></pre>
 </div>
 </div>
 <p>If you’re using RStudio, create an RStudio Project (<code>File &gt; New Project</code>) rooted at <code>cluster-exercise/</code> — this keeps every path relative and portable, exactly like the <code>data/raw/...</code> paths from the bash module.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Logic check: why does the session start matter?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A script that begins by assuming “I am in the right folder” works today and breaks the day you launch R from one directory higher, or copy the project to the cluster. The 10 seconds you spend checking <code>getwd()</code> up front converts a confusing <code>cannot open file 'data/raw/...'</code> error into a one-line fix (<code>setwd()</code> to the right place, or better, restart R in the project root).</p>
+<p>Rule of thumb: <strong>check the location first, then read files.</strong> Every “file not found” error is either a wrong working directory, a typo, or a file that genuinely isn’t there — and the first cause is by far the most common.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="r-data-types-and-structures" class="level2">
 <h2 class="anchored" data-anchor-id="r-data-types-and-structures">R data types and structures</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vectors: one-dimensional, single type</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>heights <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">27.3</span>, <span class="fl">31.1</span>, <span class="fl">29.6</span>, <span class="fl">32.0</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>pops    <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"AB"</span>, <span class="st">"AB"</span>, <span class="st">"CC"</span>, <span class="st">"CC"</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Factors: categorical vectors with fixed levels</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>region <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"E"</span>, <span class="st">"E"</span>, <span class="st">"C"</span>, <span class="st">"C"</span>))</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(region)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vectors: one-dimensional, single type</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>heights <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">27.3</span>, <span class="fl">31.1</span>, <span class="fl">29.6</span>, <span class="fl">32.0</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>pops    <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"AB"</span>, <span class="st">"AB"</span>, <span class="st">"CC"</span>, <span class="st">"CC"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Factors: categorical vectors with fixed levels</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>region <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"E"</span>, <span class="st">"E"</span>, <span class="st">"C"</span>, <span class="st">"C"</span>))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(region)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "C" "E"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data frames: a table — columns can be different types</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>df_demo <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">pop =</span> pops, <span class="at">height =</span> heights)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_demo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data frames: a table — columns can be different types</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df_demo <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">pop =</span> pops, <span class="at">height =</span> heights)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_demo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   4 obs. of  2 variables:
  $ pop   : chr  "AB" "AB" "CC" "CC"
  $ height: num  27.3 31.1 29.6 32</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lists: can hold mixed, differently-shaped objects</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean_height =</span> <span class="fu">mean</span>(heights), <span class="at">populations =</span> <span class="fu">unique</span>(pops))</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>mean_height</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lists: can hold mixed, differently-shaped objects</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean_height =</span> <span class="fu">mean</span>(heights), <span class="at">populations =</span> <span class="fu">unique</span>(pops))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>mean_height</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 30</code></pre>
 </div>
 </div>
 <p><strong>Key idea:</strong> almost everything you do in this module is a data frame — one row per tree, one column per variable — with vectors as its columns.</p>
+<section id="the-four-structures-one-at-a-time" class="level3">
+<h3 class="anchored" data-anchor-id="the-four-structures-one-at-a-time">The four structures, one at a time</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Vectors</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Factors</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Data frames</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Lists</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>A vector is R’s atomic unit: <strong>one dimension, one type</strong>. Everything you compute with — a column of heights, a column of region labels — is a vector.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>heights            <span class="co"># print it</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 27.3 31.1 29.6 32.0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(heights)     <span class="co"># what type is it? "numeric"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(heights)    <span class="co"># how many elements?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(pops)        <span class="co"># "character"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+</div>
+<p>A vector’s type is decided by the <em>most flexible</em> element inside it — this is called <strong>implicit coercion</strong>, and it is the source of many silent surprises:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)        <span class="co"># numeric: 1 2 3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="st">"a"</span>)         <span class="co"># character: "1" "a" — the number was demoted to text!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "1" "a"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="dv">1</span>)        <span class="co"># numeric: 1 1      — TRUE became 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 1</code></pre>
+</div>
+</div>
+<p>The hierarchy is <code>logical → numeric → character</code>: mixing types in one <code>c()</code> promotes everything to the highest type present. Nothing errors, nothing warns — your <code>1</code> just silently becomes <code>"1"</code> and later comparisons like <code>x == 1</code> stop matching.</p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>A factor is a categorical vector with a fixed, ordered set of <strong>levels</strong>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>region</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] E E C C
+Levels: C E</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.integer</span>(region)   <span class="co"># stored internally as 2 2 1 1 (E=2, C=1: levels are alphabetical)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2 2 1 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(region)        <span class="co"># counts per level</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>region
+C E 
+2 2 </code></pre>
+</div>
+</div>
+<p>Two things make factors different from plain text:</p>
+<ol type="1">
+<li><strong>Memory and clarity:</strong> a column with 326 <code>"C"</code>, <code>"E"</code>, <code>"M"</code> strings stores the full text repeatedly; a factor stores small integers plus the level table once.</li>
+<li><strong>Fixed classes:</strong> <code>levels()</code> defines which categories <em>exist</em>, even if they have zero observations. This matters for counting — as you’ll see with genotypes in population genetics module, <code>table()</code> on a plain vector drops categories that don’t occur, while <code>table(factor(x, levels = ...))</code> keeps them with a count of zero.</li>
+</ol>
+<p>Plotting and modeling functions (<code>boxplot</code>, <code>lm</code>) use levels to decide the order of groups on the axis, which is why the idea check asks about <code>boxplot(Height ~ Region, ...)</code>.</p>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>A data frame is a <strong>list of equal-length vectors</strong> displayed as a table — which is why columns can have different types but every column has the same number of rows. It is the structure you will use 95% of the time:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df_demo</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  pop height
+1  AB   27.3
+2  AB   31.1
+3  CC   29.6
+4  CC   32.0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(df_demo)   <span class="co"># rows = observations</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(df_demo)   <span class="co"># columns = variables</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+<p>One row = one observation (one tree); one column = one variable (its height, its region). This “tidy” layout is what <code>aggregate()</code>, <code>boxplot(Height ~ Region)</code>, and almost every R modeling function expect.</p>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p>A list is a <strong>container with no constraints</strong>: elements can be different types <em>and</em> different lengths — even other lists. They are how functions bundle multiple outputs:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$mean_height
+[1] 30
+
+$populations
+[1] "AB" "CC"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(result)    <span class="co"># each slot has a name</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "mean_height" "populations"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>mean_height</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 30</code></pre>
+</div>
+</div>
+<p>You will mostly <em>read</em> lists (model objects, <code>str()</code> output) before you write them, but recognizing <code>[[1]]</code> vs <code>$name</code> access patterns pays off immediately when you start calling <code>summary()</code> on fitted models.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="missing-values-na-the-silent-saboteur" class="level3">
+<h3 class="anchored" data-anchor-id="missing-values-na-the-silent-saboteur">Missing values: <code>NA</code>, the silent saboteur</h3>
+<p>Real datasets have missing data, and this one is no exception — 13 trees are missing a <code>Height</code> measurement. R represents a missing data with <code>NA</code>, and the rule you must internalize is:</p>
+<blockquote class="blockquote">
+<p><strong>Almost any computation that touches an <code>NA</code> returns <code>NA</code>.</strong></p>
+</blockquote>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">27.3</span>, <span class="fl">31.1</span>, <span class="cn">NA</span>, <span class="fl">32.0</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x)              <span class="co"># NA — R refuses to guess</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="co"># 30.13 — "remove NAs, then compute"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 30.13333</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(x)              <span class="co"># FALSE FALSE  TRUE FALSE — a logical flag per element</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE  TRUE FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(x))         <span class="co"># 1 — counting NAs by summing TRUEs</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(x))        <span class="co"># 3 — counting non-missing values</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+</div>
+<p>Why does <code>sum(is.na(x))</code> work? <code>is.na()</code> returns a logical vector, and in arithmetic <code>TRUE</code> counts as 1 and <code>FALSE</code> as 0 — so summing counts the <code>TRUE</code>s. That idiom (<code>sum(is.na(col))</code>) is the standard first move when inspecting any new dataset.</p>
+<p><code>NA</code> is <em>contagious</em> in subsetting too — see the indexing section below.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Logic check: predict the output
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Before running each line, write down what you expect. Then check.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="sc">&gt;</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE  TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="cn">NA</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+A B 
+2 1 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>c(1, 2, 3) &gt; 2</code> → <code>FALSE FALSE TRUE</code>. Comparisons are vectorized: the operation applies element-wise, and the result is a logical vector. This vectorized comparison is the engine behind filtering rows.</li>
+<li><code>mean(c(1, NA, 3))</code> → <code>NA</code>. No <code>na.rm</code>, no answer. Add <code>na.rm = TRUE</code> to get <code>2</code>.</li>
+<li><code>sum(c(TRUE, TRUE, FALSE))</code> → <code>2</code>. Booleans are 1/0 under arithmetic — the counting trick from the NA section.</li>
+<li><code>class(c(TRUE, 2))</code> → <code>"numeric"</code>. Coercion promotes <code>TRUE</code> to <code>1</code>, because mixing logical and numeric yields numeric.</li>
+<li><code>table(c("A", "A", "B", NA))</code> → counts for <code>A</code> (2) and <code>B</code> (1) only, and <strong>the NA is silently excluded</strong> from the printed table. When checking a dataset, <code>sum(is.na(x))</code> is more trustworthy than eyeballing <code>table()</code>.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
 <section id="importing-and-inspecting-the-dataset" class="level3">
 <h3 class="anchored" data-anchor-id="importing-and-inspecting-the-dataset">Importing and inspecting the dataset</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>),</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(traits)          <span class="co"># rows x columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>),</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(traits)          <span class="co"># rows x columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 326  19</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(traits)        <span class="co"># column names</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(traits)        <span class="co"># column names</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "Family"                  "Population"             
  [3] "Tree"                    "Location"               
@@ -700,7 +1007,7 @@ Note
 [17] "Population_Homozygosity" "Genetic_Diversity"      
 [19] "Genetic_Load"           </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(traits)          <span class="co"># types per column</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(traits)          <span class="co"># types per column</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   326 obs. of  19 variables:
  $ Family                 : chr  "AB_05" "AB_08" "AB_12" "AB_16" ...
@@ -723,7 +1030,7 @@ Note
  $ Genetic_Diversity      : num  0.0965 0.0965 0.0965 0.0965 0.0945 ...
  $ Genetic_Load           : num  1.01 1.01 1.01 1.01 1 ...</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(traits, <span class="dv">5</span>)      <span class="co"># first 5 rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(traits, <span class="dv">5</span>)      <span class="co"># first 5 rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Family Population Tree Location Region Latitude Longitude SeedWeight
 1  AB_05         AB    5       TN      E 35.55297  83.49438   0.003868
@@ -744,34 +1051,90 @@ Note
 4           0.9183347             0.010900911        0.09649039     1.014863
 5           0.8903996             0.006835856        0.09449166     1.003412</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(traits<span class="sc">$</span>Height)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(traits<span class="sc">$</span>Height)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
   19.39   27.04   29.94   30.03   32.38   47.56      13 </code></pre>
 </div>
 </div>
-<p>You should see 19 columns including identifiers (<code>Family</code>, <code>Population</code>, <code>Tree</code>, <code>Location</code>, <code>Region</code>), coordinates and environment (<code>Latitude</code>, <code>Longitude</code>, <code>Elevation</code>), fitness traits (<code>SeedWeight</code>, <code>Germination</code>, <code>Survival</code>, <code>Height</code>, <code>Fitness</code>), and genetic parameters (<code>PC1</code>, <code>PC2</code>, <code>Family_Homozygosity</code>, <code>Population_Homozygosity</code>, <code>Genetic_Diversity</code>, <code>Genetic_Load</code>) — we’ll use that last group in Module 2.</p>
+<p>You should see 19 columns including identifiers (<code>Family</code>, <code>Population</code>, <code>Tree</code>, <code>Location</code>, <code>Region</code>), coordinates and environment (<code>Latitude</code>, <code>Longitude</code>, <code>Elevation</code>), fitness traits (<code>SeedWeight</code>, <code>Germination</code>, <code>Survival</code>, <code>Height</code>, <code>Fitness</code>), and genetic parameters (<code>PC1</code>, <code>PC2</code>, <code>Family_Homozygosity</code>, <code>Population_Homozygosity</code>, <code>Genetic_Diversity</code>, <code>Genetic_Load</code>) — we’ll use that last group in the Population genetics foundation module.</p>
 <p><strong>Don’t assume a column’s type from its name</strong> — Always check with <code>str()</code> before analyzing.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Code breakdown: what each inspection function told you
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>dim(traits)</code> → <code>326 19</code>: 326 rows (trees) and 19 columns (variables). Confirm the row count matches your expectation from the raw file — a mismatch usually means a wrong <code>sep</code> or <code>header</code> argument.</li>
+<li><code>names(traits)</code> → the 19 column names. You will type these constantly; check spelling here first when <code>object not found</code> errors appear later.</li>
+<li><code>str(traits)</code> → the full type map: identifiers are <code>chr</code> (text), <code>Tree</code> and <code>Elevation</code> are <code>int</code> (integers), everything numeric with decimals is <code>num</code>. The three-letter prefixes mean: <code>chr</code> = character, <code>int</code> = integer, <code>num</code> = numeric (double). <code>int</code> columns <em>are</em> numeric for computation — the distinction only matters for storage and factor conversion.</li>
+<li><code>head(traits, 5)</code> → the first 5 rows <em>as they sit in the file</em> — useful for spotting parsing disasters (values in the wrong column, text where numbers should be).</li>
+<li><code>summary(traits$Height)</code> → Min 19.39, Median 29.94, Mean 30.03, Max 47.56 — <strong>and 13 <code>NA</code>s</strong>. The dataset genuinely has 13 trees with no height measurement. This single line is why the NA section above exists: without <code>na.rm = TRUE</code>, every mean, sd, and correlation on this column is <code>NA</code>.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Worked example: reading a new file safely
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The routine to run on <em>any</em> new tabular file, before you analyze anything:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. How big is it? Does the shape match the source?</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(traits)</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. What are the columns called, and what type did R guess?</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(traits)</span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Does the first rows look like the actual file (compare to the raw text)?</span></span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(traits)</span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Where are the holes?</span></span>
+<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(traits))</span>
+<span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-13"><a href="#cb78-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Do the categorical columns have the levels I expect?</span></span>
+<span id="cb78-14"><a href="#cb78-14" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(traits<span class="sc">$</span>Region)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For this dataset step 4 reports: <code>SeedWeight</code> 12, <code>Germination</code> 12, <code>Survival</code> 1, <code>Height</code> 13, <code>Fitness</code> 12, <code>Elevation</code> 3 — everything else is complete. Knowing this <em>before</em> computing anything is what separates a smooth analysis from an hour of “why is my mean <code>NA</code>?”</p>
+</div>
+</div>
+</div>
 </section>
 <section id="indexing-and-subsetting" class="level3">
 <h3 class="anchored" data-anchor-id="indexing-and-subsetting">Indexing and subsetting</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A single column</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>traits<span class="sc">$</span>Fitness <span class="sc">|&gt;</span> <span class="fu">head</span>() <span class="co"># |&gt; is called the pipe command, which lets you run the additional commands (head()) at the end </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A single column</span></span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>traits<span class="sc">$</span>Fitness <span class="sc">|&gt;</span> <span class="fu">head</span>() <span class="co"># |&gt; is called the pipe command, which lets you run the additional commands (head()) at the end </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  3.5312860  0.8623953  5.5273541  9.9760420 18.2689001 19.9572132</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rows meeting a condition</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>edge <span class="ot">&lt;-</span> traits[traits<span class="sc">$</span>Region <span class="sc">==</span> <span class="st">"E"</span>, ]</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(edge)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rows meeting a condition</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>edge <span class="ot">&lt;-</span> traits[traits<span class="sc">$</span>Region <span class="sc">==</span> <span class="st">"E"</span>, ]</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(edge)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 101</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple conditions</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>healthy_edge <span class="ot">&lt;-</span> traits[traits<span class="sc">$</span>Region <span class="sc">==</span> <span class="st">"E"</span> <span class="sc">&amp;</span> traits<span class="sc">$</span>Survival <span class="sc">&gt;</span> <span class="fl">0.8</span>, ]</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># subset() reads more like a sentence</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(traits, Region <span class="sc">==</span> <span class="st">"E"</span> <span class="sc">&amp;</span> Height <span class="sc">&gt;</span> <span class="dv">35</span>, <span class="at">select =</span> <span class="fu">c</span>(Population, Height, Fitness))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple conditions</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>healthy_edge <span class="ot">&lt;-</span> traits[traits<span class="sc">$</span>Region <span class="sc">==</span> <span class="st">"E"</span> <span class="sc">&amp;</span> traits<span class="sc">$</span>Survival <span class="sc">&gt;</span> <span class="fl">0.8</span>, ]</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a><span class="co"># subset() reads more like a sentence</span></span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(traits, Region <span class="sc">==</span> <span class="st">"E"</span> <span class="sc">&amp;</span> Height <span class="sc">&gt;</span> <span class="dv">35</span>, <span class="at">select =</span> <span class="fu">c</span>(Population, Height, Fitness))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Population   Height   Fitness
 83         CRA 37.28518 31.319550
@@ -780,12 +1143,85 @@ Note
 326        XWS 35.68774  2.141264</code></pre>
 </div>
 </div>
+<section id="how-the-bracket-syntax-works" class="level4">
+<h4 class="anchored" data-anchor-id="how-the-bracket-syntax-works">How the bracket syntax works</h4>
+<p><code>df[rows, cols]</code> — the comma splits rows from columns, and an empty slot means “everything”:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>df[1, ]</code></td>
+<td>row 1, all columns</td>
+</tr>
+<tr class="even">
+<td><code>df[, 2]</code></td>
+<td>all rows, column 2</td>
+</tr>
+<tr class="odd">
+<td><code>df[1:5, c("Height", "Fitness")]</code></td>
+<td>rows 1–5, two named columns</td>
+</tr>
+<tr class="even">
+<td><code>df[df$Region == "E", ]</code></td>
+<td>every row where the condition is TRUE, all columns</td>
+</tr>
+<tr class="odd">
+<td><code>df[, -1]</code></td>
+<td>all rows, drop column 1</td>
+</tr>
+</tbody>
+</table>
+<p>The filter <code>df[condition, ]</code> works because the condition is a <strong>logical vector with one TRUE/FALSE per row</strong>, and bracket-indexing keeps exactly the rows whose position is <code>TRUE</code>. That is the vectorized comparison from the logic check, doing real work.</p>
+<p>Three beginner traps:</p>
+<ol type="1">
+<li><strong><code>==</code> vs <code>=</code>.</strong> <code>==</code> compares (“is Region equal to E?”); <code>=</code> assigns or names arguments. <code>traits[traits$Region = "E", ]</code> is a syntax error.</li>
+<li><strong><code>&amp;</code> vs <code>|</code>.</strong> <code>&amp;</code> is AND (both conditions), <code>|</code> is OR (either). For filter vectors use the single forms — <code>&amp;&amp;</code>/<code>||</code> only compare single values.</li>
+<li><strong>NA rows vanish.</strong> The one tree with missing <code>Survival</code> makes <code>traits$Survival &gt; 0.8</code> evaluate to <code>NA</code> for that row, and <code>[</code> drops <code>NA</code> rows silently. Usually harmless (that row can’t satisfy the condition anyway) — but if you need to keep or count them explicitly, use <code>which()</code> or <code>complete.cases()</code>:</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explicit about missing data: keep only rows with no NA anywhere</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>traits_complete <span class="ot">&lt;-</span> traits[<span class="fu">complete.cases</span>(traits), ]</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(traits_complete)   <span class="co"># rows surviving the NA filter</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 309</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Logic check: what did the subsetting code return?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>edge</code> keeps <strong>101 rows</strong> — the number of trees from Region “E”. Nothing about the filter changed column count: <code>ncol(edge)</code> is still 19.</li>
+<li><code>healthy_edge</code> applies <strong>two</strong> conditions at once with <code>&amp;</code>; only rows that are Region “E” <em>and</em> have <code>Survival</code> above 0.8 survive.</li>
+<li><code>subset(..., select = c(...))</code> does both jobs in one call: filter rows and pick columns — its output has only 3 columns. Note it’s a convenient interactive shortcut; the bracket syntax is what scripts and functions reliably use.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="summarizing-data" class="level3">
 <h3 class="anchored" data-anchor-id="summarizing-data">Summarizing data</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Counts</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(traits<span class="sc">$</span>Population) <span class="co"># number of inds per population</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Counts</span></span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(traits<span class="sc">$</span>Population) <span class="co"># number of inds per population</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
    AB   ALB   APP   ASC     B   BAL   BBE   BER   BFA   BLA   BRA   BRB   BRU 
@@ -799,14 +1235,14 @@ Note
   WCA   WHI   XBM   XCS   XCV   XDS   XFS   XGL   XPK   XSK   XWS 
     6     6     6     2     5     6     3     4     4     3     3 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(traits<span class="sc">$</span>Region)     <span class="co"># number of inds per region</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(traits<span class="sc">$</span>Region)     <span class="co"># number of inds per region</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
   C   E   M 
 178 101  47 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Grouped means with tapply()</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(traits<span class="sc">$</span>Height, traits<span class="sc">$</span>Population, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Grouped means with tapply()</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(traits<span class="sc">$</span>Height, traits<span class="sc">$</span>Population, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      AB      ALB      APP      ASC        B      BAL      BBE      BER 
 30.01320 28.57737 29.63241 28.52612 33.56843 35.15642 30.99741 31.03151 
@@ -825,8 +1261,8 @@ Note
      XCV      XDS      XFS      XGL      XPK      XSK      XWS 
 35.35950 27.99949 25.99399 29.10061 28.37384 26.40402 30.18033 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Grouped summary with aggregate()</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(Height, Fitness) <span class="sc">~</span> Population, <span class="at">data =</span> traits, <span class="at">FUN =</span> mean) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Grouped summary with aggregate()</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(Height, Fitness) <span class="sc">~</span> Population, <span class="at">data =</span> traits, <span class="at">FUN =</span> mean) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Population   Height   Fitness
 1         AB 30.01320  4.974269
@@ -837,46 +1273,92 @@ Note
 6        BAL 35.15642 14.434015</code></pre>
 </div>
 </div>
+<section id="what-each-summarizer-is-for" class="level4">
+<h4 class="anchored" data-anchor-id="what-each-summarizer-is-for">What each summarizer is for</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Question it answers</th>
+<th>Key arguments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>table()</code></td>
+<td>How many observations per category?</td>
+<td>the categorical vector</td>
+</tr>
+<tr class="even">
+<td><code>tapply()</code></td>
+<td>Apply one function to one column, split by one group</td>
+<td>(values, groups, function)</td>
+</tr>
+<tr class="odd">
+<td><code>aggregate()</code></td>
+<td>Same, but multiple columns and multiple groups at once</td>
+<td>formula like <code>cbind(a, b) ~ group</code></td>
+</tr>
+</tbody>
+</table>
+<p>The formula syntax (<code>Height ~ Population</code>) reads right-to-left: “height, explained by population” — split Height by Population. <code>cbind()</code> glues several response columns together so one call summarizes all of them.</p>
+<p>Notice the <code>na.rm = TRUE</code> inside <code>tapply()</code>: it is passed through to <code>mean()</code>. Without it, every population containing one of the 13 missing heights would report <code>NA</code> — and with this dataset, that would be most of them. When a grouped summary comes back full of <code>NA</code>s, this is the first thing to check.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The formula version of aggregate with two grouping factors</span></span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits, <span class="at">FUN =</span> mean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Region   Height
+1      C 29.68908
+2      E 28.88793
+3      M 34.03509</code></pre>
+</div>
+</div>
+</section>
 </section>
 <section id="basic-plotting" class="level3">
 <h3 class="anchored" data-anchor-id="basic-plotting">Basic plotting</h3>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Default Histogram</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Breaks = 30</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Breaks = 50</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Default Histogram</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Breaks = 30</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Breaks = 50</a></li></ul>
 <div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, </span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Seed weight"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, </span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Seed weight"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="index_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="index_files/figure-html/unnamed-chunk-21-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, </span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Seed weight"</span>, <span class="at">breaks =</span> <span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, </span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Seed weight"</span>, <span class="at">breaks =</span> <span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="index_files/figure-html/unnamed-chunk-12-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="index_files/figure-html/unnamed-chunk-22-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, </span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Seed weight"</span>, <span class="at">breaks =</span> <span class="dv">50</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, </span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Seed weight"</span>, <span class="at">breaks =</span> <span class="dv">50</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="index_files/figure-html/unnamed-chunk-13-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="index_files/figure-html/unnamed-chunk-23-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -884,27 +1366,100 @@ Note
 </div>
 </div>
 </div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits, </span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Height by region"</span>, </span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Height (cm)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><a href="index_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></a></p>
-</figure>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Logic check: what does <code>breaks</code> actually do?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A histogram first bins the data — it cuts the value range into intervals (“bins”) and counts observations per bin. <code>breaks</code> is a <em>suggestion</em> for how many bins to use:</p>
+<ul>
+<li><strong>Default</strong> (~10 bins): the shape is blocky; broad features only.</li>
+<li><strong>breaks = 30</strong>: medium detail — real structure appears (this seed-weight distribution is right-skewed with a long thin tail).</li>
+<li><strong>breaks = 50</strong>: fine detail, but each bin holds fewer trees, so the counts get noisier and the shape gets jittery.</li>
+</ul>
+<p>The trade-off is <strong>bias vs.&nbsp;variance</strong>: too few bins smooth over real features; too many bins amplify sampling noise. There is no single right answer — the point of the tabset is that you <em>look</em> at several and pick one that shows the structure without chasing noise. The x-axis is the variable’s value; the y-axis (default <code>freq = TRUE</code>) is the raw count per bin.</p>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(traits<span class="sc">$</span>Elevation, traits<span class="sc">$</span>Fitness,</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Elevation (m)"</span>, <span class="at">ylab =</span> <span class="st">"Fitness"</span>,</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Fitness vs elevation"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits, </span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Height by region"</span>, </span>
+<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Height (cm)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="index_files/figure-html/unnamed-chunk-15-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="index_files/figure-html/unnamed-chunk-24-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Logic check: how to read this boxplot
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>For each region the box shows five numbers:</p>
+<ul>
+<li><strong>Bold center line</strong> — the median: C ≈ 29.8, E ≈ 29.0, M ≈ 33.6.</li>
+<li><strong>Box edges</strong> — the 1st and 3rd quartiles; the box spans the middle 50% of trees (the interquartile range, IQR).</li>
+<li><strong>Whiskers</strong> — the furthest values within 1.5 × IQR of the box.</li>
+<li><strong>Points beyond whiskers</strong> — individual outlier trees.</li>
+</ul>
+<p>What the plot says: all three regions overlap heavily (heights between regions are not dramatically different), but region M sits visibly higher — its median exceeds the upper quartile of E. The medians differ even though the distributions overlap, which is precisely the situation where a <em>comparison of groups</em> (boxplot) is more informative than the overall histogram. Note <code>summary()</code> gives you these same five numbers numerically — the boxplot is <code>summary()</code> drawn.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(traits<span class="sc">$</span>Elevation, traits<span class="sc">$</span>Fitness,</span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Elevation (m)"</span>, <span class="at">ylab =</span> <span class="st">"Fitness"</span>,</span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Fitness vs elevation"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-25-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Logic check: reading a scatterplot
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The cloud trends <strong>downhill</strong>: higher-elevation trees tend to have lower fitness. The correlation (computed in the exercises) is about <strong>−0.36</strong> — a moderate negative association, not a tight line.</p>
+<p>Two cautions before interpreting:</p>
+<ol type="1">
+<li><strong>Association is not causation.</strong> Elevation here stands in for a whole bundle of correlated variables (temperature, growing season, soil). The plot cannot tell you <em>which</em> one matters.</li>
+<li><strong>Correlation ignores structure.</strong> The three regions occupy different elevation bands. A trend across regions might be a region effect (genetic origin) rather than an elevation effect — the confounding theme population genetics module tackles head-on with PCA before genotype–environment association.</li>
+</ol>
+<p>Adding a fitted line summarizes the trend in one stroke:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(traits<span class="sc">$</span>Elevation, traits<span class="sc">$</span>Fitness,</span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Elevation (m)"</span>, <span class="at">ylab =</span> <span class="st">"Fitness"</span>)</span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(Fitness <span class="sc">~</span> Elevation, <span class="at">data =</span> traits), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>abline()</code> draws a straight line from a model fit; <code>lm()</code> fits it. The <code>col</code>/<code>lwd</code> options style the line so it stands out from the points.</p>
 </div>
 </div>
 </div>
@@ -912,18 +1467,90 @@ Note
 <section id="saving-outputs-and-scripting" class="level3">
 <h3 class="anchored" data-anchor-id="saving-outputs-and-scripting">Saving outputs and scripting</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>pop_summary <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="fu">cbind</span>(Height, Fitness, SeedWeight) <span class="sc">~</span> Population, <span class="at">data =</span> traits, <span class="at">FUN =</span> mean)</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(pop_summary, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"results/population_trait_summary.csv"</span>), <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>pop_summary <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="fu">cbind</span>(Height, Fitness, SeedWeight) <span class="sc">~</span> Population, <span class="at">data =</span> traits, <span class="at">FUN =</span> mean)</span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(pop_summary, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"results/population_trait_summary.csv"</span>), <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># exporting plot as a .png</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"results/height_by_region.png"</span>), <span class="at">width =</span> <span class="dv">800</span>, <span class="at">height =</span> <span class="dv">600</span>)</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits)</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="co"># exporting plot as a .png</span></span>
+<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"results/height_by_region.png"</span>), <span class="at">width =</span> <span class="dv">800</span>, <span class="at">height =</span> <span class="dv">600</span>)</span>
+<span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits)</span>
+<span id="cb104-4"><a href="#cb104-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Code breakdown: the two save patterns
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Tables.</strong> <code>write.csv(x, file, row.names = FALSE)</code> writes a data frame as CSV. <code>row.names = FALSE</code> suppresses the meaningless <code>"1", "2", "3", ...</code> column R would otherwise add — your data already has meaningful identifiers (<code>Population</code>).</p>
+<p><strong>Plots.</strong> Base R plots draw to a <em>graphics device</em>. By default that device is your screen; <code>png()</code> opens a file device instead, and everything you plot lands in the file until <code>dev.off()</code> closes it. The sequence is always:</p>
+<ol type="1">
+<li><code>png(path, width, height)</code> — open the file device (dimensions in pixels)</li>
+<li>draw: <code>boxplot(...)</code>, <code>hist(...)</code>, etc.</li>
+<li><code>dev.off()</code> — close the device and flush the file to disk</li>
+</ol>
+<p>Forgetting <code>dev.off()</code> is the classic bug: the file stays empty, and every <em>next</em> plot you make goes into it instead of the screen. If plots stop appearing in your session, run <code>dev.off()</code> once and check <code>results/</code>.</p>
+</div>
+</div>
 </div>
 <p>Put everything into <code>src/01_explore_traits.R</code> and run it non-interactively — this is what makes it reproducible and Slurm-friendly:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> src/01_explore_traits.R</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb105"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> src/01_explore_traits.R</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Code breakdown: what makes a script “reproducible”?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A script (rather than typed commands) gives you three things:</p>
+<ol type="1">
+<li><strong>A record</strong> — the exact sequence of steps, reviewable and citable.</li>
+<li><strong>Re-runnability</strong> — same script + same raw data = same outputs, on your laptop or on a Slurm node, forever. This is the working definition of reproducibility.</li>
+<li><strong>Scale</strong> — only a script can be handed to <code>sbatch</code>, scheduled overnight, or re-run when the data updates.</li>
+</ol>
+<p>The skeleton to aim for in <code>src/01_explore_traits.R</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 01_explore_traits.R — first look at red spruce fitness traits</span></span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage: Rscript src/01_explore_traits.R</span></span>
+<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-4"><a href="#cb106-4" aria-hidden="true" tabindex="-1"></a><span class="co"># --- setup: paths (relative to project root) -----------------------------</span></span>
+<span id="cb106-5"><a href="#cb106-5" aria-hidden="true" tabindex="-1"></a>raw_file <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>)</span>
+<span id="cb106-6"><a href="#cb106-6" aria-hidden="true" tabindex="-1"></a>out_dir  <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"results"</span>)</span>
+<span id="cb106-7"><a href="#cb106-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-8"><a href="#cb106-8" aria-hidden="true" tabindex="-1"></a><span class="co"># --- load ----------------------------------------------------------------</span></span>
+<span id="cb106-9"><a href="#cb106-9" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(raw_file, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>,</span>
+<span id="cb106-10"><a href="#cb106-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb106-11"><a href="#cb106-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-12"><a href="#cb106-12" aria-hidden="true" tabindex="-1"></a><span class="co"># --- inspect -------------------------------------------------------------</span></span>
+<span id="cb106-13"><a href="#cb106-13" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(traits)</span>
+<span id="cb106-14"><a href="#cb106-14" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(traits)</span>
+<span id="cb106-15"><a href="#cb106-15" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(traits))</span>
+<span id="cb106-16"><a href="#cb106-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-17"><a href="#cb106-17" aria-hidden="true" tabindex="-1"></a><span class="co"># --- analyze -------------------------------------------------------------</span></span>
+<span id="cb106-18"><a href="#cb106-18" aria-hidden="true" tabindex="-1"></a>pop_summary <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="fu">cbind</span>(Height, Fitness, SeedWeight) <span class="sc">~</span> Population,</span>
+<span id="cb106-19"><a href="#cb106-19" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data =</span> traits, <span class="at">FUN =</span> mean)</span>
+<span id="cb106-20"><a href="#cb106-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-21"><a href="#cb106-21" aria-hidden="true" tabindex="-1"></a><span class="co"># --- save ----------------------------------------------------------------</span></span>
+<span id="cb106-22"><a href="#cb106-22" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(pop_summary, here<span class="sc">::</span><span class="fu">here</span>(out_dir, <span class="st">"population_trait_summary.csv"</span>),</span>
+<span id="cb106-23"><a href="#cb106-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Notice the section comments — <code>setup / load / inspect / analyze / save</code> — and that not a single absolute path appears anywhere. Anyone can clone the project, run one command, and get your results.</p>
+</div>
+</div>
 </div>
 </section>
 </section>
@@ -940,21 +1567,329 @@ Note
 <li>If <code>mean(traits$Height)</code> returned <code>NA</code>, what would you check first, and how would you fix it?</li>
 <li>Why write outputs into <code>results/</code> instead of overwriting anything in <code>data/raw/</code>?</li>
 </ol>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Sample answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>A vector is one-dimensional and holds a <strong>single type</strong>; a data frame is two-dimensional — a list of equal-length vectors, so each column can have its own type. Vectors are the building blocks; data frames organize them into one-observation-per-row tables.</li>
+<li>Relative paths travel; absolute paths don’t. <code>data/raw/...</code> resolves correctly wherever the project lives — laptop, cluster, collaborator’s machine — while <code>/home/your_username/...</code> only exists on one computer. <code>here::here()</code> gives you relative-path portability even when the working directory is wrong.</li>
+<li><code>str()</code> reports the <strong>type of every column</strong> (<code>chr</code>/<code>int</code>/<code>num</code>) and the object’s shape — information about <em>all</em> 326 rows. <code>head()</code> only shows the first few rows’ values; a column mis-parsed as text looks identical in <code>head()</code> but announces itself in <code>str()</code>.</li>
+<li>A factor carries <strong>fixed, ordered levels</strong>, which the boxplot formula uses to define the groups and their axis order. Plain characters usually work here too, but factors give you control (alphabetical, or a biologically meaningful order), guarantee every category appears even with zero counts, and are what modeling functions like <code>lm()</code> expect for categorical predictors.</li>
+<li>Check for missing values: <code>sum(is.na(traits$Height))</code> — here, 13. Fix with <code>mean(traits$Height, na.rm = TRUE)</code>. The deeper question — <em>why</em> are 13 heights missing and are they missing at random? — matters before you publish any number computed on the remaining 313.</li>
+<li><code>data/raw/</code> is the <strong>immutable source</strong>: if analysis outputs overwrite it, you can no longer distinguish input from product, and re-running the script gives different (corrupted) results. Everything in <code>results/</code> is disposable and regenerable from raw + script; the raw file is not.</li>
+</ol>
+</div>
+</div>
+</div>
 </section>
 <section id="practical-exercises" class="level3">
 <h3 class="anchored" data-anchor-id="practical-exercises">Practical exercises</h3>
 <p>Work through these in order inside an R session, then consolidate the working code into <code>src/01_explore_traits.R</code>.</p>
-<ol type="1">
-<li>Load the dataset and confirm it has 326 rows and 19 columns.</li>
-<li>Run <code>str(traits)</code> and list every column name along with its type (<code>chr</code>, <code>int</code>, <code>num</code>).</li>
-<li>Compute overall summary statistics (mean, sd, min, max) for <code>Height</code> and <code>Fitness</code>.</li>
-<li>Use <code>table()</code> to count trees per <code>Population</code> and per <code>Region</code>. Which population has the most trees sampled?</li>
-<li>Subset the data to trees in <code>Region == "C"</code> with <code>Survival &gt; 0.8</code>. How many trees meet this criterion?</li>
-<li>Use <code>aggregate()</code> or <code>tapply()</code> to get mean <code>Height</code> and mean <code>Fitness</code> per <code>Population</code>. Identify the top 3 populations by mean <code>Fitness</code>.</li>
-<li>Create a histogram of <code>SeedWeight</code> and a boxplot of <code>Height</code> by <code>Region</code>. Save both as PNG files in <code>results/</code>.</li>
-<li>Save your population-level summary table as <code>results/population_trait_summary.csv</code>.</li>
-<li>Move all working code into <code>src/01_explore_traits.R</code> and confirm it runs cleanly end-to-end with <code>Rscript src/01_explore_traits.R</code>, producing the expected files in <code>results/</code>.</li>
-</ol>
+</section>
+<section id="exercise-1-load-and-confirm-the-shape" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-1-load-and-confirm-the-shape">Exercise 1 — Load and confirm the shape</h3>
+<p>Load the dataset and confirm it has 326 rows and 19 columns.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>),</span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(traits)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 326  19</code></pre>
+</div>
+</div>
+<p><code>dim()</code> returns <code>326 19</code> — 326 trees, 19 variables. If you had gotten 327 rows, the likely culprit would be a header misread; 1 row, a wrong separator; and a single column, tabs not being recognized (check the actual file with <code>head data/raw/red_spruce_fitness_traits.txt</code> in the shell).</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-2-map-every-column-to-its-type" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2-map-every-column-to-its-type">Exercise 2 — Map every column to its type</h3>
+<p>Run <code>str(traits)</code> and list every column name along with its type (<code>chr</code>, <code>int</code>, <code>num</code>).</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>str(traits)</code> prints the full map. Grouped:</p>
+<ul>
+<li><code>chr</code>: <code>Family</code>, <code>Population</code>, <code>Location</code>, <code>Region</code></li>
+<li><code>int</code>: <code>Tree</code>, <code>Elevation</code></li>
+<li><code>num</code>: <code>Latitude</code>, <code>Longitude</code>, <code>SeedWeight</code>, <code>Germination</code>, <code>Survival</code>, <code>Height</code>, <code>Fitness</code>, <code>PC1</code>, <code>PC2</code>, <code>Family_Homozygosity</code>, <code>Population_Homozygosity</code>, <code>Genetic_Diversity</code>, <code>Genetic_Load</code></li>
+</ul>
+<p>That is 4 text, 2 integer, 13 numeric columns = 19 total. Sanity-check the <em>biological</em> plausibility of the types too: identifiers as text ✓, elevation in whole meters as integer ✓, proportions like <code>Survival</code> as numeric ✓. A type that surprises you (say, <code>Height</code> as <code>chr</code>) means some row contains non-numeric junk — find it with <code>traits$Height[is.na(as.numeric(traits$Height))]</code>-style checks.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-3-summary-statistics-and-the-na-trap" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-3-summary-statistics-and-the-na-trap">Exercise 3 — Summary statistics, and the NA trap</h3>
+<p>Compute overall summary statistics (mean, sd, min, max) for <code>Height</code> and <code>Fitness</code>.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>stats_of <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">mean =</span> <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd   =</span> <span class="fu">sd</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">min  =</span> <span class="fu">min</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb109-5"><a href="#cb109-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">max  =</span> <span class="fu">max</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb109-6"><a href="#cb109-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb109-7"><a href="#cb109-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-8"><a href="#cb109-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="at">Height  =</span> <span class="fu">stats_of</span>(traits<span class="sc">$</span>Height),</span>
+<span id="cb109-9"><a href="#cb109-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">Fitness =</span> <span class="fu">stats_of</span>(traits<span class="sc">$</span>Fitness))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            mean       sd      min      max
+Height  30.03018 4.641802 19.38537 47.56003
+Fitness 14.00769 7.320978  0.00000 41.42805</code></pre>
+</div>
+</div>
+<p>Expected values: Height mean <strong>30.03</strong>, sd <strong>4.64</strong>, range <strong>19.39–47.56</strong>; Fitness mean <strong>14.01</strong>, sd <strong>7.32</strong>, range <strong>0.00–41.43</strong>.</p>
+<p>The critical detail: without <code>na.rm = TRUE</code> every one of these returns <code>NA</code>, because <code>Height</code> is missing for 13 trees and <code>Fitness</code> for 12. Writing your own <code>stats_of()</code> wrapper (a function — see the quick reference) bakes the <code>na.rm</code> in once instead of repeating it eight times. Note how <code>rbind()</code> stacks the two named rows into one table — the same row-binding idea you’ll meet again when combining populations in the population genetics module.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-4-count-trees-per-group" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-4-count-trees-per-group">Exercise 4 — Count trees per group</h3>
+<p>Use <code>table()</code> to count trees per <code>Population</code> and per <code>Region</code>. Which population has the most trees sampled?</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(traits<span class="sc">$</span>Population)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   AB   ALB   APP   ASC     B   BAL   BBE   BER   BFA   BLA   BRA   BRB   BRU 
+    4     5     6     6     5     6     5     6     5     5     5     4     5 
+  CAM    CR   CRA   CRR    DG   EQU   ESC   G13   G18   G57   GPA   GRE    HR 
+    6     5     6     2     5     6     6     5     3    11     4     6     5 
+  HUN   IND   JAY   KAN   KIL   KOS   LEU   LOL   MAC   MMF   MPG   MRC   MSK 
+    7     6     3     5     6     6     5     5     5     7     6     5     4 
+   MT NBTIC   NOR   OCT   OKE   OWL   PRK   PRO    RP   SAV   SPR   TWI    WA 
+    7     6     6     6     6     4     5     4     5     7     5     5     5 
+  WCA   WHI   XBM   XCS   XCV   XDS   XFS   XGL   XPK   XSK   XWS 
+    6     6     6     2     5     6     3     4     4     3     3 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(traits<span class="sc">$</span>Region)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  C   E   M 
+178 101  47 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.max</span>(<span class="fu">table</span>(traits<span class="sc">$</span>Population))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>G57 
+ 23 </code></pre>
+</div>
+</div>
+<ul>
+<li><code>table(traits$Region)</code> → <strong>C: 178, E: 101, M: 47</strong> — 178 + 101 + 47 = 326, so every tree has a region.</li>
+<li>The most-sampled population is <strong>G57 with 11 trees</strong>; most populations have 4–7 trees, and a couple (<code>CRR</code>, <code>XCS</code>) have only 2.</li>
+</ul>
+<p><code>which.max()</code> returns the <em>name</em> of the maximum entry, automating the eyeball-scan. Keep the small populations in mind for Exercise 6 — means computed from 2 trees are far noisier than means from 11.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-5-subsetting-with-two-conditions" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-5-subsetting-with-two-conditions">Exercise 5 — Subsetting with two conditions</h3>
+<p>Subset the data to trees in <code>Region == "C"</code> with <code>Survival &gt; 0.8</code>. How many trees meet this criterion?</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>c_healthy <span class="ot">&lt;-</span> traits[traits<span class="sc">$</span>Region <span class="sc">==</span> <span class="st">"C"</span> <span class="sc">&amp;</span> traits<span class="sc">$</span>Survival <span class="sc">&gt;</span> <span class="fl">0.8</span>, ]</span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(c_healthy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 117</code></pre>
+</div>
+</div>
+<p><strong>116 trees</strong> (out of 178 in region C). Points to notice:</p>
+<ul>
+<li>The comma inside <code>[ , ]</code> is mandatory — without it you select <em>columns</em> matching a logical vector, a different (and here, nonsense) operation.</li>
+<li><code>&amp;</code> combines the two conditions; both must hold for a row to survive.</li>
+<li>One tree has <code>NA</code> for <code>Survival</code>, so its comparison is <code>NA</code> and the row is dropped silently — usually the right behavior, but be able to explain why.</li>
+<li>Sanity check: <code>nrow(c_healthy)</code> = 116 ≤ 178 = <code>table(traits$Region)["C"]</code>. A filtered count larger than its parent group is impossible; catching that means your condition logic is broken (probably <code>|</code> where you meant <code>&amp;</code>).</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-6-grouped-means" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-6-grouped-means">Exercise 6 — Grouped means</h3>
+<p>Use <code>aggregate()</code> or <code>tapply()</code> to get mean <code>Height</code> and mean <code>Fitness</code> per <code>Population</code>. Identify the top 3 populations by mean <code>Fitness</code>.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a>pop_means <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="fu">cbind</span>(Height, Fitness) <span class="sc">~</span> Population,</span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">data =</span> traits, <span class="at">FUN =</span> mean)</span>
+<span id="cb119-3"><a href="#cb119-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pop_means[<span class="fu">order</span>(<span class="sc">-</span>pop_means<span class="sc">$</span>Fitness), ], <span class="dv">3</span>)   <span class="co"># top 3 by Fitness</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Population   Height  Fitness
+22        G18 33.12132 24.53187
+13        BRU 40.61024 24.17780
+11        BRA 32.56467 22.90860</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(pop_means[<span class="fu">order</span>(<span class="sc">-</span>pop_means<span class="sc">$</span>Fitness), ], <span class="dv">2</span>)   <span class="co"># bottom of the table, for contrast</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Population   Height  Fitness
+62        XSK 26.40402 3.112958
+63        XWS 30.18033 2.188637</code></pre>
+</div>
+</div>
+<p>Top 3 by mean fitness: <strong>G18 (24.53), BRU (24.18), BRA (22.91)</strong>; the lowest are XWS (2.19) and XSK (3.11).</p>
+<p><code>order(-pop_means$Fitness)</code> sorts descending — the minus flips the order of an otherwise ascending sort. Read the results with the caveat from Exercise 4 in mind: G18 has only 3 trees, so its mean rests on a tiny sample; its rank could easily change with more sampling. Grouped means are only as trustworthy as the per-group counts behind them.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-7-plots-saved-to-files" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-7-plots-saved-to-files">Exercise 7 — Plots, saved to files</h3>
+<p>Create a histogram of <code>SeedWeight</code> and a boxplot of <code>Height</code> by <code>Region</code>. Save both as PNG files in <code>results/</code>.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb123"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"results/seedweight_hist.png"</span>), <span class="at">width =</span> <span class="dv">800</span>, <span class="at">height =</span> <span class="dv">600</span>)</span>
+<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(traits<span class="sc">$</span>SeedWeight, <span class="at">breaks =</span> <span class="dv">30</span>,</span>
+<span id="cb123-3"><a href="#cb123-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Seed weight distribution"</span>, <span class="at">xlab =</span> <span class="st">"Seed weight"</span>)</span>
+<span id="cb123-4"><a href="#cb123-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb123-5"><a href="#cb123-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-6"><a href="#cb123-6" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"results/height_by_region.png"</span>), <span class="at">width =</span> <span class="dv">800</span>, <span class="at">height =</span> <span class="dv">600</span>)</span>
+<span id="cb123-7"><a href="#cb123-7" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Height <span class="sc">~</span> Region, <span class="at">data =</span> traits,</span>
+<span id="cb123-8"><a href="#cb123-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Height by region"</span>, <span class="at">ylab =</span> <span class="st">"Height (cm)"</span>)</span>
+<span id="cb123-9"><a href="#cb123-9" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The three-beat pattern each time: <code>png()</code> opens the file, the plot call draws into it, <code>dev.off()</code> closes and flushes. Verify the files exist afterwards with <code>list.files(here::here("results"))</code> — an empty file means you forgot <code>dev.off()</code>; plots appearing on screen instead mean <code>png()</code> never ran.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-8-save-the-summary-table" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-8-save-the-summary-table">Exercise 8 — Save the summary table</h3>
+<p>Save your population-level summary table as <code>results/population_trait_summary.csv</code>.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(pop_summary,</span>
+<span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a>          here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"results/population_trait_summary.csv"</span>),</span>
+<span id="cb124-3"><a href="#cb124-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>row.names = FALSE</code> keeps the file keyed by <code>Population</code> alone — the CSV’s first column will be <code>Population</code>, not R’s meaningless <code>1, 2, 3, ...</code> row numbers. Inspect it from the shell with <code>head results/population_trait_summary.csv</code> to confirm what your future self (and your collaborators) will actually receive.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-9-the-reproducibility-test" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-9-the-reproducibility-test">Exercise 9 — The reproducibility test</h3>
+<p>Move all working code into <code>src/01_explore_traits.R</code> and confirm it runs cleanly end-to-end with <code>Rscript src/01_explore_traits.R</code>, producing the expected files in <code>results/</code>.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution sketch
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The pass/fail test is a clean-room re-run:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb125"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from the project root</span></span>
+<span id="cb125-2"><a href="#cb125-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> results                <span class="co"># delete everything R ever produced</span></span>
+<span id="cb125-3"><a href="#cb125-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> src/01_explore_traits.R</span>
+<span id="cb125-4"><a href="#cb125-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> results/                <span class="co"># the script must recreate it all</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If that sequence recreates <code>population_trait_summary.csv</code> plus the two PNGs with no errors and no warnings you can’t explain, your module is reproducible. If it fails, the usual culprits are, in order: a hard-coded absolute path, a missing <code>dir.create(results)</code> before the first write, and code that depends on objects you created interactively but never put in the script. The last one is the reason to build scripts from a fresh R session, not from the session where you explored.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="homework" class="level3">
 <h3 class="anchored" data-anchor-id="homework">Homework</h3>
@@ -968,6 +1903,26 @@ Note
 </ul></li>
 <li><strong>Bonus (optional):</strong> recreate one plot with <code>ggplot2</code> instead of base R.</li>
 </ul>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hints (not full answers)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-27" class="callout-27-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Grouped by Region first</strong> — it’s only 3 groups, so eyeball-able: mean Height is <strong>C 29.7 / E 28.9 / M 34.0</strong> and mean Fitness <strong>C 14.7 / E 10.6 / M 19.8</strong>. Region M — the group with the <em>lowest</em> median elevation (570 m, vs.&nbsp;787 for C and 1333 for E) — is taller <em>and</em> higher-fitness on average. Per-population, extend the <code>aggregate(... ~ Population)</code> pattern from Exercise 6; for two grouping factors at once, try <code>aggregate(cbind(...) ~ Region, ...)</code> separately — a <code>Population × Region</code> cross needs <code>table(traits$Population, traits$Region)</code> or <code>interaction()</code>.</li>
+<li><strong>The scatterplot answer you should arrive at:</strong> elevation vs.&nbsp;fitness is a <strong>moderate negative relationship</strong> (correlation ≈ −0.36) — higher sites, lower mean fitness; elevation vs.&nbsp;seed weight is <strong>weakly positive</strong> (≈ +0.25). Both are visible-but-loose trends in the point cloud, not tight lines. Remember the two cautions from the plotting section before you write the interpretation: association ≠ causation, and region structure is confounded with elevation here.</li>
+<li><strong>ggplot2 bonus:</strong> the same boxplot is <code>ggplot(traits, aes(x = Region, y = Height)) + geom_boxplot()</code> after <code>install.packages("ggplot2")</code> and <code>library(ggplot2)</code> — the <code>+</code> layers replace the single-call-with-arguments style of base plotting.</li>
+</ul>
+</div>
+</div>
+</div>
 
 
 </section>

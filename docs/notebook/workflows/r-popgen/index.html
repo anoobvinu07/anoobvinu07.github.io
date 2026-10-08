@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Anoob Prakash">
-<meta name="dcterms.date" content="2026-09-11">
+<meta name="dcterms.date" content="2026-10-07">
 <meta name="description" content="Allele frequencies, heterozygosity, and a first genotype–environment association">
 
 <title>R: Population Genetics Foundations – Anoob Prakash</title>
@@ -86,7 +86,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-7ccbb4ccca079e06e65b90b0593693ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-2fa0301950720c9e2ce57d5336047d17.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="../../../site_libs/bootstrap/bootstrap-eec4df300a3bea66f7b8025a75741c68.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/academicons-1.9.4/all.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-contrib/academicons-1.9.4/size.css" rel="stylesheet">
@@ -402,12 +402,25 @@ window.Quarto = {
   <li><a href="#calculate-genotype-frequencies" id="toc-calculate-genotype-frequencies" class="nav-link" data-scroll-target="#calculate-genotype-frequencies">Calculate genotype frequencies</a></li>
   <li><a href="#calculate-allele-frequencies" id="toc-calculate-allele-frequencies" class="nav-link" data-scroll-target="#calculate-allele-frequencies">Calculate allele frequencies</a></li>
   </ul></li>
-  <li><a href="#excercises" id="toc-excercises" class="nav-link" data-scroll-target="#excercises">Excercises</a></li>
+  <li><a href="#excercises" id="toc-excercises" class="nav-link" data-scroll-target="#excercises">Excercises</a>
+  <ul class="collapse">
+  <li><a href="#exercise-1-allele-frequencies-for-population-2" id="toc-exercise-1-allele-frequencies-for-population-2" class="nav-link" data-scroll-target="#exercise-1-allele-frequencies-for-population-2">Exercise 1 — Allele frequencies for Population 2</a></li>
+  <li><a href="#exercise-2-allele-frequencies-for-the-pooled-population" id="toc-exercise-2-allele-frequencies-for-the-pooled-population" class="nav-link" data-scroll-target="#exercise-2-allele-frequencies-for-the-pooled-population">Exercise 2 — Allele frequencies for the pooled population</a></li>
+  <li><a href="#exercise-3-pooling-changes-genotype-frequencies" id="toc-exercise-3-pooling-changes-genotype-frequencies" class="nav-link" data-scroll-target="#exercise-3-pooling-changes-genotype-frequencies">Exercise 3 — Pooling changes genotype frequencies</a></li>
+  <li><a href="#exercise-4-allele-frequencies-from-the-genotype-matrix" id="toc-exercise-4-allele-frequencies-from-the-genotype-matrix" class="nav-link" data-scroll-target="#exercise-4-allele-frequencies-from-the-genotype-matrix">Exercise 4 — Allele frequencies from the genotype matrix</a></li>
+  <li><a href="#exercise-5-explore-the-simulation" id="toc-exercise-5-explore-the-simulation" class="nav-link" data-scroll-target="#exercise-5-explore-the-simulation">Exercise 5 — Explore the simulation</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#part-iii" id="toc-part-iii" class="nav-link" data-scroll-target="#part-iii">PART III</a>
   <ul class="collapse">
   <li><a href="#observed-and-expected-heterozygosity" id="toc-observed-and-expected-heterozygosity" class="nav-link" data-scroll-target="#observed-and-expected-heterozygosity">Observed and expected heterozygosity</a></li>
+  <li><a href="#the-wahlund-effect-connecting-part-ii-to-part-iii" id="toc-the-wahlund-effect-connecting-part-ii-to-part-iii" class="nav-link" data-scroll-target="#the-wahlund-effect-connecting-part-ii-to-part-iii">The Wahlund effect: connecting Part II to Part III</a></li>
+  <li><a href="#exercises-heterozygosity" id="toc-exercises-heterozygosity" class="nav-link" data-scroll-target="#exercises-heterozygosity">Exercises: heterozygosity</a></li>
+  <li><a href="#exercise-6-ho-and-he-for-the-two-populations" id="toc-exercise-6-ho-and-he-for-the-two-populations" class="nav-link" data-scroll-target="#exercise-6-ho-and-he-for-the-two-populations">Exercise 6 — Ho and He for the two populations</a></li>
+  <li><a href="#exercise-7-average-across-loci" id="toc-exercise-7-average-across-loci" class="nav-link" data-scroll-target="#exercise-7-average-across-loci">Exercise 7 — Average across loci</a></li>
+  <li><a href="#exercise-8-connect-to-the-real-data" id="toc-exercise-8-connect-to-the-real-data" class="nav-link" data-scroll-target="#exercise-8-connect-to-the-real-data">Exercise 8 — Connect to the real data</a></li>
   <li><a href="#pca-for-population-structure" id="toc-pca-for-population-structure" class="nav-link" data-scroll-target="#pca-for-population-structure">PCA for population structure</a></li>
+  <li><a href="#how-everything-connects" id="toc-how-everything-connects" class="nav-link" data-scroll-target="#how-everything-connects">How everything connects</a></li>
   <li><a href="#roadmap-beyond-this-module" id="toc-roadmap-beyond-this-module" class="nav-link" data-scroll-target="#roadmap-beyond-this-module">Roadmap beyond this module</a></li>
   <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up">Wrap Up</a>
   <ul class="collapse">
@@ -458,7 +471,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 11, 2026</p>
+      <p class="date">October 7, 2026</p>
     </div>
   </div>
   
@@ -474,7 +487,7 @@ window.Quarto = {
 <h1>PART I</h1>
 <section id="goal" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="goal">Goal</h2>
-<p>Apply the R skills from Module 1 to population-genetics concepts: allele frequency, heterozygosity, genetic diversity, and a first genotype/phenotype–environment association (GEA), using the genetic-parameter columns already present in the red-spruce dataset (<code>PC1</code>, <code>PC2</code>, <code>Family_Homozygosity</code>, <code>Population_Homozygosity</code>, <code>Genetic_Diversity</code>, <code>Genetic_Load</code>).</p>
+<p>Apply your R skills to population-genetics concepts: allele frequency, heterozygosity, genetic diversity, and a first genotype/phenotype–environment association (GEA), using the genetic-parameter columns already present in the red-spruce dataset (<code>PC1</code>, <code>PC2</code>, <code>Family_Homozygosity</code>, <code>Population_Homozygosity</code>, <code>Genetic_Diversity</code>, <code>Genetic_Load</code>).</p>
 <p>We don’t have a raw genotype (VCF) file for this dataset, so this module teaches the underlying math with a small <strong>simulated</strong> SNP matrix, then applies the same reasoning to the <strong>real, pre-computed</strong> genetic-parameter columns already in your data.</p>
 <section id="prerequisites" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="prerequisites">Prerequisites</h3>
@@ -533,7 +546,7 @@ window.Quarto = {
 </div>
 <p><em>2. Install the packages used here:</em></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"vegan"</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"vegan"</span>, <span class="st">"here"</span>))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Optional, for working with real genotype/VCF files beyond this module:</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># install.packages("BiocManager")</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># BiocManager::install(c("vcfR", "adegenet"))</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -595,31 +608,46 @@ window.Quarto = {
 <td><code>colMeans(geno) / 2</code></td>
 </tr>
 <tr class="even">
+<td><code>table()</code></td>
+<td>Count occurrences of each value</td>
+<td><code>table(pop_1$genotype)</code></td>
+</tr>
+<tr class="odd">
+<td><code>prop.table()</code></td>
+<td>Convert counts to proportions</td>
+<td><code>prop.table(table(pop_1$genotype))</code></td>
+</tr>
+<tr class="even">
+<td><code>rbind()</code></td>
+<td>Stack data frames row-wise</td>
+<td><code>rbind(pop_1, pop_2)</code></td>
+</tr>
+<tr class="odd">
 <td><code>prcomp()</code></td>
 <td>Principal component analysis</td>
 <td><code>prcomp(geno, scale. = TRUE)</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>cor.test()</code></td>
 <td>Test correlation between two variables</td>
 <td><code>cor.test(x, y)</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>lm()</code></td>
 <td>Fit a linear model</td>
 <td><code>lm(y ~ x1 + x2, data = df)</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>vegan::rda()</code></td>
 <td>Redundancy analysis (multivariate GEA)</td>
 <td><code>rda(Y ~ x1 + x2, data = df)</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>vcfR::read.vcfR()</code></td>
 <td>Read a real VCF file (beyond this module)</td>
 <td><code>read.vcfR("file.vcf")</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>adegenet::genind</code></td>
 <td>Genotype container object (beyond this module)</td>
 <td><code>df2genind(...)</code></td>
@@ -732,7 +760,8 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(geno) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"ind_"</span>, <span class="dv">1</span><span class="sc">:</span>n_ind)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(geno) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"locus_"</span>, <span class="dv">1</span><span class="sc">:</span>n_loci)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>geno[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>geno[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      locus_1 locus_2 locus_3 locus_4 locus_5
 ind_1       1       2       0       1       0
@@ -751,9 +780,10 @@ ind_5       2       1       2       1       1</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>alt_freq <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(geno) <span class="sc">/</span> <span class="dv">2</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>ref_freq <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> alt_freq</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">locus =</span> <span class="fu">names</span>(alt_freq),       <span class="co"># col 1 filled with locus names</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">alt_freq =</span> <span class="fu">round</span>(alt_freq, <span class="dv">3</span>), <span class="co"># col 2 filled with alt freq</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">ref_freq =</span> <span class="fu">round</span>(ref_freq, <span class="dv">3</span>)) <span class="co"># col 3 is filled with ref freq</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">locus =</span> <span class="fu">names</span>(alt_freq),       <span class="co"># col 1 filled with locus names</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">alt_freq =</span> <span class="fu">round</span>(alt_freq, <span class="dv">3</span>), <span class="co"># col 2 filled with alt freq</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">ref_freq =</span> <span class="fu">round</span>(ref_freq, <span class="dv">3</span>)) <span class="co"># col 3 is filled with ref freq</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            locus alt_freq ref_freq
 locus_1   locus_1    0.400    0.600
@@ -766,6 +796,50 @@ locus_7   locus_7    0.417    0.583
 locus_8   locus_8    0.400    0.600
 locus_9   locus_9    0.367    0.633
 locus_10 locus_10    0.450    0.550</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Worked example: allele frequency by hand
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Suppose one locus has 20 genotyped individuals: <strong>12 are <code>0/0</code>, 5 are <code>0/1</code>, and 3 are <code>1/1</code></strong>.</p>
+<p>Each individual carries 2 allele copies, so the denominator is <span class="math inline">\(2N = 40\)</span> gene copies:</p>
+<ul>
+<li>Alternate allele copies: <span class="math inline">\((0 \times 12) + (1 \times 5) + (2 \times 3) = 11\)</span></li>
+<li>Reference allele copies: <span class="math inline">\((2 \times 12) + (1 \times 5) + (0 \times 3) = 29\)</span></li>
+</ul>
+<p><span class="math display">\[p_{alt} = \frac{11}{40} = 0.275 \qquad p_{ref} = \frac{29}{40} = 0.725 \qquad p_{alt} + p_{ref} = 1\]</span></p>
+<p>The shortcut <code>mean(geno_column) / 2</code> works for exactly the same reason: the mean of a 0/1/2 column is the average number of alternate alleles <strong>per individual</strong>, so dividing by 2 converts it to a per-gene-copy frequency.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Worked example: why divide by 2?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The mean of a 0/1/2 genotype column counts alleles <strong>per individual</strong>, but allele frequency counts alleles <strong>per gene copy</strong>. A diploid individual has 2 copies, hence the division by 2. Sanity checks that always hold:</p>
+<ul>
+<li><code>alt_freq</code> must lie between 0 and 1</li>
+<li><code>alt_freq + ref_freq</code> must equal exactly 1</li>
+<li>a column that is entirely <code>0</code> or entirely <code>2</code> is <strong>monomorphic</strong> (no variation) and carries no information for a GEA — real pipelines filter these out along with low-frequency variants</li>
+</ul>
+</div>
 </div>
 </div>
 </section>
@@ -828,7 +902,7 @@ locus_10 locus_10    0.450    0.550</code></pre>
 <p><span class="math display">\[AA = p^2\]</span> <span class="math display">\[Aa = 2pq\]</span></p>
 <p><span class="math display">\[aa = q^2\]</span></p>
 <div class="callout callout-style-default callout-important no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -837,7 +911,7 @@ locus_10 locus_10    0.450    0.550</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong><a href="https://bio.libretexts.org/Bookshelves/Introductory_and_General_Biology/General_Biology_(Boundless)/19%3A_The_Evolution_of_Populations/19.01%3A_Population_Evolution/19.1C%3A_Hardy-Weinberg_Principle_of_Equilibrium">What is Hardy-Weinberg equilibrium?</a></strong></p>
 <p>The key expectataion under Hardy-Weinberg equilibrium is <span class="math inline">\(p^2\)</span> for <em>AA</em>, <span class="math inline">\(2pq\)</span> for <em>Aa</em>, and <span class="math inline">\(q^2\)</span> for <em>aa</em>, where <span class="math inline">\(p + q = 1\)</span>. In finite populations, observed values vary around thse expectations because of random sampling, variation becomes more obvious at small sample sizes.</p>
@@ -848,20 +922,23 @@ locus_10 locus_10    0.450    0.550</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Population 1: 20 individuals; allele A frequency p = 0.80</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>p_1 <span class="ot">&lt;-</span> <span class="fl">0.80</span>  </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>q_1 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> p_1</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>pop_1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">population =</span> <span class="st">"Pop_1"</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># sample function for choosing genotypes</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">genotype =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>), <span class="co"># possible genotype values</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">size =</span> <span class="dv">20</span>,                           <span class="co"># no. of individuals to simulate</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">replace =</span> <span class="cn">TRUE</span>,                      <span class="co"># genotypes can  occur more than once</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># p2 + 2pq + q2</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">prob =</span> <span class="fu">c</span>(p_1<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span> <span class="sc">*</span> p_1 <span class="sc">*</span> q_1, q_1<span class="sc">^</span><span class="dv">2</span>)) <span class="co"># probability of each genotype</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                      )</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pop_1) <span class="co"># peek into the pop_1 dataframe</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Population 1: 20 individuals; allele A frequency p = 0.80</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>p_1 <span class="ot">&lt;-</span> <span class="fl">0.80</span>  </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>q_1 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> p_1</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>pop_1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">population =</span> <span class="st">"Pop_1"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># sample function for choosing genotypes</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">genotype =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>), <span class="co"># possible genotype values</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">size =</span> <span class="dv">20</span>,                           <span class="co"># no. of individuals to simulate</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">replace =</span> <span class="cn">TRUE</span>,                      <span class="co"># genotypes can  occur more than once</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># p2 + 2pq + q2</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                      <span class="at">prob =</span> <span class="fu">c</span>(p_1<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span> <span class="sc">*</span> p_1 <span class="sc">*</span> q_1, q_1<span class="sc">^</span><span class="dv">2</span>)) <span class="co"># probability of each genotype</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                      )</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pop_1) <span class="co"># peek into the pop_1 dataframe</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  population genotype
 1      Pop_1       Aa
@@ -875,14 +952,16 @@ locus_10 locus_10    0.450    0.550</code></pre>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>p_2 <span class="ot">&lt;-</span> <span class="fl">0.30</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>q_2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> p_2</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>pop_2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">population =</span> <span class="st">"Pop_2"</span>,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">genotype =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>),</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">size =</span> <span class="dv">20</span>,</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">prob =</span> <span class="fu">c</span>(p_2<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span> <span class="sc">*</span> p_2 <span class="sc">*</span> q_2, q_2<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                      )</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pop_2) <span class="co"># peek into the pop_2 dataframe</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>pop_2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">population =</span> <span class="st">"Pop_2"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">genotype =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>),</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">size =</span> <span class="dv">20</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">prob =</span> <span class="fu">c</span>(p_2<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span> <span class="sc">*</span> p_2 <span class="sc">*</span> q_2, q_2<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                      )</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pop_2) <span class="co"># peek into the pop_2 dataframe</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  population genotype
 1      Pop_2       Aa
@@ -894,7 +973,7 @@ locus_10 locus_10    0.450    0.550</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -903,7 +982,7 @@ locus_10 locus_10    0.450    0.550</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li>sample() randomly assigns each individual one of three possible genotypes: AA, Aa, or aa.<br>
@@ -928,29 +1007,34 @@ locus_10 locus_10    0.450    0.550</code></pre>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>geno_count_pop2 <span class="ot">&lt;-</span> <span class="fu">table</span>(pop_2<span class="sc">$</span>genotype)</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert genotype counts to genotype frequencies  </span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>geno_prop_pop1 <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(pop_1<span class="sc">$</span>genotype))</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>geno_prop_pop2 <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(pop_2<span class="sc">$</span>genotype))</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine individuals from the two populations</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>pooled_population <span class="ot">&lt;-</span> <span class="fu">rbind</span>(pop_1, pop_2)</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>geno_count_pooled <span class="ot">&lt;-</span> <span class="fu">table</span>(pooled_population<span class="sc">$</span>genotype)</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>geno_prop_pooled <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(pooled_population<span class="sc">$</span>genotype))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert genotype counts to genotype frequencies  </span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>geno_prop_pop1 <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(pop_1<span class="sc">$</span>genotype))</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>geno_prop_pop2 <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(pop_2<span class="sc">$</span>genotype))</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine individuals from the two populations</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>pooled_population <span class="ot">&lt;-</span> <span class="fu">rbind</span>(pop_1, pop_2)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Build one comparison table</span></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>geno_summary <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">genotype =</span> <span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>),</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">count_pop1 =</span> <span class="fu">as.integer</span>(geno_count_pop1[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">freq_pop1  =</span> <span class="fu">as.numeric</span>(geno_prop_pop1[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">count_pop2 =</span> <span class="fu">as.integer</span>(geno_count_pop2[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">freq_pop2  =</span> <span class="fu">as.numeric</span>(geno_prop_pop2[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">count_pooled =</span> <span class="fu">as.integer</span>(geno_count_pooled[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">freq_pooled  =</span> <span class="fu">as.numeric</span>(geno_prop_pooled[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)])</span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>geno_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>geno_count_pooled <span class="ot">&lt;-</span> <span class="fu">table</span>(pooled_population<span class="sc">$</span>genotype)</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>geno_prop_pooled <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(pooled_population<span class="sc">$</span>genotype))</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Build one comparison table</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>geno_summary <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">genotype =</span> <span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>),</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">count_pop1 =</span> <span class="fu">as.integer</span>(geno_count_pop1[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">freq_pop1  =</span> <span class="fu">as.numeric</span>(geno_prop_pop1[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">count_pop2 =</span> <span class="fu">as.integer</span>(geno_count_pop2[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">freq_pop2  =</span> <span class="fu">as.numeric</span>(geno_prop_pop2[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">count_pooled =</span> <span class="fu">as.integer</span>(geno_count_pooled[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)]),</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">freq_pooled  =</span> <span class="fu">as.numeric</span>(geno_prop_pooled[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)])</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>geno_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  genotype count_pop1 freq_pop1 count_pop2 freq_pop2 count_pooled freq_pooled
 1       AA          9      0.45          2       0.1           11       0.275
@@ -972,7 +1056,7 @@ locus_10 locus_10    0.450    0.550</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -981,7 +1065,7 @@ locus_10 locus_10    0.450    0.550</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li>rbind() or “row” bind stacks the two population data frames row by row.<br>
@@ -1028,18 +1112,22 @@ locus_10 locus_10    0.450    0.550</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count each genotype in Population 1</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>counts_1 <span class="ot">&lt;-</span> geno_count_pop1</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of individuals</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>N_1 <span class="ot">&lt;-</span> <span class="fu">nrow</span>(pop_1)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Count A and a allele copies</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>n_A_1 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> counts_1[<span class="st">"AA"</span>] <span class="sc">+</span> counts_1[<span class="st">"Aa"</span>]</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>n_a_1 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> counts_1[<span class="st">"aa"</span>] <span class="sc">+</span> counts_1[<span class="st">"Aa"</span>]</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert allele counts to allele frequencies</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>p_A_1 <span class="ot">&lt;-</span> n_A_1 <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> N_1)</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>q_a_1 <span class="ot">&lt;-</span> n_a_1 <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> N_1)</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>p_A_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of individuals</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>N_1 <span class="ot">&lt;-</span> <span class="fu">nrow</span>(pop_1)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Count A and a allele copies</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>n_A_1 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> counts_1[<span class="st">"AA"</span>] <span class="sc">+</span> counts_1[<span class="st">"Aa"</span>]</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>n_a_1 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> counts_1[<span class="st">"aa"</span>] <span class="sc">+</span> counts_1[<span class="st">"Aa"</span>]</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert allele counts to allele frequencies</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>p_A_1 <span class="ot">&lt;-</span> n_A_1 <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> N_1)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>q_a_1 <span class="ot">&lt;-</span> n_a_1 <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> N_1)</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>p_A_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> AA 
 0.7 </code></pre>
@@ -1055,22 +1143,314 @@ locus_10 locus_10    0.450    0.550</code></pre>
  1 </code></pre>
 </div>
 </div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Worked example: the numbers behind Population 1
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>With <code>set.seed(42)</code>, Population 1 has <strong>9 <code>AA</code>, 10 <code>Aa</code>, 1 <code>aa</code></strong>. Plugging those counts into the formulas:</p>
+<p><span class="math display">\[p_{A} = \frac{(2 \times 9) + 10}{40} = \frac{28}{40} = 0.70\]</span></p>
+<p><span class="math display">\[q_{a} = \frac{(2 \times 1) + 10}{40} = \frac{12}{40} = 0.30\]</span></p>
+<p>Note that <span class="math inline">\(p_A + q_a = 1\)</span> exactly — this is not a coincidence but a bookkeeping identity: every one of the <span class="math inline">\(2N = 40\)</span> gene copies is counted exactly once on either the numerator side of <span class="math inline">\(p_A\)</span> or of <span class="math inline">\(q_a\)</span>.</p>
+<p>Two things worth noticing:</p>
+<ol type="1">
+<li>The <strong>observed</strong> allele frequency (0.70) differs from the <strong>simulation</strong> input (0.80) — random sampling in a finite population (N = 20) shifts the estimate. Smaller samples drift further from the input value.</li>
+<li>The observed genotype counts (9/10/1) do not match the H–W expectations for <span class="math inline">\(p = 0.70\)</span> (12.25/6.00/1.75 out of 20) — here we observe an <strong>excess of heterozygotes</strong>. With only 20 individuals, deviations like this are expected sampling noise, not biology.</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Worked example: expected vs.&nbsp;observed counts
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Expected counts are just <span class="math inline">\(N \times\)</span> expected frequency. For Population 1 (<span class="math inline">\(p = 0.80\)</span>, <span class="math inline">\(N = 20\)</span>):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Genotype</th>
+<th>Expected frequency</th>
+<th>Expected count (of 20)</th>
+<th>Observed count (seed 42)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AA</td>
+<td>0.64</td>
+<td>12.8</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>Aa</td>
+<td>0.32</td>
+<td>6.4</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>aa</td>
+<td>0.04</td>
+<td>0.8</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>The expected <code>aa</code> count is <strong>less than 1 individual</strong>. This is why formal goodness-of-fit tests (like <code>chisq.test()</code>) are unreliable here: the standard rule of thumb requires expected counts of at least ~5 per category. With <span class="math inline">\(q^2 = 0.04\)</span> and N = 20, you would need roughly <span class="math inline">\(5 / 0.04 = 125\)</span> individuals just to expect 5 <code>aa</code> individuals. Rare genotype classes need large samples.</p>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="excercises" class="level2">
 <h2 class="anchored" data-anchor-id="excercises">Excercises</h2>
+<section id="exercise-1-allele-frequencies-for-population-2" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-1-allele-frequencies-for-population-2">Exercise 1 — Allele frequencies for Population 2</h3>
+<p>Estimate the allele frequencies <span class="math inline">\(p_A\)</span> and <span class="math inline">\(q_a\)</span> for <strong>Population 2</strong>, following the same steps used for Population 1: count genotypes, count allele copies, and divide by <span class="math inline">\(2N\)</span>. Verify that <span class="math inline">\(p + q = 1\)</span>.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>counts_2 <span class="ot">&lt;-</span> geno_count_pop2</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>N_2 <span class="ot">&lt;-</span> <span class="fu">nrow</span>(pop_2)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>n_A_2 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> counts_2[<span class="st">"AA"</span>] <span class="sc">+</span> counts_2[<span class="st">"Aa"</span>]</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>n_a_2 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> counts_2[<span class="st">"aa"</span>] <span class="sc">+</span> counts_2[<span class="st">"Aa"</span>]</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>p_A_2 <span class="ot">&lt;-</span> <span class="fu">unname</span>(<span class="fu">as.numeric</span>(n_A_2 <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> N_2)))</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>q_a_2 <span class="ot">&lt;-</span> <span class="fu">unname</span>(<span class="fu">as.numeric</span>(n_a_2 <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> N_2)))</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>p_A_2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.35</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>q_a_2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.65</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>p_A_2 <span class="sc">+</span> q_a_2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<p>With <code>set.seed(42)</code>, Population 2 has <strong>2 <code>AA</code>, 10 <code>Aa</code>, 8 <code>aa</code></strong>, so:</p>
+<p><span class="math display">\[p_{A} = \frac{(2 \times 2) + 10}{40} = \frac{14}{40} = 0.35\]</span></p>
+<p><span class="math display">\[q_{a} = \frac{(2 \times 8) + 10}{40} = \frac{26}{40} = 0.65\]</span></p>
+<p>Again the observed <span class="math inline">\(p\)</span> (0.35) sits above the simulation input (0.30) — finite-sample noise. The two populations are strongly differentiated at this locus: <span class="math inline">\(p_A\)</span> = 0.70 vs.&nbsp;0.35.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-2-allele-frequencies-for-the-pooled-population" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2-allele-frequencies-for-the-pooled-population">Exercise 2 — Allele frequencies for the pooled population</h3>
+<p>Compute the allele frequencies for the <strong>pooled</strong> population (Pop_1 + Pop_2). Compare them to the within-population values, and explain the pattern: where does the pooled estimate fall, and why?</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>counts_p <span class="ot">&lt;-</span> geno_count_pooled</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>N_p <span class="ot">&lt;-</span> <span class="fu">nrow</span>(pooled_population)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>n_A_p <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> counts_p[<span class="st">"AA"</span>] <span class="sc">+</span> counts_p[<span class="st">"Aa"</span>]</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>n_a_p <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> counts_p[<span class="st">"aa"</span>] <span class="sc">+</span> counts_p[<span class="st">"Aa"</span>]</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>p_A_p <span class="ot">&lt;-</span> <span class="fu">unname</span>(<span class="fu">as.numeric</span>(n_A_p <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> N_p)))</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>q_a_p <span class="ot">&lt;-</span> <span class="fu">unname</span>(<span class="fu">as.numeric</span>(n_a_p <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> N_p)))</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>p_A_p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.525</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>q_a_p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.475</code></pre>
+</div>
+</div>
+<p>Pooled counts are <strong>11 <code>AA</code>, 20 <code>Aa</code>, 9 <code>aa</code></strong> (40 individuals, 80 gene copies):</p>
+<p><span class="math display">\[p_{A} = \frac{(2 \times 11) + 20}{80} = \frac{42}{80} = 0.525\]</span></p>
+<p><span class="math display">\[q_{a} = \frac{(2 \times 9) + 20}{80} = \frac{38}{80} = 0.475\]</span></p>
+<p>The pooled <span class="math inline">\(p_A\)</span> = 0.525 is almost exactly the <strong>average</strong> of the two within-population frequencies:</p>
+<p><span class="math display">\[\frac{p_{A,1} + p_{A,2}}{2} = \frac{0.70 + 0.35}{2} = 0.525\]</span></p>
+<p>(With unequal population sizes, the pooled frequency is a weighted average, weighted by each population’s size.) Mixing does not create or destroy alleles — it just averages them. But as the next exercise shows, it <strong>does</strong> distort <em>genotype</em> frequencies.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-3-pooling-changes-genotype-frequencies" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-3-pooling-changes-genotype-frequencies">Exercise 3 — Pooling changes genotype frequencies</h3>
+<p>Using the <code>geno_summary</code> table you built earlier:</p>
+<ol type="1">
+<li>Compute the <strong>expected</strong> genotype frequencies for the pooled population from its allele frequencies (<span class="math inline">\(p^2\)</span>, <span class="math inline">\(2pq\)</span>, <span class="math inline">\(q^2\)</span>).</li>
+<li>Compare them to the <strong>observed</strong> pooled genotype frequencies.</li>
+<li>Compute the expected genotype frequencies you would get by averaging the two populations’ <em>own</em> H–W expectations.</li>
+<li>Which comparison do the observed pooled frequencies resemble more? Why?</li>
+</ol>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. H-W expectations from the POOLED allele frequencies</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>exp_pooled_from_pool_p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">AA =</span> p_A_p<span class="sc">^</span><span class="dv">2</span>, <span class="at">Aa =</span> <span class="dv">2</span> <span class="sc">*</span> p_A_p <span class="sc">*</span> q_a_p, <span class="at">aa =</span> q_a_p<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Observed pooled genotype frequencies</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>obs_pooled <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(geno_prop_pooled[<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>)])</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Average of the two populations' OWN H-W expectations</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>exp_avg_of_pops <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">AA =</span> (p_1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> p_2<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Aa =</span> (<span class="dv">2</span> <span class="sc">*</span> p_1 <span class="sc">*</span> q_1 <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> p_2 <span class="sc">*</span> q_2) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">aa =</span> (q_1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> q_2<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">observed            =</span> obs_pooled,</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">HW_from_pooled_p    =</span> exp_pooled_from_pool_p,</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">avg_of_pop_HW       =</span> exp_avg_of_pops</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                       AA      Aa       aa
+observed         0.275000 0.50000 0.225000
+HW_from_pooled_p 0.275625 0.49875 0.225625
+avg_of_pop_HW    0.365000 0.37000 0.265000</code></pre>
+</div>
+</div>
+<p>Using the seed-42 numbers (<span class="math inline">\(p_{pool} = 0.525\)</span>):</p>
 <ul>
-<li><p><strong>Estimate allele frequencies for Population 2</strong></p></li>
-<li><p><strong>Combine the pooled population data with the Population 1 and Population 2 data</strong></p>
-<ul>
-<li>What changed for the pooled data? What could be the reason?</li>
-</ul></li>
-<li><p><strong>Try changing the simulations</strong></p>
-<ul>
-<li>Change one value at a time: change population size, make populations genetically similar, make populations drastically different, change the seed (set.seed(?))</li>
+<li>H–W from pooled <span class="math inline">\(p\)</span>: <span class="math inline">\(AA = 0.276\)</span>, <span class="math inline">\(Aa = 0.499\)</span>, <span class="math inline">\(aa = 0.226\)</span></li>
+<li>Average of the two populations’ own expectations: <span class="math inline">\(AA = 0.365\)</span>, <span class="math inline">\(Aa = 0.370\)</span>, <span class="math inline">\(aa = 0.265\)</span></li>
 </ul>
-<p>Testing repo update</p></li>
+<p>Here is the interesting part: at this seed, the <strong>observed</strong> pooled frequencies (0.275 / 0.500 / 0.225) land almost exactly on the H–W line from the pooled <span class="math inline">\(p\)</span> — the Wahlund deficit is invisible. Compare the two reference rows to see why the deficit <em>should</em> be there: H–W from the pooled <span class="math inline">\(p\)</span> predicts 49.9% heterozygotes, but heterozygotes in the mixture can only come from the two populations’ own heterozygote proportions, which average 37%. The systematic expectation is a <strong>13-point heterozygote deficit</strong> — the Wahlund effect.</p>
+<p>Why can’t we see it? At <span class="math inline">\(N = 20\)</span> per population, the standard error of a genotype proportion near 0.5 is about <span class="math inline">\(\sqrt{0.25/20} \approx 0.11\)</span> — the same size as the deficit itself. In this seed, Pop_1 happened to draw a heterozygote <em>excess</em> (10 observed vs.&nbsp;6.4 expected), which cancels the Wahlund gap almost perfectly.</p>
+<p>The takeaway is not that the effect is fake, but that <strong>at small N it is buried in noise</strong>. Pooling two H–W populations systematically produces a heterozygote deficit relative to H–W expectations computed from the pooled allele frequencies — no population evolved, only the <em>reference frame</em> changed. Part III re-runs this exact comparison at <span class="math inline">\(N = 500\)</span> per population, where the deficit stands out unmistakably.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-4-allele-frequencies-from-the-genotype-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-4-allele-frequencies-from-the-genotype-matrix">Exercise 4 — Allele frequencies from the genotype matrix</h3>
+<p>Return to the 30 individuals <span class="math inline">\(\times\)</span> 10 loci matrix <code>geno</code> from Part I.</p>
+<ol type="1">
+<li>Compute the alternate allele frequency for every locus <strong>by hand</strong> using allele counting (<code>2*n2 + n1</code> divided by <code>2*N</code>), not <code>colMeans()</code>.</li>
+<li>Verify that your result matches <code>colMeans(geno) / 2</code> exactly.</li>
+<li>Compute the <strong>minor allele frequency (MAF)</strong> for each locus. Which locus is closest to fixation? Which is most variable?</li>
+</ol>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span>(geno)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Allele counting, locus by locus</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>n_alt <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">colSums</span>(geno <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">colSums</span>(geno <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>alt_freq_manual <span class="ot">&lt;-</span> n_alt <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> N)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Cross-check with the shortcut</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(<span class="fu">as.numeric</span>(alt_freq_manual), <span class="fu">as.numeric</span>(alt_freq))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Minor allele frequency</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> <span class="fu">pmin</span>(alt_freq, <span class="dv">1</span> <span class="sc">-</span> alt_freq)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">round</span>(maf, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> locus_6  locus_4  locus_9  locus_2  locus_3  locus_1  locus_5  locus_8 
+   0.317    0.367    0.367    0.383    0.383    0.400    0.400    0.400 
+ locus_7 locus_10 
+   0.417    0.450 </code></pre>
+</div>
+</div>
+<p><code>all.equal()</code> confirms the two computations agree — <code>colMeans(geno)/2</code> is just algebraically compressed allele counting: the mean of a 0/1/2 column is <span class="math inline">\((n_{het} + 2 \cdot n_{homAlt}) / N\)</span>, which divided by 2 is exactly the alternate allele frequency.</p>
+<p>For the MAF, the least variable locus is <code>locus_6</code> (alt = 0.317, MAF <span class="math inline">\(\approx\)</span> 0.317) and the most variable is <code>locus_10</code> (alt = 0.450, MAF <span class="math inline">\(\approx\)</span> 0.450). The most informative loci for GEA are the ones with MAF near 0.5, which is why filtering pipelines typically drop loci with MAF below 0.05: rare variants carry little signal and inflate noise.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-5-explore-the-simulation" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-5-explore-the-simulation">Exercise 5 — Explore the simulation</h3>
+<p>Change <strong>one thing at a time</strong> and re-run the whole Part II pipeline. Before you run each variant, write down what you expect to happen; then check.</p>
+<ul>
+<li><strong>Sample size:</strong> set both populations to <code>size = 500</code>. Do observed frequencies land closer to the H–W expectations?</li>
+<li><strong>Similar populations:</strong> set <span class="math inline">\(p_2 = 0.75\)</span>. What happens to the pooled genotype frequencies and the Wahlund gap?</li>
+<li><strong>Divergent populations:</strong> set <span class="math inline">\(p_2 = 0.05\)</span>. What happens?</li>
+<li><strong>Different seed:</strong> change <code>set.seed(42)</code> to another number. Which quantities change (counts, frequencies) and which relationships stay fixed (<span class="math inline">\(p + q = 1\)</span>, pooled <span class="math inline">\(p\)</span> = average of within-population <span class="math inline">\(p\)</span>)?</li>
 </ul>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution — what you should see
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Sample size (N = 500):</strong> observed genotype frequencies converge on the H–W expectations. Sampling noise shrinks like <span class="math inline">\(1/\sqrt{N}\)</span> — ten times the sample, about three times less noise. This is the single most reliable way to distinguish “sampling noise” from “real deviation from H–W”.</p>
+<p><strong>Similar populations (<span class="math inline">\(p_2 = 0.75\)</span>):</strong> the two populations are nearly indistinguishable at this locus. Pooling barely changes anything — there is almost no Wahlund effect because there is almost no structure. Weak structure = weak heterozygote deficit.</p>
+<p><strong>Divergent populations (<span class="math inline">\(p_2 = 0.05\)</span>):</strong> the contrast is extreme — Pop_1 is nearly all <code>AA</code>, Pop_2 nearly all <code>aa</code>. The pooled sample looks like a classic heterozygote-deficient population even though each source population is in perfect H–W equilibrium. Strong structure = strong apparent deficit. This is the situation that most often fools naive analyses of mixed samples (e.g., pooling before computing heterozygosity in a VCF).</p>
+<p><strong>Different seed:</strong> the counts and frequencies all shift slightly, but the <em>relationships</em> hold: <span class="math inline">\(p + q = 1\)</span> in every population and the pooled <span class="math inline">\(p\)</span> always equals the (size-weighted) average of within-population <span class="math inline">\(p\)</span>. Identities survive randomness; estimates don’t.</p>
+<p>One practical gotcha when you change seeds or parameters: if a genotype class happens not to occur (e.g., no <code>aa</code> individuals in Pop_1), <code>table()</code> silently drops that level and indexing <code>counts["aa"]</code> returns <code>NA</code>. Keep all three classes with <code>table(factor(pop_1$genotype, levels = c("AA", "Aa", "aa")))</code> so counts of zero are explicit.</p>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="part-iii" class="level1">
@@ -1081,14 +1461,15 @@ locus_10 locus_10    0.450    0.550</code></pre>
 <p><strong>Expected heterozygosity (<span class="math inline">\(H_{e}\)</span>):</strong> what you’d expect under Hardy-Weinberg equilibrium, given the allele frequencies: <span class="math inline">\(H_{e} = 2pq\)</span>, where <em>p</em> and <em>q</em> are the reference and alternate allele frequencies.</p>
 <p><strong>Concept review: <a href="https://bio.libretexts.org/Bookshelves/Introductory_and_General_Biology/General_Biology_(Boundless)/19%3A_The_Evolution_of_Populations/19.01%3A_Population_Evolution/19.1C%3A_Hardy-Weinberg_Principle_of_Equilibrium">What is Hardy-Weinberg equilibrium?</a></strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>Ho <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(geno <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>He <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> ref_freq <span class="sc">*</span> alt_freq</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>het_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">locus =</span> <span class="fu">names</span>(Ho), </span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">Ho =</span> <span class="fu">round</span>(Ho, <span class="dv">3</span>), </span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">He =</span> <span class="fu">round</span>(He, <span class="dv">3</span>),</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">diff =</span> <span class="fu">round</span>(Ho <span class="sc">-</span> He, <span class="dv">3</span>))</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>het_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>Ho <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(geno <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>He <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> ref_freq <span class="sc">*</span> alt_freq</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>het_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">locus =</span> <span class="fu">names</span>(Ho), </span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">Ho =</span> <span class="fu">round</span>(Ho, <span class="dv">3</span>), </span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">He =</span> <span class="fu">round</span>(He, <span class="dv">3</span>),</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">diff =</span> <span class="fu">round</span>(Ho <span class="sc">-</span> He, <span class="dv">3</span>))</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>het_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            locus    Ho    He   diff
 locus_1   locus_1 0.267 0.480 -0.213
@@ -1104,42 +1485,486 @@ locus_10 locus_10 0.567 0.495  0.072</code></pre>
 </div>
 </div>
 <p>If <code>Ho</code> is consistently lower than <code>He</code> across loci, that’s a signature of inbreeding or population substructure — the same underlying idea behind the <code>Family_Homozygosity</code> and <code>Population_Homozygosity</code> columns already computed in the <a href="https://github.com/anoobvinu07/Genomic_assisted_selection/blob/master/data/FitnessTraits_GeneticParameters_RedSpruce.txt">real world dataset</a> used in the previous modules.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Worked example: heterozygosity by hand
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Take the hand-calculation locus from Part I: <strong>12 <code>0/0</code>, 5 <code>0/1</code>, 3 <code>1/1</code></strong> (<span class="math inline">\(N = 20\)</span>, <span class="math inline">\(p_{alt} = 0.275\)</span>, <span class="math inline">\(p_{ref} = 0.725\)</span>).</p>
+<p><strong>Observed heterozygosity</strong> — just count the heterozygotes:</p>
+<p><span class="math display">\[H_{o} = \frac{n_{het}}{N} = \frac{5}{20} = 0.25\]</span></p>
+<p><strong>Expected heterozygosity</strong> — the H–W heterozygote frequency at those allele frequencies:</p>
+<p><span class="math display">\[H_{e} = 2pq = 2 \times 0.725 \times 0.275 = 0.399\]</span></p>
+<p>This locus has fewer heterozygotes than expected (<span class="math inline">\(H_o &lt; H_e\)</span>). The standard way to summarize the gap is the <strong>inbreeding coefficient</strong>:</p>
+<p><span class="math display">\[F = 1 - \frac{H_{o}}{H_{e}} = 1 - \frac{0.25}{0.399} = 0.373\]</span></p>
+<ul>
+<li><span class="math inline">\(F = 0\)</span>: the population matches H–W exactly at this locus</li>
+<li><span class="math inline">\(F &gt; 0\)</span>: heterozygote <strong>deficit</strong> (inbreeding, substructure, or chance)</li>
+<li><span class="math inline">\(F &lt; 0\)</span>: heterozygote <strong>excess</strong> (e.g., overdominance, or sampling noise)</li>
+</ul>
+<p>Notice how the pieces from Part II assemble here: <strong>allele counts → allele frequencies → H–W expectations → observed vs.&nbsp;expected → F</strong>. Every downstream population-genetics quantity is built from the same two inputs, <span class="math inline">\(p\)</span> and <span class="math inline">\(N\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Worked example: <span class="math inline">\(H_e\)</span> is maximized at <span class="math inline">\(p = 0.5\)</span>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(H_e = 2pq\)</span> is a parabola in <span class="math inline">\(p\)</span> — it peaks when both alleles are equally common:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(q\)</span></th>
+<th><span class="math inline">\(H_e = 2pq\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.1</td>
+<td>0.9</td>
+<td>0.18</td>
+</tr>
+<tr class="even">
+<td>0.3</td>
+<td>0.7</td>
+<td>0.42</td>
+</tr>
+<tr class="odd">
+<td>0.5</td>
+<td>0.5</td>
+<td><strong>0.50</strong></td>
+</tr>
+<tr class="even">
+<td>0.7</td>
+<td>0.3</td>
+<td>0.42</td>
+</tr>
+<tr class="odd">
+<td>0.9</td>
+<td>0.1</td>
+<td>0.18</td>
+</tr>
+<tr class="even">
+<td>1.0</td>
+<td>0.0</td>
+<td>0.00</td>
+</tr>
+</tbody>
+</table>
+<p>Three consequences worth internalizing:</p>
+<ol type="1">
+<li><strong>Near-fixed loci are uninformative.</strong> At <span class="math inline">\(p = 0.95\)</span>, <span class="math inline">\(H_e = 0.095\)</span> — almost no variation to work with. This is why MAF filtering exists (Exercise 4, Part II).</li>
+<li><strong>Heterozygosity measures evenness, not richness.</strong> A population fixed for a different allele at every locus and one fixed for the same allele at every locus both have <span class="math inline">\(H_e = 0\)</span>.</li>
+<li><strong>Homozygosity and diversity are two views of the same quantity</strong>: for a biallelic locus, <span class="math inline">\(H_e + \text{homozygosity} = 1\)</span>. In the red-spruce data, this is why <code>Population_Homozygosity</code> and <code>Genetic_Diversity</code> should be near-perfect mirror images of each other (negatively correlated) — check it in the practical exercises.</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Worked example: reading the simulated het_table
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>For the Part I simulation (seed 123), the table shows:</p>
+<ul>
+<li>Mean <span class="math inline">\(H_o \approx 0.403\)</span>, mean <span class="math inline">\(H_e \approx 0.473\)</span>, so <span class="math inline">\(H_o &lt; H_e\)</span> at <strong>most</strong> loci, and the overall <span class="math inline">\(F \approx 0.147\)</span>.</li>
+<li>The largest deficit is at <code>locus_1</code> (<span class="math inline">\(H_o = 0.267\)</span> vs.&nbsp;<span class="math inline">\(H_e = 0.480\)</span>).</li>
+<li>The largest excess is at <code>locus_10</code> (<span class="math inline">\(H_o = 0.567\)</span> vs.&nbsp;<span class="math inline">\(H_e = 0.495\)</span>).</li>
+</ul>
+<p>Here is the subtle part — this deficit is <strong>built into the simulation</strong>, not a biological process. We drew <em>genotypes</em> with probabilities <code>c(0.4, 0.4, 0.2)</code> rather than drawing <em>alleles</em> and pairing them randomly. Those genotype probabilities imply an allele frequency of <span class="math inline">\(p = (0 \times 0.4 + 1 \times 0.4 + 2 \times 0.2)/2 = 0.4\)</span>, and H–W at that frequency would give <span class="math inline">\(H_e = 2(0.4)(0.6) = 0.48\)</span> — but our draw only produces heterozygotes 40% of the time. So the simulation has an inbreeding coefficient of about <span class="math inline">\(F = 1 - 0.40/0.48 \approx 0.17\)</span> by construction.</p>
+<p>The lesson: <strong>always ask how a simulation generates its data before interpreting the output.</strong> A genotype-frequency simulator and an allele-frequency simulator with the same <span class="math inline">\(p\)</span> produce different heterozygosities — which is precisely the <span class="math inline">\(H_o\)</span> vs <span class="math inline">\(H_e\)</span> distinction.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="the-wahlund-effect-connecting-part-ii-to-part-iii" class="level3">
+<h3 class="anchored" data-anchor-id="the-wahlund-effect-connecting-part-ii-to-part-iii">The Wahlund effect: connecting Part II to Part III</h3>
+<p>In Part II you saw that pooling two populations distorts genotype frequencies. Here is the same demonstration at a sample size where the pattern is unambiguous. This time, simulate two large populations (N = 500 each) at one locus:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>N_w <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Same structure as Part II, just bigger</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>pop_big_1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>), N_w, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">prob =</span> <span class="fu">c</span>(p_1<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span> <span class="sc">*</span> p_1 <span class="sc">*</span> q_1, q_1<span class="sc">^</span><span class="dv">2</span>))   <span class="co"># p = 0.80</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>pop_big_2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"AA"</span>, <span class="st">"Aa"</span>, <span class="st">"aa"</span>), N_w, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">prob =</span> <span class="fu">c</span>(p_2<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span> <span class="sc">*</span> p_2 <span class="sc">*</span> q_2, q_2<span class="sc">^</span><span class="dv">2</span>))   <span class="co"># p = 0.30</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>pool_big <span class="ot">&lt;-</span> <span class="fu">c</span>(pop_big_1, pop_big_2)</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>Ho_of <span class="ot">&lt;-</span> <span class="cf">function</span>(g) <span class="fu">sum</span>(g <span class="sc">==</span> <span class="st">"Aa"</span>) <span class="sc">/</span> <span class="fu">length</span>(g)</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>p_of  <span class="ot">&lt;-</span> <span class="cf">function</span>(g) (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(g <span class="sc">==</span> <span class="st">"AA"</span>) <span class="sc">+</span> <span class="fu">sum</span>(g <span class="sc">==</span> <span class="st">"Aa"</span>)) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">length</span>(g))</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">c</span>(<span class="st">"Pop_1"</span>, <span class="st">"Pop_2"</span>, <span class="st">"Pooled"</span>),</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_A =</span> <span class="fu">round</span>(<span class="fu">c</span>(<span class="fu">p_of</span>(pop_big_1), <span class="fu">p_of</span>(pop_big_2), <span class="fu">p_of</span>(pool_big)), <span class="dv">3</span>),</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ho =</span> <span class="fu">round</span>(<span class="fu">c</span>(<span class="fu">Ho_of</span>(pop_big_1), <span class="fu">Ho_of</span>(pop_big_2), <span class="fu">Ho_of</span>(pool_big)), <span class="dv">3</span>),</span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">He_from_p =</span> <span class="fu">round</span>(<span class="dv">2</span> <span class="sc">*</span> <span class="fu">c</span>(<span class="fu">p_of</span>(pop_big_1), <span class="fu">p_of</span>(pop_big_2), <span class="fu">p_of</span>(pool_big)) <span class="sc">*</span></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>                       (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">c</span>(<span class="fu">p_of</span>(pop_big_1), <span class="fu">p_of</span>(pop_big_2), <span class="fu">p_of</span>(pool_big))), <span class="dv">3</span>)</span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   group   p_A    Ho He_from_p
+1  Pop_1 0.800 0.332     0.320
+2  Pop_2 0.307 0.418     0.426
+3 Pooled 0.553 0.375     0.494</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Reading the Wahlund table
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>With seed 7 you should see numbers like these:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Group</th>
+<th><span class="math inline">\(p_A\)</span></th>
+<th><span class="math inline">\(H_o\)</span></th>
+<th><span class="math inline">\(H_e\)</span> (from its own <span class="math inline">\(p\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Pop_1</td>
+<td>0.800</td>
+<td>0.332</td>
+<td>0.320</td>
+</tr>
+<tr class="even">
+<td>Pop_2</td>
+<td>0.307</td>
+<td>0.418</td>
+<td>0.426</td>
+</tr>
+<tr class="odd">
+<td><strong>Pooled</strong></td>
+<td><strong>0.553</strong></td>
+<td><strong>0.375</strong></td>
+<td><strong>0.494</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Read the last row carefully — both comparisons matter:</p>
+<ol type="1">
+<li><strong>Within each population, <span class="math inline">\(H_o \approx H_e\)</span>.</strong> Each population is in H–W equilibrium, as designed. No inbreeding, no structure — nothing is wrong with either population.</li>
+<li><strong>The pooled row shows <span class="math inline">\(H_o = 0.375 \ll H_e = 0.494\)</span></strong>, an apparent heterozygote deficit with <span class="math inline">\(F \approx 0.24\)</span> — <strong>out of nowhere</strong>, if you didn’t know the sample was structured.</li>
+<li>The pooled <span class="math inline">\(H_e\)</span> (0.494) is also <strong>higher than either population’s own <span class="math inline">\(H_e\)</span></strong> (0.320, 0.426). Pooling mixes allele frequencies toward the middle (<span class="math inline">\(p = 0.553\)</span>, near 0.5 where <span class="math inline">\(H_e\)</span> peaks), so the <em>expected</em> diversity of the mixture exceeds the diversity of any real component.</li>
+</ol>
+<p>This is the <strong>Wahlund effect</strong>: combining structured populations inflates apparent expected heterozygosity and produces an apparent heterozygote deficit — mimicking inbreeding even when every subpopulation is perfectly outbred.</p>
+<p>Why does this matter for your work? If you compute heterozygosity from a mixed VCF without accounting for population structure, substructure masquerades as inbreeding. It also runs the other way: the PCA section below is exactly the tool you use to <em>detect</em> the structure that causes Wahlund effects — the connection between these two sections is the heart of “everything connects.”</p>
+<p>In the red-spruce dataset, <code>Population_Homozygosity</code> computed across structured regions contains this same mixing effect, which is one reason it is analyzed <strong>by region</strong> and alongside <code>PC1</code>/<code>PC2</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercises-heterozygosity" class="level3">
+<h3 class="anchored" data-anchor-id="exercises-heterozygosity">Exercises: heterozygosity</h3>
+</section>
+<section id="exercise-6-ho-and-he-for-the-two-populations" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-6-ho-and-he-for-the-two-populations">Exercise 6 — Ho and He for the two populations</h3>
+<p>Using <code>pop_1</code> and <code>pop_2</code> from Part II (N = 20 each):</p>
+<ol type="1">
+<li>Compute <span class="math inline">\(H_o\)</span> (observed frequency of <code>Aa</code>) and <span class="math inline">\(H_e\)</span> (from the observed <span class="math inline">\(p\)</span>) for each population.</li>
+<li>Compute <span class="math inline">\(H_o\)</span> and <span class="math inline">\(H_e\)</span> for the <strong>pooled</strong> population.</li>
+<li>Is the pooled <span class="math inline">\(H_o\)</span> below the pooled <span class="math inline">\(H_e\)</span>? Is the deficit larger or smaller than in the N = 500 demonstration above? Why?</li>
+</ol>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>Ho_pop1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(pop_1<span class="sc">$</span>genotype <span class="sc">==</span> <span class="st">"Aa"</span>) <span class="sc">/</span> <span class="fu">nrow</span>(pop_1)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>Ho_pop2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(pop_2<span class="sc">$</span>genotype <span class="sc">==</span> <span class="st">"Aa"</span>) <span class="sc">/</span> <span class="fu">nrow</span>(pop_2)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>Ho_pool <span class="ot">&lt;-</span> <span class="fu">sum</span>(pooled_population<span class="sc">$</span>genotype <span class="sc">==</span> <span class="st">"Aa"</span>) <span class="sc">/</span> <span class="fu">nrow</span>(pooled_population)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>He_pop1 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> p_A_1 <span class="sc">*</span> q_a_1</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>He_pop2 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> p_A_2 <span class="sc">*</span> q_a_2</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>He_pool <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> p_A_p <span class="sc">*</span> q_a_p</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">c</span>(<span class="st">"Pop_1"</span>, <span class="st">"Pop_2"</span>, <span class="st">"Pooled"</span>),</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ho =</span> <span class="fu">round</span>(<span class="fu">c</span>(Ho_pop1, Ho_pop2, Ho_pool), <span class="dv">3</span>),</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">He =</span> <span class="fu">round</span>(<span class="fu">c</span>(He_pop1, He_pop2, He_pool), <span class="dv">3</span>),</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">F =</span> <span class="fu">round</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">c</span>(Ho_pop1, Ho_pop2, Ho_pool) <span class="sc">/</span></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>              <span class="fu">c</span>(He_pop1, He_pop2, He_pool), <span class="dv">3</span>)</span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   group  Ho    He      F
+1  Pop_1 0.5 0.420 -0.190
+2  Pop_2 0.5 0.455 -0.099
+3 Pooled 0.5 0.499 -0.003</code></pre>
+</div>
+</div>
+<p>With seed 42, all three groups happen to show <span class="math inline">\(H_o \approx 0.50\)</span> (and the within-pop <span class="math inline">\(H_e\)</span> values are 0.420 and 0.455), so the Wahlund deficit is essentially invisible: <span class="math inline">\(F_{pool} \approx -0.003\)</span> — a hair of heterozygote <em>excess</em> — even though the populations are just as differentiated as in the big simulation.</p>
+<p>The reason is <strong>noise swamping signal</strong>: with N = 20, the standard error of a proportion near 0.5 is <span class="math inline">\(\sqrt{0.25/20} \approx 0.11\)</span>, while the expected Wahlund deficit for this configuration is <span class="math inline">\(H_{e,pool} - \overline{H_{o,within}} \approx
+0.49 - 0.37 \approx 0.12\)</span> — the same order as the noise. With N = 500, the standard error shrinks to <span class="math inline">\(\approx 0.022\)</span> and the deficit stands out clearly.</p>
+<p>Practical takeaway: heterozygote deficits (and excesses) in small samples are uninterpretable without either larger N or replicated loci. This is why genome-scale analyses average over thousands of loci — the per-locus noise cancels while a systematic deficit (structure, inbreeding) persists.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-7-average-across-loci" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-7-average-across-loci">Exercise 7 — Average across loci</h3>
+<p>For the <code>geno</code> matrix from Part I:</p>
+<ol type="1">
+<li>Add a per-locus inbreeding coefficient <span class="math inline">\(F = 1 - H_o/H_e\)</span> to <code>het_table</code>.</li>
+<li>Which single locus departs most from H–W in <em>each</em> direction?</li>
+<li>Compute the mean <span class="math inline">\(H_o\)</span>, mean <span class="math inline">\(H_e\)</span>, and multi-locus <span class="math inline">\(F\)</span> across all 10 loci. Why is averaging across loci more trustworthy than any single locus?</li>
+</ol>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute F from the unrounded Ho and He, then attach it to the table</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>het_table<span class="sc">$</span>F <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="dv">1</span> <span class="sc">-</span> Ho <span class="sc">/</span> He, <span class="dv">3</span>)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>het_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            locus    Ho    He   diff      F
+locus_1   locus_1 0.267 0.480 -0.213  0.444
+locus_2   locus_2 0.500 0.473  0.027 -0.058
+locus_3   locus_3 0.367 0.473 -0.106  0.224
+locus_4   locus_4 0.333 0.464 -0.131  0.282
+locus_5   locus_5 0.467 0.480 -0.013  0.028
+locus_6   locus_6 0.433 0.433  0.001 -0.001
+locus_7   locus_7 0.367 0.486 -0.119  0.246
+locus_8   locus_8 0.400 0.480 -0.080  0.167
+locus_9   locus_9 0.333 0.464 -0.131  0.282
+locus_10 locus_10 0.567 0.495  0.072 -0.145</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(het_table<span class="sc">$</span>Ho)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4034</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(het_table<span class="sc">$</span>He)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4728</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>(het_table<span class="sc">$</span>Ho) <span class="sc">/</span> <span class="fu">mean</span>(het_table<span class="sc">$</span>He)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1467851</code></pre>
+</div>
+</div>
+<p>With seed 123: the strongest deficit is <code>locus_1</code> (<span class="math inline">\(F = 0.44\)</span>), the strongest excess is <code>locus_10</code> (<span class="math inline">\(F = -0.15\)</span>), and the multi-locus value is <span class="math inline">\(F \approx 0.147\)</span>.</p>
+<p>Averaging across loci works because each locus is an independent draw of the same underlying process. Random per-locus deviations — which push individual <span class="math inline">\(F\)</span> values both up and down — cancel out, while a systematic process (inbreeding, structure, or in our case the simulation’s genotype probabilities) shifts all loci in the same direction and survives the average. This is the same logic as Exercise 6 writ large: more data, same signal, less noise. It is also exactly why real genomic studies report genome-wide average <span class="math inline">\(H_o/H_e\)</span> rather than single-locus values.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-8-connect-to-the-real-data" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-8-connect-to-the-real-data">Exercise 8 — Connect to the real data</h3>
+<p>Using the red-spruce dataset:</p>
+<ol type="1">
+<li>Plot <code>Genetic_Diversity</code> against <code>Population_Homozygosity</code>.</li>
+<li>Fit <code>lm(Population_Homozygosity ~ Genetic_Diversity, data = traits)</code>.</li>
+<li>Interpret the slope in light of the identity <span class="math inline">\(H_e + \text{homozygosity} = 1\)</span> from the worked example above.</li>
+</ol>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution sketch
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(traits<span class="sc">$</span>Genetic_Diversity, traits<span class="sc">$</span>Population_Homozygosity,</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">xlab =</span> <span class="st">"Genetic diversity"</span>, <span class="at">ylab =</span> <span class="st">"Population homozygosity"</span>)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(Population_Homozygosity <span class="sc">~</span> Genetic_Diversity, <span class="at">data =</span> traits))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For a single biallelic locus, expected homozygosity is <span class="math inline">\(p^2 + q^2 = 1 - 2pq = 1 -
+H_e\)</span>, so the two quantities are deterministically complementary. If these columns were computed from the same set of loci and the same weighting, you should find a strongly <strong>negative</strong> relationship — though not necessarily a slope of exactly <span class="math inline">\(-1\)</span>, since the columns may use different locus sets, weightings, or estimators. Scatter around a strong negative trend is expected with real, noisy, structured data; deviations can also reflect population structure (Wahlund again) inflating homozygosity in mixed samples. Check the outlier populations against their <code>Region</code> on the PCA plot.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="pca-for-population-structure" class="level3">
 <h3 class="anchored" data-anchor-id="pca-for-population-structure">PCA for population structure</h3>
 <p>On the simulated matrix:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>pca_sim <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(geno, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pca_sim<span class="sc">$</span>x[, <span class="dv">1</span>], pca_sim<span class="sc">$</span>x[, <span class="dv">2</span>],</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"PC1"</span>, <span class="at">ylab =</span> <span class="st">"PC2"</span>, <span class="at">main =</span> <span class="st">"Simulated genotype PCA"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>pca_sim <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(geno, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pca_sim<span class="sc">$</span>x[, <span class="dv">1</span>], pca_sim<span class="sc">$</span>x[, <span class="dv">2</span>],</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"PC1"</span>, <span class="at">ylab =</span> <span class="st">"PC2"</span>, <span class="at">main =</span> <span class="st">"Simulated genotype PCA"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="index_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="index_files/figure-html/unnamed-chunk-22-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Now look at the <strong>real</strong> PC1/PC2 already computed for the red-spruce trees (from actual genetic markers, not simulated):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"data/raw/red_spruce_fitness_traits.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>traits<span class="sc">$</span>Region <span class="ot">&lt;-</span> <span class="fu">factor</span>(traits<span class="sc">$</span>Region)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(traits<span class="sc">$</span>PC1, traits<span class="sc">$</span>PC2,</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="fu">as.integer</span>(traits<span class="sc">$</span>Region), <span class="at">pch =</span> <span class="dv">19</span>,</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"PC1"</span>, <span class="at">ylab =</span> <span class="st">"PC2"</span>, <span class="at">main =</span> <span class="st">"Genetic PCA colored by region"</span>)</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">levels</span>(traits<span class="sc">$</span>Region),</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlevels</span>(traits<span class="sc">$</span>Region), <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>traits<span class="sc">$</span>Region <span class="ot">&lt;-</span> <span class="fu">factor</span>(traits<span class="sc">$</span>Region)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(traits<span class="sc">$</span>PC1, traits<span class="sc">$</span>PC2,</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="fu">as.integer</span>(traits<span class="sc">$</span>Region), <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"PC1"</span>, <span class="at">ylab =</span> <span class="st">"PC2"</span>, <span class="at">main =</span> <span class="st">"Genetic PCA colored by region"</span>)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">levels</span>(traits<span class="sc">$</span>Region),</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlevels</span>(traits<span class="sc">$</span>Region), <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="index_files/figure-html/unnamed-chunk-17-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="index_files/figure-html/unnamed-chunk-25-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <p>In population genetics, PC1/PC2 from a genetic marker PCA usually capture the strongest axes of population structure — often correlated with geography (isolation by distance) or major environmental gradients.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Worked example: what a PCA of the two-population simulation would show
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Go back to the Wahlund simulation (two populations, <span class="math inline">\(p = 0.8\)</span> vs.&nbsp;<span class="math inline">\(p = 0.3\)</span>, N = 500 each) and imagine running <code>prcomp()</code> on a 1000 <span class="math inline">\(\times\)</span> 1 matrix of genotypes. Because there is only one locus, the “PCA” is trivial — but if you extend the simulation to hundreds of loci that all differ between the populations in the same direction (like locally adapted loci), PC1 would capture exactly one thing: <strong>which population an individual belongs to</strong>.</p>
+<p>That is what PC1/PC2 do in real data. When the red-spruce PCA shows points colored by <code>Region</code> separating along PC1, you are looking at the multilocus version of the allele-frequency difference <span class="math inline">\(p_{A,1} = 0.70\)</span> vs.&nbsp;<span class="math inline">\(p_{A,2} = 0.35\)</span> from Part II. The PCA doesn’t create information — it summarizes thousands of per-locus frequency differences into two axes you can plot.</p>
+<p>The loop closes here: <strong>structure (Part II pooling) → heterozygote deficit (Wahlund) → PCA detects that structure → and the GEA/RDA step must account for it</strong>, because a climate variable correlated with region would otherwise look like adaptation when it is really just ancestry. This is why <code>PC1</code> sits in the red-spruce dataset alongside the climate variables.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="how-everything-connects" class="level2">
+<h2 class="anchored" data-anchor-id="how-everything-connects">How everything connects</h2>
+<p>Everything in this module is one pipeline applied at increasing scale. Trace it end-to-end with a single question: <strong>“why is this locus heterozygote-deficient?”</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Concept</th>
+<th>Where you computed it</th>
+<th>Red-spruce equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Count genotypes</td>
+<td><code>table(pop_1$genotype)</code></td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Allele frequencies <span class="math inline">\(p, q\)</span></td>
+<td><code>colMeans(geno)/2</code>, allele counting</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>H–W expectations <span class="math inline">\(p^2, 2pq, q^2\)</span></td>
+<td><code>prob = c(p^2, 2pq, q^2)</code></td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Observed vs.&nbsp;expected heterozygosity</td>
+<td><code>Ho</code>, <code>He</code>, <code>het_table</code></td>
+<td><code>Genetic_Diversity</code></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>The gap: <span class="math inline">\(F = 1 - H_o/H_e\)</span></td>
+<td>Exercise 7</td>
+<td><code>Family_Homozygosity</code> (conceptually related)</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Structure causes the gap</td>
+<td>Wahlund effect (N = 500 demo)</td>
+<td><code>Region</code>, <code>PC1</code>, <code>PC2</code></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Structure detected multivariately</td>
+<td><code>prcomp()</code> PCA plot</td>
+<td><code>PC1</code>, <code>PC2</code> columns</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Structure + environment</td>
+<td><code>cor.test()</code>, <code>lm()</code></td>
+<td><code>Elevation</code>, <code>Latitude</code></td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>Many loci + environment jointly</td>
+<td><code>vegan::rda()</code> (stretch)</td>
+<td>RDA / genomic offset</td>
+</tr>
+</tbody>
+</table>
+<p>Three threads run through the whole table:</p>
+<ul>
+<li><strong>The same two quantities everywhere.</strong> Every row is computed from genotype counts and sample size. Heterozygosity, F, the Wahlund effect, PCA loadings, and even the RDA ordination are all functions of allele frequencies — the only thing that changes is how many loci and how many environmental axes you let in.</li>
+<li><strong>Structure is the recurring confounder.</strong> Pooling populations inflates apparent diversity (Part II, Wahlund), heterozygote deficits can mean either inbreeding or structure (Part III), and the PCA that reveals structure (<code>PC1</code>/<code>PC2</code>) is also the covariate you must control before interpreting any genotype–environment association (Part III’s <code>lm()</code> and <code>rda()</code>). A climate correlation that survives after accounting for structure is evidence of local adaptation; one that disappears was ancestry all along.</li>
+<li><strong>Scale changes confidence, not logic.</strong> With N = 20 at one locus, noise dominates (Exercise 6). With N = 500, the Wahlund effect is obvious. With 10 loci, averaging helps (Exercise 7). With genome-wide SNPs, per-locus estimates are noise but multivariate summaries (PCA, RDA) become powerful. The math you did by hand on a 2-allele, 20-individual toy is the same math inside <code>adegenet</code>, <code>LEA</code>, and your genomic-offset pipelines.</li>
+</ul>
+<p>When you reach the stretch exercise — <code>rda()</code> with <code>Genetic_Diversity</code>, <code>Genetic_Load</code>, <code>PC1</code>, <code>PC2</code> as responses and <code>Elevation</code>, <code>Latitude</code> as predictors — notice what it is: rows 8 and 9 of the table. A correlation tests one response–predictor pair; the RDA tests all of them jointly, in the same way the PCA summarized all loci jointly. Multivariate = the same idea, more axes.</p>
 </section>
 <section id="roadmap-beyond-this-module" class="level2">
 <h2 class="anchored" data-anchor-id="roadmap-beyond-this-module">Roadmap beyond this module</h2>
@@ -1177,6 +2002,7 @@ locus_10 locus_10 0.567 0.495  0.072</code></pre>
 <li><strong>Stretch exercise:</strong> run the <code>vegan::rda()</code> example above using <code>Genetic_Diversity</code>, <code>Genetic_Load</code>, <code>PC1</code>, <code>PC2</code> as responses and <code>Elevation</code>, <code>Latitude</code> as predictors. Produce the ordination biplot and describe what you see in 2–3 sentences.</li>
 <li>Save every summary table (allele frequencies, heterozygosity table, correlation results) and every plot into <code>results/</code>.</li>
 </ol>
+<p>Solutions for the simulation-based items (1–3) are worked through in Part I, the Part II exercises, and Exercise 7 — attempt them before unfolding those callouts.</p>
 </section>
 <section id="homework" class="level3">
 <h3 class="anchored" data-anchor-id="homework">Homework</h3>
