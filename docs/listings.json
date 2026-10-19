@@ -3,6 +3,7 @@
     "listing": "/notebook/index.html",
     "items": [
       "/notebook/workflows/r-popgen/index.html",
+      "/notebook/learn-to-code/r-advanced/index.html",
       "/notebook/learn-to-code/bash-advanced-text-processing/index.html",
       "/notebook/learn-to-code/bash-advanced-scripting/index.html",
       "/notebook/learn-to-code/r-basics/index.html",

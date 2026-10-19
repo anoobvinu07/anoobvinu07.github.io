@@ -1,0 +1,1279 @@
+---
+title: "_`R`_: Module _`2`_ Data wrangling, visualization, and first models"
+description: "Reshape, summarize, plot, and model the red spruce dataset with the tidyverse"
+author:
+  - name: "Anoob Prakash"
+    email: "prakas89@purdue.edu"
+    orcid: "0000-0002-7207-934X"
+    url: "https://www.linkedin.com/in/anoob-prakash/"
+date: "10/19/2026"
+date-modified: "10/19/2026"
+categories:
+  - hpc
+  - r
+
+
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-title: "On this page"
+    toc-depth: 3
+    page-layout: full
+    lightbox: true
+    code-fold: false
+    code-overflow: wrap
+    code-copy: true
+    code-tools: false
+    code-block-border-left: "#583C88"
+    code-block-border-left-size: 5px
+    code-block-border-left-style: solid
+---
+
+
+
+
+## Goal
+
+
+In [Module 1](/notebook/learn-to-code/r-basics/index.qmd) you learned to load, inspect, subset, and summarize the red spruce fitness-trait dataset with base R, and you wrote your first reproducible script. Module 2 does the same kinds of jobs with the **tidyverse**: a set of packages built for data wrangling (`dplyr`, `tidyr`), plotting (`ggplot2`), and repeating tasks (`purrr`). You will also fit your **first statistical models**.
+
+
+By the end you will have a second script, `src/02_wrangle_model_traits.R`, that turns `data/raw/` into a set of tables, publication-style figures, and model summaries in `results/`, all with one `Rscript` call.
+
+
+#### Prerequisites
+::: {.column-body}
+- Completed Module 1 (you can read the file, use `str()`, `table()`, `aggregate()`, and save to `results/`)
+- R (>= 4.2), because the native pipe `|>` and the `\(x)` shorthand for functions need R 4.1 or newer
+- The dataset at `data/raw/red_spruce_fitness_traits.txt`, and the same `cluster-exercise/` project layout as Module 1
+
+
+Install the packages once (on the cluster, inside the R module you loaded in Module 1):
+
+
+```{r}
+#| eval: false
+install.packages(c("dplyr", "tidyr", "readr", "ggplot2", "purrr", "forcats", "broom", "here"))
+
+# or the whole bundle in one go (bigger download)
+# install.packages("tidyverse")
+```
+
+
+::: {.callout-tip}
+# Code reproducibility check
+
+Installing is a **one-time** step, so it never goes inside your analysis script. The script only *loads* packages with `library()`. If a collaborator does not have a package, `library()` fails right away with a clear error. That is much better than the script quietly installing something into their system.
+
+At the end of every script, `sessionInfo()` prints your R version and the version of every loaded package. Save that output with your results and anyone can see exactly which software produced them. Have you ever had code that worked last year and breaks today? Package versions are usually why.
+:::
+
+
+::: {.callout-important collapse="true"}
+## Project directory setup
+**This exercise uses the same structure as Module 1.** New in this module: a `results/figures/` subfolder, so plots stay separate from tables.
+
+
+<pre style="color: #F8F9FA; background-color: #22252A; padding: 1rem; border-radius: 6px;"><code>cluster-exercise/
+ ├── data/
+ │   └── raw/            # downloaded, unchanged source data
+ ├── logs/               # Slurm standard output and error logs
+ ├── results/            # tables created by R
+ │   └── figures/        # plots created by R
+ └── src/                # R and Slurm scripts
+     ├── 01_explore_traits.R
+     └── 02_wrangle_model_traits.R</code></pre>
+:::
+
+:::
+
+
+## Learning objectives
+
+
+By the end of this module you should be able to:
+
+
+- Load packages and handle **name conflicts** between them (`dplyr::filter` vs `stats::filter`)
+- Read data with `readr` and explain how a **tibble** differs from a data frame
+- Chain the five core `dplyr` verbs (`filter`, `select`, `mutate`, `arrange`, `summarise`) with the pipe `|>`
+- Compute grouped summaries with `group_by()` and `across()`
+- Reshape data between **wide** and **long** formats with `tidyr`
+- **Join** a tree-level table to a population-level table
+- Write your own functions and repeat them over many traits with `purrr::map()`
+- Build layered plots with `ggplot2` and save them with `ggsave()`
+- Fit and interpret a linear model with `lm()`, and see how a **confounding** variable changes the answer
+- Extend your reproducible script to wrangle, plot, model, and save
+
+
+#### R quick reference
+
+
+| Function/operator | Package | Purpose | Example |
+|---|---|---|---|
+| `|>` | base | Pass the left side into the first argument on the right | `traits |> head()` |
+| `read_tsv()` | readr | Read a tab-delimited file as a tibble | `read_tsv("data/raw/file.txt")` |
+| `glimpse()` | dplyr | Compact, sideways `str()` | `glimpse(traits)` |
+| `filter()` | dplyr | Keep **rows** that match a condition | `filter(traits, Region == "E")` |
+| `select()` | dplyr | Keep or drop **columns** | `select(traits, Population, Height)` |
+| `mutate()` | dplyr | Create or change columns | `mutate(traits, elev_km = Elevation / 1000)` |
+| `arrange()` | dplyr | Sort rows (`desc()` for descending) | `arrange(traits, desc(Fitness))` |
+| `group_by()` + `summarise()` | dplyr | One summary row per group | `group_by(traits, Region) |> summarise(n = n())` |
+| `count()` | dplyr | Shortcut for group + count | `count(traits, Region)` |
+| `across()` | dplyr | Apply the same function to many columns | `summarise(across(c(Height, Fitness), mean))` |
+| `case_when()` | dplyr | Vectorized if/else for new categories | `case_when(Elevation < 500 ~ "low", ...)` |
+| `left_join()` | dplyr | Add columns from a second table by a key | `left_join(trees, pops, by = "Population")` |
+| `distinct()` | dplyr | Unique rows | `distinct(traits, Population, Region)` |
+| `pivot_longer()` / `pivot_wider()` | tidyr | Reshape wide ↔ long | `pivot_longer(traits, c(Height, Fitness))` |
+| `drop_na()` | tidyr | Drop rows with NA in given columns | `drop_na(traits, Fitness)` |
+| `fct_relevel()` | forcats | Set the order of factor levels | `fct_relevel(Region, "C", "M", "E")` |
+| `map()` + `list_rbind()` | purrr | Apply a function to each element, stack the results | `map(traits_vec, f) |> list_rbind()` |
+| `ggplot()` + `aes()` + `geom_*()` | ggplot2 | Layered plotting | `ggplot(traits, aes(Region, Height)) + geom_boxplot()` |
+| `facet_wrap()` | ggplot2 | Small multiples, one panel per group | `+ facet_wrap(~ trait, scales = "free_y")` |
+| `ggsave()` | ggplot2 | Save a ggplot to a file | `ggsave("results/figures/p.png", p)` |
+| `lm()` | stats | Fit a linear model | `lm(Fitness ~ Elevation, data = traits)` |
+| `tidy()` / `glance()` | broom | Model output as tibbles | `broom::tidy(fit)` |
+
+
+## Setting up the session
+
+
+Start R in the project root exactly as in Module 1 (`cd ~/projects/cluster-exercise`, load the R module, `R`), then load the packages:
+
+
+```{r}
+#| message: false
+library(dplyr)
+library(tidyr)
+library(readr)
+library(ggplot2)
+library(purrr)
+library(forcats)
+
+here::here()   # confirm the project root before reading anything
+
+dir.create(here::here("results/figures"), recursive = TRUE, showWarnings = FALSE)
+```
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Logic check: "The following objects are masked from ..."
+
+When you run `library(dplyr)` in a fresh session, R prints something like:
+
+```
+The following objects are masked from 'package:stats':
+    filter, lag
+```
+
+Two packages both define a function called `filter()`: base R's `stats` (a signal-processing filter) and `dplyr` (keep rows). The package loaded **last** wins, so after `library(dplyr)` the bare name `filter` means `dplyr::filter`.
+
+This is the second reason for the `package::function` syntax from Module 1. `dplyr::filter(...)` and `stats::filter(...)` are never ambiguous, whatever order the packages were loaded in. A classic bug is code that works in your session, then breaks for a collaborator who loaded the packages in a different order. If a familiar function suddenly gives a strange error, check `conflicts()` or write the package name explicitly.
+
+I load `broom` and `here` with `::` instead of `library()` because each is used only a few times. That keeps the list of loaded names short.
+:::
+
+
+### Reading data with `readr`
+
+
+```{r}
+traits <- read_tsv(here::here("data/raw/red_spruce_fitness_traits.txt"),
+                   show_col_types = FALSE)
+
+traits          # printing a tibble shows only what fits on screen
+glimpse(traits) # one line per column: name, type, first values
+```
+
+
+`read_tsv()` is the `readr` version of `read.delim()`. It returns a **tibble**, which is a data frame with stricter and friendlier behavior. A tibble *is* a data frame, so everything from Module 1 (`$`, `[ , ]`, `nrow()`) still works.
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Code breakdown: tibble vs data.frame
+
+Compare `str()` output from Module 1 with `glimpse()` now:
+
+| | `read.delim()` (Module 1) | `read_tsv()` (Module 2) |
+|---|---|---|
+| Object class | `data.frame` | `tbl_df` / `tbl` / `data.frame` |
+| `Tree`, `Elevation` | `int` | `dbl`: readr reads every number as a double unless you ask otherwise |
+| Printing | every row, which floods the console | the first 10 rows, plus column types under the names |
+| Partial column names | `traits$Heig` silently returns `Height` | `traits$Heig` gives `NULL` plus a warning |
+| Text columns | `chr` (with `stringsAsFactors = FALSE`) | always `chr`; it never turns text into factors on its own |
+
+The `int` → `dbl` change does not matter for any calculation here, but it shows the lesson from Module 1: **the type of a column depends on the function that read it**, so check with `glimpse()` or `str()` every time.
+
+Need to fix a type while reading? Pass `col_types`, e.g. `read_tsv(file, col_types = cols(Tree = col_integer()))`.
+:::
+
+
+### Making `Region` a meaningful factor
+
+
+The three region codes describe where each population sits in the red spruce range: **C**ore (the northern center of the range), **M**argin (Pennsylvania), and **E**dge (the southern Appalachians). R sorts factor levels alphabetically (C, E, M), which mixes up that geography. Mean latitude runs C 43.7°, M 41.2°, E 37.6°, so the order north to south is C → M → E. Let's use that order:
+
+
+```{r}
+traits <- traits |>
+  mutate(Region = fct_relevel(factor(Region), "C", "M", "E"))
+
+levels(traits$Region)
+```
+
+
+From now on every table, boxplot, and model lists regions north to south. You choose this order once, near the top of the script, and it is used everywhere after that.
+
+
+## Wrangling with `dplyr`
+
+
+### The pipe, revisited
+
+
+In Module 1 you met `|>` as a way to tack `head()` onto the end of a command. Its real job is to turn nested code into a sequence you read from top to bottom:
+
+
+```{r}
+# Nested: read from the inside out
+head(arrange(filter(traits, Region == "E"), desc(Fitness)), 3)
+
+# Piped: read top to bottom, "then ... then ... then"
+traits |>
+  filter(Region == "E") |>
+  arrange(desc(Fitness)) |>
+  head(3)
+```
+
+
+Both lines give the same result. `x |> f(y)` is just another way to write `f(x, y)`: the left side becomes the **first argument** of the function on the right. Every `dplyr` verb takes a data frame as its first argument and returns a data frame, which is why the verbs chain so neatly.
+
+
+::: {.callout-tip}
+# `|>` or `%>%`?
+
+You will see `%>%` (from the `magrittr` package) in older tutorials and Stack Overflow answers. For everything in this module the two behave the same. `|>` is built into R, so it needs no package, and it is what we use here.
+:::
+
+
+### The five core verbs
+
+
+::: {.panel-tabset}
+
+#### _`filter()`_: rows
+
+```{r}
+traits |> filter(Region == "E", Fitness > 20)
+```
+
+Comma-separated conditions are combined with AND, the same as `&` inside `[ , ]` in Module 1. Note that you write `Region`, not `traits$Region`. Inside a `dplyr` verb, column names are looked up in the data frame you piped in. This is called **data masking**.
+
+Rows where the condition is `NA` are dropped, just like base-R bracket filtering.
+
+#### _`select()`_: columns
+
+```{r}
+traits |> select(Population, Region, Height, Fitness) |> head(3)
+
+traits |> select(Family:Region) |> head(3)          # a range of columns
+traits |> select(starts_with("Pop")) |> head(3)    # by name pattern
+traits |> select(-c(PC1, PC2)) |> ncol()            # drop columns
+```
+
+Helpers like `starts_with()`, `ends_with()`, `contains()`, and `where(is.numeric)` let you choose columns by a rule instead of typing every name.
+
+#### _`mutate()`_: new columns
+
+```{r}
+traits |>
+  mutate(elev_km   = Elevation / 1000,
+         log_seed  = log(SeedWeight),
+         tall      = Height > 35) |>
+  select(Population, Elevation, elev_km, SeedWeight, log_seed, Height, tall) |>
+  head(3)
+```
+
+`mutate()` keeps all existing columns and adds new ones at the end. A column created early in a `mutate()` call can be used further down the same call.
+
+#### _`arrange()`_: sort
+
+```{r}
+traits |> arrange(Region, desc(Height)) |> select(Family, Region, Height) |> head(4)
+```
+
+The first column sorts first, and the second column breaks ties. `desc()` reverses the order. This replaces Module 1's `order(-x)` trick, and it also works on text columns.
+
+#### _`summarise()`_: collapse
+
+```{r}
+traits |>
+  summarise(n_trees     = n(),
+            mean_height = mean(Height, na.rm = TRUE),
+            sd_height   = sd(Height, na.rm = TRUE))
+```
+
+`summarise()` reduces many rows to one. On its own that is like `mean()`. It gets useful when you pair it with `group_by()`.
+
+:::
+
+
+### Grouped summaries
+
+
+```{r}
+traits |>
+  group_by(Region) |>
+  summarise(n_trees      = n(),
+            n_pops       = n_distinct(Population),
+            mean_fitness = mean(Fitness, na.rm = TRUE),
+            sd_fitness   = sd(Fitness, na.rm = TRUE),
+            .groups = "drop")
+```
+
+
+`group_by()` changes nothing you can see. It tags the data so that the *next* verb runs once per group. Compare this with Module 1: one `group_by() |> summarise()` call replaces a separate `tapply()` for each statistic, and it returns a tidy table instead of a named vector.
+
+
+`count()` is the shortcut for the most common grouped summary, the number of rows:
+
+
+```{r}
+traits |> count(Region)
+traits |> count(Region, Location)   # two-way: every Region × state combination
+```
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Logic check: what does `.groups = "drop"` do?
+
+When you `summarise()` a grouped tibble, `dplyr` removes the **last** grouping level but keeps any others. With a single group that leaves nothing grouped, but with `group_by(Region, Population)` the result is still grouped by `Region`. Any later `mutate()` or `summarise()` would then run separately inside each region, which can cause very confusing bugs.
+
+`.groups = "drop"` removes all grouping, so the result is an ordinary tibble. Make it a habit. You can also use the per-call shortcut `summarise(..., .by = Region)`, which groups for that one call only:
+
+```{r}
+traits |> summarise(mean_height = mean(Height, na.rm = TRUE), .by = Region)
+```
+
+Notice that `.by` lists groups in the order they first appear in the data (E first, because the file starts with population AB from Tennessee), while `group_by()` uses the factor levels. Another small reason to set the factor order on purpose.
+:::
+
+
+### Many columns at once with `across()`
+
+
+Summarizing five traits one at a time means typing `mean(..., na.rm = TRUE)` five times. `across()` applies one function, or several, to a whole set of columns:
+
+
+```{r}
+fitness_traits <- c("SeedWeight", "Germination", "Survival", "Height", "Fitness")
+
+traits |>
+  group_by(Region) |>
+  summarise(across(all_of(fitness_traits), \(x) mean(x, na.rm = TRUE)),
+            .groups = "drop")
+```
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Code breakdown: `\(x) mean(x, na.rm = TRUE)`
+
+`\(x)` is shorthand for `function(x)`. It creates a small, unnamed (**anonymous**) function in place. The line above is identical to:
+
+```{r}
+#| eval: false
+summarise(across(all_of(fitness_traits), function(x) mean(x, na.rm = TRUE)))
+```
+
+`across()` calls that function once for each selected column and passes the column in as `x`. `all_of(fitness_traits)` says "use the columns named in this character vector, and error if any is missing". That is safer than `any_of()`, which skips missing names without telling you.
+
+To get several statistics per column, pass a **named list** of functions. The names become suffixes on the new columns:
+
+```{r}
+traits |>
+  group_by(Region) |>
+  summarise(across(c(Height, Fitness),
+                   list(mean = \(x) mean(x, na.rm = TRUE),
+                        sd   = \(x) sd(x, na.rm = TRUE))),
+            .groups = "drop")
+```
+:::
+
+
+### New categories with `case_when()`
+
+
+Elevation is continuous, but sometimes you want bands. `case_when()` is a vectorized if/else: conditions are checked **in order**, and the first one that is `TRUE` wins:
+
+
+```{r}
+traits <- traits |>
+  mutate(elev_class = case_when(
+           Elevation < 500  ~ "low",
+           Elevation < 1000 ~ "mid",      # only reached if Elevation >= 500
+           Elevation >= 1000 ~ "high"
+         ),
+         elev_class = factor(elev_class, levels = c("low", "mid", "high")))
+
+traits |> count(elev_class)
+```
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Logic check: where did the `NA` class come from?
+
+`count()` shows **3 trees** with `elev_class` of `NA`. In Module 1, `colSums(is.na(traits))` reported 3 missing `Elevation` values. These are the same 3 trees, all from population **NBTIC**. No condition can be `TRUE` for a missing elevation, so `case_when()` returns `NA` for them.
+
+That is the right behavior. A tree with unknown elevation should not be put in an elevation band. But `count()` lists the `NA` group openly, while `table()` from Module 1 hides it. That is one more reason to like `count()` for checking data.
+
+Check where the bands fall across regions:
+
+```{r}
+traits |> count(Region, elev_class) |> pivot_wider(names_from = elev_class, values_from = n)
+```
+
+Region E has no low-elevation trees and region M has no high-elevation trees. **Region and elevation are tangled together (confounded).** Keep this table in mind, because it explains the modeling result at the end of the module.
+:::
+
+
+## Reshaping with `tidyr`
+
+
+### Wide vs long
+
+
+The dataset is **wide**: each fitness trait has its own column. That suits one-trait-at-a-time work, but many tasks are easier when the data is **long**, with one row per tree × trait pair:
+
+
+```{r}
+traits_long <- traits |>
+  select(Family, Population, Region, all_of(fitness_traits)) |>
+  pivot_longer(cols      = all_of(fitness_traits),
+               names_to  = "trait",
+               values_to = "value")
+
+traits_long
+dim(traits_long)
+```
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Code breakdown: why 1,630 rows?
+
+326 trees × 5 traits = **1,630 rows**. `pivot_longer()` stacks the 5 trait columns into two new columns:
+
+- `names_to = "trait"`: the old *column names* (`"SeedWeight"`, `"Height"`, ...) become values in a column called `trait`
+- `values_to = "value"`: the old *cell values* go into a column called `value`
+
+The ID columns you did not pivot (`Family`, `Population`, `Region`) are repeated on each of a tree's 5 rows.
+
+Why bother? Once all traits share one `value` column, a **single** `group_by(trait)` summarises every trait at once, and a **single** `facet_wrap(~ trait)` plots them all (see the plotting section):
+
+```{r}
+traits_long |>
+  group_by(trait) |>
+  summarise(n_missing = sum(is.na(value)),
+            mean      = mean(value, na.rm = TRUE),
+            .groups = "drop")
+```
+
+The missing counts (12, 12, 1, 13, 12) match Module 1's `colSums(is.na(traits))`. Checking new numbers against ones you already trust is how you catch reshaping mistakes.
+:::
+
+
+`pivot_wider()` goes the other way. A common use is turning a long summary into a table that is easy to read:
+
+
+```{r}
+traits_long |>
+  group_by(Region, trait) |>
+  summarise(mean = mean(value, na.rm = TRUE), .groups = "drop") |>
+  pivot_wider(names_from = Region, values_from = mean)
+```
+
+
+Traits are rows and regions are columns. This is the shape a manuscript table usually takes.
+
+
+## Joining tables
+
+
+Look at the genetic-parameter columns. `Population_Homozygosity`, `Genetic_Diversity`, and `Genetic_Load` have **one value per population**, repeated on every tree from that population. They are population-level variables stored in a tree-level table. You can pull them out into their own table:
+
+
+```{r}
+pop_genetics <- traits |>
+  distinct(Population, Region, Population_Homozygosity, Genetic_Diversity, Genetic_Load)
+
+nrow(pop_genetics)   # one row per population
+```
+
+
+Exactly **63 rows**, one per population. If any population had two different values, `distinct()` would have returned more than 63 rows, so this is also a check that the data is consistent. (`Family_Homozygosity`, as the name says, differs between families, so it stays in the tree table.)
+
+
+Now build population-level trait means and **join** the two tables on their shared key, `Population`:
+
+
+```{r}
+pop_means <- traits |>
+  group_by(Population) |>
+  summarise(n_trees      = n(),
+            mean_fitness = mean(Fitness, na.rm = TRUE),
+            mean_height  = mean(Height, na.rm = TRUE),
+            mean_elev    = mean(Elevation, na.rm = TRUE),
+            .groups = "drop")
+
+pop_table <- left_join(pop_means, pop_genetics, by = "Population")
+dim(pop_table)
+head(pop_table, 3)
+```
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Code breakdown: the join family
+
+A join matches rows from two tables wherever the **key** column (`by = ...`) has the same value:
+
+| Join | Keeps |
+|---|---|
+| `left_join(x, y)` | every row of `x`; columns from `y` where a match exists, `NA` where it doesn't |
+| `inner_join(x, y)` | only rows with a match in both |
+| `full_join(x, y)` | every row from both |
+| `anti_join(x, y)` | rows of `x` with **no** match in `y` (great for finding problems) |
+
+Two checks worth doing after every join:
+
+```{r}
+nrow(pop_table) == nrow(pop_means)                    # a left join should not add rows
+anti_join(pop_means, pop_genetics, by = "Population") # should be empty: 0 rows
+```
+
+If a left join **adds** rows, the key is not unique in `y`: one population matched several rows and was copied. This is the most common join bug, and it quietly inflates every count and mean computed afterwards.
+:::
+
+
+A small hand-made **lookup table** is another common join, for example to swap codes for readable labels:
+
+
+```{r}
+region_lookup <- tibble(Region      = c("C", "M", "E"),
+                        region_name = c("Core", "Margin", "Edge"))
+
+traits |>
+  mutate(Region = as.character(Region)) |>   # match the key type in the lookup
+  left_join(region_lookup, by = "Region") |>
+  count(region_name)
+```
+
+
+The `as.character()` step is there because a join key should have the **same type** on both sides. If you join a factor key to a character key, `dplyr` quietly turns the result into plain character, so your carefully chosen C → M → E order disappears without warning. Match the types on purpose, then set the factor order again afterwards if you need it.
+
+
+## Functions and iteration
+
+
+### Writing your own function
+
+
+You wrote a small function (`stats_of()`) in Module 1, Exercise 3. Here is a more general version. It takes a data frame and the **name** of a trait as text, and returns a one-row tibble:
+
+
+```{r}
+trait_summary <- function(data, trait) {
+  x <- data[[trait]]                      # [[ ]] pulls a column by its name as text
+  stopifnot(is.numeric(x))                # stop early with a clear error if not numeric
+
+  tibble(trait     = trait,
+         n         = sum(!is.na(x)),
+         n_missing = sum(is.na(x)),
+         mean      = mean(x, na.rm = TRUE),
+         sd        = sd(x, na.rm = TRUE),
+         cv        = sd / mean)           # coefficient of variation
+}
+
+trait_summary(traits, "Height")
+```
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Logic check: why `data[[trait]]` and not `data$trait`?
+
+`data$trait` looks for a column literally called `trait`, and there isn't one. `data[[trait]]` **evaluates** the variable `trait` first (giving `"Height"`), then pulls that column. Use `[[ ]]` whenever the column name is stored in a variable. That is almost always the case inside functions and loops.
+
+`stopifnot()` is a cheap guard. Calling `trait_summary(traits, "Region")` stops at once with `is.numeric(x) is not TRUE`, instead of returning a confusing `NA` mean with a warning. Functions that fail **early and loudly** are much easier to debug than ones that fail quietly later on.
+
+Inside `tibble()`, `cv = sd / mean` uses the `sd` and `mean` columns defined just above it in the same call, like `mutate()` does. It does not refer to the functions `sd()` and `mean()`.
+:::
+
+
+### Repeating a function: loop vs `map()`
+
+
+Now run `trait_summary()` for all five traits. Here are two ways that give the same result:
+
+
+::: {.panel-tabset}
+
+#### _`for`_ loop
+
+```{r}
+out <- vector("list", length(fitness_traits))   # make room for the results first
+
+for (i in seq_along(fitness_traits)) {
+  out[[i]] <- trait_summary(traits, fitness_traits[i])
+}
+
+bind_rows(out)
+```
+
+#### _`purrr::map()`_
+
+```{r}
+map(fitness_traits, \(tr) trait_summary(traits, tr)) |>
+  list_rbind()
+```
+
+:::
+
+
+`map(x, f)` means "call `f` on each element of `x` and return the results as a list". It is the same loop, without the bookkeeping: no index `i`, and no setting up `out` in advance. `list_rbind()` stacks the list of one-row tibbles into a single table, like `bind_rows()` in the loop version.
+
+
+::: {.callout-tip}
+# Which one should I use?
+
+Both are fine. A `for` loop is easier to read when each step does several things (read a file, fit a model, save a plot). `map()` is shorter when each step is a single function call that returns a value. Choose the one you can still read six months from now.
+
+One habit to drop: growing a result inside a loop with `out <- rbind(out, new_row)`. R copies the whole object on every pass, so it gets slow quickly with large data (for example, thousands of SNPs). Make room first, as above, or use `map()`.
+:::
+
+
+Look at the `cv` column. `Fitness` (CV ≈ 0.52) varies far more, relative to its mean, than `Height` (CV ≈ 0.16). That makes sense: in this dataset `Fitness` is a composite built from germination, survival, and growth, so it collects variation from all three. Its correlation with `Germination` is 0.86.
+
+
+## Plotting with `ggplot2`
+
+
+### The grammar of graphics
+
+
+Every `ggplot2` plot has the same three parts:
+
+1. **Data**: `ggplot(traits, ...)`
+2. **Aesthetic mappings**: `aes(x = ..., y = ..., colour = ...)` link columns to visual properties
+3. **Geoms**: `geom_point()`, `geom_boxplot()`, ... decide *how* the mapped data is drawn
+
+
+You add layers with `+` (not `|>`). Here is the Module 1 boxplot rebuilt layer by layer:
+
+
+::: {.panel-tabset}
+
+#### 1. Data + aesthetics
+
+```{r}
+ggplot(traits, aes(x = Region, y = Height))
+```
+
+An empty panel. The axes exist because the mappings are set, but no geom has been added yet.
+
+#### 2. + boxplot
+
+```{r}
+ggplot(traits, aes(x = Region, y = Height)) +
+  geom_boxplot()
+```
+
+#### 3. + raw points
+
+```{r}
+ggplot(traits, aes(x = Region, y = Height)) +
+  geom_boxplot(outlier.shape = NA) +             # hide outliers; the points show them
+  geom_jitter(width = 0.15, alpha = 0.4)
+```
+
+Showing the raw data under a summary is good practice. It reveals that region M has far fewer trees (47) than C (178), which a boxplot alone hides.
+
+#### 4. + labels and theme
+
+```{r}
+ggplot(traits, aes(x = Region, y = Height, fill = Region)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.6) +
+  geom_jitter(width = 0.15, alpha = 0.4, size = 1) +
+  labs(x = "Region (north to south)", y = "Height (cm)",
+       title = "Seedling height by region") +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+:::
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Logic check: the `Removed 13 rows` warning
+
+Running these plots prints `Removed 13 rows containing non-finite outside the scale range`. Those are the same 13 trees with missing `Height` from Module 1. `ggplot2` drops them and **tells you**, unlike base R's `boxplot()`. Don't hide the warning automatically. Check that the number matches what you expect. A number you did not expect (say, `Removed 200 rows`) usually means an axis limit cut off real data, or a reshaping step went wrong.
+:::
+
+
+### Scatterplots with a fitted line, coloured by group
+
+
+```{r}
+ggplot(traits, aes(x = Elevation, y = Fitness)) +
+  geom_point(aes(colour = Region), alpha = 0.6) +
+  geom_smooth(method = "lm", formula = y ~ x, colour = "black") +
+  labs(x = "Elevation (m)", y = "Fitness") +
+  theme_bw()
+```
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Code breakdown: where `aes()` goes matters
+
+`colour = Region` sits inside `geom_point(aes(...))`, so it applies **only to the points**. Because the smoother does not inherit it, `geom_smooth()` fits **one** line through all trees.
+
+Move `colour = Region` into the top-level `ggplot(aes(...))` and every layer inherits it. You then get **three** lines, one per region:
+
+```{r}
+ggplot(traits, aes(x = Elevation, y = Fitness, colour = Region)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+  labs(x = "Elevation (m)", y = "Fitness") +
+  theme_bw()
+```
+
+Compare the two plots. The Core and Edge lines are flatter than the single pooled line. The Margin line is steep, but it covers only about 200 m of elevation (475–674 m), so it is poorly constrained. Above all, the three regions sit at different fitness levels **and** cover different elevation ranges: Margin is low and fit, Edge is high and less fit. A large part of the overall downhill trend comes from the regions being **different from each other**, not from elevation acting within each region. The model section below puts a number on this.
+
+Mappings in `aes()` link a **column** to a visual property. A fixed setting like `colour = "black"` goes **outside** `aes()`. Writing `aes(colour = "black")` is a classic mistake: it creates a legend entry called "black" drawn in the default red.
+:::
+
+
+### Small multiples with facets
+
+
+The long table from the reshaping section pays off here. One plot shows every trait:
+
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+p_traits <- traits_long |>
+  ggplot(aes(x = Region, y = value, fill = Region)) +
+  geom_boxplot(alpha = 0.6, outlier.size = 0.8) +
+  facet_wrap(~ trait, scales = "free_y", nrow = 2) +
+  labs(x = NULL, y = NULL) +
+  theme_bw() +
+  theme(legend.position = "none")
+
+p_traits
+```
+
+
+`scales = "free_y"` gives each panel its own y-axis. Without it, seed weight (around 0.003) would be squashed flat against height (around 30). This one call replaces five separate base-R `boxplot()` calls.
+
+
+### Saving plots with `ggsave()`
+
+
+```{r}
+ggsave(here::here("results/figures/traits_by_region.png"), p_traits,
+       width = 10, height = 6, dpi = 300)
+```
+
+
+Compare this with Module 1's `png()` → plot → `dev.off()` sequence. `ggsave()` takes the plot **object** and writes it in one step, so you cannot forget to close the device. The file type comes from the extension: `.pdf` gives a vector file for manuscripts, `.png` a raster image for slides and websites. `width` and `height` are in inches by default.
+
+
+## First statistical models
+
+
+### Correlation
+
+
+```{r}
+cor.test(traits$Elevation, traits$Fitness)
+```
+
+
+This matches Module 1: r ≈ −0.36. Now there is a 95% confidence interval (−0.46 to −0.26) and a p-value. `df = 309` tells you **311 trees** have both values: 326 minus those missing `Fitness`, `Elevation`, or both.
+
+
+### Linear regression with `lm()`
+
+
+```{r}
+fit_elev <- lm(Fitness ~ Elevation, data = traits)
+summary(fit_elev)
+```
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Code breakdown: reading `summary(lm)`
+
+- **Formula** `Fitness ~ Elevation`: "model Fitness as a straight-line function of Elevation." It is the same `~` you used in `aggregate()` and `boxplot()`.
+- **Coefficients**:
+    - `(Intercept)` ≈ 20.50: predicted fitness at elevation 0 m. That is outside the data (lowest site 310 m), so don't read it as biology. It only fixes where the line sits.
+    - `Elevation` ≈ −0.0070: each extra **metre** lowers predicted fitness by 0.007, or **0.70 per 100 m**. Rescaling like this (or using `elev_km`) makes a slope easier to talk about.
+    - `Pr(>|t|)` tests whether each coefficient is zero. For the slope, p ≈ 3.7 × 10⁻¹¹.
+- **`(15 observations deleted due to missingness)`**: `lm()` drops any row with `NA` in a variable it uses. 326 − 15 = 311, matching the `df` from `cor.test()`.
+- **Multiple R²** = 0.13: elevation explains about 13% of the variance in fitness. The slope is clearly not zero, but most of the variation lies elsewhere.
+:::
+
+
+### Tidy model output with `broom`
+
+
+`summary()` output is meant for reading, not for further work. `broom` turns models into tibbles you can filter, join, plot, and `write_csv()`:
+
+
+```{r}
+broom::tidy(fit_elev, conf.int = TRUE)    # one row per coefficient
+broom::glance(fit_elev)                   # one row per model: R², AIC, n, ...
+```
+
+
+### Adding region: confounding in action
+
+
+The elevation-band table and the per-region scatterplot both suggested that region and elevation are confounded. Put both in the model:
+
+
+```{r}
+fit_both <- lm(Fitness ~ Elevation + Region, data = traits)
+broom::tidy(fit_both, conf.int = TRUE)
+
+anova(fit_elev, fit_both)   # does adding Region improve the fit?
+```
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Logic check: what changed, and why?
+
+| | `Fitness ~ Elevation` | `Fitness ~ Elevation + Region` |
+|---|---|---|
+| Elevation slope (per 100 m) | **−0.70** | **−0.36** |
+| R² | 0.13 | 0.18 |
+
+Adding `Region` **halves** the elevation slope. The overall downhill trend was partly a region effect. Edge trees (south, high elevation) have low fitness, and Margin trees (Pennsylvania, low elevation) have high fitness, whatever the elevation within each region.
+
+How to read the region coefficients: `Region` is a factor, so `lm()` makes the **first level** the reference. Thanks to `fct_relevel()` that is C (Core). `RegionM` ≈ +4.56 means Margin trees average about 4.6 fitness units above Core trees **at the same elevation**. `RegionE` ≈ −2.15 is the Edge-vs-Core difference, and its p ≈ 0.07 is not clearly separable from zero once elevation is in the model.
+
+The `anova()` comparison (F = 9.2, p ≈ 1.3 × 10⁻⁴) says Region adds real explanatory power beyond elevation.
+
+**The general lesson:** when a predictor (elevation) is correlated with group structure (region), a model without the groups gives the predictor credit for the group differences. Here "region" partly stands for genetic background. This is the same problem genotype–environment association methods face with population structure, and it is why the population genetics module corrects for structure (with PCs like the `PC1` and `PC2` columns) before testing environmental associations.
+:::
+
+
+### Checking assumptions
+
+
+A linear model assumes the residuals are roughly normal with constant spread. Check visually:
+
+
+```{r}
+#| fig-width: 10
+#| fig-height: 4
+diag_df <- broom::augment(fit_both)   # adds .fitted and .resid columns to the data used
+
+p_resid <- ggplot(diag_df, aes(x = .fitted, y = .resid)) +
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(x = "Fitted values", y = "Residuals") +
+  theme_bw()
+
+p_qq <- ggplot(diag_df, aes(sample = .resid)) +
+  stat_qq(alpha = 0.5) + stat_qq_line() +
+  labs(x = "Theoretical quantiles", y = "Sample quantiles") +
+  theme_bw()
+
+p_resid
+p_qq
+```
+
+
+::: {.callout-note icon="false" appearance="default" collapse="true"}
+## Logic check: how to read the two diagnostic plots
+
+- **Residuals vs fitted**: you want a shapeless band around zero. A funnel (spread growing with fitted value) means the variance is not constant. A curve means a straight line is the wrong shape. Here the spread is fairly even. The points form three clusters along the x-axis (about 8–12, 12–16, and 20) because each region gets its own intercept: Edge trees have the lowest fitted values, Core the middle, and Margin the highest. Clusters like this are expected with a factor predictor and are not a problem.
+- **Q–Q plot**: points on the line mean normally distributed residuals. Here they follow the line closely with slight tails. A Shapiro–Wilk test on these residuals gives p ≈ 0.06, so there is no strong sign of non-normality.
+
+Base R gives the same checks with `plot(fit_both)`, which cycles through 4 diagnostic plots. Use whichever you like. Just **look before you interpret coefficients**.
+:::
+
+
+### Saving model results
+
+
+```{r}
+region_summary <- traits |>
+  group_by(Region) |>
+  summarise(n_trees = n(),
+            across(all_of(fitness_traits),
+                   list(mean = \(x) mean(x, na.rm = TRUE),
+                        sd   = \(x) sd(x, na.rm = TRUE))),
+            .groups = "drop")
+
+write_csv(region_summary, here::here("results/region_trait_summary.csv"))
+write_csv(pop_table,      here::here("results/population_table.csv"))
+write_csv(broom::tidy(fit_both, conf.int = TRUE),
+          here::here("results/lm_fitness_elevation_region.csv"))
+```
+
+
+`write_csv()` is the `readr` version of `write.csv()`. It never writes row names, so you no longer need `row.names = FALSE`. It is also faster and always writes UTF-8.
+
+
+### Putting it into a script
+
+
+Collect the working code into `src/02_wrangle_model_traits.R`:
+
+
+```{r}
+#| eval: false
+# 02_wrangle_model_traits.R: wrangle, plot, and model red spruce fitness traits
+# Usage: Rscript src/02_wrangle_model_traits.R
+
+# --- setup ---------------------------------------------------------------
+suppressPackageStartupMessages({
+  library(dplyr); library(tidyr); library(readr)
+  library(ggplot2); library(purrr); library(forcats)
+})
+
+raw_file <- here::here("data/raw/red_spruce_fitness_traits.txt")
+fig_dir  <- here::here("results/figures")
+dir.create(fig_dir, recursive = TRUE, showWarnings = FALSE)
+
+fitness_traits <- c("SeedWeight", "Germination", "Survival", "Height", "Fitness")
+
+# --- load + clean --------------------------------------------------------
+traits <- read_tsv(raw_file, show_col_types = FALSE) |>
+  mutate(Region = fct_relevel(factor(Region), "C", "M", "E"))
+
+stopifnot(nrow(traits) == 326, all(fitness_traits %in% names(traits)))
+
+# --- wrangle -------------------------------------------------------------
+traits_long <- traits |>
+  pivot_longer(all_of(fitness_traits), names_to = "trait", values_to = "value")
+
+region_summary <- traits |>
+  group_by(Region) |>
+  summarise(n_trees = n(),
+            across(all_of(fitness_traits),
+                   list(mean = \(x) mean(x, na.rm = TRUE),
+                        sd   = \(x) sd(x, na.rm = TRUE))),
+            .groups = "drop")
+
+# --- plot ----------------------------------------------------------------
+p_traits <- ggplot(traits_long, aes(Region, value, fill = Region)) +
+  geom_boxplot(alpha = 0.6) +
+  facet_wrap(~ trait, scales = "free_y", nrow = 2) +
+  theme_bw() + theme(legend.position = "none")
+
+ggsave(file.path(fig_dir, "traits_by_region.png"), p_traits,
+       width = 10, height = 6, dpi = 300)
+
+# --- model ---------------------------------------------------------------
+fit_both <- lm(Fitness ~ Elevation + Region, data = traits)
+
+# --- save ----------------------------------------------------------------
+write_csv(region_summary, here::here("results/region_trait_summary.csv"))
+write_csv(broom::tidy(fit_both, conf.int = TRUE),
+          here::here("results/lm_fitness_elevation_region.csv"))
+
+# --- provenance ----------------------------------------------------------
+writeLines(capture.output(sessionInfo()),
+           here::here("results/sessionInfo_02.txt"))
+```
+
+
+Two additions since Module 1. First, **`stopifnot()` checks** run straight after loading. If the raw file ever changes shape, the script stops right away with a clear message instead of producing quietly wrong figures. Second, a **provenance file** records the package versions that produced the results.
+
+
+## Wrap up
+### Idea check
+
+
+Answer these in your own words, as comments at the top of `src/02_wrangle_model_traits.R`.
+
+
+1. What does `x |> f(y)` translate to, and why do `dplyr` verbs chain together so naturally?
+2. When would you use `group_by() |> summarise()` instead of `group_by() |> mutate()`? (Hint: how many rows does each return?)
+3. Give one task that is easier with long data and one that is easier with wide data.
+4. After a `left_join()`, your table has more rows than before. What happened, and how do you find the cause?
+5. In `ggplot()`, what is the difference between `aes(colour = Region)` and `colour = "blue"`?
+6. Why did the elevation slope shrink when `Region` was added to the model? What does this have to do with population structure?
+
+::: {.callout-tip icon="false" appearance="default" collapse="true"}
+## Sample answers
+
+1. `f(x, y)`: the left side becomes the **first argument**. Every `dplyr` verb takes a data frame first and returns a data frame, so each verb's output can be the next one's input.
+2. `summarise()` **collapses** each group to one row (a summary table). `mutate()` **keeps every row** and adds a column computed within each group. An example is `group_by(Population) |> mutate(fitness_rel = Fitness / mean(Fitness, na.rm = TRUE))`, which gives each tree's fitness relative to its own population's mean.
+3. Long is easier for doing one operation across many variables, like faceted plots or `group_by(trait)` summaries. Wide is easier for comparing variables side by side: correlations between traits, model formulas like `Fitness ~ Elevation`, and readable summary tables.
+4. The key is **not unique** in the right-hand table, so some rows matched more than once and were copied. Find the culprits with `count(y, key) |> filter(n > 1)`.
+5. Inside `aes()` you **map** a column to colour, so colour changes with the data and a legend appears. Outside `aes()` you **set** a fixed colour for the whole layer.
+6. Elevation and region are confounded: Edge populations are high and southern, Margin populations are low. Without `Region`, the model credits elevation with differences that are really between regions. Region here partly stands for genetic background, which is exactly why genotype–environment analyses must account for population structure before testing environmental effects.
+:::
+
+
+### Practical exercises
+
+
+Work through these in a fresh R session, then move the working code into `src/02_wrangle_model_traits.R`.
+
+
+### Exercise 1: Load, order, and label
+
+Read the data with `read_tsv()`, set the `Region` factor order to C, M, E, and add a `region_name` column (Core, Margin, Edge) with a lookup-table join. Confirm the tree counts per region name.
+
+::: {.callout-tip icon="false" appearance="default" collapse="true"}
+## Solution
+
+```{r}
+region_lookup <- tibble(Region = c("C", "M", "E"),
+                        region_name = c("Core", "Margin", "Edge"))
+
+ex1 <- read_tsv(here::here("data/raw/red_spruce_fitness_traits.txt"),
+                show_col_types = FALSE) |>
+  left_join(region_lookup, by = "Region") |>     # join while Region is still text
+  mutate(Region      = fct_relevel(factor(Region), "C", "M", "E"),
+         region_name = fct_relevel(factor(region_name), "Core", "Margin", "Edge"))
+
+ex1 |> count(region_name)
+```
+
+**Core 178, Margin 47, Edge 101**, the same counts as Module 1's `table(traits$Region)`. Doing the join *before* turning `Region` into a factor avoids the factor/character type mismatch. Note that `region_name` needs its own `fct_relevel()`; otherwise it sorts alphabetically as Core, Edge, Margin.
+:::
+
+
+### Exercise 2: Filter, select, arrange
+
+List the Edge-region trees with `Fitness > 20`, showing only `Population`, `Elevation`, `Height`, and `Fitness`, sorted from highest to lowest fitness. How many are there, and which populations do they come from?
+
+::: {.callout-tip icon="false" appearance="default" collapse="true"}
+## Solution
+
+```{r}
+high_edge <- traits |>
+  filter(Region == "E", Fitness > 20) |>
+  select(Population, Elevation, Height, Fitness) |>
+  arrange(desc(Fitness))
+
+high_edge
+high_edge |> count(Population, sort = TRUE)
+```
+
+**10 trees** from 5 populations: **CRA** and **XCV** (3 each), **KOS** (2), and **BRB** and **PRK** (1 each). The top tree is from CRA (Fitness 31.3).
+
+The order of verbs matters for efficiency, not for the result: `filter()` first means `select()` and `arrange()` work on 10 rows, not 326. Also notice the elevations: every one is between 986 and 1419 m, which is low to mid **for the Edge region** (median 1333 m, range 776–1955 m). This fits the negative elevation–fitness trend from the model section.
+:::
+
+
+### Exercise 3: Elevation bands
+
+Using `case_when()`, classify trees as `low` (< 500 m), `mid` (500–999 m), or `high` (≥ 1000 m). Report the number of trees and the mean `Fitness` and `Height` per band. Which population has no band, and why?
+
+::: {.callout-tip icon="false" appearance="default" collapse="true"}
+## Solution
+
+```{r}
+traits |>
+  group_by(elev_class) |>
+  summarise(n            = n(),
+            mean_fitness = mean(Fitness, na.rm = TRUE),
+            mean_height  = mean(Height, na.rm = TRUE),
+            .groups = "drop")
+
+traits |> filter(is.na(elev_class)) |> distinct(Population)
+```
+
+| Band | n | Mean fitness | Mean height |
+|---|---|---|---|
+| low | 24 | 15.7 | 31.9 |
+| mid | 180 | 15.5 | 30.6 |
+| high | 119 | 11.4 | 28.8 |
+| `NA` | 3 | 18.6 | 35.1 |
+
+Fitness and height fall with elevation, with a sharp drop at ≥ 1000 m. The 3 unclassified trees are all from **NBTIC**, which has no recorded `Elevation`. Don't fill these in with a guess. Report them as missing.
+:::
+
+
+### Exercise 4: Grouped summary with `across()`
+
+For each `Region`, compute the number of trees and the mean **and** standard deviation of all five fitness traits in a single `summarise()` call. How many columns does the result have, and why?
+
+::: {.callout-tip icon="false" appearance="default" collapse="true"}
+## Solution
+
+```{r}
+ex4 <- traits |>
+  group_by(Region) |>
+  summarise(n_trees = n(),
+            across(all_of(fitness_traits),
+                   list(mean = \(x) mean(x, na.rm = TRUE),
+                        sd   = \(x) sd(x, na.rm = TRUE))),
+            .groups = "drop")
+
+dim(ex4)
+ex4 |> select(Region, n_trees, starts_with("Fitness"), starts_with("Height"))
+```
+
+**3 rows × 12 columns**: `Region` + `n_trees` + (5 traits × 2 statistics) = 1 + 1 + 10 = 12. The `list(mean = ..., sd = ...)` names become suffixes, giving `Fitness_mean`, `Fitness_sd`, and so on.
+
+Mean fitness is **C 14.6, M 19.8, E 10.5**, and mean height is **C 29.7, M 34.0, E 28.9**. Margin is highest on both.
+:::
+
+
+### Exercise 5: Reshape for a faceted plot
+
+Pivot the five fitness traits to long format, then make a faceted histogram with one panel per trait and each panel on its own x-axis. Save it to `results/figures/trait_histograms.png`.
+
+::: {.callout-tip icon="false" appearance="default" collapse="true"}
+## Solution
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+p_hist <- traits |>
+  pivot_longer(all_of(fitness_traits), names_to = "trait", values_to = "value") |>
+  ggplot(aes(x = value)) +
+  geom_histogram(bins = 30, fill = "grey60", colour = "white") +
+  facet_wrap(~ trait, scales = "free_x", nrow = 2) +
+  labs(x = NULL, y = "Number of trees") +
+  theme_bw()
+
+p_hist
+
+ggsave(here::here("results/figures/trait_histograms.png"), p_hist,
+       width = 10, height = 6, dpi = 300)
+```
+
+For histograms the trait value is on the **x**-axis, so the free scale is `"free_x"`, not the `"free_y"` used for the boxplots. `ggplot2` warns that it removed **50 rows**. That is all the `NA`s across the five traits added up (12 + 12 + 1 + 13 + 12 = 50), a good check that the reshape worked. Notice how different the shapes are: `Survival` piles up near 1, while `SeedWeight` is skewed to the right.
+:::
+
+
+### Exercise 6: Population table and join
+
+Build a population-level table with one row per population: the number of trees, mean `Fitness`, mean `Elevation`, and the three population-level genetic parameters. Check that the join neither added nor lost rows. What is the correlation between population mean fitness and `Genetic_Diversity`?
+
+::: {.callout-tip icon="false" appearance="default" collapse="true"}
+## Solution
+
+```{r}
+ex6_means <- traits |>
+  group_by(Population) |>
+  summarise(n_trees      = n(),
+            mean_fitness = mean(Fitness, na.rm = TRUE),
+            mean_elev    = mean(Elevation, na.rm = TRUE),
+            .groups = "drop")
+
+ex6_gen <- traits |>
+  distinct(Population, Region, Population_Homozygosity, Genetic_Diversity, Genetic_Load)
+
+ex6 <- left_join(ex6_means, ex6_gen, by = "Population")
+
+c(before = nrow(ex6_means), after = nrow(ex6))   # both 63
+cor(ex6$mean_fitness, ex6$Genetic_Diversity)
+```
+
+**63 rows before and after**, so the key was unique and nothing was copied. The correlation is about **+0.39**: populations with more genetic diversity tend to have higher mean fitness.
+
+Be careful with this number. It is computed on **63 population means**, not 326 trees, and some means rest on only 2 or 3 trees (recall Module 1, Exercise 4). Interpreting genetic parameters properly, including the confounding of diversity with region, is the subject of the population genetics module.
+:::
+
+
+### Exercise 7: A function, mapped over traits
+
+Write a function `region_test(data, trait)` that fits `lm(trait ~ Region)` and returns a one-row tibble with the trait name, the model R², and the overall F-test p-value. Run it over all five fitness traits with `map()`. Which trait differs most between regions?
+
+::: {.callout-tip icon="false" appearance="default" collapse="true"}
+## Solution
+
+```{r}
+region_test <- function(data, trait) {
+  f   <- reformulate("Region", response = trait)  # builds the formula: trait ~ Region
+  fit <- lm(f, data = data)
+  g   <- broom::glance(fit)
+  tibble(trait = trait, r_squared = g$r.squared, p_value = g$p.value, n = g$nobs)
+}
+
+map(fitness_traits, \(tr) region_test(traits, tr)) |>
+  list_rbind() |>
+  arrange(desc(r_squared))
+```
+
+`reformulate()` is how you build a formula from text. You cannot write `lm(trait ~ Region)` directly, because `lm()` would look for a column literally named `trait`. This is the same problem `[[ ]]` solved in `trait_summary()`.
+
+Region explains the most variance in **Germination** (R² ≈ 0.19), then **Fitness** (≈ 0.17), then **Height** (≈ 0.13), and very little for seed weight or survival. Because `Fitness` correlates 0.86 with `Germination`, much of the regional difference in fitness may come from germination.
+:::
+
+
+### Exercise 8: Height model and confounding
+
+Repeat the confounding analysis for `Height`: fit `Height ~ Elevation` and `Height ~ Elevation + Region`. Does the elevation slope change the way it did for `Fitness`?
+
+::: {.callout-tip icon="false" appearance="default" collapse="true"}
+## Solution
+
+```{r}
+h1 <- lm(Height ~ Elevation, data = traits)
+h2 <- lm(Height ~ Elevation + Region, data = traits)
+
+bind_rows(elev_only     = broom::tidy(h1),
+          elev_plus_reg = broom::tidy(h2),
+          .id = "model") |>
+  filter(term == "Elevation") |>
+  mutate(slope_per_100m = estimate * 100)
+
+c(h1 = summary(h1)$r.squared, h2 = summary(h2)$r.squared)
+anova(h1, h2)
+```
+
+**No, and that is the interesting part.** The height slope is about **−0.38 cm per 100 m** in both models. Adding `Region` barely moves it, even though Region still improves the fit (R² 0.10 → 0.17, `anova` p ≈ 2 × 10⁻⁶).
+
+So for **height**, elevation and region each have their own effect. For **fitness**, about half of the apparent elevation effect was really a region effect. The same two predictors, confounded in the same way, can behave differently for different traits. You can only find out by fitting both models; you cannot tell in advance.
+:::
+
+
+### Exercise 9: The reproducibility test
+
+Run the clean-room test from Module 1 on your new script:
+
+```{bash}
+#| eval: false
+rm -rf results
+Rscript src/02_wrangle_model_traits.R
+ls -R results/
+```
+
+::: {.callout-tip icon="false" appearance="default" collapse="true"}
+## Solution sketch
+
+Expected output: `region_trait_summary.csv`, `lm_fitness_elevation_region.csv`, `sessionInfo_02.txt`, and `figures/traits_by_region.png`, plus any extra files from Exercises 5–8 that you added to the script.
+
+The usual problems are a `library()` call you ran in the console but never put in the script, and the `results/figures/` folder not existing before the first `ggsave()`. The script's `dir.create(..., recursive = TRUE)` handles the folder.
+
+To run it on the cluster, wrap the same `Rscript` line in a Slurm script like the one from the bash module and submit it with `sbatch`. Nothing in the R code needs to change. That is the payoff of `here::here()` and relative paths.
+:::
+
+
+### Homework
+
+
+- Make a **publication-ready figure** of `Fitness` vs `Elevation`: points coloured by region, one fitted line per region, labelled axes, `theme_bw()`. Save it as both `.png` and `.pdf` in `results/figures/`.
+- Compute each tree's fitness **relative to its population mean** (`group_by()` + `mutate()`), and plot the relative values by region. Which region has the most variation within populations?
+- Using `map()`, fit `Fitness ~ Elevation` **separately within each region**. Report the slope per 100 m and its p-value for each region, and compare them with the pooled slope from the model section.
+- Write your interpretation as comments at the bottom of the script: is the elevation–fitness relationship mostly **between** regions, **within** regions, or both?
+- **Bonus (optional):** combine the scatterplot and the faceted boxplot into one two-panel figure with the `patchwork` package (`p1 + p2`).
+
+::: {.callout-tip icon="false" appearance="default" collapse="true"}
+## Hints (not full answers)
+
+- **Relative fitness**: `group_by(Population) |> mutate(rel_fit = Fitness / mean(Fitness, na.rm = TRUE)) |> ungroup()`. By construction each population's relative fitness averages 1, so compare the *spread* (sd or IQR) across regions, not the centres.
+- **Per-region slopes**: one approach is `split(traits, traits$Region) |> map(\(d) lm(Fitness ~ Elevation, data = d)) |> map(broom::tidy) |> list_rbind(names_to = "Region")`, then `filter(term == "Elevation")`. You should find slopes of about **−0.44 (C), −2.5 (M), and −0.26 (E) per 100 m**. Only Core's is clearly different from zero (p ≈ 0.04). Margin's slope looks steep, but it rests on 43 trees spread over only about 200 m of elevation, so its standard error is ten times larger.
+- **What this means**: the pooled slope (−0.70 per 100 m) is steeper than the within-region slopes for C and E. The pooled trend mixes a between-region difference with a weaker within-region one. This pattern has a name, the **ecological fallacy** (and in extreme cases, Simpson's paradox). Watch for it whenever groups differ in both the predictor and the response.
+- **patchwork**: `install.packages("patchwork")`, then `library(patchwork)`; `p_scatter + p_traits + plot_layout(widths = c(1, 2))`. Save the combined object with `ggsave()` as usual.
+:::
