@@ -1,11 +1,5 @@
-base
-methods
-utils
-datasets
-grDevices
-graphics
-stats
 sp
 raster
 leaflet
 plyr
+sf

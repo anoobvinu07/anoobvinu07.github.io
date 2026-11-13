@@ -1,6 +1,6 @@
 ---
 title: "Notebook"
-subtitle: "Useful notes for research and fun" 
+subtitle: "Useful notes for computational and analytical research"
 
 author:
   - name: "Anoob Prakash"
@@ -8,12 +8,13 @@ author:
     orcid: "0000-0002-7207-934X"
     url: "https://www.linkedin.com/in/anoob-prakash/"
 
-
-format: 
+format:
   html:
     page-layout: full
     toc: false
     css: /styles/notebook.css
+    
+    
 
 listing:
   - id: posts
@@ -39,9 +40,11 @@ listing:
     categories: false
     exclude:
       listed: false
-  
-  - id: learn-to-code
+
+  - id: learning-r
     contents: "learn-to-code/*/*.qmd"
+    include:
+      categories: [r]
     sort: "date desc"
     type: default
     image-align: right
@@ -52,27 +55,47 @@ listing:
     exclude:
       listed: false
 
-
+  - id: learning-linux
+    contents: "learn-to-code/*/*.qmd"
+    include:
+      categories: [bash]
+    sort: "date desc"
+    type: default
+    image-align: right
+    max-description-length: 5000
+    feed: true
+    fields: [title, categories, date, reading-time]
+    categories: false
+    exclude:
+      listed: false
 
   - id: review
     contents: "review/*/*.qmd"
-    type: grid 
+    type: grid
     sort: "date desc"
     fields: [title, date, reading-time]
     exclude:
       listed: false
 ---
 
-
 ## Workflows
-:::{#workflows}
+
+::: {#workflows}
 :::
 
-## Learning to code
-:::{#learn-to-code}
+## Learning to code {#learn-to-code}
+
+
+
+::: {#learning-r}
+:::
+
+---
+
+::: {#learning-linux}
 :::
 
 ## Review materials
 
-:::{#review}
+::: {#review}
 :::

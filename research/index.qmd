@@ -22,20 +22,20 @@ _~ the questions that drive me_
 
 
 
-::::: .column-page
+::::: {.column-page}
 ::: {.cv-hero}
 <div class="cv-name">Climate change adaptation in trees</div>
 <div class="cv-title">**Publication**: [Prakash et al. (2022)](https://doi.org/10.1098/rstb.2021.0008)</div>
 :::
 ::::: 
 
-::::: .column-page
+::::: {.column-page}
 
 ::::: {layout="[ 50, 50 ]"}
 ::: {#first-column}
 
 ::: {.cv-section}
-#### Background  
+## Background  
 Species distributions are shaped by a combination of historical and contemporary processes, including past range expansions, migration, and patterns of adaptation to diverse environmental conditions across their ranges. Today, global climate change is a major driver of new changes in species distributions. 
 
 Warming temperatures, shifting precipitation patterns, and more frequent climate extremes have led to widespread responses like altered phenology, range shifts, and physiological changes observed across many taxa. Long-lived, sessile organisms like trees are especially vulnerable because their migration and adaptation rates cannot keep pace with rapid climate changes.  
@@ -46,7 +46,7 @@ Warming temperatures, shifting precipitation patterns, and more frequent climate
 ::: {#second-column}
 
 ::: {.cv-section}
-#### Red spruce  
+## Red spruce  
 
 I used multidisciplinary approaches to understand the genotypic and phenotypic variation and climate change adaptation present in red spruce (Picea rubens Sarg.), a climate sensitive conifer species found in eastern North America. Red spruce populations have declined over the past century due to logging, acid rain, climate stress, and exhibit low genetic diversity, particularly in the fragmented southern part of its range. To assess genetic and environmental influences on key traits like phenology and growth, I planted seeds from across the species range in three common gardens (Vermont, Maryland, and North Carolina) and performed whole-genome exome capture of mother trees. Genetic analysis revealed moderate heritability and regional differentiation for phenology and growth, alongside high plasticity.   
 
@@ -55,9 +55,11 @@ I used multidisciplinary approaches to understand the genotypic and phenotypic v
 :::::
 :::::
 
-::::: column-screen
+::::: {.column-page}
+:::: {.callout-warning appearance="minimal" collapse="true"}
+### Red spruce case study
 ::: {.cv-section}
-
+#### [Prakash et al. (2022)](https://doi.org/10.1098/rstb.2021.0008) | [Github repo](https://anoobvinu07.github.io/NSF_RedSpruce_CG/) 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -65,7 +67,7 @@ knitr::opts_chunk$set(echo = TRUE)
  
 ```{r}
 #| cache: true
-#| column: screen-inset-shaded
+#| column: page
 #| message: false
 #| warning: false
 #| echo: false
@@ -165,64 +167,27 @@ leaflet() %>%
 
 ```
 
-
 :::
+::::
 :::::
 
 
 
-::::: .column-page 
-::::: {layout="[ 50, 50 ]"}
-
-::: {#first-column}
-::: {.cv-section}
-
-#### Genotypic and phenotypic variations in RS  
-
-The common gardens were raised for 2 years, recording their phenotypic and phenological traits and harvested for biomass and isotope analysis. The results of the common garden experiment to investigate the phenotypic plasticity and genotypic variations in red spruce was published in 2022. The results of this paper laid the foundations for extending our understanding of the species and further apply it in the field.   
-
-::: {.cv-hero}
-<div class="cv-actions">
-  [Paper](https://doi.org/10.1098/rstb.2021.0008){.btn .btn-outline-primary}
-  
-  [Code repo](https://github.com/anoobvinu07/NSF_RedSpruce_CG){.btn .btn-outline-primary}
-  
-  [Code html](https://anoobvinu07.github.io/NSF_RedSpruce_CG/){.btn .btn-outline-primary}
-</div>
-::: 
-
-:::
-:::
-
-::: {#second-column}
-::: {.cv-section}
-
-#### Common gardens  
-
-![Common gardens at Vermont, Maryland and North Carolina](spruce/spruce_CG.png){.lightbox group="spruce"}   
-
-![Harvesting the red spruce common gardens after two years of growth.](../photos/spruce_garden/harvest.gif){.lightbox group="spruce"}
-
-:::
-:::
-
-:::::
-:::::
+---
 
 
 
 
 
 
-
-::::: .column-page
+::::: {.column-page}
 ::: {.cv-hero}
 <div class="cv-name">Hybridization and Adaptive Introgression</div>
 <div class="cv-title">**Publication**: _In prep_</div>
 :::
 ::::: 
 
-::::: .column-page
+::::: {.column-page}
 
 ::::: {layout="[ 50, 50 ]"}
 ::: {#first-column}
@@ -247,22 +212,23 @@ Northern red spruce populations shows extensive introgression from black spruce 
 ::::: 
 
 
-::::: .column-page
+::::: {.column-page}
 ::: {.cv-section}
 Admix plot showing the introgression between red spruce and allopatric black spruce outside the current range of red spruce. 
 ![](hybridization/rs_bs_admix.png){.panorama-photo width=100% .lightbox group="hybrid"}
 :::
 ::::: 
 
+--- 
 
-::::: .column-page
+::::: {.column-page}
 ::: {.cv-hero}
 <div class="cv-name">Genomic Forecasting</div>
 <div class="cv-title">**Publication**: [Lachmuth et al. (2024) in Ecological Monographs](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecm.1593)</div>
 :::
 ::::: 
 
-::::: .column-page
+::::: {.column-page}
 
 ::::: {layout="[ 50, 50 ]"}
 ::: {#first-column}
@@ -271,9 +237,11 @@ Admix plot showing the introgression between red spruce and allopatric black spr
 #### Background  
 Long‑lived, sessile organisms like forest trees have long generation times and limited dispersal, so they may not keep pace with rapid anthropogenic climate change, making climate maladaptation a major concern over the coming decades. Genomic offset provides a way to integrate genomic data and climate projections to forecast where adaptive mismatches are likely to emerge, helping identify vulnerable populations, evaluate seed transfer and assisted migration strategies, and prioritize conservation and restoration actions under changing climates.
 
-<div class="cv-actions">
-[Must read: Fitzpatrick & Keller (2015)](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.12376?casa_token=UzFn4XEGK5YAAAAA%3AOYxrXBlWekOGbZtUR6Y4HxQqmbzjNoPtw5eGy0zPIWbaUghNl_faUZ82YYCtz93JBrPWhSnnlJF1K_w){.btn .btn-outline-primary} 
-</div>
+::: {.cv-actions .d-flex .justify-content-center .flex-wrap .gap-5}
+
+[Must read: Fitzpatrick & Keller (2015)](https://doi.org/10.1111/ele.12376){.btn .btn-outline-primary group="forecasting"}
+
+:::
 
 
 :::
@@ -291,25 +259,30 @@ Genomic offset is a quantitative measure of how much the allele frequencies unde
 :::::
 
 
-::::: .column-page
+::::: {.column-page}
 ::: {.cv-section} 
 ![Genomic offset as a measure of climate maladaptation. Left: conceptual fitness curves showing how local populations (grey peaks) collectively form a species‑level climate response curve (green) along a climate gradient. Right: genomic offset quantifies the expected change in the adaptive genetic component needed for populations to remain climatically adapted when climate shifts from current (green points A, B) to future conditions (red points A′, B′), with larger vertical distances indicating greater disruption of local adaptation.](offset/genoffset_twofigs.png){.lightbox group="forecasting"} 
-Genomic offset as a measure of climate maladaptation.  <div class="cv-actions">
-[Capblancq et al (2020)](https://www.annualreviews.org/content/journals/10.1146/annurev-ecolsys-020720-042553) : [Genomic offset workflow](offset/genomic_offset_workflow.gif){.btn .btn-outline-primary .lightbox group="forecasting"} 
-</div>
+Genomic offset as a measure of climate maladaptation.  
+
+::: {.cv-actions .d-flex .justify-content-center .flex-wrap .gap-5}
+
+[Capblancq et al. (2020)](https://www.annualreviews.org/content/journals/10.1146/annurev-ecolsys-020720-042553){.btn .btn-outline-primary .lightbox group="forecasting"}
+[Genomic offset workflow](offset/genomic_offset_workflow.gif){.btn .btn-outline-primary .lightbox group="forecasting"}
+
+:::
 
 :::
 :::::
 
 
-::::: .column-page
+::::: {.column-page}
 ::: {.cv-hero}
 <div class="cv-name">Conservation biology</div>
 <div class="cv-title">**Publication**: [Prakash et al. (2024)](https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11600)</div>
 :::
 ::::: 
 
-::::: .column-page
+::::: {.column-page}
 
 ::::: {layout="[ 50, 50 ]"}
 ::: {#first-column}
@@ -334,10 +307,10 @@ Kathryn Shallows from TNC approached the Keller lab in 2019 regarding red spruce
 :::::
 :::::
 
-::::: column-screen
-::: {.cv-section}
+::::: {.column-page}
+
 
 ![Genomic assisted red spruce restoration at Maryland, West-Viginia and Virginia, USA.](genomics_to_the_field_snippet.png){.lightbox group="red-spruce"}
-::: 
+
 ::::: 
 
