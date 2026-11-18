@@ -1,5 +1,5 @@
 ---
-title: "_R_: Population Genetics Foundations"
+title: "_`R`_: Population Genetics Foundations"
 description: "Allele frequencies, heterozygosity, and a first genotype–environment association"
 author:
   - name: "Anoob Prakash"

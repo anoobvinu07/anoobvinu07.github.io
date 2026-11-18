@@ -1,0 +1,911 @@
+---
+title: "_`R`_: Fixation indices"
+description: "Learning about fixation indices $F_{ST}$ and $F_{IS}$"
+author:
+  - name: "Anoob Prakash"
+    email: "prakas89@purdue.edu"
+    orcid: "0000-0002-7207-934X"
+    url: "https://www.linkedin.com/in/anoob-prakash/"
+date: "11/16/2026"
+listed: false
+categories:
+  - hpc
+  - r
+  - foundations
+  - github
+  - popgen
+
+
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-title: "On this page"
+    toc-depth: 3
+    page-layout: full
+    lightbox: true
+    code-fold: false
+    code-overflow: wrap
+    code-copy: true
+    code-tools: false
+    code-block-border-left: "#583C88"
+    code-block-border-left-size: 5px
+    code-block-border-left-style: solid
+
+
+---
+
+
+# $F_{ST}$ and $F_{IS}$ with simulated forest populations  
+
+Simulating several forests stands of trees over 150 simualtions at once SNP. Each tree's genotype in the simulation is represented by one number. 
+
+| Code | Genotype | Number of `A` alleles | Description |
+| - | -- | --- | --- | 
+| `0` | `aa` | `0` | Homozygous _a_ | 
+| `1` | `Aa` | `1` | Heterozygous _Aa_ | 
+| `2` | `AA` | `2` | Homozygous _A_ |   
+
+For example:
+
+```{r}
+g <- c(0,1,2,1)
+```
+represents four trees:   
+```{text}
+aa Aa AA Aa
+```
+
+### Scenarios and Expected results  
+
+| Scenario | What changes | What to expect |
+| -- | --- | --- | 
+| A. **Drift** <br> _50 trees/stand_ | Isolated stands that randomly mates | Allele frequencies drift apart. $F_{ST}$ rises towards 1 and $F_{IS}$ stays near 0. | 
+| B. **Gene flow** | 5% of the pollen comes from other stands | $F_{ST}$ stays low. | 
+| C. **Selfing** | Half of the seeds comes from self-pollination. | $F_{IS}$ stays above 0, close to the theory value $s / (2 - s)$, which is 0.33 when $s = 0.5$. |
+| D. **Drift** <br> _500 trees/stand_ | Larger stands | $F_{ST}$ rises much more slowly thn in Scenario **A**. |  
+
+## Setting up: 
+### 1. Load packages required  
+
+```{r}
+#| warning: false
+
+# Install once if needed:
+# install.packages("ggplot2")
+# install.packages("plotly")
+
+require(ggplot2)
+require(plotly) # for making the plots interactive
+```
+
+```{r}
+set.seed(47) 
+```
+
+### 2. Calculate allele frequency  
+```{r}
+allele_freq <- function(g) {sum(g) / (2 * length(g))}
+```
+
+This defines a function named _allele_freq()_. It's input _g_ is a vector of genotypes. The numerator of this function adds the number of _A_ alleles across all trees. While, in the denominator counts all the allele copies. 
+
+For examples: If there are four diploid trees, then they carry eight copies in total. 
+
+Therefore if `g = c(0, 1, 2, 1)` then;
+
+```{r}
+#| echo: false
+g <- c(0,1,2,1)
+```
+$$sum(g) = 0 + 1 + 2 + 1 = 4$$   
+$$2 * length(g) = 2 \times 4 = 8$$
+$$p_{A} = \frac{4}{8} = 0.5$$
+
+
+### 3. Calculate observed heterozygosity  
+```{r}
+obs_het <- function(g) { mean(g == 1)}
+```
+
+This functions checks which tree in the sample is heterozygous (g==1), which would return:
+
+```{r}
+g==1
+```
+When calclating a mean, R treats _TRUE_ as 1 and _FALSE_ as 0:
+$$H_{O} = \frac{0 + 1 + 0 + 1}{4} = 0.5$$
+Thus the observed heterozygosity ($H_{O}$) is simply the fraction of heterozygous trees. 
+
+### 4. Calculate expected heterozygosity
+```{r}
+exp_het <- function(p) { 2 * p * (1 - p) }
+```
+Given the allele frequency $p$, this calculates: 
+
+$$H_{E} = 2p(1 - p)$$
+For $p = 0.5$ : 
+
+$$ H_{E} = 2(0.5)(1 - 0.5) = 0.5$$
+
+The important distinction between the two heterozygosity measures is: 
+
+- Observed heterozygosity ($H_{O}$) comes from the actual genotype counts.  
+
+- Expected heterozygosity ($H_{E}$) comes from the allele frequency and the model's random mating reference. 
+
+### 5. Define F-statistic calculation  
+```{r}
+# F-statistics are undefined when their denominator is zero.
+safe_F <- function(observed, expected) {
+                        if (expected > 0) {1 - observed / expected} 
+                                                
+                        else {NA_real_}
+                                        }
+```
+
+
+
+
+
+```{r}
+# -------------------------------------------------------------
+# 2. Reproduction within one stand
+# -------------------------------------------------------------
+
+make_offspring <- function(
+    parents,
+    N,
+    selfing = 0,
+    m = 0,
+    migrant_p = NA_real_
+) {
+
+  # Draw one allele from each selected parent.
+  gamete <- function(idx) {
+    rbinom(
+      n = length(idx),
+      size = 1,
+      prob = parents[idx] / 2
+    )
+  }
+
+  # Maternal contribution.
+  mom <- sample(
+    seq_along(parents),
+    size = N,
+    replace = TRUE
+  )
+
+  egg <- gamete(mom)
+
+  # Designated selfing versus random local mating.
+  is_self <- runif(N) < selfing
+
+  dad <- ifelse(
+    is_self,
+    mom,
+    sample(seq_along(parents), N, replace = TRUE)
+  )
+
+  pollen <- gamete(dad)
+
+  # Migrant pollen replaces some non-designated-self pollen.
+  if (m > 0) {
+
+    from_out <- (runif(N) < m) & !is_self
+
+    pollen[from_out] <- rbinom(
+      n = sum(from_out),
+      size = 1,
+      prob = migrant_p
+    )
+  }
+
+  egg + pollen
+}
+
+# -------------------------------------------------------------
+# 3. Simulate multiple stands
+# -------------------------------------------------------------
+
+simulate_stands <- function(
+    n_pop = 6,
+    N = 50,
+    n_gen = 100,
+    p0 = 0.5,
+    selfing = 0,
+    m = 0
+) {
+
+  # Independent draws from the same starting distribution.
+  # Realized starting allele frequencies vary among stands.
+  stands <- replicate(
+    n_pop,
+    rbinom(N, size = 2, prob = p0),
+    simplify = FALSE
+  )
+
+  freq <- matrix(
+    NA_real_,
+    nrow = n_gen + 1,
+    ncol = n_pop,
+    dimnames = list(NULL, paste0("Stand ", seq_len(n_pop)))
+  )
+
+  stats <- data.frame(
+    gen = 0:n_gen,
+    HI = NA_real_,
+    HS = NA_real_,
+    HT = NA_real_,
+    FIS = NA_real_,
+    FST = NA_real_,
+    FIT = NA_real_
+  )
+
+  for (t in 0:n_gen) {
+
+    p <- vapply(stands, allele_freq, numeric(1))
+
+    HI <- mean(vapply(stands, obs_het, numeric(1)))
+    HS <- mean(exp_het(p))
+    HT <- exp_het(mean(p))
+
+    freq[t + 1, ] <- p
+
+    stats[t + 1, 2:7] <- c(
+      HI,
+      HS,
+      HT,
+      safe_F(HI, HS),
+      safe_F(HS, HT),
+      safe_F(HI, HT)
+    )
+
+    if (t == n_gen) break
+
+    # Shared pollen pool includes all stands.
+    pbar <- mean(p)
+
+    stands <- lapply(
+      stands,
+      make_offspring,
+      N = N,
+      selfing = selfing,
+      m = m,
+      migrant_p = pbar
+    )
+  }
+
+  list(
+    freq = freq,
+    stats = stats,
+    final = stands
+  )
+}
+
+# -------------------------------------------------------------
+# 4. Run scenarios
+# -------------------------------------------------------------
+
+n_gen <- 150
+
+sims <- list(
+  A = simulate_stands(
+    N = 50,
+    n_gen = n_gen
+  ),
+  B = simulate_stands(
+    N = 50,
+    n_gen = n_gen,
+    m = 0.05
+  ),
+  C = simulate_stands(
+    N = 50,
+    n_gen = n_gen,
+    selfing = 0.5
+  ),
+  D = simulate_stands(
+    N = 500,
+    n_gen = n_gen
+  )
+)
+
+scenario_labels <- c(
+  A = "A. Drift | N = 50, isolated",
+  B = "B. Pollen flow | N = 50, m = 0.05",
+  C = "C. Selfing | N = 50, s = 0.50",
+  D = "D. Drift | N = 500, isolated"
+)
+
+# -------------------------------------------------------------
+# 5. Convert simulation output to long-format plot data
+#    No tidyr or dplyr required.
+# -------------------------------------------------------------
+
+freq_data <- do.call(
+  rbind,
+  lapply(names(sims), function(id) {
+
+    sim <- sims[[id]]
+
+    data.frame(
+      scenario = id,
+      generation = rep(
+        sim$stats$gen,
+        times = ncol(sim$freq)
+      ),
+      stand = rep(
+        colnames(sim$freq),
+        each = nrow(sim$freq)
+      ),
+      value = as.vector(sim$freq)
+    )
+  })
+)
+
+F_data <- do.call(
+  rbind,
+  lapply(names(sims), function(id) {
+
+    s <- sims[[id]]$stats
+
+    rbind(
+      data.frame(
+        scenario = id,
+        generation = s$gen,
+        statistic = "FST: among stands",
+        value = s$FST
+      ),
+      data.frame(
+        scenario = id,
+        generation = s$gen,
+        statistic = "FIS: within stands",
+        value = s$FIS
+      )
+    )
+  })
+)
+
+# Ordered panel labels produce four rows and two columns.
+panel_labels <- unlist(
+  lapply(names(sims), function(id) {
+    paste(
+      scenario_labels[[id]],
+      c("Allele frequency", "F-statistics"),
+      sep = "\n"
+    )
+  }),
+  use.names = FALSE
+)
+
+freq_data$panel <- factor(
+  paste(
+    scenario_labels[freq_data$scenario],
+    "Allele frequency",
+    sep = "\n"
+  ),
+  levels = panel_labels
+)
+
+F_data$panel <- factor(
+  paste(
+    scenario_labels[F_data$scenario],
+    "F-statistics",
+    sep = "\n"
+  ),
+  levels = panel_labels
+)
+
+# -------------------------------------------------------------
+# 6. Shared plotting theme and colors
+# -------------------------------------------------------------
+
+theme_forest <- function(base_size = 12) {
+  theme_bw(base_size = base_size) +
+    theme(
+      panel.grid.minor = element_blank(),
+      panel.grid.major.x = element_blank(),
+      panel.grid.major.y = element_line(
+        color = "grey92",
+        linewidth = 0.3
+      ),
+      strip.background = element_rect(
+        fill = "grey95",
+        color = "grey75"
+      ),
+      strip.text = element_text(
+        face = "bold",
+        size = 10,
+        margin = margin(7, 5, 7, 5)
+      ),
+      legend.position = "bottom",
+      legend.box = "vertical",
+      plot.title = element_text(face = "bold"),
+      plot.caption = element_text(
+        hjust = 0,
+        color = "grey35",
+        size = 9
+      ),
+      panel.spacing = grid::unit(1, "lines")
+    )
+}
+
+n_stands <- ncol(sims[[1]]$freq)
+
+stand_colors <- setNames(
+  hcl.colors(n_stands, palette = "Dark 3"),
+  paste0("Stand ", seq_len(n_stands))
+)
+
+F_colors <- c(
+  "FST: among stands" = "#B33B32",
+  "FIS: within stands" = "#2878A5"
+)
+
+# Frequency bounds: 0 to 1.
+freq_bounds <- expand.grid(
+  panel = panel_labels[seq(1, length(panel_labels), by = 2)],
+  generation = c(0, n_gen),
+  value = c(0, 1),
+  stringsAsFactors = FALSE
+)
+
+# Common F-statistic bounds, extended if FIS falls below -0.2.
+finite_F <- F_data$value[is.finite(F_data$value)]
+
+F_lower <- min(c(-0.2, finite_F))
+F_lower <- floor(F_lower * 10) / 10
+
+F_bounds <- expand.grid(
+  panel = panel_labels[seq(2, length(panel_labels), by = 2)],
+  generation = c(0, n_gen),
+  value = c(F_lower, 1),
+  stringsAsFactors = FALSE
+)
+
+plot_bounds <- rbind(freq_bounds, F_bounds)
+
+plot_bounds$panel <- factor(
+  plot_bounds$panel,
+  levels = panel_labels
+)
+
+# Reference lines belong only to their relevant panels.
+reference_lines <- rbind(
+  data.frame(
+    panel = panel_labels[seq(1, length(panel_labels), by = 2)],
+    intercept = 0.5
+  ),
+  data.frame(
+    panel = panel_labels[seq(2, length(panel_labels), by = 2)],
+    intercept = 0
+  )
+)
+
+reference_lines$panel <- factor(
+  reference_lines$panel,
+  levels = panel_labels
+)
+```
+
+```{r}
+# -------------------------------------------------------------
+# 7. Scenario figure
+# -------------------------------------------------------------
+
+p_scenarios <- ggplot() +
+
+  geom_blank(
+    data = plot_bounds,
+    aes(x = generation, y = value)
+  ) +
+
+  geom_hline(
+    data = reference_lines,
+    aes(yintercept = intercept),
+    color = "grey55",
+    linetype = "dotted",
+    linewidth = 0.45
+  ) +
+
+  geom_line(
+    data = freq_data,
+    aes(
+      x = generation,
+      y = value,
+      color = stand,
+      group = stand
+    ),
+    linewidth = 0.65,
+    alpha = 0.9
+  ) +
+
+  geom_line(
+    data = F_data,
+    aes(
+      x = generation,
+      y = value,
+      color = statistic,
+      group = statistic
+    ),
+    linewidth = 0.8,
+    na.rm = TRUE
+  ) +
+
+  facet_wrap(
+    ~ panel,
+    ncol = 2,
+    scales = "free_y",
+    drop = FALSE
+  ) +
+
+  scale_color_manual(
+    name = NULL,
+    values = c(stand_colors, F_colors),
+    breaks = c(names(stand_colors), names(F_colors))
+  ) +
+
+  scale_x_continuous(
+    breaks = seq(0, n_gen, by = 50),
+    expand = expansion(mult = c(0.01, 0.02))
+  ) +
+
+  scale_y_continuous(
+    expand = expansion(mult = c(0.03, 0.04))
+  ) +
+
+  guides(
+    color = guide_legend(
+      nrow = 2,
+      byrow = TRUE,
+      override.aes = list(linewidth = 1)
+    )
+  ) +
+
+  labs(
+    title = "Drift, pollen flow, and selfing in forest stands",
+    subtitle = paste0(
+      "Left: allele-frequency trajectories.",
+      "Right: differentiation among stands and heterozygote","\n",
+      "deficit within stands."
+    ),
+    x = "Generation",
+    y = "Allele frequency / F-statistic",
+    caption = paste(
+      "One neutral biallelic SNP; six stands per scenario.",
+      "\nMissing F-statistics indicate zero heterozygosity",
+      "in the relevant denominator.",
+      "\nMigrant pollen is drawn from a shared pool;",
+      "m applies only to offspring not designated as selfed."
+    )
+  ) +
+
+  theme_forest()
+```
+
+
+::: {.panel-tabset}
+
+## Plot
+
+```{r}
+#| code-fold: true
+#| warning: false
+#| fig-width: 7.5
+#| fig-height: 9
+p_scenarios
+```
+
+## Interactive
+
+```{r}
+#| code-fold: true
+#| fig-width: 7.5
+#| fig-height: 9
+#| warning: false
+ggplotly(p_scenarios, title=false)
+```
+
+:::
+
+
+
+::: {.callout-note appearance="minimal" collapse="true"}
+### Save outputs
+```{r}
+ggsave(
+  filename = "fst_fis_scenarios.pdf",
+  plot = p_scenarios,
+  width = 12,
+  height = 14,
+  units = "in"
+)
+
+ggsave(
+  filename = "fst_fis_scenarios.png",
+  plot = p_scenarios,
+  width = 12,
+  height = 14,
+  units = "in",
+  dpi = 300,
+  bg = "white"
+)
+```
+:::
+```{r}
+# -------------------------------------------------------------
+# 8. Compare replicate FST trajectories with a drift benchmark
+# -------------------------------------------------------------
+
+n_reps <- 20
+N_theory <- 50
+
+reps <- replicate(
+  n_reps,
+  simulate_stands(
+    n_pop = 10,
+    N = N_theory,
+    n_gen = n_gen
+  )$stats$FST
+)
+
+rep_data <- data.frame(
+  generation = rep(0:n_gen, times = n_reps),
+  replicate = factor(
+    rep(seq_len(n_reps), each = n_gen + 1)
+  ),
+  FST = as.vector(reps)
+)
+
+# Avoid returning NaN when all replicates are undefined.
+mean_FST <- apply(
+  reps,
+  1,
+  function(x) {
+    if (all(is.na(x))) NA_real_ else mean(x, na.rm = TRUE)
+  }
+)
+
+curve_data <- rbind(
+  data.frame(
+    generation = 0:n_gen,
+    FST = mean_FST,
+    curve = "Mean of simulated runs"
+  ),
+  data.frame(
+    generation = 0:n_gen,
+    FST = 1 - (1 - 1 / (2 * N_theory))^(0:n_gen),
+    curve = "Idealized drift benchmark"
+  )
+)
+
+p_theory <- ggplot() +
+
+  geom_line(
+    data = rep_data,
+    aes(
+      x = generation,
+      y = FST,
+      group = replicate
+    ),
+    color = "grey55",
+    alpha = 0.35,
+    linewidth = 0.5,
+    na.rm = TRUE
+  ) +
+
+  geom_line(
+    data = curve_data,
+    aes(
+      x = generation,
+      y = FST,
+      color = curve,
+      linetype = curve
+    ),
+    linewidth = 1.1,
+    na.rm = TRUE
+  ) +
+
+  scale_color_manual(
+    name = NULL,
+    values = c(
+      "Mean of simulated runs" = "#B33B32",
+      "Idealized drift benchmark" = "black"
+    )
+  ) +
+
+  scale_linetype_manual(
+    name = NULL,
+    values = c(
+      "Mean of simulated runs" = "solid",
+      "Idealized drift benchmark" = "dashed"
+    )
+  ) +
+
+  scale_x_continuous(
+    breaks = seq(0, n_gen, by = 25),
+    expand = expansion(mult = c(0.01, 0.02))
+  ) +
+
+  scale_y_continuous(
+    limits = c(0, 1),
+    breaks = seq(0, 1, by = 0.2),
+    expand = expansion(mult = c(0, 0.02))
+  ) +
+
+  labs(
+    title = "Genetic drift increases differentiation",
+    subtitle = paste(
+      n_reps,
+      "replicate simulations; 10 isolated stands;",
+      N_theory,
+      "trees per stand"
+    ),
+    x = "Generation",
+    y = expression(F[ST]),
+    caption = paste(
+      "Gray lines: individual simulation runs.",
+      "\nDashed curve: 1 - (1 - 1/(2N))^t.",
+      "\nThis is a benchmark, not an exact expectation",
+      "for the finite-stand heterozygosity-ratio statistic.",
+      "\nThe simulated mean excludes undefined values",
+      "at each generation."
+    )
+  ) +
+
+  theme_forest()
+```
+
+
+::: {.panel-tabset}
+
+## Plot
+
+```{r}
+#| code-fold: true
+#| warning: false
+p_theory
+```
+
+## Interactive
+
+```{r}
+#| code-fold: true
+#| warning: false
+ggplotly(p_theory)
+```
+
+:::
+
+
+
+::: {.callout-note appearance="minimal" collapse="true"}
+### Save outputs
+```{r}
+ggsave(
+  filename = "fst_vs_theory.pdf",
+  plot = p_theory,
+  width = 8,
+  height = 6,
+  units = "in"
+)
+
+ggsave(
+  filename = "fst_vs_theory.png",
+  plot = p_theory,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 300,
+  bg = "white"
+)
+```
+:::
+
+```{r}
+# -------------------------------------------------------------
+# 9. Wahlund effect
+# -------------------------------------------------------------
+
+pooled <- unlist(sims$A$final, use.names = FALSE)
+
+p_pool <- allele_freq(pooled)
+
+# Relative to the original hierarchy, the pooled deficit is FIT.
+FIT_pooled <- safe_F(
+  observed = obs_het(pooled),
+  expected = exp_het(p_pool)
+)
+
+final_A <- tail(sims$A$stats, 1)
+
+cat("\n--- Scenario A: final generation ---\n")
+print(round(final_A, 3))
+
+cat(
+  "\nWithin-stand FIS: ",
+  round(final_A$FIS, 3),
+  "\nPooled heterozygote deficit (FIT): ",
+  round(FIT_pooled, 3),
+  "\nAmong-stand FST: ",
+  round(final_A$FST, 3),
+  "\n",
+  sep = ""
+)
+
+# Check the hierarchical identity where defined.
+FIT_from_components <- with(
+  final_A,
+  FIS + FST - FIS * FST
+)
+
+cat(
+  "\nFIT calculated from FIS and FST: ",
+  round(FIT_from_components, 3),
+  "\n",
+  sep = ""
+)
+
+# -------------------------------------------------------------
+# 10. Final-generation summary
+# -------------------------------------------------------------
+
+summary_table <- do.call(
+  rbind,
+  lapply(names(sims), function(id) {
+    data.frame(
+      scenario = unname(scenario_labels[id]),
+      tail(sims[[id]]$stats, 1),
+      row.names = NULL
+    )
+  })
+)
+
+cat("\n--- Final-generation statistics ---\n")
+
+summary_print <- summary_table
+is_numeric <- vapply(summary_print, is.numeric, logical(1))
+summary_print[is_numeric] <- lapply(
+  summary_print[is_numeric],
+  round,
+  digits = 3
+)
+
+print(summary_print, row.names = FALSE)
+
+write.csv(
+  summary_table,
+  file = "fst_fis_summary.csv",
+  row.names = FALSE
+)
+
+# Export complete trajectories for all scenarios.
+trajectory_table <- do.call(
+  rbind,
+  lapply(names(sims), function(id) {
+    data.frame(
+      scenario = unname(scenario_labels[id]),
+      sims[[id]]$stats,
+      row.names = NULL
+    )
+  })
+)
+
+write.csv(
+  trajectory_table,
+  file = "fst_fis_trajectories.csv",
+  row.names = FALSE
+)
+
+# -------------------------------------------------------------
+# Exercises
+# -------------------------------------------------------------
+# 1. Compare m = 0.01, 0.05, and 0.20.
+# 2. Compare selfing = 0.20, 0.50, and 0.90.
+# 3. Compare simulated FIS with s / (2 - s), before fixation.
+# 4. Halve N and examine the speed of allele loss/fixation.
+# 5. Combine selfing and pollen flow.
+# 6. Compare HI, HS, and HT rather than only their ratios.
+# -------------------------------------------------------------
+```

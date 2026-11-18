@@ -1,14 +1,14 @@
 ---
-title: "_R_: functions()"
-description: "Writing functions to simply tasks"
+title: "_`R`_: Allele frequency change simulation"
+description: "Writing functions to simply tasks of simualting allele freqency change over generations"
 author:
   - name: "Anoob Prakash"
     email: "prakas89@purdue.edu"
     orcid: "0000-0002-7207-934X"
     url: "https://www.linkedin.com/in/anoob-prakash/"
 date: "11/05/2026"
+date-modified: "11/18/2026"
 categories:
-  - hpc
   - r
   - foundations
   - popgen
@@ -34,9 +34,63 @@ format:
 ---
 
 
+# PART I
+
+## Goal
+
+Apply your R skills to simulate a single biallelic locus in a diploid
+population, summarize it (allele frequencies, genotype frequencies,
+heterozygosities), and then extend the simulation **over generations** to watch
+allele frequencies change by chance — the process biologists call **genetic
+drift**.
+
+Along the way you will practice two of the most important programming habits in
+computational biology:
+
+- **Writing functions** so a multi-step analysis can be reused with different
+  inputs instead of copy-pasted.
+- **Simulating randomness** with `sample()`, `runif()`, and `replicate()` — the
+  foundation of every population-genetics simulation, from this toy locus to
+  forward-time genome simulations.
 
 
+### Learning objectives
 
+- Write and call a custom R function with arguments and a returned value.
+- Simulate diploid genotypes under Hardy–Weinberg expectations using
+  `sample()` with the `prob` argument.
+- Calculate observed allele and genotype frequencies from simulated data.
+- Estimate observed ($H_o$) and expected ($H_e$) heterozygosity and interpret
+  the difference between them.
+- Simulate random mating across generations using a **gamete pool**.
+- Visualize drift trajectories for single and replicate populations.
+
+
+::: {.callout-tip collapse="true"}
+## Concept review: Hardy-Weinberg equilibrium
+
+In a large, randomly mating population with no selection, mutation, or
+migration, genotype frequencies after one generation of random mating are
+$p^2$, $2pq$, and $q^2$, where $p$ and $q$ are the allele frequencies. This is
+the **baseline** our simulations assume when creating a starting population —
+and the expectation we compare against when checking whether a population
+deviates.
+
+**Read more:** [What is Hardy-Weinberg equilibrium?](https://bio.libretexts.org/Bookshelves/Introductory_and_General_Biology/General_Biology_(Boundless)/19%3A_The_Evolution_of_Populations/19.01%3A_Population_Evolution/19.1C%3A_Hardy-Weinberg_Principle_of_Equilibrium)
+:::
+
+
+## Function to simulate one population
+
+So far we have simulated populations by typing out a `sample()` call each time.
+That works, but it has two problems: we repeat ourselves, and changing the
+population size or allele frequency means editing the call by hand. The fix is
+to wrap the whole workflow in a **function**.
+
+A function packages code behind a name. You give it inputs (**arguments**), it
+runs its body, and it hands back a result (**return value**). You already use
+functions constantly — `sample()`, `table()`, `mean()` are all functions
+someone else wrote for you. Now we write our own.
 
 
 ```{r}
@@ -48,7 +102,9 @@ format:
 #   0 = AA, 1 = Aa, 2 = aa
 sim_popgen <- function(n, p) {
 
+
   q <- 1 - p                       # frequency of allele a
+
 
   # 1. Simulate genotypes -------------------------------------------
   #    Under Hardy-Weinberg:  AA = p^2,  Aa = 2pq,  aa = q^2
@@ -57,28 +113,35 @@ sim_popgen <- function(n, p) {
                      replace = TRUE,
                      prob = c(p^2, 2 * p * q, q^2))
 
+
   # 2. Genotype frequencies ----------------------------------------
   geno_freq <- table(genotype) / n
+
 
   # 3. Allele frequencies --------------------------------------------
   #    Each genotype value IS an allele-a count, so sum / (2 * n)
   f_a <- sum(genotype) / (2 * n)
   f_A <- 1 - f_a
 
+
   # 4. Heterozygosities ---------------------------------------------
   Ho <- sum(genotype == 1) / n      # observed: fraction of Aa
   He <- 2 * f_A * f_a              # expected under H-W: 2pq
+
 
   # 5. Print everything -----------------------------------------------
   cat("Allele frequencies:\n")
   cat("  p(A) =", round(f_A, 3), " q(a) =", round(f_a, 3), "\n\n")
 
+
   cat("Genotype frequencies:\n")
   print(round(geno_freq, 3))
+
 
   cat("\nHeterozygosity:\n")
   cat("  Ho =", round(Ho, 3), " (observed)\n")
   cat("  He =", round(He, 3), " (expected, H-W)\n")
+
 
   # Return the results in a list so you can reuse them
   list(genotype = genotype,
@@ -89,10 +152,39 @@ sim_popgen <- function(n, p) {
 ```
 
 
+## Code breakdown
+
+- `sim_popgen <- function(n, p)` creates a new function named `sim_popgen` and
+  saves it, exactly like saving a value to a variable. `n` (individuals) and
+  `p` (allele-A frequency) are the arguments — the inputs you pass in.
+- `q <- 1 - p` derives the frequency of the other allele: allele frequencies
+  must sum to 1, so if `p = 0.80` then `q = 0.20`.
+- Step 1 draws each individual's genotype with `sample(0:2, ...)`. Because a
+  genotype value **is** the number of `a` alleles it carries, the simulation
+  and the bookkeeping later use the same coding.
+- Step 2 uses `table() / n` to convert genotype counts into frequencies.
+- Step 3 uses the allele-counting shortcut: `sum(genotype)` totals all the `a`
+  alleles, and dividing by `2 * n` (each diploid individual carries two allele
+  copies) gives the frequency of `a`.
+- Step 4 computes both heterozygosities: $H_o$ counts the heterozygotes
+  directly; $H_e = 2pq$ is what random mating would produce at the observed
+  allele frequencies.
+- Step 5 prints a readable summary with `cat()`, then **returns a list**. The
+  last expression in a function is its return value, so the results survive
+  after the function ends — you access them with `$`.
+
+
+## Running and pooling populations
+
+Calling the function looks like calling any built-in one. Save the result, and
+the returned list keeps the raw genotypes available for follow-up analysis —
+such as pooling two populations into one sample:
+
 
 ```{r}
 pop_1 <- sim_popgen(n = 20, p = 0.80)   # Population 1 from Part II
 pop_2 <- sim_popgen(n = 20, p = 0.30)   # Population 2
+
 
 # Combine two populations
 pooled <- c(pop_1$genotype, pop_2$genotype)
@@ -100,16 +192,36 @@ sum(pooled == 1) / length(pooled)      # observed Ho for the pooled data
 ```
 
 
+::: {.callout-warning collapse="true"}
+## Why pool?
+
+Because both `$genotype` vectors are numeric, `c()` concatenates them into one
+larger sample — 40 individuals. We will reuse this pooled sample twice below:
+first to visualize it, then to see why pooling structured populations creates
+an apparent heterozygote deficit.
+:::
+
+
+## Visualizing one population against its expectation
+
+A barplot is the clearest way to compare what we **observed** against what
+Hardy–Weinberg **predicts** at the input allele frequency. Again, plotting is a
+repeated task — so it goes in a function too:
+
+
 ```{r}
 # Visualize one simulated population against its H-W expectation
 plot_popgen <- function(pop, p, n) {
   q <- 1 - p
 
+
   # observed genotype frequencies from the raw genotypes
   observed <- table(factor(pop$genotype, levels = 0:2)) / n
 
+
   # Hardy-Weinberg expectation from the input allele frequency
   expected <- c(p^2, 2 * p * q, q^2)
+
 
   barplot(rbind(observed, expected),
           beside  = TRUE,                       # bars side by side, not stacked
@@ -121,9 +233,26 @@ plot_popgen <- function(pop, p, n) {
   abline(h = 0)
 }
 
+
 plot_popgen(pop_1, p = 0.80, n = 20)
 plot_popgen(pop_2, p = 0.30, n = 20)
 ```
+
+
+Note the `factor(pop$genotype, levels = 0:2)` trick: it keeps genotype classes
+that happened to have **zero** individuals in the table, so all three bars
+appear even when a genotype is absent.
+
+
+## Pooling and the Wahlund effect
+
+What happens if we treat the two populations as one? Their allele frequencies
+differ ($p \approx 0.80$ vs $p \approx 0.30$), so the pooled sample mixes two
+gene pools. The pooled heterozygote frequency falls **below** the Hardy–Weinberg
+expectation calculated from the pooled allele frequency — not because of
+inbreeding, but because structure was hidden in the pooling. This is the
+**Wahlund effect**, and it is exactly the signal that `Population_Homozygosity`
+and structure analyses pick up in real datasets.
 
 
 ```{r}
@@ -131,6 +260,7 @@ plot_popgen(pop_2, p = 0.30, n = 20)
 pooled   <- c(pop_1$genotype, pop_2$genotype)
 f_a      <- sum(pooled) / (2 * length(pooled))   # pooled allele frequency
 f_A      <- 1 - f_a
+
 
 barplot(rbind(
     "Pooled observed"             = table(factor(pooled, levels = 0:2)) / 40,
@@ -145,6 +275,13 @@ barplot(rbind(
 ```
 
 
+## Sampling noise
+
+Even a single population simulated with a *known* input frequency does not come
+out exactly at that frequency — a finite sample of 20 diploids carries only 40
+allele copies, so the observed frequency wobbles around the input by chance.
+Repeating the simulation many times shows the size of that wobble:
+
 
 ```{r}
 # Run the same simulation 1000 times and collect the observed a frequency
@@ -153,8 +290,307 @@ q_obs <- replicate(1000, {
   sum(g) / 40
 })
 
+
 hist(q_obs, breaks = 20, col = "#583C88",
      xlab  = "observed frequency of allele a",
      main  = "Sampling noise (n = 20, input q = 0.20)")
 abline(v = 0.20, col = "red", lty = 2, lwd = 2)   # the input frequency
 ```
+
+
+`replicate(1000, {...})` runs the code block 1000 times and stacks the results
+into one vector — the same function we will use below to run replicate
+drifting populations. The red line marks the *input* frequency: with only 20
+individuals, observed frequencies routinely land 0.05–0.10 away from it. This
+is why an observed allele frequency of 0.70 from a simulated input of 0.80 is
+normal, not a bug.
+
+
+# PART II
+
+## Population allele frequency change over generations
+
+Everything so far described a population at **one moment**. Now we let time
+run: each generation, individuals mate at random, offspring inherit alleles,
+and the allele frequency in the new generation is counted again. Because
+sampling is random, the frequency will wander — sometimes up, sometimes down.
+That random walk is **genetic drift**.
+
+
+::: {.callout-tip collapse="true"}
+## Concept review: genetic drift
+
+Drift is change in allele frequency caused by random sampling of gametes
+between generations. Its strength is inversely proportional to population size:
+in small populations, allele frequencies bounce wildly and alleles are quickly
+lost or fixed (frequency 0 or 1); in large populations, the bounce is gentle.
+There is no selection, no mutation, and no migration in our simulation; drift
+is the *only* evolutionary force acting.
+
+**Read more:** [Genetic drift](https://plato.stanford.edu/entries/genetic-drift/)
+:::
+
+
+## The gamete pool model
+
+We need one design decision before coding random mating. A full model would
+track sexes, pairs, and pedigrees — overkill for one locus. The standard
+simplification is the **gamete pool**:
+
+1. Every individual contributes its two alleles to a shared pool of gametes
+   (pollen, sperm, eggs — the biology doesn't matter here).
+2. Each offspring draws two alleles at random from that pool and glues them
+   together into its genotype.
+
+This reproduces random mating faithfully at a single locus, and it maps cleanly
+onto R code: `substr()` splits genotype strings into alleles, `sample()` draws
+gametes, and `paste0()` reassembles offspring genotypes.
+
+
+## The `pop_gen()` function
+
+```{r}
+# Pop allele freq change over generations
+
+
+# Simulate random mating and genetic drift over generations
+#   data     : vector of 0/1/2 genotypes (e.g. pop_1$genotype from sim_popgen)
+#   gen      : number of generations
+#   pop_size : number of individuals (kept constant each generation)
+pop_gen <- function(data, gen, pop_size) {
+
+
+  # Convert numeric genotypes to letters: 0 = "AA", 1 = "Aa", 2 = "aa"
+  # (value + 1 turns 0/1/2 into the positions 1/2/3 of the lookup vector)
+  g <- c("AA", "Aa", "aa")[data + 1]
+
+
+  # Storage: allele frequency of A, one row per generation
+  freq <- data.frame(generation = 0:gen, p = NA)
+  freq$p[1] <- 1 - sum(data) / (2 * length(data))   # starting frequency
+
+
+  for (i in 1:gen) {
+
+
+    # 1. Gamete pool: every individual contributes both its alleles
+    pool <- c(substr(g, 1, 1),    # first allele of each genotype
+              substr(g, 2, 2))   # second allele of each genotype
+
+
+    # 2. Offspring: each draws two alleles at random from the pool
+    g <- replicate(pop_size, # no. of times for the following fucntion to be replicated
+                   paste0(sample(pool, size = 2), collapse = ""))
+
+
+    # 3. Record the new allele frequency of A
+    freq$p[i + 1] <- (2 * sum(g == "AA") + sum(g == "Aa")) / (2 * pop_size)
+  }
+
+
+  freq    # returns a data frame ready for plotting
+}
+```
+
+
+## Code breakdown
+
+- **Letter conversion.** `c("AA", "Aa", "aa")[data + 1]` is a lookup: adding 1
+  turns genotype codes 0/1/2 into positions 1/2/3 of the vector, so `0`
+  becomes `"AA"` and so on. We switch to letters because splitting a string
+  into alleles (`substr()`) is easier than unpacking a number.
+- **Storage.** `freq` is a data frame with one row per generation, created
+  empty (`p = NA`) and filled in as the loop runs. Recording *every*
+  generation — not just the last — is what lets us plot the trajectory.
+- **The loop.** `for (i in 1:gen)` repeats the mating step once per
+  generation. Each pass builds the gamete pool (`substr()` twice), draws
+  `pop_size` offspring (`replicate()` + `sample()` + `paste0()`), then counts
+  allele A in the offspring: `2 * AA + Aa` allele copies over `2 * pop_size`
+  total copies — the same divide-by-2 rule from Part I.
+- **Return value.** The last line, `freq`, is what the function hands back: a
+  tidy data frame with `generation` and `p` columns.
+
+
+## One population's trajectory
+
+
+```{r}
+set.seed(8765)
+# Testing
+pop_1 <- sim_popgen(n = 30, p = 0.60)
+
+
+drift <- pop_gen(pop_1$genotype, gen = 15, pop_size = 10)
+
+
+plot(drift$generation, drift$p,
+     type  = "b", pch = 16, ylim = c(0, 1),
+     xlab  = "Generation",
+     ylab  = "Frequency of allele A",
+     main  = "Genetic drift: population of 10 individuals")
+abline(h = drift$p[1], lty = 2, col = "grey55")   # starting frequency
+```
+
+
+The dotted line marks the starting frequency. Notice how far the frequency can
+wander in just 15 generations when only 10 individuals breed each generation —
+drift is fast in small populations.
+
+
+## Many replicate populations
+
+Drift is stochastic: run the same population twice and you get two different
+histories. One trajectory can mislead, so we run **replicates** — 15
+independent populations started from the same genotypes — and overlay them:
+
+
+```{r}
+# Each COLUMN is one simulated population; rows are generations 0-15
+sims <- replicate(15, pop_gen(pop_1$genotype, gen = 15, pop_size = 15)$p)
+
+
+matplot(0:15, sims, type = "l", lty = 1,
+        col  = adjustcolor("steelblue", alpha.f = 0.5),
+        ylim = c(0, 1),
+        xlab = "Generation", ylab = "Frequency of allele A",
+        main = "Drift: 15 replicate populations (n = 15)")
+abline(h = 0.60, lty = 2, col = "grey55")
+```
+
+
+Two details make this plot work:
+
+- `replicate()` returns a matrix where **rows are generations and columns are
+  replicates** — exactly the shape `matplot()` wants: it draws one line per
+  column, matching the 16 x-values `0:15`. (If you ever see
+  `'x' and 'y' must have same number of rows`, a stray `t()` is the usual
+  suspect.)
+- `adjustcolor(..., alpha.f = 0.5)` makes the lines semi-transparent, so
+  overlapping trajectories stay readable.
+
+The typical picture: some lines hit 1 (allele A **fixed**), some hit 0
+(allele A **lost**), and the rest drift on. No line is "the" answer — each is
+one equally likely history.
+
+
+## Exercises
+
+### Exercise 1 — Population size matters
+
+Rerun the replicate simulation with `pop_size = 100` (and `gen = 50`). How does
+the spread of trajectories compare with the `pop_size = 15` run?
+
+### Exercise 2 — Starting frequency matters
+
+Start populations at `p = 0.10` instead of `0.60`. Which outcome — loss or
+fixation of allele A — is more common, and why?
+
+### Exercise 3 — Track heterozygosity too
+
+Modify `pop_gen()` to also record $H_o$ each generation and plot it alongside
+`p`. What happens to heterozygosity as alleles drift toward fixation?
+
+:::{.callout-tip appearance="minimal" collapse="true"}
+### Solution
+
+```{r}
+# pop_gen with heterozygosity tracking
+pop_gen_het <- function(data, gen, pop_size) {
+
+  # Convert numeric genotypes to letters: 0 = "AA", 1 = "Aa", 2 = "aa"
+  g <- c("AA", "Aa", "aa")[data + 1]
+
+  # Storage: allele frequency AND observed heterozygosity per generation
+  freq <- data.frame(generation = 0:gen, p = NA, Ho = NA)
+  freq$p[1]  <- 1 - sum(data) / (2 * length(data))
+  freq$Ho[1] <- sum(data == 1) / length(data)
+
+  for (i in 1:gen) {
+
+    # 1. Gamete pool
+    pool <- c(substr(g, 1, 1), substr(g, 2, 2))
+
+    # 2. Offspring
+    g <- replicate(pop_size,
+                   paste0(sample(pool, size = 2), collapse = ""))
+
+    # 3. Record the new allele frequency AND heterozygosity
+    freq$p[i + 1]  <- (2 * sum(g == "AA") + sum(g == "Aa")) / (2 * pop_size)
+    freq$Ho[i + 1] <- sum(g == "Aa") / pop_size # additional line within the loop to address Ho
+  }
+
+  freq
+}
+
+
+set.seed(42)
+pop_1 <- sim_popgen(n = 10, p = 0.60)
+drift <- pop_gen_het(pop_1$genotype, gen = 15, pop_size = 10)
+
+par(mfrow = c(2, 1), mar = c(4, 4, 2, 1))
+
+plot(drift$generation, drift$p, type = "b", pch = 16, ylim = c(0, 1),
+     xlab = "Generation", ylab = "Frequency of A",
+     main = "Allele frequency")
+abline(h = drift$p[1], lty = 2, col = "grey55")
+
+plot(drift$generation, drift$Ho, type = "b", pch = 16, ylim = c(0, 1),
+     col = "#2A7F8E",
+     xlab = "Generation", ylab = "Heterozygosity",
+     main = "Observed heterozygosity")
+lines(drift$generation, 2 * drift$p * (1 - drift$p),   # He = 2pq
+      lty = 2, col = "grey55")
+```
+:::
+
+
+
+### Exercise 4 — Add a bottleneck
+
+Halfway through the generations, drop `pop_size` to 5 for two generations,
+then restore it. What does the trajectory look like around the bottleneck?
+
+:::{.callout-tip appearance="minimal" collapse="true"}
+### Solution
+
+```{r}
+# pop_gen with a population size that can change every generation
+#   sizes: vector of population sizes, one entry PER GENERATION
+pop_gen_sizes <- function(data, sizes) {
+
+  gen <- length(sizes)
+  g   <- c("AA", "Aa", "aa")[data + 1]
+
+  freq <- data.frame(generation = 0:gen, p = NA)
+  freq$p[1] <- 1 - sum(data) / (2 * length(data))
+
+  for (i in 1:gen) {
+
+    N <- sizes[i]    # population size THIS generation (bottleneck if small)
+
+    pool <- c(substr(g, 1, 1), substr(g, 2, 2))
+    g <- replicate(N, paste0(sample(pool, size = 2), collapse = ""))
+
+    freq$p[i + 1] <- (2 * sum(g == "AA") + sum(g == "Aa")) / (2 * N)
+  }
+
+  freq
+}
+```
+
+Build a 16 generation size schedule: 8 generations at `n = 25`, a two geeration bottleneck at `n = 5`, thn six more generations at `n = 25`.  
+
+```{r}
+sizes <- c(rep(25, 8), 5, 5, rep(25, 6))
+
+set.seed(7)
+pop_1 <- sim_popgen(n = 25, p = 0.60)
+drift <- pop_gen_sizes(pop_1$genotype, sizes)
+
+plot(drift$generation, drift$p, type = "b", pch = 16, ylim = c(0, 1),
+     xlab = "Generation", ylab = "Frequency of allele A",
+     main = "Bottleneck at generations 9-10 (n = 5)")
+rect(8, 0, 10, 1, col = adjustcolor("grey50", alpha.f = 0.15), border = NA)
+abline(h = drift$p[1], lty = 2, col = "grey55")
+```
+:::
