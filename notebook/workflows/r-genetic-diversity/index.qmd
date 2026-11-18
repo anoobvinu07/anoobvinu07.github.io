@@ -1,0 +1,718 @@
+---
+title: "_`R`_: Genetic variation within and among populations"
+description: "Population differentiation, gene flow, drift, FST, and isolation by distance — with hands-on simulations in R"
+author:
+  - name: "Anoob Prakash"
+    email: "prakas89@purdue.edu"
+    orcid: "0000-0002-7207-934X"
+    url: "https://www.linkedin.com/in/anoob-prakash/"
+date: "11/18/2026"
+categories:
+  - hpc
+  - r
+  - foundations
+  - popgen
+
+
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-title: "On this page"
+    toc-depth: 3
+    page-layout: full
+    lightbox: true
+    code-fold: false
+    code-overflow: wrap
+    code-copy: true
+    code-tools: false
+    code-block-border-left: "#583C88"
+    code-block-border-left-size: 5px
+    code-block-border-left-style: solid
+
+
+---
+
+
+# PART I
+
+## Goal
+
+Everything so far has described a **single** population at a single locus. Real
+species are collections of populations — forest stands scattered across a
+landscape — and their genetic variation can be divided into two parts:
+
+- **Within populations:** how genetically variable is each stand?
+- **Among populations:** how different are the stands from each other?
+
+This module introduces the standard way population genetics quantifies that
+split: within-population gene diversity ($H_S$), total gene diversity ($H_T$),
+and the fixation index
+
+$$F_{ST} = \frac{H_T - H_S}{H_T},$$
+
+the fraction of a species' total genetic diversity that sits **among**
+populations rather than within them.
+
+In the hands-on part we simulate multiple populations with different allele
+frequencies, compute $H_S$, $H_T$, and $F_{ST}$, build a pairwise $F_{ST}$
+matrix, and finish by adding geography — testing whether populations that are
+farther apart are also more genetically different (**isolation by distance**).
+
+
+### Learning objectives
+
+- Explain the difference between genetic diversity within populations and
+  genetic differentiation among populations.
+- Define and compute $H_S$, $H_T$, and $F_{ST}$.
+- Interpret $F_{ST}$ values and know their rough benchmarks.
+- Explain how genetic drift and gene flow push $F_{ST}$ in opposite
+  directions.
+- Describe isolation by distance as a hypothesis about how gene flow decays
+  with distance.
+- Simulate multiple populations, compute a pairwise $F_{ST}$ matrix, and
+  visualize it as a heatmap.
+- Test the relationship between genetic and geographic distance.
+
+
+## Two levels of genetic variation
+
+Imagine sampling red spruce trees from six stands across the Appalachians.
+At any SNP, some of the variation you see exists *inside* each stand —
+individuals within a stand carry different genotypes. But the stands
+themselves also differ: an allele that is common in a northern stand may be
+rare in a southern one.
+
+These two levels answer different biological questions:
+
+- **Within-population diversity** matters for a stand's evolutionary
+  potential — can it adapt to future conditions if it retains variation?
+- **Among-population differentiation** matters for conservation and for
+  local adaptation — are stands locally distinct, and would moving seed
+  between them swamp or rescue local adaptation?
+
+A species can have high diversity and low differentiation (most variation
+within stands), or low diversity and high differentiation (stands small and
+genetically distinct). These are not the same quantity, and $F_{ST}$ exists
+precisely to separate them.
+
+
+## The evolutionary forces
+
+::: {.callout-tip collapse="true"}
+## Concept review: genetic drift
+
+Drift is the change in allele frequency caused by random sampling of gametes
+between generations. It is strongest in **small** populations, and it pushes
+isolated populations **apart**: each stand's allele frequency random-walks
+independently, so stands that started identical gradually diverge. Drift also
+erodes variation *within* populations, eventually fixing or losing alleles.
+
+**Read more:** [Genetic drift (LibreTexts)](https://bio.libretexts.org/Bookshelves/Introductory_and_General_Biology/General_Biology_(Boundless)/19:_The_Evolution_of_Populations/19.02:_Population_Genetics/19.2B:_Genetic_Drift)
+:::
+
+::: {.callout-tip collapse="true"}
+## Concept review: gene flow
+
+Gene flow is the movement of alleles between populations — by migrating
+individuals, or for trees, by **seed** and especially **pollen** dispersal.
+Gene flow pushes populations **together**: migrants carry alleles from one
+stand into another, making allele frequencies more similar and countering the
+divergence drift creates.
+
+**Read more:** [Gene flow and mutation (LibreTexts)](https://bio.libretexts.org/Bookshelves/Introductory_and_General_Biology/General_Biology_(Boundless)/19:_The_Evolution_of_Populations/19.02:_Population_Genetics/19.2C:_Gene_Flow_and_Mutation)
+:::
+
+Drift and gene flow are opponents. Drift makes populations diverge at a rate
+that scales with $1/N_e$; gene flow homogenizes them at a rate that scales
+with the migration rate $m$. For the classic island model, their balance
+produces an equilibrium
+
+$$F_{ST} \approx \frac{1}{4N_em + 1},$$
+
+where $N_em$ is the effective number of migrants per generation. A widely
+used rule of thumb follows from this formula: **even one migrant per
+generation** ($N_em \approx 1$) is enough to keep populations from diverging
+strongly by drift alone. This is why $F_{ST}$ is often interpreted
+informally as a measure of gene flow — high $F_{ST}$ implies little of it.
+
+::: {.callout-warning collapse="true"}
+## FST is about neutral structure
+
+The $F_{ST}$–gene-flow relationship holds for **neutral** loci. Low
+$F_{ST}$ at neutral markers does not mean populations are interchangeable:
+locally adapted populations can be nearly identical at neutral SNPs while
+differing strongly at loci under selection. That distinction — neutral
+structure versus adaptive divergence — is exactly the gap that
+genotype–environment association methods address.
+:::
+
+
+## Partitioning diversity: $H_S$, $H_T$, and $F_{ST}$
+
+Take a set of populations, each with its own allele frequency $p_i$ for
+allele A. Two heterozygosities summarize the whole system:
+
+- **Within-population gene diversity**, $H_S$: the *average* expected
+  heterozygosity of the populations,
+  $$H_S = \overline{2 p_i (1 - p_i)}.$$
+  It answers: if you drew two alleles at random from the **same**
+  population, how often would they differ?
+
+- **Total gene diversity**, $H_T$: the expected heterozygosity computed from
+  the allele frequency of the **pooled** sample (all populations thrown
+  together),
+  $$H_T = 2\, \bar{p}\, (1 - \bar{p}), \quad \bar{p} = \text{mean allele frequency}.$$
+  It answers: if you drew two alleles at random from the **whole species**,
+  how often would they differ?
+
+If every population had the same allele frequency, then $H_S = H_T$: pooling
+adds no information, and there is no differentiation. The more the
+populations' allele frequencies differ, the more $H_T$ exceeds $H_S$ —
+because in the pooled sample, alleles drawn from *different* populations
+often differ. $F_{ST}$ is simply the share of the total that this
+between-population component represents:
+
+$$F_{ST} = \frac{H_T - H_S}{H_T}.$$
+
+$F_{ST}$ ranges from 0 (populations identical) toward 1 (populations fixed
+for different alleles). The subscript letters are historical: $S$ =
+**s**ubpopulation (within), $T$ = **t**otal (the whole set), and $F$ comes
+from "fixation".
+
+
+### Worked example: $F_{ST}$ by hand
+
+Two populations, one biallelic SNP, allele-A frequencies $p_1 = 0.80$ and
+$p_2 = 0.20$:
+
+1. **Within:** $H_1 = 2(0.80)(0.20) = 0.32$ and $H_2 = 2(0.20)(0.80) = 0.32$,
+   so $H_S = 0.32$.
+2. **Total:** $\bar{p} = (0.80 + 0.20)/2 = 0.50$, so
+   $H_T = 2(0.50)(0.50) = 0.50$.
+3. **Differentiation:**
+   $$F_{ST} = \frac{0.50 - 0.32}{0.50} = 0.36.$$
+
+Interpretation: 36% of the total genetic diversity at this locus lies
+**among** populations; only 64% sits within them. Note also the subtle point
+this example hides: each population still has plenty of heterozygosity
+($H_S = 0.32$) — differentiation does not require the populations
+themselves to be invariant.
+
+
+### How big is big? Interpreting $F_{ST}$
+
+Wright's rough guidelines, still widely quoted:
+
+| $F_{ST}$ | Interpretation |
+|---|---|
+| 0 – 0.05 | little differentiation |
+| 0.05 – 0.15 | moderate differentiation |
+| 0.15 – 0.25 | great differentiation |
+| > 0.25 | very great differentiation |
+
+Treat these as landmarks, not thresholds. $F_{ST}$ depends on the marker
+type (microsatellites behave differently from SNPs), on diversity itself
+($F_{ST}$ is bounded above when the minor allele is rare), and on the
+scale of sampling. In wind-pollinated forest trees, neutral $F_{ST}$
+typically lands between **0.02 and 0.10** — long-distance pollen flow
+keeps stands surprisingly similar — so a value of 0.15 would already be
+notable for a conifer.
+
+
+## Isolation by distance
+
+If dispersal is limited, nearby populations exchange more migrants than
+distant ones. Sewall Wright (1943) called the resulting pattern **isolation
+by distance** (IBD): genetic differentiation should increase with geographic
+distance, because gene flow — the homogenizing force — decays as distance
+grows.
+
+IBD turns the question into a testable relationship:
+
+1. Sample populations across a landscape and record their positions.
+2. Compute two distance matrices: **geographic distance** between every
+   pair of sites, and **genetic distance** (here, pairwise $F_{ST}$).
+3. Ask whether the two matrices are correlated. Farther pairs should be
+   more differentiated.
+
+The standard test is the **Mantel test**, which correlates two distance
+matrices and compares the observed correlation against permutations that
+shuffle population labels. We will use `vegan::mantel()`, from the package
+installed in an earlier module. A significant positive relationship between
+genetic and geographic distance is evidence that dispersal limitation — not
+just drift or history — structures the species' genetic variation.
+
+::: {.callout-note collapse="true"}
+## Classic references
+
+- Wright, S. (1943). Isolation by distance. *Genetics* 28: 114–138.
+- Rousset, F. (1997). Genetic differentiation and estimation of gene flow
+  from F-statistics under isolation by distance. *Genetics* 145: 1219–1224
+  — proposes regressing $F_{ST}/(1 - F_{ST})$ on distance for biallelic
+  markers.
+:::
+
+
+# PART II
+
+## Hands-on: multiple populations in R
+
+We reuse `sim_popgen()` from the previous module to create six populations
+with a gradient of allele frequencies — a **cline**, as if allele A were
+common in the south and rare in the north:
+
+::: {.callout-important appearance="minimal" collapse="true"}
+#### sim_popgen() : custom function
+```{r}
+# Simulate one population at one biallelic locus, then summarize it
+#   n : number of individuals
+#   p : frequency of allele A (0 to 1)
+#
+# Genotypes are coded 0/1/2:
+#   0 = AA, 1 = Aa, 2 = aa
+sim_popgen <- function(n, p) {
+
+
+  q <- 1 - p                       # frequency of allele a
+
+
+  # 1. Simulate genotypes -------------------------------------------
+  #    Under Hardy-Weinberg:  AA = p^2,  Aa = 2pq,  aa = q^2
+  genotype <- sample(0:2,
+                     size = n,
+                     replace = TRUE,
+                     prob = c(p^2, 2 * p * q, q^2))
+
+
+  # 2. Genotype frequencies ----------------------------------------
+  geno_freq <- table(genotype) / n
+
+
+  # 3. Allele frequencies --------------------------------------------
+  #    Each genotype value IS an allele-a count, so sum / (2 * n)
+  f_a <- sum(genotype) / (2 * n)
+  f_A <- 1 - f_a
+
+
+  # 4. Heterozygosities ---------------------------------------------
+  Ho <- sum(genotype == 1) / n      # observed: fraction of Aa
+  He <- 2 * f_A * f_a              # expected under H-W: 2pq
+
+
+  # 5. Print everything -----------------------------------------------
+  cat("Allele frequencies:\n")
+  cat("  p(A) =", round(f_A, 3), " q(a) =", round(f_a, 3), "\n\n")
+
+
+  cat("Genotype frequencies:\n")
+  print(round(geno_freq, 3))
+
+
+  cat("\nHeterozygosity:\n")
+  cat("  Ho =", round(Ho, 3), " (observed)\n")
+  cat("  He =", round(He, 3), " (expected, H-W)\n")
+
+
+  # Return the results in a list so you can reuse them
+  list(genotype = genotype,
+       allele_freq = c(A = f_A, a = f_a),
+       Ho = Ho,
+       He = He)
+}
+
+```
+:::
+
+```{r}
+# Six populations with different starting allele frequencies
+pop_names <- c("Pop_A", "Pop_B", "Pop_C", "Pop_D", "Pop_E", "Pop_F")
+p_values  <- c(0.05, 0.20, 0.40, 0.60, 0.80, 0.95)
+n         <- 30
+
+# A list to hold each population's raw genotypes
+pops <- vector("list", length(p_values))
+
+for (i in seq_along(p_values)) {
+  pops[[i]] <- sim_popgen(n = n, p = p_values[i])$genotype
+}
+names(pops) <- pop_names
+
+# Observed frequency of allele A in each population
+p_obs <- sapply(pops, function(g) 1 - sum(g) / (2 * length(g)))
+round(p_obs, 3)
+```
+
+Two R details worth pausing on:
+
+- A **list** (`pops[[i]] <- ...`) is the natural container for a set of
+  vectors that all belong together. Double brackets `[[ ]]` assign to one
+  slot of the list.
+- `sapply(pops, function(g) ...)` applies the little function to **each
+  element** of the list and simplifies the results into one named vector —
+  it replaces a `for` loop when you only want to compute a value per
+  element.
+
+Because genotypes are coded 0/1/2 (copies of allele a), the frequency of
+allele **A** is `1 - sum(g) / (2 * length(g))` — the divide-by-2 rule from
+Part I, inverted.
+
+
+## Heterozygosity within populations: $H_S$
+
+Each population's expected heterozygosity is $2p(1-p)$ at its own observed
+allele frequency. $H_S$ is their average:
+
+```{r}
+# Expected heterozygosity WITHIN each population
+He_pops <- sapply(pops, function(g) {
+  p <- 1 - sum(g) / (2 * length(g))   # frequency of allele A
+  2 * p * (1 - p)
+})
+
+Hs <- mean(He_pops)
+round(c(He_pops = He_pops, Hs = Hs), 3)
+```
+
+Notice something interesting in the output: the populations at the **ends**
+of the cline ($p \approx 0.05$ and $p \approx 0.95$) have the *lowest*
+heterozygosity, and the middle populations the highest. Heterozygosity is
+maximized at $p = 0.5$ — a population can be highly differentiated and
+still have little internal variation when its allele is near fixation.
+
+
+## Total gene diversity and global $F_{ST}$: $H_T$
+
+$H_T$ uses the allele frequency of the **pooled** sample, as if we ignored
+population labels entirely:
+
+```{r}
+# Pool all individuals, ignoring population labels
+all_g <- unlist(pops)
+p_tot <- 1 - sum(all_g) / (2 * length(all_g))
+HT <- 2 * p_tot * (1 - p_tot)
+
+FST <- (HT - Hs) / HT
+round(c(p_tot = p_tot, Hs = Hs, HT = HT, FST = FST), 3)
+```
+
+`unlist()` flattens the list of genotype vectors into one long vector — the
+genetic equivalent of pouring all six stands into one bag. From here,
+$F_{ST}$ is one line: the among-population share of the total.
+
+
+## Pairwise $F_{ST}$
+
+The global $F_{ST}$ collapses all six populations into one number. Often
+more informative is the **pairwise** matrix: $F_{ST}$ for every pair of
+populations, showing *which* stands are similar and which differ. The logic
+is identical to the global calculation, applied to just two populations at a
+time:
+
+```{r}
+# FST for ONE pair of populations (same recipe as the global version)
+fst_pair <- function(gi, gj) {
+  p_i <- 1 - sum(gi) / (2 * length(gi))   # allele A frequency, pop i
+  p_j <- 1 - sum(gj) / (2 * length(gj))   # allele A frequency, pop j
+
+  H_i <- 2 * p_i * (1 - p_i)              # heterozygosity within i
+  H_j <- 2 * p_j * (1 - p_j)              # heterozygosity within j
+  H_s <- (H_i + H_j) / 2                  # average within-pop diversity
+
+  p_t <- (p_i + p_j) / 2                  # pooled allele frequency
+  H_t <- 2 * p_t * (1 - p_t)              # total diversity
+
+  (H_t - H_s) / H_t                       # FST for this pair
+}
+
+# Loop over every pair and fill a k x k matrix
+k <- length(pops)
+fst_mat <- matrix(NA, k, k,
+                  dimnames = list(pop_names, pop_names))
+
+for (i in 1:k) {
+  for (j in 1:k) {
+    fst_mat[i, j] <- fst_pair(pops[[i]], pops[[j]])
+  }
+}
+diag(fst_mat) <- 0          # a population compared with itself
+
+round(fst_mat, 3)
+```
+
+Read a row of the printed matrix like a profile of one population: small
+values next to its neighbors on the cline, large values next to the
+populations at the other end. Pairs like Pop_A–Pop_F (0.05 vs 0.95) should
+show the largest $F_{ST}$; adjacent pairs the smallest.
+
+
+## Visualizing allele frequencies among populations
+
+```{r}
+barplot(p_obs, col = "#583C88", ylim = c(0, 1),
+        names.arg = pop_names,
+        ylab = "Frequency of allele A",
+        main = "Allele frequencies across populations")
+abline(h = p_tot, lty = 2, col = "grey55")   # global (pooled) frequency
+```
+
+The dotted line is $\bar{p}$ from the pooled sample. The more the bars
+scatter around that line, the larger the among-population component —
+visually, the raw material of $F_{ST}$.
+
+
+## The pairwise $F_{ST}$ heatmap
+
+```{r}
+image(x = 1:k, y = 1:k, z = fst_mat,
+      col = heat.colors(100),
+      axes = FALSE, xlab = "", ylab = "",
+      main = "Pairwise FST among populations")
+axis(1, at = 1:k, labels = pop_names)
+axis(2, at = 1:k, labels = pop_names)
+
+# label the most divergent pair for orientation
+box()
+```
+
+In `heat.colors()`, **red means low $F_{ST}$** (similar populations) and
+pale yellow means high. The matrix is symmetric, so the map is a mirror
+image across its diagonal; a perfect cline shows a smooth gradient from the
+Pop_A corner to the Pop_F corner. `image()` also flips the first matrix
+index onto the y-axis — a classic R gotcha, and harmless here only because
+the matrix is symmetric.
+
+::: {.callout-tip collapse="true"}
+## A note on negative FST
+
+With real (or simulated) sampling noise, a pairwise $F_{ST}$ can come out
+**slightly negative** — sampling made the two populations look more
+different within than between. A negative value means "differentiation
+indistinguishable from zero"; it is not an error in the formula.
+:::
+
+
+## How $F_{ST}$ changes as populations diverge
+
+The cline above is one snapshot. To see the whole range of behavior, sweep
+across scenarios — from identical populations to maximally divergent ones —
+and compute the global $F_{ST}$ of each:
+
+```{r}
+# Global FST for a set of populations defined by their allele frequencies
+global_fst <- function(p_vec, n = 30) {
+
+  # simulate each population's genotypes directly with sample()
+  # (avoids sim_popgen()'s printed output)
+  pops <- lapply(p_vec, function(p) {
+    sample(0:2, size = n, replace = TRUE,
+           prob = c(p^2, 2 * p * (1 - p), (1 - p)^2))
+  })
+
+  # Hs: average within-population heterozygosity
+  Hs <- mean(sapply(pops, function(g) {
+    p <- 1 - sum(g) / (2 * length(g))
+    2 * p * (1 - p)
+  }))
+
+  # HT: heterozygosity of the pooled sample
+  all_g <- unlist(pops)
+  p_tot <- 1 - sum(all_g) / (2 * length(all_g))
+  HT <- 2 * p_tot * (1 - p_tot)
+
+  (HT - Hs) / HT
+}
+
+# Three scenarios: similar, moderate, divergent
+scenarios <- list(
+  similar   = rep(0.50, 6),
+  moderate  = seq(0.35, 0.65, length.out = 6),
+  divergent = seq(0.05, 0.95, length.out = 6)
+)
+
+fst_values <- sapply(scenarios, global_fst)
+
+barplot(fst_values, col = "#583C88",
+        ylab = "Global FST", ylim = c(0, 1),
+        main = "FST rises as populations diverge")
+```
+
+What you should see:
+
+- **Similar** populations (identical input $p$) give $F_{ST} \approx 0$ —
+  not exactly zero, because finite samples ($n = 30$) wobble, but close.
+- **Divergent** populations push $F_{ST}$ high; with allele frequencies
+  spread from 0.05 to 0.95, most of the total diversity is among
+  populations.
+- The relationship is **not** linear in the spread of allele frequencies —
+  the same spread matters more when it crosses 0.5, and $F_{ST}$ is
+  capped well below 1 unless alleles are near fixation in each population.
+
+
+## Adding geography: isolation by distance
+
+Finally, give the populations **locations**. Our cline becomes a transect:
+six stands sampled at regular intervals along a line, with allele A
+increasing from one end to the other. Because allele frequencies were
+assigned in geographic order, nearby populations are genetically similar
+and distant ones differ — isolation by distance, by construction.
+
+```{r}
+# Sampling locations: six stands along a transect
+sites <- data.frame(
+  pop = pop_names,
+  lon = c(-87.0, -86.8, -86.6, -86.4, -86.2, -86.0),
+  lat = rep(40.4, 6)
+)
+
+# Geographic distance between every pair of sites
+geo_mat <- as.matrix(dist(cbind(sites$lon, sites$lat)))
+rownames(geo_mat) <- colnames(geo_mat) <- pop_names
+
+# Genetic distance = pairwise FST (computed above)
+plot(as.vector(geo_mat), as.vector(fst_mat),
+     xlab = "Geographic distance (degrees)",
+     ylab = "Pairwise FST",
+     main = "Isolation by distance")
+abline(lm(as.vector(fst_mat) ~ as.vector(geo_mat)),
+       col = "red", lwd = 2)
+
+cor(as.vector(geo_mat), as.vector(fst_mat))
+```
+
+The points should trend upward: the farther apart two stands are, the more
+differentiated they are. The red line is a plain linear regression — good
+for seeing the trend, but it ignores that the points are not independent
+(each population appears in five pairs). The proper test is the Mantel
+test, which permutes population labels and asks whether the observed
+matrix correlation is stronger than chance:
+
+```{r}
+library(vegan)   # installed in an earlier module
+
+mantel(as.dist(fst_mat), as.dist(geo_mat),
+       permutations = 999)
+```
+
+`as.dist()` converts our full square matrices into the compact
+lower-triangular form `mantel()` expects. The output reports the matrix
+correlation (Mantel statistic r), a significance test from the 999
+permutations, and — importantly — a **p-value only as meaningful as the
+hypothesis being tested**. A significant IBD signal tells you dispersal
+limitation contributes to structure; it does not rule out history or
+selection acting alongside it.
+
+
+## Exercises
+
+### Exercise 1 — Gene flow homogenizes
+
+Replace a fraction $m$ of each population's individuals with migrants drawn
+from the **global** allele frequency, then recompute global $F_{ST}$ for
+$m = 0$, $0.05$, and $0.25$. What happens?
+
+### Exercise 2 — Sample size and noise
+
+Estimate global $F_{ST}$ for the divergent scenario with `n = 10` and
+`n = 200` (use `replicate(50, ...)` for each). How much do the estimates
+wobble, and around what values?
+
+### Exercise 3 — Multilocus FST
+
+Real studies average over hundreds of loci. Repeat the divergent scenario
+for 20 loci, each with its own randomly drawn cline, and average the
+per-locus $F_{ST}$ values. How does the average compare with any single
+locus?
+
+### Exercise 4 — Rousset's transform
+
+Rousset (1997) recommends regressing $F_{ST}/(1 - F_{ST})$ on geographic
+distance for biallelic markers. Redraw the IBD plot with the transform and
+compare the fit.
+
+::: {.callout-tip appearance="minimal" collapse="true"}
+## Solutions
+
+### Exercise 1 
+
+```{r}
+# Add migrants drawn from the global allele frequency
+add_migration <- function(g, m, p_tot) {
+  n_mig <- round(m * length(g))            # how many migrants
+  migrants <- sample(0:2, n_mig, replace = TRUE,
+                     prob = c(p_tot^2, 2 * p_tot * (1 - p_tot),
+                              (1 - p_tot)^2))
+  c(sample(g, length(g) - n_mig), migrants)  # residents + migrants
+}
+
+m_values <- c(0, 0.05, 0.25)
+sapply(m_values, function(m) {
+  mig_pops <- lapply(pops, add_migration, m = m, p_tot = p_tot)
+  # same Hs / HT / FST recipe as global_fst(), on mig_pops
+  Hs <- mean(sapply(mig_pops, function(g) {
+    p <- 1 - sum(g) / (2 * length(g)); 2 * p * (1 - p)
+  }))
+  all_g <- unlist(mig_pops)
+  p_t <- 1 - sum(all_g) / (2 * length(all_g))
+  (2 * p_t * (1 - p_t) - Hs) / (2 * p_t * (1 - p_t))
+})
+```
+
+**What you should see:** $F_{ST}$ falls as $m$ grows. Even 5% migration
+pulls the populations noticeably toward the pooled frequency — the
+one-migrant-per-generation rule in action. At $m = 0.25$, the cline has
+largely dissolved.
+
+### Exercise 2 
+
+```{r}
+divergent <- seq(0.05, 0.95, length.out = 6)
+
+fst_n10  <- replicate(50, global_fst(divergent, n = 10))
+fst_n200 <- replicate(50, global_fst(divergent, n = 200))
+
+round(c(mean_n10 = mean(fst_n10),  sd_n10 = sd(fst_n10),
+        mean_n200 = mean(fst_n200), sd_n200 = sd(fst_n200)), 3)
+```
+
+**What you should see:** both averages land near the same true value, but
+the `n = 10` estimates scatter widely (and can even go negative), while
+`n = 200` estimates cluster tightly. The lesson: a single small-sample
+$F_{ST}$ is an estimate with variance — report it with uncertainty, or
+with more individuals or loci.
+
+### Exercise 3 
+
+Wrap the divergent scenario in a per-locus loop with random clines:
+
+```{r}
+locus_fst <- replicate(20, {
+  p_cline <- sort(runif(6, 0.05, 0.95))    # a random cline for this locus
+  global_fst(p_cline)
+})
+c(single_locus_example = locus_fst[1],
+  mean_over_20_loci    = mean(locus_fst))
+```
+
+**What you should see:** any single locus can give an erratic $F_{ST}$
+(clines vary, sampling noise adds more), but the **average over 20 loci**
+is much more stable. This is why empirical studies never quote a
+one-locus $F_{ST}$ — the genome-wide average is the estimate.
+
+### Exercise 4 
+
+```{r}
+plot(as.vector(geo_mat), as.vector(fst_mat) / (1 - as.vector(fst_mat)),
+     xlab = "Geographic distance (degrees)",
+     ylab = "FST / (1 - FST)",
+     main = "IBD with Rousset's transform")
+abline(lm(I(as.vector(fst_mat) / (1 - as.vector(fst_mat))) ~
+            as.vector(geo_mat)), col = "red", lwd = 2)
+```
+
+**What you should see:** the transform stretches small $F_{ST}$ values
+apart near zero, roughly linearizing the relationship — which is exactly
+why Rousset proposed it. With our strong artificial cline the improvement
+may be modest; with real, weakly structured data it is often substantial.
+
+:::

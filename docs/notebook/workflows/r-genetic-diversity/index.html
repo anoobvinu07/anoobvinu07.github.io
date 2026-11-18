@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Anoob Prakash">
+<meta name="dcterms.date" content="2026-11-18">
+<meta name="description" content="Population differentiation, gene flow, drift, FST, and isolation by distance — with hands-on simulations in R">
+
+<title>R: Genetic variation within and among populations – Anoob Prakash</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../img/illustrated_AP.jpg" rel="icon" type="image/jpeg">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-85f7a32731ed2b609fa7be27e34d4366.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-85f7a32731ed2b609fa7be27e34d4366.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-85f7a32731ed2b609fa7be27e34d4366.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-eea2e599b33a2dcc6567cc33a4814596.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-5c51ab3b563e9d201f5791837cfcc282.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-eea2e599b33a2dcc6567cc33a4814596.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/quarto-contrib/academicons-1.9.4/all.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/academicons-1.9.4/size.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="floating nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          toggle.setAttribute("aria-checked", alternate ? "true" : "false");
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
+        setTimeout(() => {
+          window.scrollTo(0, scrollY);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo light-content">
+    <img src="../../../img/AP_logo2.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Anoob Prakash</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../research/index.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../notebook/index.html"> 
+<span class="menu-text">Notebook</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../gallery/index.html"> 
+<span class="menu-text">Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../news/index.html"> 
+<span class="menu-text">News</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../cv/index.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <button type="button" role="switch" aria-checked="false" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="bi"></i></button>
+</div>
+            <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="Section">
+    <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#part-i" id="toc-part-i" class="nav-link active" data-scroll-target="#part-i">PART I</a>
+  <ul class="collapse">
+  <li><a href="#goal" id="toc-goal" class="nav-link" data-scroll-target="#goal">Goal</a>
+  <ul class="collapse">
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  </ul></li>
+  <li><a href="#two-levels-of-genetic-variation" id="toc-two-levels-of-genetic-variation" class="nav-link" data-scroll-target="#two-levels-of-genetic-variation">Two levels of genetic variation</a></li>
+  <li><a href="#the-evolutionary-forces" id="toc-the-evolutionary-forces" class="nav-link" data-scroll-target="#the-evolutionary-forces">The evolutionary forces</a></li>
+  <li><a href="#partitioning-diversity-h_s-h_t-and-f_st" id="toc-partitioning-diversity-h_s-h_t-and-f_st" class="nav-link" data-scroll-target="#partitioning-diversity-h_s-h_t-and-f_st">Partitioning diversity: <span class="math inline">\(H_S\)</span>, <span class="math inline">\(H_T\)</span>, and <span class="math inline">\(F_{ST}\)</span></a>
+  <ul class="collapse">
+  <li><a href="#worked-example-f_st-by-hand" id="toc-worked-example-f_st-by-hand" class="nav-link" data-scroll-target="#worked-example-f_st-by-hand">Worked example: <span class="math inline">\(F_{ST}\)</span> by hand</a></li>
+  <li><a href="#how-big-is-big-interpreting-f_st" id="toc-how-big-is-big-interpreting-f_st" class="nav-link" data-scroll-target="#how-big-is-big-interpreting-f_st">How big is big? Interpreting <span class="math inline">\(F_{ST}\)</span></a></li>
+  </ul></li>
+  <li><a href="#isolation-by-distance" id="toc-isolation-by-distance" class="nav-link" data-scroll-target="#isolation-by-distance">Isolation by distance</a></li>
+  </ul></li>
+  <li><a href="#part-ii" id="toc-part-ii" class="nav-link" data-scroll-target="#part-ii">PART II</a>
+  <ul class="collapse">
+  <li><a href="#hands-on-multiple-populations-in-r" id="toc-hands-on-multiple-populations-in-r" class="nav-link" data-scroll-target="#hands-on-multiple-populations-in-r">Hands-on: multiple populations in R</a></li>
+  <li><a href="#heterozygosity-within-populations-h_s" id="toc-heterozygosity-within-populations-h_s" class="nav-link" data-scroll-target="#heterozygosity-within-populations-h_s">Heterozygosity within populations: <span class="math inline">\(H_S\)</span></a></li>
+  <li><a href="#total-gene-diversity-and-global-f_st-h_t" id="toc-total-gene-diversity-and-global-f_st-h_t" class="nav-link" data-scroll-target="#total-gene-diversity-and-global-f_st-h_t">Total gene diversity and global <span class="math inline">\(F_{ST}\)</span>: <span class="math inline">\(H_T\)</span></a></li>
+  <li><a href="#pairwise-f_st" id="toc-pairwise-f_st" class="nav-link" data-scroll-target="#pairwise-f_st">Pairwise <span class="math inline">\(F_{ST}\)</span></a></li>
+  <li><a href="#visualizing-allele-frequencies-among-populations" id="toc-visualizing-allele-frequencies-among-populations" class="nav-link" data-scroll-target="#visualizing-allele-frequencies-among-populations">Visualizing allele frequencies among populations</a></li>
+  <li><a href="#the-pairwise-f_st-heatmap" id="toc-the-pairwise-f_st-heatmap" class="nav-link" data-scroll-target="#the-pairwise-f_st-heatmap">The pairwise <span class="math inline">\(F_{ST}\)</span> heatmap</a></li>
+  <li><a href="#how-f_st-changes-as-populations-diverge" id="toc-how-f_st-changes-as-populations-diverge" class="nav-link" data-scroll-target="#how-f_st-changes-as-populations-diverge">How <span class="math inline">\(F_{ST}\)</span> changes as populations diverge</a></li>
+  <li><a href="#adding-geography-isolation-by-distance" id="toc-adding-geography-isolation-by-distance" class="nav-link" data-scroll-target="#adding-geography-isolation-by-distance">Adding geography: isolation by distance</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a>
+  <ul class="collapse">
+  <li><a href="#exercise-1-gene-flow-homogenizes" id="toc-exercise-1-gene-flow-homogenizes" class="nav-link" data-scroll-target="#exercise-1-gene-flow-homogenizes">Exercise 1 — Gene flow homogenizes</a></li>
+  <li><a href="#exercise-2-sample-size-and-noise" id="toc-exercise-2-sample-size-and-noise" class="nav-link" data-scroll-target="#exercise-2-sample-size-and-noise">Exercise 2 — Sample size and noise</a></li>
+  <li><a href="#exercise-3-multilocus-fst" id="toc-exercise-3-multilocus-fst" class="nav-link" data-scroll-target="#exercise-3-multilocus-fst">Exercise 3 — Multilocus FST</a></li>
+  <li><a href="#exercise-4-roussets-transform" id="toc-exercise-4-roussets-transform" class="nav-link" data-scroll-target="#exercise-4-roussets-transform">Exercise 4 — Rousset’s transform</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content column-page-right" id="quarto-document-content" tabindex="-1">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><em><code>R</code></em>: Genetic variation within and among populations</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">hpc</div>
+    <div class="quarto-category">r</div>
+    <div class="quarto-category">foundations</div>
+    <div class="quarto-category">popgen</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Population differentiation, gene flow, drift, FST, and isolation by distance — with hands-on simulations in R
+  </div>
+</div>
+
+
+<div class="quarto-title-meta column-page-right">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p><a href="https://www.linkedin.com/in/anoob-prakash/">Anoob Prakash</a> <a href="mailto:prakas89@purdue.edu" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-7207-934X" class="quarto-title-author-orcid" aria-label="ORCID profile for Anoob Prakash"> <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 18, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="part-i" class="level1">
+<h1>PART I</h1>
+<section id="goal" class="level2">
+<h2 class="anchored" data-anchor-id="goal">Goal</h2>
+<p>Everything so far has described a <strong>single</strong> population at a single locus. Real species are collections of populations — forest stands scattered across a landscape — and their genetic variation can be divided into two parts:</p>
+<ul>
+<li><strong>Within populations:</strong> how genetically variable is each stand?</li>
+<li><strong>Among populations:</strong> how different are the stands from each other?</li>
+</ul>
+<p>This module introduces the standard way population genetics quantifies that split: within-population gene diversity (<span class="math inline">\(H_S\)</span>), total gene diversity (<span class="math inline">\(H_T\)</span>), and the fixation index</p>
+<p><span class="math display">\[F_{ST} = \frac{H_T - H_S}{H_T},\]</span></p>
+<p>the fraction of a species’ total genetic diversity that sits <strong>among</strong> populations rather than within them.</p>
+<p>In the hands-on part we simulate multiple populations with different allele frequencies, compute <span class="math inline">\(H_S\)</span>, <span class="math inline">\(H_T\)</span>, and <span class="math inline">\(F_{ST}\)</span>, build a pairwise <span class="math inline">\(F_{ST}\)</span> matrix, and finish by adding geography — testing whether populations that are farther apart are also more genetically different (<strong>isolation by distance</strong>).</p>
+<section id="learning-objectives" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h3>
+<ul>
+<li>Explain the difference between genetic diversity within populations and genetic differentiation among populations.</li>
+<li>Define and compute <span class="math inline">\(H_S\)</span>, <span class="math inline">\(H_T\)</span>, and <span class="math inline">\(F_{ST}\)</span>.</li>
+<li>Interpret <span class="math inline">\(F_{ST}\)</span> values and know their rough benchmarks.</li>
+<li>Explain how genetic drift and gene flow push <span class="math inline">\(F_{ST}\)</span> in opposite directions.</li>
+<li>Describe isolation by distance as a hypothesis about how gene flow decays with distance.</li>
+<li>Simulate multiple populations, compute a pairwise <span class="math inline">\(F_{ST}\)</span> matrix, and visualize it as a heatmap.</li>
+<li>Test the relationship between genetic and geographic distance.</li>
+</ul>
+</section>
+</section>
+<section id="two-levels-of-genetic-variation" class="level2">
+<h2 class="anchored" data-anchor-id="two-levels-of-genetic-variation">Two levels of genetic variation</h2>
+<p>Imagine sampling red spruce trees from six stands across the Appalachians. At any SNP, some of the variation you see exists <em>inside</em> each stand — individuals within a stand carry different genotypes. But the stands themselves also differ: an allele that is common in a northern stand may be rare in a southern one.</p>
+<p>These two levels answer different biological questions:</p>
+<ul>
+<li><strong>Within-population diversity</strong> matters for a stand’s evolutionary potential — can it adapt to future conditions if it retains variation?</li>
+<li><strong>Among-population differentiation</strong> matters for conservation and for local adaptation — are stands locally distinct, and would moving seed between them swamp or rescue local adaptation?</li>
+</ul>
+<p>A species can have high diversity and low differentiation (most variation within stands), or low diversity and high differentiation (stands small and genetically distinct). These are not the same quantity, and <span class="math inline">\(F_{ST}\)</span> exists precisely to separate them.</p>
+</section>
+<section id="the-evolutionary-forces" class="level2">
+<h2 class="anchored" data-anchor-id="the-evolutionary-forces">The evolutionary forces</h2>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Concept review: genetic drift
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Drift is the change in allele frequency caused by random sampling of gametes between generations. It is strongest in <strong>small</strong> populations, and it pushes isolated populations <strong>apart</strong>: each stand’s allele frequency random-walks independently, so stands that started identical gradually diverge. Drift also erodes variation <em>within</em> populations, eventually fixing or losing alleles.</p>
+<p><strong>Read more:</strong> <a href="https://bio.libretexts.org/Bookshelves/Introductory_and_General_Biology/General_Biology_(Boundless)/19:_The_Evolution_of_Populations/19.02:_Population_Genetics/19.2B:_Genetic_Drift">Genetic drift (LibreTexts)</a></p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Concept review: gene flow
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Gene flow is the movement of alleles between populations — by migrating individuals, or for trees, by <strong>seed</strong> and especially <strong>pollen</strong> dispersal. Gene flow pushes populations <strong>together</strong>: migrants carry alleles from one stand into another, making allele frequencies more similar and countering the divergence drift creates.</p>
+<p><strong>Read more:</strong> <a href="https://bio.libretexts.org/Bookshelves/Introductory_and_General_Biology/General_Biology_(Boundless)/19:_The_Evolution_of_Populations/19.02:_Population_Genetics/19.2C:_Gene_Flow_and_Mutation">Gene flow and mutation (LibreTexts)</a></p>
+</div>
+</div>
+</div>
+<p>Drift and gene flow are opponents. Drift makes populations diverge at a rate that scales with <span class="math inline">\(1/N_e\)</span>; gene flow homogenizes them at a rate that scales with the migration rate <span class="math inline">\(m\)</span>. For the classic island model, their balance produces an equilibrium</p>
+<p><span class="math display">\[F_{ST} \approx \frac{1}{4N_em + 1},\]</span></p>
+<p>where <span class="math inline">\(N_em\)</span> is the effective number of migrants per generation. A widely used rule of thumb follows from this formula: <strong>even one migrant per generation</strong> (<span class="math inline">\(N_em \approx 1\)</span>) is enough to keep populations from diverging strongly by drift alone. This is why <span class="math inline">\(F_{ST}\)</span> is often interpreted informally as a measure of gene flow — high <span class="math inline">\(F_{ST}\)</span> implies little of it.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>FST is about neutral structure
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The <span class="math inline">\(F_{ST}\)</span>–gene-flow relationship holds for <strong>neutral</strong> loci. Low <span class="math inline">\(F_{ST}\)</span> at neutral markers does not mean populations are interchangeable: locally adapted populations can be nearly identical at neutral SNPs while differing strongly at loci under selection. That distinction — neutral structure versus adaptive divergence — is exactly the gap that genotype–environment association methods address.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="partitioning-diversity-h_s-h_t-and-f_st" class="level2">
+<h2 class="anchored" data-anchor-id="partitioning-diversity-h_s-h_t-and-f_st">Partitioning diversity: <span class="math inline">\(H_S\)</span>, <span class="math inline">\(H_T\)</span>, and <span class="math inline">\(F_{ST}\)</span></h2>
+<p>Take a set of populations, each with its own allele frequency <span class="math inline">\(p_i\)</span> for allele A. Two heterozygosities summarize the whole system:</p>
+<ul>
+<li><p><strong>Within-population gene diversity</strong>, <span class="math inline">\(H_S\)</span>: the <em>average</em> expected heterozygosity of the populations, <span class="math display">\[H_S = \overline{2 p_i (1 - p_i)}.\]</span> It answers: if you drew two alleles at random from the <strong>same</strong> population, how often would they differ?</p></li>
+<li><p><strong>Total gene diversity</strong>, <span class="math inline">\(H_T\)</span>: the expected heterozygosity computed from the allele frequency of the <strong>pooled</strong> sample (all populations thrown together), <span class="math display">\[H_T = 2\, \bar{p}\, (1 - \bar{p}), \quad \bar{p} = \text{mean allele frequency}.\]</span> It answers: if you drew two alleles at random from the <strong>whole species</strong>, how often would they differ?</p></li>
+</ul>
+<p>If every population had the same allele frequency, then <span class="math inline">\(H_S = H_T\)</span>: pooling adds no information, and there is no differentiation. The more the populations’ allele frequencies differ, the more <span class="math inline">\(H_T\)</span> exceeds <span class="math inline">\(H_S\)</span> — because in the pooled sample, alleles drawn from <em>different</em> populations often differ. <span class="math inline">\(F_{ST}\)</span> is simply the share of the total that this between-population component represents:</p>
+<p><span class="math display">\[F_{ST} = \frac{H_T - H_S}{H_T}.\]</span></p>
+<p><span class="math inline">\(F_{ST}\)</span> ranges from 0 (populations identical) toward 1 (populations fixed for different alleles). The subscript letters are historical: <span class="math inline">\(S\)</span> = <strong>s</strong>ubpopulation (within), <span class="math inline">\(T\)</span> = <strong>t</strong>otal (the whole set), and <span class="math inline">\(F\)</span> comes from “fixation”.</p>
+<section id="worked-example-f_st-by-hand" class="level3">
+<h3 class="anchored" data-anchor-id="worked-example-f_st-by-hand">Worked example: <span class="math inline">\(F_{ST}\)</span> by hand</h3>
+<p>Two populations, one biallelic SNP, allele-A frequencies <span class="math inline">\(p_1 = 0.80\)</span> and <span class="math inline">\(p_2 = 0.20\)</span>:</p>
+<ol type="1">
+<li><strong>Within:</strong> <span class="math inline">\(H_1 = 2(0.80)(0.20) = 0.32\)</span> and <span class="math inline">\(H_2 = 2(0.20)(0.80) = 0.32\)</span>, so <span class="math inline">\(H_S = 0.32\)</span>.</li>
+<li><strong>Total:</strong> <span class="math inline">\(\bar{p} = (0.80 + 0.20)/2 = 0.50\)</span>, so <span class="math inline">\(H_T = 2(0.50)(0.50) = 0.50\)</span>.</li>
+<li><strong>Differentiation:</strong> <span class="math display">\[F_{ST} = \frac{0.50 - 0.32}{0.50} = 0.36.\]</span></li>
+</ol>
+<p>Interpretation: 36% of the total genetic diversity at this locus lies <strong>among</strong> populations; only 64% sits within them. Note also the subtle point this example hides: each population still has plenty of heterozygosity (<span class="math inline">\(H_S = 0.32\)</span>) — differentiation does not require the populations themselves to be invariant.</p>
+</section>
+<section id="how-big-is-big-interpreting-f_st" class="level3">
+<h3 class="anchored" data-anchor-id="how-big-is-big-interpreting-f_st">How big is big? Interpreting <span class="math inline">\(F_{ST}\)</span></h3>
+<p>Wright’s rough guidelines, still widely quoted:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(F_{ST}\)</span></th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 – 0.05</td>
+<td>little differentiation</td>
+</tr>
+<tr class="even">
+<td>0.05 – 0.15</td>
+<td>moderate differentiation</td>
+</tr>
+<tr class="odd">
+<td>0.15 – 0.25</td>
+<td>great differentiation</td>
+</tr>
+<tr class="even">
+<td>&gt; 0.25</td>
+<td>very great differentiation</td>
+</tr>
+</tbody>
+</table>
+<p>Treat these as landmarks, not thresholds. <span class="math inline">\(F_{ST}\)</span> depends on the marker type (microsatellites behave differently from SNPs), on diversity itself (<span class="math inline">\(F_{ST}\)</span> is bounded above when the minor allele is rare), and on the scale of sampling. In wind-pollinated forest trees, neutral <span class="math inline">\(F_{ST}\)</span> typically lands between <strong>0.02 and 0.10</strong> — long-distance pollen flow keeps stands surprisingly similar — so a value of 0.15 would already be notable for a conifer.</p>
+</section>
+</section>
+<section id="isolation-by-distance" class="level2">
+<h2 class="anchored" data-anchor-id="isolation-by-distance">Isolation by distance</h2>
+<p>If dispersal is limited, nearby populations exchange more migrants than distant ones. Sewall Wright (1943) called the resulting pattern <strong>isolation by distance</strong> (IBD): genetic differentiation should increase with geographic distance, because gene flow — the homogenizing force — decays as distance grows.</p>
+<p>IBD turns the question into a testable relationship:</p>
+<ol type="1">
+<li>Sample populations across a landscape and record their positions.</li>
+<li>Compute two distance matrices: <strong>geographic distance</strong> between every pair of sites, and <strong>genetic distance</strong> (here, pairwise <span class="math inline">\(F_{ST}\)</span>).</li>
+<li>Ask whether the two matrices are correlated. Farther pairs should be more differentiated.</li>
+</ol>
+<p>The standard test is the <strong>Mantel test</strong>, which correlates two distance matrices and compares the observed correlation against permutations that shuffle population labels. We will use <code>vegan::mantel()</code>, from the package installed in an earlier module. A significant positive relationship between genetic and geographic distance is evidence that dispersal limitation — not just drift or history — structures the species’ genetic variation.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Classic references
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Wright, S. (1943). Isolation by distance. <em>Genetics</em> 28: 114–138.</li>
+<li>Rousset, F. (1997). Genetic differentiation and estimation of gene flow from F-statistics under isolation by distance. <em>Genetics</em> 145: 1219–1224 — proposes regressing <span class="math inline">\(F_{ST}/(1 - F_{ST})\)</span> on distance for biallelic markers.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="part-ii" class="level1">
+<h1>PART II</h1>
+<section id="hands-on-multiple-populations-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="hands-on-multiple-populations-in-r">Hands-on: multiple populations in R</h2>
+<p>We reuse <code>sim_popgen()</code> from the previous module to create six populations with a gradient of allele frequencies — a <strong>cline</strong>, as if allele A were common in the south and rare in the north:</p>
+<div class="callout callout-style-simple callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>sim_popgen() : custom function
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate one population at one biallelic locus, then summarize it</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   n : number of individuals</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   p : frequency of allele A (0 to 1)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Genotypes are coded 0/1/2:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   0 = AA, 1 = Aa, 2 = aa</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>sim_popgen <span class="ot">&lt;-</span> <span class="cf">function</span>(n, p) {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  q <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> p                       <span class="co"># frequency of allele a</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Simulate genotypes -------------------------------------------</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">#    Under Hardy-Weinberg:  AA = p^2,  Aa = 2pq,  aa = q^2</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  genotype <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                     <span class="at">size =</span> n,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                     <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                     <span class="at">prob =</span> <span class="fu">c</span>(p<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span> <span class="sc">*</span> p <span class="sc">*</span> q, q<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Genotype frequencies ----------------------------------------</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  geno_freq <span class="ot">&lt;-</span> <span class="fu">table</span>(genotype) <span class="sc">/</span> n</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Allele frequencies --------------------------------------------</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="co">#    Each genotype value IS an allele-a count, so sum / (2 * n)</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  f_a <span class="ot">&lt;-</span> <span class="fu">sum</span>(genotype) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> n)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  f_A <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> f_a</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 4. Heterozygosities ---------------------------------------------</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  Ho <span class="ot">&lt;-</span> <span class="fu">sum</span>(genotype <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">/</span> n      <span class="co"># observed: fraction of Aa</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  He <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> f_A <span class="sc">*</span> f_a              <span class="co"># expected under H-W: 2pq</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 5. Print everything -----------------------------------------------</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Allele frequencies:</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"  p(A) ="</span>, <span class="fu">round</span>(f_A, <span class="dv">3</span>), <span class="st">" q(a) ="</span>, <span class="fu">round</span>(f_a, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Genotype frequencies:</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">round</span>(geno_freq, <span class="dv">3</span>))</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Heterozygosity:</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"  Ho ="</span>, <span class="fu">round</span>(Ho, <span class="dv">3</span>), <span class="st">" (observed)</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"  He ="</span>, <span class="fu">round</span>(He, <span class="dv">3</span>), <span class="st">" (expected, H-W)</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return the results in a list so you can reuse them</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">genotype =</span> genotype,</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>       <span class="at">allele_freq =</span> <span class="fu">c</span>(<span class="at">A =</span> f_A, <span class="at">a =</span> f_a),</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>       <span class="at">Ho =</span> Ho,</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>       <span class="at">He =</span> He)</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Six populations with different starting allele frequencies</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pop_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Pop_A"</span>, <span class="st">"Pop_B"</span>, <span class="st">"Pop_C"</span>, <span class="st">"Pop_D"</span>, <span class="st">"Pop_E"</span>, <span class="st">"Pop_F"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>p_values  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.20</span>, <span class="fl">0.40</span>, <span class="fl">0.60</span>, <span class="fl">0.80</span>, <span class="fl">0.95</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>n         <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># A list to hold each population's raw genotypes</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>pops <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="fu">length</span>(p_values))</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(p_values)) {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  pops[[i]] <span class="ot">&lt;-</span> <span class="fu">sim_popgen</span>(<span class="at">n =</span> n, <span class="at">p =</span> p_values[i])<span class="sc">$</span>genotype</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Allele frequencies:
+  p(A) = 0.067  q(a) = 0.933 
+
+Genotype frequencies:
+genotype
+    1     2 
+0.133 0.867 
+
+Heterozygosity:
+  Ho = 0.133  (observed)
+  He = 0.124  (expected, H-W)
+Allele frequencies:
+  p(A) = 0.217  q(a) = 0.783 
+
+Genotype frequencies:
+genotype
+    1     2 
+0.433 0.567 
+
+Heterozygosity:
+  Ho = 0.433  (observed)
+  He = 0.339  (expected, H-W)
+Allele frequencies:
+  p(A) = 0.333  q(a) = 0.667 
+
+Genotype frequencies:
+genotype
+    0     1     2 
+0.100 0.467 0.433 
+
+Heterozygosity:
+  Ho = 0.467  (observed)
+  He = 0.444  (expected, H-W)
+Allele frequencies:
+  p(A) = 0.717  q(a) = 0.283 
+
+Genotype frequencies:
+genotype
+    0     1     2 
+0.467 0.500 0.033 
+
+Heterozygosity:
+  Ho = 0.5  (observed)
+  He = 0.406  (expected, H-W)
+Allele frequencies:
+  p(A) = 0.9  q(a) = 0.1 
+
+Genotype frequencies:
+genotype
+  0   1 
+0.8 0.2 
+
+Heterozygosity:
+  Ho = 0.2  (observed)
+  He = 0.18  (expected, H-W)
+Allele frequencies:
+  p(A) = 0.933  q(a) = 0.067 
+
+Genotype frequencies:
+genotype
+    0     1 
+0.867 0.133 
+
+Heterozygosity:
+  Ho = 0.133  (observed)
+  He = 0.124  (expected, H-W)</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pops) <span class="ot">&lt;-</span> pop_names</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Observed frequency of allele A in each population</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>p_obs <span class="ot">&lt;-</span> <span class="fu">sapply</span>(pops, <span class="cf">function</span>(g) <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(g) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">length</span>(g)))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(p_obs, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Pop_A Pop_B Pop_C Pop_D Pop_E Pop_F 
+0.067 0.217 0.333 0.717 0.900 0.933 </code></pre>
+</div>
+</div>
+<p>Two R details worth pausing on:</p>
+<ul>
+<li>A <strong>list</strong> (<code>pops[[i]] &lt;- ...</code>) is the natural container for a set of vectors that all belong together. Double brackets <code>[[ ]]</code> assign to one slot of the list.</li>
+<li><code>sapply(pops, function(g) ...)</code> applies the little function to <strong>each element</strong> of the list and simplifies the results into one named vector — it replaces a <code>for</code> loop when you only want to compute a value per element.</li>
+</ul>
+<p>Because genotypes are coded 0/1/2 (copies of allele a), the frequency of allele <strong>A</strong> is <code>1 - sum(g) / (2 * length(g))</code> — the divide-by-2 rule from Part I, inverted.</p>
+</section>
+<section id="heterozygosity-within-populations-h_s" class="level2">
+<h2 class="anchored" data-anchor-id="heterozygosity-within-populations-h_s">Heterozygosity within populations: <span class="math inline">\(H_S\)</span></h2>
+<p>Each population’s expected heterozygosity is <span class="math inline">\(2p(1-p)\)</span> at its own observed allele frequency. <span class="math inline">\(H_S\)</span> is their average:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Expected heterozygosity WITHIN each population</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>He_pops <span class="ot">&lt;-</span> <span class="fu">sapply</span>(pops, <span class="cf">function</span>(g) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(g) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">length</span>(g))   <span class="co"># frequency of allele A</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span> <span class="sc">*</span> p <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>Hs <span class="ot">&lt;-</span> <span class="fu">mean</span>(He_pops)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">He_pops =</span> He_pops, <span class="at">Hs =</span> Hs), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>He_pops.Pop_A He_pops.Pop_B He_pops.Pop_C He_pops.Pop_D He_pops.Pop_E 
+        0.124         0.339         0.444         0.406         0.180 
+He_pops.Pop_F            Hs 
+        0.124         0.270 </code></pre>
+</div>
+</div>
+<p>Notice something interesting in the output: the populations at the <strong>ends</strong> of the cline (<span class="math inline">\(p \approx 0.05\)</span> and <span class="math inline">\(p \approx 0.95\)</span>) have the <em>lowest</em> heterozygosity, and the middle populations the highest. Heterozygosity is maximized at <span class="math inline">\(p = 0.5\)</span> — a population can be highly differentiated and still have little internal variation when its allele is near fixation.</p>
+</section>
+<section id="total-gene-diversity-and-global-f_st-h_t" class="level2">
+<h2 class="anchored" data-anchor-id="total-gene-diversity-and-global-f_st-h_t">Total gene diversity and global <span class="math inline">\(F_{ST}\)</span>: <span class="math inline">\(H_T\)</span></h2>
+<p><span class="math inline">\(H_T\)</span> uses the allele frequency of the <strong>pooled</strong> sample, as if we ignored population labels entirely:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pool all individuals, ignoring population labels</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>all_g <span class="ot">&lt;-</span> <span class="fu">unlist</span>(pops)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>p_tot <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(all_g) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">length</span>(all_g))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>HT <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> p_tot <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_tot)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>FST <span class="ot">&lt;-</span> (HT <span class="sc">-</span> Hs) <span class="sc">/</span> HT</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">p_tot =</span> p_tot, <span class="at">Hs =</span> Hs, <span class="at">HT =</span> HT, <span class="at">FST =</span> FST), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>p_tot    Hs    HT   FST 
+0.528 0.270 0.498 0.459 </code></pre>
+</div>
+</div>
+<p><code>unlist()</code> flattens the list of genotype vectors into one long vector — the genetic equivalent of pouring all six stands into one bag. From here, <span class="math inline">\(F_{ST}\)</span> is one line: the among-population share of the total.</p>
+</section>
+<section id="pairwise-f_st" class="level2">
+<h2 class="anchored" data-anchor-id="pairwise-f_st">Pairwise <span class="math inline">\(F_{ST}\)</span></h2>
+<p>The global <span class="math inline">\(F_{ST}\)</span> collapses all six populations into one number. Often more informative is the <strong>pairwise</strong> matrix: <span class="math inline">\(F_{ST}\)</span> for every pair of populations, showing <em>which</em> stands are similar and which differ. The logic is identical to the global calculation, applied to just two populations at a time:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># FST for ONE pair of populations (same recipe as the global version)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>fst_pair <span class="ot">&lt;-</span> <span class="cf">function</span>(gi, gj) {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  p_i <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(gi) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">length</span>(gi))   <span class="co"># allele A frequency, pop i</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  p_j <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(gj) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">length</span>(gj))   <span class="co"># allele A frequency, pop j</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  H_i <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> p_i <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_i)              <span class="co"># heterozygosity within i</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  H_j <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> p_j <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_j)              <span class="co"># heterozygosity within j</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  H_s <span class="ot">&lt;-</span> (H_i <span class="sc">+</span> H_j) <span class="sc">/</span> <span class="dv">2</span>                  <span class="co"># average within-pop diversity</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  p_t <span class="ot">&lt;-</span> (p_i <span class="sc">+</span> p_j) <span class="sc">/</span> <span class="dv">2</span>                  <span class="co"># pooled allele frequency</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  H_t <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> p_t <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_t)              <span class="co"># total diversity</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  (H_t <span class="sc">-</span> H_s) <span class="sc">/</span> H_t                       <span class="co"># FST for this pair</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over every pair and fill a k x k matrix</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">length</span>(pops)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>fst_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, k, k,</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dimnames =</span> <span class="fu">list</span>(pop_names, pop_names))</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>k) {</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>k) {</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    fst_mat[i, j] <span class="ot">&lt;-</span> <span class="fu">fst_pair</span>(pops[[i]], pops[[j]])</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(fst_mat) <span class="ot">&lt;-</span> <span class="dv">0</span>          <span class="co"># a population compared with itself</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(fst_mat, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Pop_A Pop_B Pop_C Pop_D Pop_E Pop_F
+Pop_A 0.000 0.046 0.111 0.443 0.695 0.751
+Pop_B 0.046 0.000 0.017 0.251 0.473 0.525
+Pop_C 0.111 0.017 0.000 0.147 0.340 0.388
+Pop_D 0.443 0.251 0.147 0.000 0.054 0.081
+Pop_E 0.695 0.473 0.340 0.054 0.000 0.004
+Pop_F 0.751 0.525 0.388 0.081 0.004 0.000</code></pre>
+</div>
+</div>
+<p>Read a row of the printed matrix like a profile of one population: small values next to its neighbors on the cline, large values next to the populations at the other end. Pairs like Pop_A–Pop_F (0.05 vs 0.95) should show the largest <span class="math inline">\(F_{ST}\)</span>; adjacent pairs the smallest.</p>
+</section>
+<section id="visualizing-allele-frequencies-among-populations" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-allele-frequencies-among-populations">Visualizing allele frequencies among populations</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(p_obs, <span class="at">col =</span> <span class="st">"#583C88"</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">names.arg =</span> pop_names,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Frequency of allele A"</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Allele frequencies across populations"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> p_tot, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"grey55"</span>)   <span class="co"># global (pooled) frequency</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The dotted line is <span class="math inline">\(\bar{p}\)</span> from the pooled sample. The more the bars scatter around that line, the larger the among-population component — visually, the raw material of <span class="math inline">\(F_{ST}\)</span>.</p>
+</section>
+<section id="the-pairwise-f_st-heatmap" class="level2">
+<h2 class="anchored" data-anchor-id="the-pairwise-f_st-heatmap">The pairwise <span class="math inline">\(F_{ST}\)</span> heatmap</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span>k, <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>k, <span class="at">z =</span> fst_mat,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="fu">heat.colors</span>(<span class="dv">100</span>),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">main =</span> <span class="st">"Pairwise FST among populations"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> <span class="dv">1</span><span class="sc">:</span>k, <span class="at">labels =</span> pop_names)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> <span class="dv">1</span><span class="sc">:</span>k, <span class="at">labels =</span> pop_names)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># label the most divergent pair for orientation</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">box</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In <code>heat.colors()</code>, <strong>red means low <span class="math inline">\(F_{ST}\)</span></strong> (similar populations) and pale yellow means high. The matrix is symmetric, so the map is a mirror image across its diagonal; a perfect cline shows a smooth gradient from the Pop_A corner to the Pop_F corner. <code>image()</code> also flips the first matrix index onto the y-axis — a classic R gotcha, and harmless here only because the matrix is symmetric.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>A note on negative FST
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>With real (or simulated) sampling noise, a pairwise <span class="math inline">\(F_{ST}\)</span> can come out <strong>slightly negative</strong> — sampling made the two populations look more different within than between. A negative value means “differentiation indistinguishable from zero”; it is not an error in the formula.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="how-f_st-changes-as-populations-diverge" class="level2">
+<h2 class="anchored" data-anchor-id="how-f_st-changes-as-populations-diverge">How <span class="math inline">\(F_{ST}\)</span> changes as populations diverge</h2>
+<p>The cline above is one snapshot. To see the whole range of behavior, sweep across scenarios — from identical populations to maximally divergent ones — and compute the global <span class="math inline">\(F_{ST}\)</span> of each:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Global FST for a set of populations defined by their allele frequencies</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>global_fst <span class="ot">&lt;-</span> <span class="cf">function</span>(p_vec, <span class="at">n =</span> <span class="dv">30</span>) {</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># simulate each population's genotypes directly with sample()</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># (avoids sim_popgen()'s printed output)</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  pops <span class="ot">&lt;-</span> <span class="fu">lapply</span>(p_vec, <span class="cf">function</span>(p) {</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">size =</span> n, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">prob =</span> <span class="fu">c</span>(p<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span> <span class="sc">*</span> p <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p), (<span class="dv">1</span> <span class="sc">-</span> p)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Hs: average within-population heterozygosity</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  Hs <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">sapply</span>(pops, <span class="cf">function</span>(g) {</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(g) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">length</span>(g))</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span> <span class="sc">*</span> p <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># HT: heterozygosity of the pooled sample</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  all_g <span class="ot">&lt;-</span> <span class="fu">unlist</span>(pops)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  p_tot <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(all_g) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">length</span>(all_g))</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  HT <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> p_tot <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_tot)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  (HT <span class="sc">-</span> Hs) <span class="sc">/</span> HT</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Three scenarios: similar, moderate, divergent</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>scenarios <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">similar   =</span> <span class="fu">rep</span>(<span class="fl">0.50</span>, <span class="dv">6</span>),</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">moderate  =</span> <span class="fu">seq</span>(<span class="fl">0.35</span>, <span class="fl">0.65</span>, <span class="at">length.out =</span> <span class="dv">6</span>),</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">divergent =</span> <span class="fu">seq</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="at">length.out =</span> <span class="dv">6</span>)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>fst_values <span class="ot">&lt;-</span> <span class="fu">sapply</span>(scenarios, global_fst)</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(fst_values, <span class="at">col =</span> <span class="st">"#583C88"</span>,</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Global FST"</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"FST rises as populations diverge"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What you should see:</p>
+<ul>
+<li><strong>Similar</strong> populations (identical input <span class="math inline">\(p\)</span>) give <span class="math inline">\(F_{ST} \approx 0\)</span> — not exactly zero, because finite samples (<span class="math inline">\(n = 30\)</span>) wobble, but close.</li>
+<li><strong>Divergent</strong> populations push <span class="math inline">\(F_{ST}\)</span> high; with allele frequencies spread from 0.05 to 0.95, most of the total diversity is among populations.</li>
+<li>The relationship is <strong>not</strong> linear in the spread of allele frequencies — the same spread matters more when it crosses 0.5, and <span class="math inline">\(F_{ST}\)</span> is capped well below 1 unless alleles are near fixation in each population.</li>
+</ul>
+</section>
+<section id="adding-geography-isolation-by-distance" class="level2">
+<h2 class="anchored" data-anchor-id="adding-geography-isolation-by-distance">Adding geography: isolation by distance</h2>
+<p>Finally, give the populations <strong>locations</strong>. Our cline becomes a transect: six stands sampled at regular intervals along a line, with allele A increasing from one end to the other. Because allele frequencies were assigned in geographic order, nearby populations are genetically similar and distant ones differ — isolation by distance, by construction.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sampling locations: six stands along a transect</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">pop =</span> pop_names,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">87.0</span>, <span class="sc">-</span><span class="fl">86.8</span>, <span class="sc">-</span><span class="fl">86.6</span>, <span class="sc">-</span><span class="fl">86.4</span>, <span class="sc">-</span><span class="fl">86.2</span>, <span class="sc">-</span><span class="fl">86.0</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat =</span> <span class="fu">rep</span>(<span class="fl">40.4</span>, <span class="dv">6</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Geographic distance between every pair of sites</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>geo_mat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dist</span>(<span class="fu">cbind</span>(sites<span class="sc">$</span>lon, sites<span class="sc">$</span>lat)))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(geo_mat) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(geo_mat) <span class="ot">&lt;-</span> pop_names</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Genetic distance = pairwise FST (computed above)</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">as.vector</span>(geo_mat), <span class="fu">as.vector</span>(fst_mat),</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Geographic distance (degrees)"</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Pairwise FST"</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Isolation by distance"</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(<span class="fu">as.vector</span>(fst_mat) <span class="sc">~</span> <span class="fu">as.vector</span>(geo_mat)),</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-9-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">as.vector</span>(geo_mat), <span class="fu">as.vector</span>(fst_mat))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9459717</code></pre>
+</div>
+</div>
+<p>The points should trend upward: the farther apart two stands are, the more differentiated they are. The red line is a plain linear regression — good for seeing the trend, but it ignores that the points are not independent (each population appears in five pairs). The proper test is the Mantel test, which permutes population labels and asks whether the observed matrix correlation is stronger than chance:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)   <span class="co"># installed in an earlier module</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: permute</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mantel</span>(<span class="fu">as.dist</span>(fst_mat), <span class="fu">as.dist</span>(geo_mat),</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">permutations =</span> <span class="dv">999</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>'nperm' &gt;= set of all permutations: complete enumeration.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Set of permutations &lt; 'minperm'. Generating entire set.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Mantel statistic based on Pearson's product-moment correlation 
+
+Call:
+mantel(xdis = as.dist(fst_mat), ydis = as.dist(geo_mat), permutations = 999) 
+
+Mantel statistic r: 0.9515 
+      Significance: 0.0027778 
+
+Upper quantiles of permutations (null model):
+  90%   95% 97.5%   99% 
+0.392 0.554 0.689 0.789 
+Permutation: free
+Number of permutations: 719</code></pre>
+</div>
+</div>
+<p><code>as.dist()</code> converts our full square matrices into the compact lower-triangular form <code>mantel()</code> expects. The output reports the matrix correlation (Mantel statistic r), a significance test from the 999 permutations, and — importantly — a <strong>p-value only as meaningful as the hypothesis being tested</strong>. A significant IBD signal tells you dispersal limitation contributes to structure; it does not rule out history or selection acting alongside it.</p>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<section id="exercise-1-gene-flow-homogenizes" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-1-gene-flow-homogenizes">Exercise 1 — Gene flow homogenizes</h3>
+<p>Replace a fraction <span class="math inline">\(m\)</span> of each population’s individuals with migrants drawn from the <strong>global</strong> allele frequency, then recompute global <span class="math inline">\(F_{ST}\)</span> for <span class="math inline">\(m = 0\)</span>, <span class="math inline">\(0.05\)</span>, and <span class="math inline">\(0.25\)</span>. What happens?</p>
+</section>
+<section id="exercise-2-sample-size-and-noise" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2-sample-size-and-noise">Exercise 2 — Sample size and noise</h3>
+<p>Estimate global <span class="math inline">\(F_{ST}\)</span> for the divergent scenario with <code>n = 10</code> and <code>n = 200</code> (use <code>replicate(50, ...)</code> for each). How much do the estimates wobble, and around what values?</p>
+</section>
+<section id="exercise-3-multilocus-fst" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-3-multilocus-fst">Exercise 3 — Multilocus FST</h3>
+<p>Real studies average over hundreds of loci. Repeat the divergent scenario for 20 loci, each with its own randomly drawn cline, and average the per-locus <span class="math inline">\(F_{ST}\)</span> values. How does the average compare with any single locus?</p>
+</section>
+<section id="exercise-4-roussets-transform" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-4-roussets-transform">Exercise 4 — Rousset’s transform</h3>
+<p>Rousset (1997) recommends regressing <span class="math inline">\(F_{ST}/(1 - F_{ST})\)</span> on geographic distance for biallelic markers. Redraw the IBD plot with the transform and compare the fit.</p>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<section id="exercise-1" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-1">Exercise 1</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add migrants drawn from the global allele frequency</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>add_migration <span class="ot">&lt;-</span> <span class="cf">function</span>(g, m, p_tot) {</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  n_mig <span class="ot">&lt;-</span> <span class="fu">round</span>(m <span class="sc">*</span> <span class="fu">length</span>(g))            <span class="co"># how many migrants</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  migrants <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>, n_mig, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">prob =</span> <span class="fu">c</span>(p_tot<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span> <span class="sc">*</span> p_tot <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_tot),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                              (<span class="dv">1</span> <span class="sc">-</span> p_tot)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="fu">sample</span>(g, <span class="fu">length</span>(g) <span class="sc">-</span> n_mig), migrants)  <span class="co"># residents + migrants</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>m_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>, <span class="fl">0.25</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(m_values, <span class="cf">function</span>(m) {</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  mig_pops <span class="ot">&lt;-</span> <span class="fu">lapply</span>(pops, add_migration, <span class="at">m =</span> m, <span class="at">p_tot =</span> p_tot)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># same Hs / HT / FST recipe as global_fst(), on mig_pops</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  Hs <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">sapply</span>(mig_pops, <span class="cf">function</span>(g) {</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(g) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">length</span>(g)); <span class="dv">2</span> <span class="sc">*</span> p <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  all_g <span class="ot">&lt;-</span> <span class="fu">unlist</span>(mig_pops)</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  p_t <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(all_g) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">length</span>(all_g))</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  (<span class="dv">2</span> <span class="sc">*</span> p_t <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_t) <span class="sc">-</span> Hs) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> p_t <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_t))</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4586997 0.3970401 0.2057805</code></pre>
+</div>
+</div>
+<p><strong>What you should see:</strong> <span class="math inline">\(F_{ST}\)</span> falls as <span class="math inline">\(m\)</span> grows. Even 5% migration pulls the populations noticeably toward the pooled frequency — the one-migrant-per-generation rule in action. At <span class="math inline">\(m = 0.25\)</span>, the cline has largely dissolved.</p>
+</section>
+<section id="exercise-2" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2">Exercise 2</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>divergent <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="at">length.out =</span> <span class="dv">6</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>fst_n10  <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">50</span>, <span class="fu">global_fst</span>(divergent, <span class="at">n =</span> <span class="dv">10</span>))</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>fst_n200 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">50</span>, <span class="fu">global_fst</span>(divergent, <span class="at">n =</span> <span class="dv">200</span>))</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">mean_n10 =</span> <span class="fu">mean</span>(fst_n10),  <span class="at">sd_n10 =</span> <span class="fu">sd</span>(fst_n10),</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">mean_n200 =</span> <span class="fu">mean</span>(fst_n200), <span class="at">sd_n200 =</span> <span class="fu">sd</span>(fst_n200)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> mean_n10    sd_n10 mean_n200   sd_n200 
+    0.388     0.062     0.380     0.015 </code></pre>
+</div>
+</div>
+<p><strong>What you should see:</strong> both averages land near the same true value, but the <code>n = 10</code> estimates scatter widely (and can even go negative), while <code>n = 200</code> estimates cluster tightly. The lesson: a single small-sample <span class="math inline">\(F_{ST}\)</span> is an estimate with variance — report it with uncertainty, or with more individuals or loci.</p>
+</section>
+<section id="exercise-3" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-3">Exercise 3</h3>
+<p>Wrap the divergent scenario in a per-locus loop with random clines:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>locus_fst <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">20</span>, {</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  p_cline <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">runif</span>(<span class="dv">6</span>, <span class="fl">0.05</span>, <span class="fl">0.95</span>))    <span class="co"># a random cline for this locus</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">global_fst</span>(p_cline)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">single_locus_example =</span> locus_fst[<span class="dv">1</span>],</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean_over_20_loci    =</span> <span class="fu">mean</span>(locus_fst))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>single_locus_example    mean_over_20_loci 
+           0.2131148            0.2513456 </code></pre>
+</div>
+</div>
+<p><strong>What you should see:</strong> any single locus can give an erratic <span class="math inline">\(F_{ST}\)</span> (clines vary, sampling noise adds more), but the <strong>average over 20 loci</strong> is much more stable. This is why empirical studies never quote a one-locus <span class="math inline">\(F_{ST}\)</span> — the genome-wide average is the estimate.</p>
+</section>
+<section id="exercise-4" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-4">Exercise 4</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">as.vector</span>(geo_mat), <span class="fu">as.vector</span>(fst_mat) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">as.vector</span>(fst_mat)),</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Geographic distance (degrees)"</span>,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"FST / (1 - FST)"</span>,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"IBD with Rousset's transform"</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(<span class="fu">I</span>(<span class="fu">as.vector</span>(fst_mat) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">as.vector</span>(fst_mat))) <span class="sc">~</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">as.vector</span>(geo_mat)), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>What you should see:</strong> the transform stretches small <span class="math inline">\(F_{ST}\)</span> values apart near zero, roughly linearizing the relationship — which is exactly why Rousset proposed it. With our strong artificial cline the improvement may be modest; with real, weakly structured data it is often substantial.</p>
+</section>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const toggle = window.document.createElement('button');
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.classList.add('top-right');
+      toggle.classList.add('quarto-color-scheme-toggle');
+      toggle.setAttribute("aria-label", "Toggle dark mode");
+      toggle.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      toggle.appendChild(i);
+      // Put the toggle in a landmark of its own, so that landmark navigation
+      // can reach it.
+      //
+      // The container is always a fresh direct child of body, and the toggle is
+      // never moved into page furniture that the theme or the author controls.
+      // The toggle is positioned against the page, so any ancestor that
+      // establishes a containing block captures it: a positioned element or a
+      // grid for position: absolute, and transform, filter, will-change or
+      // contain for position: fixed. A direct child of body has none of these
+      // to inherit, and the shift when one appears is silent and visual.
+      //
+      // ARIA says a document should have at most one banner, and axe reports a
+      // duplicate whether or not the banners carry distinct labels. So use a
+      // header when the page has no banner yet, and a named region otherwise.
+      //
+      // A header is a banner wherever it sits, unless it is inside sectioning
+      // content, so this cannot just look at the children of body: a custom
+      // page layout wraps the title block header in a plain div. An explicit
+      // role="banner" always counts.
+      const sectioning = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+      const hasBanner = Array.from(
+        window.document.querySelectorAll('header:not([role]), [role="banner"]')
+      ).some(function(el) {
+        return el.hasAttribute("role") || el.closest(sectioning) === null;
+      });
+      const container = window.document.createElement(hasBanner ? "div" : "header");
+      if (hasBanner) {
+        container.setAttribute("role", "region");
+        container.setAttribute("aria-label", "Toggle dark mode");
+      }
+      container.classList.add('quarto-color-scheme-toggle-container');
+      container.appendChild(toggle);
+      window.document.body.appendChild(container);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/anoobvinu07">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://scholar.google.com/citations?hl=en&amp;user=jIOSRMkAAAAJ">
+<p><i class="ai  ai-google-scholar" aria-label="google-scholar"></i></p>
+</a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:anoobvinu@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>   
+    <div class="nav-footer-center">
+© <span id="year"></span> · Anoob Prakash
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://ag.purdue.edu/directory/prakas89">
+      <i class="bi bi-building" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://www.purdue.edu">
+<p>Purdue</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://htirc.org/">
+<p>HTIRC</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>
